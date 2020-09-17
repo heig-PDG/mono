@@ -17,7 +17,7 @@ We follow an approach inspired by the [Rapid Cycle Workflow](https://gitlab.com/
 1. Based on what was agreed on during meetings, file an issue for a task you'd like to accomplish. When choosing a task, choose something that you think should take you **less than 4 hours** to achieve. It's better to aim for a task that's too small rather than a task that's too big !
 	+ Use the dedicated issue template to file that task.
 	+ Fill in our time tracking system the expected duration of this task.
-2. Use your personal fork, and create a branch dedicated to the issue. Once you have your first commit ready, immediatly create a [draft pull request](https://github.blog/2019-02-14-introducing-draft-pull-requests/).
+2. Use your personal fork, and create a branch dedicated to the issue. Create a [draft pull request](https://github.blog/2019-02-14-introducing-draft-pull-requests/) as soon as you can (if possible, this should be on your first commit).
 3. Whenever you commit your code, log the amount of time that you have spent on your task. Try to be accurate; it will help us estimate future tasks more precisely !
 	+ Follow [this article](https://chris.beams.io/posts/git-commit/) on how to write a good commit messages. The Git history of your contribution will also be looked at during the review.
 	+ Add a description to your commit message if relevant.
