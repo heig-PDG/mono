@@ -59,3 +59,14 @@ There are a lot of ways to run team meetings. The following structure is propose
 	+ If you need help on something, this is when you should tell us about it ! Someone else will be designated to give you a hand.
 3. Once blockers have been adressed, a last round is planned to let you tell us about what you plan to be working on until the next meeting. This is the ideal time for open discussions if you don't know what to work on next, or feel like we need to plan future work differently.
 	+ You're not committing to work on what you're talking about; we're all adults, and you probably know well what the priorities of your part of the project are. This round is just meant to indicate to your teammates what they should expect to see changing on the project in the next 2-3 days.
+
+### Sprints (and the Tuesday meeting)
+
+In general, we will try to organize our work around sprints of 7 days, starting and ending on Tuesdays. This gives us some time to do some in-depth work, while still letting us do enough iterations before the project deadline. Every week, on Tuesdays:
+
++ we make a retrospective on the work done during the last week; (10 mins)
++ we collaboratively define the objectives for the next week; (15-20 mins)
++ we create a new milestone on GitHub; and
++ we add and tag all the issues related to the sprint with the milestone.
+
+We use a Kanban board to keep track of all the issues currently in progress.
