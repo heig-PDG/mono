@@ -23,7 +23,7 @@ We follow an approach inspired by the [Rapid Cycle Workflow](https://gitlab.com/
 	+ Add a description to your commit message if relevant.
 	+ When doing some peer coding, [create a commit with multiple authors](https://docs.github.com/en/enterprise/2.13/user/articles/creating-a-commit-with-multiple-authors).
 	+ If you have a question on your work, write it in the feed of the draft pull request.
-4. Once you are with your contribution, mark your draft as ready. Make sure that merging the pull request will close the issue created in `1.` !
+4. Once you are done with your contribution, mark your draft as ready. Make sure that merging the pull request will close the issue created in `1.` !
 	+ To do that, you should probably write in the pull request body that it will `Fix issue #3.`.
 5. Add two reviewers to your pull request (including the colleague working in your "team").
 6. If the review is a success and the integration and unit tests pass, **merge your pull request** and celebrate 🍾
