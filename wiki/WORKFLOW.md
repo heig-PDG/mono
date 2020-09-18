@@ -9,7 +9,7 @@ This document provides an overview of the collaboration principles that drive ou
 We follow an approach inspired by the [Rapid Cycle Workflow](https://gitlab.com/softeng-heigvd/teaching-heigvd-pdg-2020/guidelines/-/blob/master/WORKFLOW.md). We adapt it to match our specific use-case:
 
 - we're using GitHub, in order to centralize all of our services (issues, project management, milestones, hosting, continuous integration);
-- we want to make sysetmatic pull request reviews; and
+- we want to make systematic pull request reviews; and
 - we'll be using an external time tracking system.
 
 ### Rapid Cycle Workflow
