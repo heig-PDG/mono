@@ -29,3 +29,37 @@ Occasionally, a secondary color, Flamingo, may be used in some components, to pr
 - ![Flamingo 700](https://placehold.it/15/CC00C4/000000?text=+) Flamingo 700 (`#CC00C4`)
 - ![Flamingo 800](https://placehold.it/15/990093/000000?text=+) Flamingo 800 (`#990093`)
 - ![Flamingo 900](https://placehold.it/15/660062/000000?text=+) Flamingo 900 (`#660062`)
+
+## Typography
+
+Typography is based on Android's typographic system. Fonts are described using the following format `**name** : font, weight, size, (opt.) additional info`.
+
+There are 6 headline fonts, with different heights, depending on the context in which they are used.
+
+- **H1 Headline** : Archivo, Bold, 96
+- **H2 Headline** : Archivo, Bold, 60
+- **H3 Headline** : Archivo, Bold, 48
+- **H4 Headline** : Archivo, Bold, 34
+- **H5 Headline** : Archivo, Bold, 24
+- **H6 Headline** : Archivo, Bold, 20
+
+Some extra font variants are provided for subtitles, text body, as well as button, caption and overline use-cases.
+
+- **Subtitle 1** : Mulish, Semibold, 16
+- **Subtitle 2** : Mulish, Bold, 14
+- **Body 1** : Mulish, Regular, 16
+- **Body 2** : Mulish, Regular, 14
+- **Button** : Mulish, Bold, 14, CAPITALIZATION ON EVERY LETTER
+- **Caption** : Mulish, Semibold, 12
+- **Overline** : Mulish, Bold, 10, CAPITALIZATION ON EVERY LETTER
+
+The following conversion table should be used to convert font sizes, depending on your platform :
+
+| Platform         | Android | iOS  | Web               |
+|------------------|---------|------|-------------------|
+| Font size unit   | `sp`    | `pt` | `rem`             |
+| Conversion ratio | 1.0     | 1.0  | 0.0625, or (1/16) |
+
+The [Material Design type scale website](https://material.io/design/typography/the-type-system.html#type-scale)
+offers a good overview of platform-specific considerations when it comes to
+fonts.
