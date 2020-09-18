@@ -64,6 +64,6 @@ The [Material Design type scale website](https://material.io/design/typography/t
 offers a good overview of platform-specific considerations when it comes to
 fonts.
 
-### Illustration
+### Illustration
 
 ![Typography](assets/Fonts.png)
