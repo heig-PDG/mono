@@ -1,3 +1,14 @@
+# Table of Contents
+
+- [Table of Contents](#table-of-contents)
+- [Workflow](#workflow)
+  - [Contributing](#contributing)
+    - [Rapid Cycle Workflow](#rapid-cycle-workflow)
+  - [Meetings](#meetings)
+    - [Goals and non-goals](#goals-and-non-goals)
+    - [Structure](#structure)
+    - [Sprints (and the Tuesday meeting)](#sprints-and-the-tuesday-meeting)
+
 # Workflow
 
 This document provides an overview of the collaboration principles that drive our project. It includes information relative to the contribution workflow, the structure of meeetings and the organization of sprints and epics (iterations).
