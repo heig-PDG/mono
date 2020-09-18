@@ -1,6 +1,6 @@
 # Workflow
 
-This document provides an overview of the collaboration principles that drive our project. It includes information relative to the contribution workflow, the structure of meeetings and the organization of sprints and epics (iterations).
+This document provides an overview of the collaboration principles that drive our project. It includes information relative to the contribution workflow, the structure of meetings and the organization of sprints and epics (iterations).
 
 > No document is auto-sufficient or frozen over time. This is also the case with the workflow of our team, which we will update as time goes by.
 
