@@ -24,5 +24,11 @@ about: Help us know what you're working on and how you plan to split up the task
 
 > The estimated time should be less than 4 hours. Otherwise, it's necessary to split your task in smaller units.
 
-**Estimated time :** 
-**Actual time :** 
+**Estimated time :**
+**Actual time :**
+
+## Related (optional)
+
+> Is this feature meant to be split up in some sub-tasks ? This is where you should link them.
+> 
+> You may also want to add some references to documentation you'll use here.
