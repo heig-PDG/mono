@@ -38,7 +38,7 @@ Team alignments are organized **two times a week**. They occur:
 + on **Tuesday at 10 AM**; and
 + on **Friday at 8:45 AM**.
 
-If you can't be there on time, please let us the team know about it 😄 We chose this schedule because we get to see each other for in-person classes on Wednesday and Thursday. If relevant, we might change the team meetings timing.
+If you can't be there on time, please let us know about it 😄 We chose this schedule because we get to see each other for in-person classes on Wednesday and Thursday. If relevant, we might change the team meetings timing.
 
 ### Goals and non-goals
 
