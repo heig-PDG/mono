@@ -35,10 +35,10 @@ We follow an approach inspired by the [Rapid Cycle Workflow](https://gitlab.com/
 
 Team alignments are organized **two times a week**. They occur:
 
-+ on **Tuesdays at 10 AM**; and
-+ on **Fridays at 8:45 AM**.
++ on **Tuesday at 10 AM**; and
++ on **Friday at 8:45 AM**.
 
-If you can't be there on time, please let us the team know about it 😄 We chose this schedule because we get to see each other for in-person classes on Wednesdays and Thursdays. If relevant, we might change the team meetings timing.
+If you can't be there on time, please let us the team know about it 😄 We chose this schedule because we get to see each other for in-person classes on Wednesday and Thursday. If relevant, we might change the team meetings timing.
 
 ### Goals and non-goals
 
@@ -62,7 +62,7 @@ There are a lot of ways to run team meetings. The following structure is propose
 
 ### Sprints (and the Tuesday meeting)
 
-In general, we will try to organize our work around sprints of 7 days, starting and ending on Tuesdays. This gives us some time to do some in-depth work, while still letting us do enough iterations before the project deadline. Every week, on Tuesdays:
+In general, we will try to organize our work around sprints of 7 days, starting and ending on Tuesday. This gives us some time to do some in-depth work, while still letting us do enough iterations before the project deadline. Every week, on Tuesday:
 
 + we make a retrospective on the work done during the last week; (10 mins)
 + we collaboratively define the objectives for the next week; (15-20 mins)
