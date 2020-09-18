@@ -4,7 +4,7 @@ about: Help us know what you're working on and how you plan to split up the task
 
 ---
 
-## Your feature in two sentences
+## Your feature in two sentences
 
 > Use two sentences to describe your contribution.
 
