@@ -63,3 +63,7 @@ The following conversion table should be used to convert font sizes, depending o
 The [Material Design type scale website](https://material.io/design/typography/the-type-system.html#type-scale)
 offers a good overview of platform-specific considerations when it comes to
 fonts.
+
+### Illustration
+
+![Typography](assets/Fonts.png)
