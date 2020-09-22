@@ -27,6 +27,8 @@ _Italic_ points are nice-to-have features
 	* _See where other lunchboxes are_
 	* _Click on those to like or dislike_
 
+[Use case diagram](assets/DiagramUseCase.svg)
+
 ### Example 1
 * User 1 downloads and installs the app. It creates an account or uses his Google one.
 * User 1 cooks a lobster, puts it into a Tupper, takes picture and posts it on the app.
