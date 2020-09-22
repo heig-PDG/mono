@@ -11,7 +11,6 @@ _Italic_ points are nice-to-have features
 * Post a new lunchbox picture
 	* Set a name
 	* Put one picture
-	* _Inform location_
 
 * Swipe other lunchbox pictures
 	* Pictures are provided by the algorithm
