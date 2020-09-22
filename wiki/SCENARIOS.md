@@ -1,19 +1,36 @@
-# User cases
-### What should the user be capable of ?
-All following points require the user has installed the app and created a profile, 
-requiring a profile picture and a pseudo. Then a user can :
+# Features
 
-* Post a new picture of a lunchbox
-* Swipe pictures of other users's lunchboxes. These images are provided by the algorithm. 
-Swipe left an image means a dislike, or at least non-interest. Swipe right means a like.
-* See other user's profile by clicking on his pseudo while swiping.
-* See other user's profile by searching his pseudo.
-* Open the map of the area and see where there are other users.
-* Click on an other user displayed on the map and see his profile.
-* While seeing a profile, browse and swipe all pictures of this user.
+* Create a profile
+	* Submit his email
+	* Choose a pseudo
+	* Put a profile picture
+	* _Set a default location_
 
-If two users like an other's lunchbox, it's a Match. Each user can start chatting
-with each other.
+* Post a new lunchobx picture
+	* Set a name
+	* Put at least 1 picture
+	* _Inform location_
+
+* Swipe other lunchbox pictures
+	* Pictures are provided by the algorithm
+	* Swipe left is dislike
+	* Swipe right is like
+	* Buttons are also usable for these two actions
+
+* If there is a match...
+	* Chatting becomes possible
+	* No other tool to organise rendezvous. It's the users's problem
+
+* See other user's profile
+	* By clicking on his pseudo while swiping
+	* By searching his pseudo
+
+* While seeing a profile
+	* Browse and swipe all pictures of this user
+
+* _Open the map page_
+	* _See where other lunchboxes are_
+	* _Click on those to like or dislike_
 
 ### Example 1
 * User 1 downloads and installs the app. It creates an account or uses his Google one.
