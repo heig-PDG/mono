@@ -2685,6 +2685,11 @@ firstline@^1.2.0:
   resolved "https://registry.yarnpkg.com/firstline/-/firstline-1.3.1.tgz#59e84af0fd858fbc6dac0a0ff97fd22a47e58084"
   integrity sha512-ycwgqtoxujz1dm0kjkBFOPQMESxB9uKc/PlD951dQDIG+tBXRpYZC2UmJb0gDxopQ1ZX6oyRQN3goRczYu7Deg==
 
+fontsource-mulish@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/fontsource-mulish/-/fontsource-mulish-3.0.5.tgz#9cef7432383d29e7669ab5204bbce24b94cffd5b"
+  integrity sha512-ICxdw7Qq6FxTrC8RNpWPYEqoUh3bCtjSFxDad7bRcC5nzUsBiwWUT80UPPfwCj+rO5G/QJ/P4i2EZuaxszUVfQ==
+
 for-in@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
@@ -5845,6 +5850,11 @@ typedarray@^0.0.6, typedarray@~0.0.5:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
+
+typeface-archivo@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/typeface-archivo/-/typeface-archivo-1.1.3.tgz#22c86cde8c18de4b878687bbc856c1f2e2389d4a"
+  integrity sha512-08zahBpkGVcsLZEJ5nHTQ1WPiZXIIcm9f/GQfUI4BGt3bOwQ3SJHsDTU/kFwEHE9HeuuRqjWXjnVfRnA/7Rx7Q==
 
 ultron@1.0.x:
   version "1.0.2"
