@@ -8,9 +8,9 @@ _Italic_ points are nice-to-have features
 	* Put a profile picture
 	* _Set a default location_
 
-* Post a new lunchobx picture
+* Post a new lunchbox picture
 	* Set a name
-	* Put at least 1 picture
+	* Put one picture
 	* _Inform location_
 
 * Swipe other lunchbox pictures
@@ -22,13 +22,6 @@ _Italic_ points are nice-to-have features
 * If there is a match...
 	* Chatting becomes possible
 	* No other tool to organise rendezvous. It's the users's problem
-
-* See other user's profile
-	* By clicking on his pseudo while swiping
-	* By searching his pseudo
-
-* While seeing a profile
-	* Browse and swipe all pictures of this user
 
 * _Open the map page_
 	* _See where other lunchboxes are_
