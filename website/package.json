@@ -1,0 +1,32 @@
+{
+  "name": "tupperdate.me",
+  "version": "1.0.0",
+  "description": "Landing Page for Tupperdate.me",
+  "main": "index.js",
+  "repository": "https://github.com/heig-PDG/mono",
+  "license": "Copyright",
+  "private": true,
+  "scripts": {
+    "analyse": "elm-analyse",
+    "format": "elm-format --validate src/",
+    "dev": "parcel static/index.html",
+    "build": "parcel static/index.html --no-cache"
+  },
+  "dependencies": {
+    "components": "^0.1.0",
+    "elm": "^0.19.1-3",
+    "elm-analyse": "^0.16.5",
+    "elm-format": "^0.8.3",
+    "elm-hot": "^1.1.5",
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-static-files-copy": "^2.3.1",
+    "postcss": "^8.0.7",
+    "tailwindcss": "^1.8.10",
+    "utilities": "^1.0.5"
+  },
+  "devDependencies": {
+    "autoprefixer": "^9.7.4",
+    "node-elm-compiler": "^5.0.5",
+    "postcss-import": "^12.0.1"
+  }
+}
