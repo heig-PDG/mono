@@ -1,0 +1,9 @@
+{
+  "name": "tupperdate.me",
+  "version": "1.0.0",
+  "description": "Landing Page for Tupperdate.me",
+  "main": "index.js",
+  "repository": "https://github.com/heig-PDG/mono",
+  "license": "Copyright",
+  "private": true
+}
