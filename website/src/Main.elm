@@ -2,8 +2,8 @@ module Main exposing (main)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key)
-import Html exposing (Html, div, h1, text)
-import Html.Attributes exposing (class)
+import Html exposing (Html, div, h1, li, p, text, ul)
+import Html.Attributes exposing (class, href)
 import Json.Decode as D
 import Url exposing (Url)
 
@@ -83,13 +83,68 @@ view _ =
 viewLanding : Html Msg
 viewLanding =
     div
-        [ class "w-full h-screen"
+        [ class "flex flex-row"
         ]
-        [ h1
-            [ class "text-6xl font-bold"
-            , class "customTitleGradient"
+        [ tupperDate
+        , div
+            [ class "w-1/2 h-screen"
+            , class "p-16 text-right"
+            , class "text-white font-archivo"
+            , class "bg-smurf-800"
             ]
-            [ text "Tupperdate" ]
+            [ h1
+                [ class "m-auto"
+                , class "text-6xl font-bold font-archivo"
+                , class "border-b-4 border-white"
+                ]
+                [ text "Who are we ?" ]
+            , ul
+                [ class "m-4 text-4xl font-archivo"
+                ]
+                [ li [] [ text "Alexandre Piveteau" ]
+                , li [] [ text "Matthieu Burguburu" ]
+                , li [] [ text "David Dupraz" ]
+                , li [] [ text "Guy-Laurent Subri" ]
+                ]
+            , p
+                [ class "m-4" ]
+                [ text "Check us out on "
+                , Html.a
+                    [ href "https://github.com/heig-PDG/mono"
+                    , class "underline"
+                    ]
+                    [ text "GitHub" ]
+                ]
+            ]
+        ]
+
+
+tupperDate : Html Msg
+tupperDate =
+    div
+        [ class "w-full h-screen"
+        , class "font-archivo"
+        , class "flex flex-col"
+        , class "bg-white"
+        ]
+        [ div
+            [ class "m-auto" ]
+            [ h1
+                [ class "w-full m-auto"
+                , class "text-6xl font-bold text-center"
+                , class "text-white"
+                , class "customTitleGradient"
+                ]
+                [ text "Tupper • Date" ]
+            , p
+                [ class "w-full px-16 mx-auto my-8"
+                , class "text-2xl text-center font-archivo"
+                ]
+                [ text "Discover folks who cook what you like"
+                , Html.br [] []
+                , text "and start sharing meals with them today."
+                ]
+            ]
         ]
 
 
