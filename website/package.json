@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "analyse": "elm-analyse",
-    "format": "elm-format",
+    "format": "elm-format --validate src/",
     "dev": "parcel static/index.html",
     "build": "parcel static/index.html --no-cache"
   },
