@@ -1,8 +1,10 @@
 module Main exposing (main)
 
 import Browser exposing (Document, UrlRequest(..))
+import Browser.Navigation exposing (Key)
 import Html exposing (div, text)
 import Json.Decode as D
+import Url exposing (Url)
 
 
 
@@ -34,12 +36,23 @@ init _ _ _ =
     ( Empty, Cmd.none )
 
 
+onUrlRequest : UrlRequest -> Msg
+onUrlRequest urlRequest =
+    ClickedLink urlRequest
+
+
+onUrlChange : Url -> Msg
+onUrlChange url =
+    ChangedUrl url
+
+
 
 --- UPDATE ---
 
 
 type Msg
-    = NoOp
+    = ClickedLink UrlRequest
+    | ChangedUrl Url
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -56,6 +69,9 @@ update msg model =
 view : Model -> Document Msg
 view _ =
     let
+        title =
+            "Tupperdate.me"
+
         body =
             [ div
                 []
