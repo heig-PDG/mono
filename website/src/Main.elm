@@ -1,7 +1,7 @@
 module Main exposing (main)
 
 import Browser exposing (Document, UrlRequest(..))
-import Browser.Navigation exposing (Key)
+import Browser.Navigation as Nav exposing (Key)
 import Html exposing (Html, div, h1, li, p, text, ul)
 import Html.Attributes exposing (class, href)
 import Json.Decode as D
@@ -59,8 +59,21 @@ type Msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case ( msg, model ) of
+        ( ClickedLink urlRequest, _ ) ->
+            performUrlRequest urlRequest model
+
         ( _, _ ) ->
             ( model, Cmd.none )
+
+
+performUrlRequest : UrlRequest -> Model -> ( Model, Cmd msg )
+performUrlRequest request model =
+    case request of
+        Internal _ ->
+            ( model, Cmd.none )
+
+        External url ->
+            ( model, Nav.load url )
 
 
 
