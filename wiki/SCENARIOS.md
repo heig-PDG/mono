@@ -1,5 +1,7 @@
 # Features
 
+_Italic_ points are nice-to-have features
+
 * Create a profile
 	* Submit his email
 	* Choose a pseudo
