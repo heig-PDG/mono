@@ -2,7 +2,8 @@ module Main exposing (main)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key)
-import Html exposing (div, text)
+import Html exposing (Html, div, h1, text)
+import Html.Attributes exposing (class)
 import Json.Decode as D
 import Url exposing (Url)
 
@@ -73,12 +74,23 @@ view _ =
             "Tupperdate.me"
 
         body =
-            [ div
-                []
-                [ text "Empty for now" ]
+            [ viewLanding
             ]
     in
     { title = title, body = body }
+
+
+viewLanding : Html Msg
+viewLanding =
+    div
+        [ class "w-full h-screen"
+        ]
+        [ h1
+            [ class "text-6xl font-bold"
+            , class "customTitleGradient"
+            ]
+            [ text "Tupperdate" ]
+        ]
 
 
 
