@@ -12,8 +12,12 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '10.x'
-      - run: yarn install
-      - run: yarn build
+      - run: |
+          cd website
+          yarn install
+      - run: |
+          cd website
+          yarn build
       - run: cp website/CNAME website/dist/CNAME
         if : github.repository == 'heig-PDG/mono'
       - run: |
