@@ -14,10 +14,10 @@ jobs:
           node-version: '10.x'
       - run: yarn install
       - run: yarn build
-      - run: cp CNAME dist/CNAME
+      - run: cp website/CNAME website/dist/CNAME
         if : github.repository == 'heig-PDG/mono'
       - run: |
-          cd dist/
+          cd website/dist/
           git init .
           git config user.name "${{github.actor}}"
           git config user.email "${{github.actor}}@users.noreply.github.com"
