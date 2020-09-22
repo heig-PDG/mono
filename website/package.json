@@ -21,5 +21,8 @@
     "parcel-plugin-static-files-copy": "^2.5.0",
     "postcss": "^8.0.7",
     "tailwindcss": "^1.8.10"
+  },
+  "devDependencies": {
+    "node-elm-compiler": "^5.0.5"
   }
 }
