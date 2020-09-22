@@ -10,7 +10,7 @@
     "analyse": "elm-analyse",
     "format": "elm-format --validate src/",
     "dev": "parcel static/index.html",
-    "build": "parcel static/index.html --no-cache"
+    "build": "parcel build static/index.html --no-cache"
   },
   "dependencies": {
     "components": "^0.1.0",
