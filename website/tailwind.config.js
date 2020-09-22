@@ -1,6 +1,11 @@
 module.exports = {
   theme: {
     extend: {
+      fontFamily: {
+        archivo: [ 'archivo', "sans serif" ],
+        mulish: [ 'mulish', "sans serif" ],
+        sans: [ 'mulish' ],
+      },
       colors: {
         smurf: {
           '100': '#E6F3FF',
