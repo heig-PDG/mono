@@ -11,7 +11,6 @@ _Italic_ points are nice-to-have features
 * Post a new lunchbox picture
 	* Set a name
 	* Put one picture
-	* _Inform location_
 
 * Swipe other lunchbox pictures
 	* Pictures are provided by the algorithm
@@ -26,6 +25,8 @@ _Italic_ points are nice-to-have features
 * _Open the map page_
 	* _See where other lunchboxes are_
 	* _Click on those to like or dislike_
+
+[Use case diagram](assets/DiagramUseCase.svg)
 
 ### Example 1
 * User 1 downloads and installs the app. It creates an account or uses his Google one.
