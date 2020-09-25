@@ -96,11 +96,13 @@ view _ =
 viewLanding : Html Msg
 viewLanding =
     div
-        [ class "flex flex-row"
+        [ class "flex flex-col"
+        , class "lg:flex-row lg:items-stretch"
         ]
         [ tupperDate
         , div
-            [ class "w-1/2 h-screen"
+            [ class "w-full lg:w-1/2"
+            , class "h-auto lg:min-h-full"
             , class "p-16 text-right"
             , class "text-white font-archivo"
             , class "bg-smurf-800"
@@ -135,7 +137,8 @@ viewLanding =
 tupperDate : Html Msg
 tupperDate =
     div
-        [ class "w-full h-screen"
+        [ class "w-full lg:w-1/2"
+        , class "h-screen lg:min-h-full"
         , class "font-archivo"
         , class "flex flex-col"
         , class "bg-white"
