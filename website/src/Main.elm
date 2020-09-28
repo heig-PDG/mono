@@ -149,11 +149,12 @@ addTuppFunc =
         [ img
             [ src "/assets/add_chili.png"
             , class "funcImg"
+            , class "-ml-20 md:m-auto"
             ]
             []
         , p
             [ class "text-2xl text-center font-archivo"
-            , class "m-8 ml-56"
+            , class "m-4 md:m-8 md:ml-56"
             ]
             [ text "Add your own Tupp's"
             , Html.br [] []
@@ -175,7 +176,7 @@ viewTuppFunc =
         ]
         [ p
             [ class "text-2xl text-center font-archivo"
-            , class "m-8 mr-56"
+            , class "m-4 md:m-8 md:mr-56"
             ]
             [ text "When you see something "
             , span [ class "font-bold fastTitleGradient" ] [ text "yummy" ]
@@ -185,6 +186,7 @@ viewTuppFunc =
         , img
             [ src "/assets/chili_view.png"
             , class "funcImg"
+            , class "-mr-20 md:m-auto"
             ]
             []
         ]
