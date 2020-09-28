@@ -207,7 +207,7 @@ whoWeAre =
             , class "text-6xl font-bold font-archivo"
             , class "border-b-4 border-white"
             ]
-            [ text "Who are we ?" ]
+            [ text "Who we are" ]
         , ul
             [ class "m-4 text-4xl font-archivo"
             ]
