@@ -145,6 +145,7 @@ addTuppFunc =
         , class "flex flex-row"
         , class "items-center justify-center"
         , class "bg-white"
+        , class "-mt-56"
         ]
         [ img
             [ src "/assets/add_chili.png"
