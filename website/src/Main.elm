@@ -139,13 +139,13 @@ tupperDate =
 addTuppFunc : Html Msg
 addTuppFunc =
     div
-        [ class "w-full"
+        [ class "w-full overflow-hidden"
         , class "h-screen"
+        , class "-mt-56"
         , class "font-archivo"
         , class "flex flex-row"
         , class "items-center justify-center"
         , class "bg-white"
-        , class "-mt-56"
         ]
         [ img
             [ src "/assets/add_chili.png"
@@ -168,7 +168,7 @@ addTuppFunc =
 viewTuppFunc : Html Msg
 viewTuppFunc =
     div
-        [ class "w-full"
+        [ class "w-full overflow-hidden"
         , class "h-screen"
         , class "font-archivo"
         , class "flex flex-row"
