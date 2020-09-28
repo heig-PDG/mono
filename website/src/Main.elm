@@ -149,7 +149,7 @@ addTuppFunc =
         [ img
             [ src "/assets/add_chili.png"
             , class "funcImg"
-            , class "-ml-20 md:m-auto"
+            , class "-ml-20 md:m-0"
             ]
             []
         , p
@@ -186,7 +186,7 @@ viewTuppFunc =
         , img
             [ src "/assets/chili_view.png"
             , class "funcImg"
-            , class "-mr-20 md:m-auto"
+            , class "-mr-20 md:m-0"
             ]
             []
         ]
