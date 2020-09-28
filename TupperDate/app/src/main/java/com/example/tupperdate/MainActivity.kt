@@ -55,25 +55,30 @@ class MainActivity : AppCompatActivity() {
                             )
                         },
                         bodyContent = {
-                            Row() {
-                                Image(imageResource(R.drawable.redlobtser), Modifier.fillMaxWidth(), contentScale = ContentScale.FillWidth)
-                                Text(text = "Red lobster")
+                            Row(Modifier.fillMaxSize(), verticalGravity = Alignment.CenterVertically) {
+                                Column() {
+                                    Image(imageResource(R.drawable.redlobtser), Modifier.fillMaxWidth(), contentScale = ContentScale.FillWidth)
+                                    Text(text = "Red lobster")
+                                }
                             }
                         },
                         bottomBar = {
                             BottomAppBar(backgroundColor = Color.White)
                             {
-                                IconButton(onClick = {}) {
-                                    Icon(vectorResource(id = R.drawable.ic_navigate_before_black_18dp))
-                                }
-                                IconButton(onClick = {}) {
-                                    Icon(vectorResource(id = R.drawable.ic_clear_black_18dp))
-                                }
-                                IconButton(onClick = {}) {
-                                    Icon(vectorResource(id = R.drawable.ic_favorite_border_black_18dp))
-                                }
-                                IconButton(onClick = {}) {
-                                    Icon(vectorResource(id = R.drawable.ic_fastfood_black_18dp))
+                                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly)
+                                {
+                                    IconButton(onClick = {}) {
+                                        Icon(vectorResource(id = R.drawable.ic_navigate_before_black_18dp))
+                                    }
+                                    IconButton(onClick = {}) {
+                                        Icon(vectorResource(id = R.drawable.ic_clear_black_18dp))
+                                    }
+                                    IconButton(onClick = {}) {
+                                        Icon(vectorResource(id = R.drawable.ic_favorite_border_black_18dp))
+                                    }
+                                    IconButton(onClick = {}) {
+                                        Icon(vectorResource(id = R.drawable.ic_fastfood_black_18dp))
+                                    }
                                 }
                             }
                         }
