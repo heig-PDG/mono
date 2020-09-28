@@ -148,7 +148,7 @@ addTuppFunc =
         ]
         [ img
             [ src "/assets/add_chili.png"
-            , class "max-w-full max-h-full"
+            , class "funcImg"
             ]
             []
         , p
@@ -158,7 +158,7 @@ addTuppFunc =
             [ text "Add your own Tupp's"
             , Html.br [] []
             , text "and share them with the "
-            , span [ class "font-bold customTitleGradient" ] [ text "world!" ]
+            , span [ class "font-bold fastTitleGradient" ] [ text "world!" ]
             ]
         ]
 
@@ -178,13 +178,13 @@ viewTuppFunc =
             , class "m-8 mr-56"
             ]
             [ text "When you see something "
-            , span [ class "font-bold customTitleGradient" ] [ text "yummy" ]
+            , span [ class "font-bold fastTitleGradient" ] [ text "yummy" ]
             , Html.br [] []
             , text "you can eat it"
             ]
         , img
             [ src "/assets/chili_view.png"
-            , class "max-w-full max-h-full"
+            , class "funcImg"
             ]
             []
         ]
