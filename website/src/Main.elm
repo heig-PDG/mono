@@ -2,8 +2,8 @@ module Main exposing (main)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation as Nav exposing (Key)
-import Html exposing (Html, div, h1, li, p, text, ul)
-import Html.Attributes exposing (class, href)
+import Html exposing (Html, div, h1, img, li, p, text, ul)
+import Html.Attributes exposing (class, href, src)
 import Json.Decode as D
 import Url exposing (Url)
 
@@ -100,6 +100,7 @@ viewLanding =
         , class "items-stretch"
         ]
         [ tupperDate
+        , addTuppFunc
         , whoWeAre
         ]
 
@@ -130,6 +131,30 @@ tupperDate =
                 , Html.br [] []
                 , text "and start sharing meals with them today."
                 ]
+            ]
+        ]
+
+
+addTuppFunc : Html Msg
+addTuppFunc =
+    div
+        [ class "w-full"
+        , class "h-screen"
+        , class "font-archivo"
+        , class "flex flex-row"
+        , class "items-center justify-center"
+        , class "bg-white"
+        ]
+        [ img
+            [ src "/assets/add_chili.png"
+            , class "max-w-full max-h-full"
+            ]
+            []
+        , p
+            [ class "text-2xl text-center font-archivo"
+            , class "m-8 ml-32"
+            ]
+            [ text "Add your own Tupp's"
             ]
         ]
 
