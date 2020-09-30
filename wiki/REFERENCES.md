@@ -15,8 +15,12 @@
 ## Jetpack Compose
 
 + Thinking in Compose [(YouTube)](https://www.youtube.com/watch?v=SMOhl9RK0BA)
++ Compose by example [(YouTube)](https://www.youtube.com/watch?v=DDd6IOlH3io)
 + Jetpack Compose Basics [(Codelab)](https://codelabs.developers.google.com/codelabs/jetpack-compose-basics)
 + Jetpack Compose Samples [(GitHub)](https://github.com/android/compose-samples)
++ **#compose** channel on the [Kotlin Slack](https://kotlinlang.slack.com)
++ Understanding Compose [(YouTube)](https://www.youtube.com/watch?v=Q9MtlmmN4Q0)
+	- This talk is more technical and goes behind-the-scenes to explain how composition works. It's great if you want to understand the do's and don'ts of making efficient UIs with Compose.
 
 ## Server-side development with Kotlin
 
