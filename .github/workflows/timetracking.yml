@@ -12,6 +12,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
+          token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
 
       - name: Update time tracking
         run: python3 timetracking/updateTimeTrack.py >> TIMETRACKING.md
@@ -21,3 +22,6 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Update time tracking informations
+          commit_user_name: Your friendly Bot
+          commit_author: Your friendly Bot <actions@github.com>
+          push_options: --force
