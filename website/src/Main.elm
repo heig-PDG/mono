@@ -193,7 +193,7 @@ landingOne =
         ]
 
 landingTwo : Html Msg
-landingTwo = 
+landingTwo =
     rightContent "/assets/Two.png"
         [ text "Add your own Tupp's"
         , Html.br [] []
@@ -202,7 +202,7 @@ landingTwo =
         ]
 
 landingThree : Html Msg
-landingThree = 
+landingThree =
     leftContent "/assets/Three.png"
         [ text "Stay in "
         , span [ class "font-bold fastTitleGradient" ] [ text "touch" ]
@@ -212,7 +212,7 @@ landingThree =
 
 
 landingFour : Html Msg
-landingFour = 
+landingFour =
     rightContent "/assets/Four.png"
         [ text "Reflect who"
         , Html.br [] []
