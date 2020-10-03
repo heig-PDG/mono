@@ -1,4 +1,4 @@
-module Main exposing (main)
+module Main exposing (main, landingTwo)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation as Nav exposing (Key)
@@ -100,8 +100,10 @@ viewLanding =
         , class "items-stretch"
         ]
         [ tupperDate
-        , addTuppFunc
-        , viewTuppFunc
+        , landingOne
+        , landingTwo
+        , landingThree
+        , landingFour
         , whoWeAre
         ]
 
@@ -135,20 +137,18 @@ tupperDate =
             ]
         ]
 
-
-addTuppFunc : Html Msg
-addTuppFunc =
+leftContent : String -> (List (Html Msg)) -> Html Msg
+leftContent image content =
     div
-        [ class "w-full overflow-hidden"
+        [ class "w-full overflow-x-hidden"
         , class "h-screen"
         , class "-mt-56"
         , class "font-archivo"
         , class "flex flex-row"
         , class "items-center justify-center"
-        , class "bg-white"
         ]
         [ img
-            [ src "/assets/add_chili.png"
+            [ src image
             , class "funcImg"
             , class "-ml-20 md:m-0"
             ]
@@ -157,41 +157,70 @@ addTuppFunc =
             [ class "text-2xl text-center font-archivo"
             , class "m-4 md:m-8 md:ml-56"
             ]
-            [ text "Add your own Tupp's"
-            , Html.br [] []
-            , text "and share them with the "
-            , span [ class "font-bold fastTitleGradient" ] [ text "world!" ]
-            ]
+            content
         ]
 
-
-viewTuppFunc : Html Msg
-viewTuppFunc =
+rightContent : String -> (List (Html Msg)) -> Html Msg
+rightContent image content =
     div
-        [ class "w-full overflow-hidden"
+        [ class "w-full overflow-x-hidden"
+        , class "-mt-56"
         , class "h-screen"
         , class "font-archivo"
         , class "flex flex-row"
         , class "items-center justify-center"
-        , class "bg-white"
         ]
         [ p
             [ class "text-2xl text-center font-archivo"
             , class "m-4 md:m-8 md:mr-56"
             ]
-            [ text "When you see something "
-            , span [ class "font-bold fastTitleGradient" ] [ text "yummy" ]
-            , Html.br [] []
-            , text "you can eat it"
-            ]
+            content
         , img
-            [ src "/assets/chili_view.png"
+            [ src image
             , class "funcImg"
             , class "-mr-20 md:m-0"
             ]
             []
         ]
 
+landingOne : Html Msg
+landingOne =
+     leftContent "/assets/One.png"
+        [ text "Browse and match"
+        , Html.br [] []
+        , text "recipes you "
+        , span [ class "font-bold fastTitleGradient" ] [ text "love!" ]
+        ]
+
+landingTwo : Html Msg
+landingTwo = 
+    rightContent "/assets/Two.png"
+        [ text "Add your own Tupp's"
+        , Html.br [] []
+        , text "and share them with the "
+        , span [ class "font-bold fastTitleGradient" ] [ text "world!" ]
+        ]
+
+landingThree : Html Msg
+landingThree = 
+    leftContent "/assets/Three.png"
+        [ text "Stay in "
+        , span [ class "font-bold fastTitleGradient" ] [ text "touch" ]
+        , Html.br [] []
+        , text "with your new friends!"
+        ]
+
+
+landingFour : Html Msg
+landingFour = 
+    rightContent "/assets/Four.png"
+        [ text "Reflect who"
+        , Html.br [] []
+        , text "you are"
+        , Html.br [] []
+        , text "with your "
+        , span [ class "font-bold fastTitleGradient" ] [ text "recipes!" ]
+        ]
 
 whoWeAre : Html Msg
 whoWeAre =
