@@ -1,9 +1,10 @@
-module Main exposing (main, landingTwo)
+module Main exposing (landingTwo, main)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation as Nav exposing (Key)
 import Html exposing (Html, div, h1, img, li, p, span, text, ul)
 import Html.Attributes exposing (class, href, src)
+import Icons
 import Json.Decode as D
 import Url exposing (Url)
 
@@ -137,7 +138,8 @@ tupperDate =
             ]
         ]
 
-leftContent : String -> (List (Html Msg)) -> Html Msg
+
+leftContent : String -> List (Html Msg) -> Html Msg
 leftContent image content =
     div
         [ class "w-full overflow-x-hidden"
@@ -160,7 +162,8 @@ leftContent image content =
             content
         ]
 
-rightContent : String -> (List (Html Msg)) -> Html Msg
+
+rightContent : String -> List (Html Msg) -> Html Msg
 rightContent image content =
     div
         [ class "w-full overflow-x-hidden"
@@ -183,14 +186,16 @@ rightContent image content =
             []
         ]
 
+
 landingOne : Html Msg
 landingOne =
-     leftContent "/assets/One.png"
+    leftContent "/assets/One.png"
         [ text "Browse and match"
         , Html.br [] []
         , text "recipes you "
         , span [ class "font-bold fastTitleGradient" ] [ text "love!" ]
         ]
+
 
 landingTwo : Html Msg
 landingTwo =
@@ -200,6 +205,7 @@ landingTwo =
         , text "and share them with the "
         , span [ class "font-bold fastTitleGradient" ] [ text "world!" ]
         ]
+
 
 landingThree : Html Msg
 landingThree =
@@ -222,6 +228,7 @@ landingFour =
         , span [ class "font-bold fastTitleGradient" ] [ text "recipes!" ]
         ]
 
+
 whoWeAre : Html Msg
 whoWeAre =
     div
@@ -233,12 +240,12 @@ whoWeAre =
         ]
         [ h1
             [ class "m-auto"
-            , class "text-6xl font-bold font-archivo"
+            , class "text-4xl font-bold md:text-5xl font-archivo"
             , class "border-b-4 border-white"
             ]
             [ text "Who we are" ]
         , ul
-            [ class "m-4 text-4xl font-archivo"
+            [ class "m-4 text-2xl md:text-3xl font-archivo"
             ]
             [ li [] [ text "Alexandre Piveteau" ]
             , li [] [ text "Matthieu Burguburu" ]
@@ -252,7 +259,18 @@ whoWeAre =
                 [ href "https://github.com/heig-PDG/mono"
                 , class "underline"
                 ]
-                [ text "GitHub" ]
+                [ text "GitHub"
+                , span [ class "ml-2" ] [ Icons.github ]
+                ]
+            , Html.br [] []
+            , text "or check out the demo "
+            , Html.a
+                [ href "https://demo.tupperdate.me"
+                , class "underline"
+                ]
+                [ text "here"
+                , span [ class "ml-2" ] [ Icons.figma ]
+                ]
             ]
         ]
 
