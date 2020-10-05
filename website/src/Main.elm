@@ -4,6 +4,7 @@ import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation as Nav exposing (Key)
 import Html exposing (Html, div, h1, img, li, p, span, text, ul)
 import Html.Attributes exposing (class, href, src)
+import Icons
 import Json.Decode as D
 import Url exposing (Url)
 
@@ -258,7 +259,16 @@ whoWeAre =
                 [ href "https://github.com/heig-PDG/mono"
                 , class "underline"
                 ]
-                [ text "GitHub" ]
+                [ text "GitHub"
+                , span [ class "ml-2" ] [ Icons.github ]
+                ]
+            , Html.br [] []
+            , text "or check out the demo "
+            , Html.a
+                [ href "https://demo.tupperdate.me"
+                , class "underline"
+                ]
+                [ text "here" ]
             ]
         ]
 
