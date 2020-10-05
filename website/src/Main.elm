@@ -268,7 +268,9 @@ whoWeAre =
                 [ href "https://demo.tupperdate.me"
                 , class "underline"
                 ]
-                [ text "here" ]
+                [ text "here"
+                , span [ class "ml-2" ] [ Icons.figma ]
+                ]
             ]
         ]
 
