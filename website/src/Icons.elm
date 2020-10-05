@@ -9,8 +9,7 @@ import Svg.Attributes as SA
 github : Html msg
 github =
     svg
-        [ SA.class "w-6 h-6 mr-1"
-        , SA.class "inline"
+        [ SA.class "hidden w-6 h-6 mr-1 md:inline"
         , SA.viewBox "0 0 24 24"
         ]
         [ path
@@ -24,8 +23,7 @@ github =
 figma : Html msg
 figma =
     svg
-        [ SA.class "w-4 h-4 ml-1 mr-2"
-        , SA.class "inline"
+        [ SA.class "hidden w-4 h-4 ml-1 mr-2 md:inline"
         , SA.viewBox "0 0 779 1168"
         ]
         [ path
