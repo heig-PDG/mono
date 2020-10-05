@@ -239,12 +239,12 @@ whoWeAre =
         ]
         [ h1
             [ class "m-auto"
-            , class "text-4xl font-bold md:text-6xl font-archivo"
+            , class "text-4xl font-bold md:text-5xl font-archivo"
             , class "border-b-4 border-white"
             ]
             [ text "Who we are" ]
         , ul
-            [ class "m-4 text-2xl md:text-4xl font-archivo"
+            [ class "m-4 text-2xl md:text-3xl font-archivo"
             ]
             [ li [] [ text "Alexandre Piveteau" ]
             , li [] [ text "Matthieu Burguburu" ]
