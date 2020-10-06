@@ -1,6 +1,10 @@
 # heig-PDG/mono
 
 An Android and web application to match and meet people based on meals, recipes and tupperwares. This is a semester project done at HEIG-VD. More information is available on the [class repository on GitLab](https://gitlab.com/softeng-heigvd/teaching-heigvd-pdg-2020/guidelines).
+![Build and publish Android app to Telegram](https://github.com/heig-PDG/mono/workflows/Build%20and%20publish%20Android%20app%20to%20Telegram/badge.svg)
+![Build and publish Docker image](https://github.com/heig-PDG/mono/workflows/Build%20and%20publish%20Docker%20image/badge.svg)
+![Update timetracking information](https://github.com/heig-PDG/mono/workflows/Update%20timetracking%20information/badge.svg)
+![Deploy Website to GitHub Pages](https://github.com/heig-PDG/mono/workflows/Deploy%20Website%20to%20GitHub%20Pages/badge.svg)
 
 ## Team
 
