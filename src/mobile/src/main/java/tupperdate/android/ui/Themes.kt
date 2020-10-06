@@ -24,6 +24,7 @@ fun TupperdateTheme(
     MaterialTheme(
         colors = TupperdateLightColors,
         shapes = TupperdateShapes,
+        typography = TupperdateTypography,
         content = content,
     )
 }
