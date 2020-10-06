@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'kotlin'
+}
+
+group 'tupperdate.web'
+version '0.0.0'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+dependencies {
+
+    // Project dependencies.
+    implementation project(":common")
+
+    // Server-side Ktor dependencies
+    implementation "io.ktor:ktor-server-netty:1.4.0"
+
+    // SL4J
+    implementation "org.slf4j:slf4j-simple:1.7.21"
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+task stage {
+    dependsOn installDist
+}
+
+application {
+    mainClassName = "tupperdate.web.Main"
+}
