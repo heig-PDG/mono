@@ -15,7 +15,7 @@ jobs:
           token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
 
       - name: Update time tracking
-        run: python3 timetracking/updateTimeTrack.py >> TIMETRACKING.md
+        run: python3 vcs/timetracking/updateTimeTrack.py >> README.md
         env:
           CLOCKIFY_API_KEY: ${{ secrets.CLOCKIFY_API_KEY }}
 
