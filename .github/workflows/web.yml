@@ -32,3 +32,10 @@ jobs:
           heroku container:release -a heig-pdg web
         env:
           HEROKU_API_KEY: ${{ secrets.TOKEN_HEROKU }}
+
+      - name: Notify on Telegram
+        run: |
+          curl -X POST \
+            --form-string chat_id=${{ secrets.DEPLOY_TELEGRAM_GROUP }} \
+            --form-string text="✅ New backend on api.tupperdate.me" \
+            https://api.telegram.org/bot${{ secrets.DEPLOY_TELEGRAM_TOKEN }}/sendMessage
