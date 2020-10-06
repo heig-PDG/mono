@@ -71,8 +71,7 @@ private val FlamingoPalette = listOf(
 @Preview
 @Composable
 fun BrandingPreview() {
-
-    MaterialTheme {
+    TupperdateTheme {
         ScrollableColumn {
             val state = rememberScrollState()
 
