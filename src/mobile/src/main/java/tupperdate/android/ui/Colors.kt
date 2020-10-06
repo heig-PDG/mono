@@ -4,10 +4,8 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.ScrollableRow
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Stack
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -69,40 +67,41 @@ private fun ColorList(
     }
 }
 
+private val SmurfPalette = listOf(
+    Color.Smurf100,
+    Color.Smurf200,
+    Color.Smurf300,
+    Color.Smurf400,
+    Color.Smurf500,
+    Color.Smurf600,
+    Color.Smurf700,
+    Color.Smurf800,
+    Color.Smurf900,
+)
+
+private val FlamingoPalette = listOf(
+    Color.Flamingo100,
+    Color.Flamingo200,
+    Color.Flamingo300,
+    Color.Flamingo400,
+    Color.Flamingo500,
+    Color.Flamingo600,
+    Color.Flamingo700,
+    Color.Flamingo800,
+    Color.Flamingo900,
+)
+
 @Preview
 @Composable
-private fun ColorsPreview() {
-    // remember {} this
-    val smurf = listOf(
-        Color.Smurf100,
-        Color.Smurf200,
-        Color.Smurf300,
-        Color.Smurf400,
-        Color.Smurf500,
-        Color.Smurf600,
-        Color.Smurf700,
-        Color.Smurf800,
-        Color.Smurf900,
-    )
-    val flamingo = listOf(
-        Color.Flamingo100,
-        Color.Flamingo200,
-        Color.Flamingo300,
-        Color.Flamingo400,
-        Color.Flamingo500,
-        Color.Flamingo600,
-        Color.Flamingo700,
-        Color.Flamingo800,
-        Color.Flamingo900,
-    )
+fun BrandingPreview() {
 
     MaterialTheme {
         Column {
             val state = rememberScrollState()
 
             Text("Palette", Modifier.padding(16.dp), style = MaterialTheme.typography.h5)
-            ColorList(smurf, Modifier.padding(bottom = 16.dp), state = state)
-            ColorList(flamingo, Modifier.padding(bottom = 16.dp), state = state)
+            ColorList(SmurfPalette, Modifier.padding(bottom = 16.dp), state = state)
+            ColorList(FlamingoPalette, Modifier.padding(bottom = 16.dp), state = state)
         }
     }
 }
