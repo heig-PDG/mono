@@ -43,10 +43,31 @@ android {
         }
     }
 
+    signingConfig {
+        prod {
+            // Main signing properties.
+            Properties prodSigning = new Properties()
+            prodSigning.load(project.rootProject.file("signing.properties.prod").newDataInputStream())
+
+            storeFile file(prodSigning.getProperty("keystore.file")) ?: "None."
+            storePassword prodSigning.getProperty("keystore.password") ?: "None."
+            keyAlias prodSigning.getProperty("alias.name") ?: "None."
+            keyPassword prodSigning.getProperty("alias.password") ?: "None."
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions "environment"
+    productFlavors {
+        prod {
+            dimension "environement"
+            signingConfig signingConfig.prod
         }
     }
 
