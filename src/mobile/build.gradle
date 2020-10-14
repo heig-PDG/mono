@@ -51,8 +51,8 @@ android {
 
             storeFile file(prodSigning.getProperty("keystore.file")) ?: "None"
             storePassword prodSigning.getProperty("keystore.password") ?: "None"
-            keyAlias prodSigning.getProperty("key.alias") ?: "None"
-            keyPassword prodSigning.getProperty("key.password") ?: "None"
+            keyAlias prodSigning.getProperty("alias.name") ?: "None"
+            keyPassword prodSigning.getProperty("alias.password") ?: "None"
         }
     }
 
