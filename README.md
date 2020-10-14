@@ -44,6 +44,7 @@ This table represents the total time invested. It will be updated weekly.
 | Date | Total time |
 | :--: | :-----: |
 | 2020-10-02 | 12h 22m 34s |
-| 2020-10-06 | 19h 55m 55s || 2020-10-06 | 21h 35m 47s |
+| 2020-10-06 | 19h 55m 55s |
+| 2020-10-06 | 21h 35m 47s |
 | 2020-10-09 | 24h 49m 34s |
 | 2020-10-13 | 24h 49m 34s |
