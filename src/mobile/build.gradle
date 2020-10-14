@@ -43,8 +43,22 @@ android {
         }
     }
 
+    signingConfigs {
+        prod {
+            Properties prodSigning = new Properties()
+            File prodFile = new File("mobile/signing.properties.prod")
+            prodFile.withInputStream { prodSigning.load(it) }
+
+            storeFile file(prodSigning.getProperty("keystore.file")) ?: "None"
+            storePassword prodSigning.getProperty("keystore.password") ?: "None"
+            keyAlias prodSigning.getProperty("key.alias") ?: "None"
+            keyPassword prodSigning.getProperty("key.password") ?: "None"
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.prod
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
