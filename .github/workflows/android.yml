@@ -15,12 +15,18 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 8
-    
+
+      - name: Load secret files
+        run: echo "$SIGNING_PROPERTIES_PROD" > ./src/mobile/signing.properties.prod
+        shell: bash
+        env:
+          SIGNING_PROPERTIES_PROD: ${{ secrets.SIGNING_PROPERTIES_PROD }}
+
       - name: Build app
         run: |
           cd ./src
           ./gradlew mobile:assemble
-      
+
       - name: Push to Telegram
         run: |
           cp src/mobile/build/outputs/apk/debug/* .
