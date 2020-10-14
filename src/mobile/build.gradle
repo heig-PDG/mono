@@ -43,31 +43,24 @@ android {
         }
     }
 
-    signingConfig {
+    signingConfigs {
         prod {
-            // Main signing properties.
             Properties prodSigning = new Properties()
-            prodSigning.load(project.rootProject.file("signing.properties.prod").newDataInputStream())
+            File prodFile = new File("mobile/signing.properties.prod")
+            prodFile.withInputStream { prodSigning.load(it) }
 
-            storeFile file(prodSigning.getProperty("keystore.file")) ?: "None."
-            storePassword prodSigning.getProperty("keystore.password") ?: "None."
-            keyAlias prodSigning.getProperty("alias.name") ?: "None."
-            keyPassword prodSigning.getProperty("alias.password") ?: "None."
+            storeFile file(prodSigning.getProperty("keystore.file")) ?: "None"
+            storePassword prodSigning.getProperty("keystore.password") ?: "None"
+            keyAlias prodSigning.getProperty("key.alias") ?: "None"
+            keyPassword prodSigning.getProperty("key.password") ?: "None"
         }
     }
 
     buildTypes {
         release {
+            signingConfig signingConfigs.prod
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    flavorDimensions "environment"
-    productFlavors {
-        prod {
-            dimension "environement"
-            signingConfig signingConfig.prod
         }
     }
 
