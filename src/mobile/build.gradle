@@ -26,6 +26,16 @@ android {
         exclude 'META-INF/*.kotlin_module'
     }
 
+    flavorDimensions "api"
+    productFlavors {
+        mock {
+            dimension "api"
+        }
+        api {
+            dimension "api"
+        }
+    }
+
     buildFeatures {
         compose true
     }
