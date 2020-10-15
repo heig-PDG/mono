@@ -5,7 +5,7 @@ apply plugin: 'kotlinx-atomicfu'
 dependencies {
 
     // Testing
-    testImplementation "junit:junit:4.13"
+    testImplementation "junit:junit:4.13.1"
     testImplementation "org.mockito:mockito-core:2.28.2"
 
     // Kotlin libraries
