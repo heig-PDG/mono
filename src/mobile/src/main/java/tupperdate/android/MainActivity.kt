@@ -12,11 +12,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val api = api()
         setContent {
-
-            TupperdateTheme {
-                // TODO : Make the preview private once we no longer want it.
-                BrandingPreview()
-            }
+            TupperdateApp(api = api, backDispatcher = onBackPressedDispatcher)
         }
     }
 }
