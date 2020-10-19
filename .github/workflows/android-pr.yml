@@ -1,0 +1,76 @@
+name: Build and publish Android app to Telegram
+
+on: [ pull_request ]
+
+jobs:
+  build:
+    name: Build mobile client
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        variant: [ mock, api ]
+        include:
+        - variant: mock
+          gradle_task: assembleMock
+
+        - variant: api
+          gradle_task: assembleApi
+
+    defaults:
+      run:
+        working-directory: src
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup JDK 8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 8
+
+      - name: Load secret files
+        run: echo "$SIGNING_PROPERTIES_PROD" > ./mobile/signing.properties.prod
+        shell: bash
+        env:
+          SIGNING_PROPERTIES_PROD: ${{ secrets.SIGNING_PROPERTIES_PROD }}
+
+      - name: Build app
+        run: ./gradlew ${{ matrix.gradle_task }}
+
+  test:
+    name: Test mobile client
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        variant: [ mock, api ]
+        include:
+        - variant: mock
+          gradle_task: testMockDebugUnitTest
+
+        - variant: api
+          gradle_task: testApiDebugUnitTest
+
+    defaults:
+      run:
+        working-directory: src
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup JDK 8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 8
+
+      - name: Load secret files
+        run: echo "$SIGNING_PROPERTIES_PROD" > ./mobile/signing.properties.prod
+        shell: bash
+        env:
+          SIGNING_PROPERTIES_PROD: ${{ secrets.SIGNING_PROPERTIES_PROD }}
+
+      - name: Build app
+        run: ./gradlew ${{ matrix.gradle_task }}
