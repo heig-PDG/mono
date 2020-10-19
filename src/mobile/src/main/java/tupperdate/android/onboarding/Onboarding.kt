@@ -10,11 +10,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.TupperdateTypography
 import tupperdate.android.ui.material.GradientButton
+import java.util.*
 
 @Composable
 fun Onboarding(
@@ -42,11 +44,23 @@ fun Onboarding(
 
         Row(modifier = Modifier.weight(1f)) {}
 
-        GradientButton(onClick = onButtonClick) {
-            Text("Get started")
+        GradientButton(
+                onClick = onButtonClick,
+                modifier = Modifier
+                        .fillMaxWidth()
+                        .preferredHeight(48.dp),
+        ) {
+            Text(
+                    text = ("Get started").toUpperCase(Locale.getDefault())
+            )
         }
 
-        Text(text = "This app was created during a group project at HEIG-VD. Make sure to check it out on GitHub.")
+        Text(
+                text = "This app was created during a group project at HEIG-VD. Make sure to check it out on GitHub.",
+                style = TupperdateTypography.body2,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)
+        )
     }
 }
 
