@@ -6,21 +6,53 @@ on:
 
 jobs:
   build:
+    name: Build website
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install node.js
+        uses: actions/setup-node@v1
         with:
           node-version: '10.x'
-      - run: |
+
+      - name: Install dependencies
+        run: |
           cd website
           yarn install
-      - run: |
+
+      - name: Build website
+        run: |
           cd website
           yarn build
-      - run: cp website/CNAME website/dist/CNAME
+
+      - name: Configure GitHub Pages
+        run: cp website/CNAME website/dist/CNAME
         if : github.repository == 'heig-PDG/mono'
-      - run: |
+
+      - name: Build artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: website
+          path: website/dist
+
+
+  deploy:
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: website
+          path: website/dist
+
+      - name: Deploy to GitHub Pages
+        run: |
           cd website/dist/
           git init .
           git config user.name "${{github.actor}}"
