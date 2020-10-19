@@ -1,4 +1,4 @@
-name: Build and publish Android app to Telegram
+name: Build and Test Android app
 
 on: [ pull_request ]
 
