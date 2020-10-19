@@ -16,7 +16,7 @@ sealed class Destination : Parcelable {
 }
 
 class Action(navigator: Navigator<Destination>) {
-    val home : () -> Unit = {
+    val home: () -> Unit = {
         navigator.navigate(Destination.Home)
     }
 

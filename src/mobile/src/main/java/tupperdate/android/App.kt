@@ -17,11 +17,11 @@ import tupperdate.api.AuthenticationApi
 
 @Composable
 fun TupperdateApp(
-        api: Api,
-        backDispatcher: OnBackPressedDispatcher
+    api: Api,
+    backDispatcher: OnBackPressedDispatcher,
 ) {
     val navigator = rememberSavedInstanceState(
-            saver = Navigator.saver<Destination>(backDispatcher)
+        saver = Navigator.saver<Destination>(backDispatcher)
     ) {
         Navigator(Destination.Home, backDispatcher)
     }
@@ -31,32 +31,32 @@ fun TupperdateApp(
 
     TupperdateTheme {
         TupperdateAppDestination(
-                api = api,
-                destination = navigator.current,
-                action = action,
-                user = user,
+            api = api,
+            destination = navigator.current,
+            action = action,
+            user = user,
         )
     }
 }
 
 @Composable
 private fun TupperdateAppDestination(
-        api: Api,
-        destination: Destination,
-        action: Action,
-        user: Flow<AuthenticationApi.User?>
+    api: Api,
+    destination: Destination,
+    action: Action,
+    user: Flow<AuthenticationApi.User?>,
 ) {
     val currentUser by user.collectAsState(null)
 
     destination.let { dest ->
         when (dest) {
             is Destination.Home -> Home(
-                    action.viewOnboarding,
-                    currentUser
+                action.viewOnboarding,
+                currentUser
             )
             is Destination.BrandingPreview -> BrandingPreview()
             is Destination.Onboarding -> Onboarding(
-                    {} // TODO: Add a behaviour to button
+                {} // TODO: Add a behaviour to button
             )
         }
     }
