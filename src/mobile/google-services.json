@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "443670314838-nuen37ergoojhh2jhku8j73p8otn4mf8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tupperdate.android",
+            "certificate_hash": "389c83cfa8939770e40d07721771816a07649cde"
+          }
+        },
+        {
           "client_id": "443670314838-ue3u346rt26l4aum2fdgccimnv3mm53b.apps.googleusercontent.com",
           "client_type": 3
         }
