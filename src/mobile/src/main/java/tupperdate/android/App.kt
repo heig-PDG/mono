@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import kotlinx.coroutines.flow.Flow
 import tupperdate.android.home.Home
+import tupperdate.android.onboarding.Onboarding
 import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.utils.Navigator
@@ -50,10 +51,13 @@ private fun TupperdateAppDestination(
     destination.let { dest ->
         when (dest) {
             is Destination.Home -> Home(
-                action.viewPreview,
+                action.viewOnboarding,
                 currentUser
             )
             is Destination.BrandingPreview -> BrandingPreview()
+            is Destination.Onboarding -> Onboarding(
+                {} // TODO: Add a behaviour to button
+            )
         }
     }
 }
