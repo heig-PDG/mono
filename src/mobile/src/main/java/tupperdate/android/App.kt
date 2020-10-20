@@ -9,7 +9,7 @@ import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import kotlinx.coroutines.flow.Flow
 import tupperdate.android.home.Home
 import tupperdate.android.onboarding.Onboarding
-import tupperdate.android.onboarding.OnboardingPage2
+import tupperdate.android.onboarding.OnboardingConfirmation
 import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.utils.Navigator
@@ -25,7 +25,7 @@ fun TupperdateApp(
     val currentUser by user.collectAsState(null)
 
     val navigator = rememberSavedInstanceState(
-        saver = Navigator.saver<Destination>(backDispatcher)
+        saver = Navigator.saver(backDispatcher)
     ) {
         if (currentUser == null) {
             Navigator(Destination.Onboarding, backDispatcher)
@@ -63,11 +63,11 @@ private fun TupperdateAppDestination(
             )
             is Destination.BrandingPreview -> BrandingPreview()
             is Destination.Onboarding -> Onboarding(
-                onButtonClick = action.viewOnboardingPage2
+                onButtonClick = action.viewOnboardingConfirmation
             )
-            is Destination.OnboardingPage2 -> OnboardingPage2(
+            is Destination.OnboardingConfirmation -> OnboardingConfirmation(
                 {} // TODO: Add a behaviour to button
-                ,action.viewOnboarding
+                , action.viewOnboarding
             )
         }
     }

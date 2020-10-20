@@ -18,7 +18,7 @@ import tupperdate.android.ui.TupperdateTypography
 import tupperdate.android.ui.material.BrandedTextField
 
 @Composable
-fun OnboardingPage2(
+fun OnboardingConfirmation(
     onButtonClick: () -> Unit,
     onReturnClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -66,9 +66,9 @@ private fun codeInput(
 
 @Preview(showBackground = true)
 @Composable
-private fun OnboardingPage2Preview() {
+private fun OnboardingConfirmationPreview() {
     TupperdateTheme {
-        OnboardingPage2(
+        OnboardingConfirmation(
             {}, {},
             Modifier.background(Color.White)
                 .fillMaxSize()
