@@ -20,14 +20,20 @@ fun TupperdateApp(
     api: Api,
     backDispatcher: OnBackPressedDispatcher,
 ) {
+    val user = remember { api.authentication.connectedUser() }
+    val currentUser by user.collectAsState(null)
+
     val navigator = rememberSavedInstanceState(
         saver = Navigator.saver<Destination>(backDispatcher)
     ) {
-        Navigator(Destination.Home, backDispatcher)
+        if (currentUser == null) {
+            Navigator(Destination.Onboarding, backDispatcher)
+        } else {
+            Navigator(Destination.Home, backDispatcher)
+        }
     }
 
     val action = remember(navigator) { Action(navigator) }
-    val user = remember { api.authentication.connectedUser() }
 
     TupperdateTheme {
         TupperdateAppDestination(
