@@ -6,21 +6,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.material.BottomAppBar
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import tupperdate.android.ui.TupperdateTypography
-import tupperdate.android.ui.material.GradientButton
+import tupperdate.android.ui.material.BrandedButton
 import java.util.*
 
 @Composable
 fun oneButtonBottomBar(onButtonClick: () -> Unit, buttonString: String) {
     BottomAppBar(backgroundColor = Color.White)
     {
-        GradientButton(
+        BrandedButton(
             onClick = onButtonClick,
             modifier = Modifier
                 .fillMaxWidth()
@@ -36,7 +35,7 @@ fun oneButtonBottomBar(onButtonClick: () -> Unit, buttonString: String) {
 @Composable
 fun oneButtonBottomBar(onButtonClick: () -> Unit, buttonString: String, textBelow: String) {
     Column() {
-        GradientButton(
+        BrandedButton(
             onClick = onButtonClick,
             modifier = Modifier
                 .fillMaxWidth()
