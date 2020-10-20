@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.LinearGradient
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.boundsInParent
-import androidx.compose.ui.onPositioned
+import androidx.compose.ui.onGloballyPositioned
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -125,7 +125,7 @@ fun BrandedButton(
         backgroundColor = Color.White,
         border = stroke,
         shape = RoundedCornerShape(50),
-        modifier = modifier.onPositioned { bounds = it.boundsInParent },
+        modifier = modifier.onGloballyPositioned { bounds = it.boundsInParent },
         content = content,
     )
 }
@@ -151,7 +151,7 @@ fun BrandedButton(
     ) {
         Text(
             text = (value).toUpperCase(Locale.getDefault()),
-            fontSize = 18.sp
+            fontSize = 14.sp
         )
     }
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onboarding_welcome">Welcome to Tupper • Date</string>
+    <string name="onboarding_presentation">Discover folks who cook what you like, and start sharing meals with them today.</string>
+    <string name="onboarding_phone_label">Your telephone number</string>
+    <string name="onboarding_phone_placeholder">+41 79 123 45 67</string>
+    <string name="onboarding_button_text">Get Started</string>
+    <string name="onboarding_bottom_text">This app was created during a group project at HEIG-VD. Make sure to check it out on GitHub.</string>
+
+    <string name="onboardingConfirmation_title">You\'ve received something.</string>
+    <string name="onboardingConfirmation_reception_text">You\'re nearly there! Please enter the registration code you\'ve just received.</string>
+    <string name="onboardingConfirmation_button_text">Let\'s Go</string>
+    <string name="onboardingConfirmation_bottom_text">Can\'t find your registration code? Make sure to check your spam folder.</string>
+    <string name="onboardingConfirmation_code_label">Your code</string>
+    <string name="onboardingConfirmation_code_placeholder">2077</string>
+</resources>

@@ -8,9 +8,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
+import tupperdate.android.R
 import tupperdate.android.appbars.onlyReturnTopBar
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.TupperdateTypography
@@ -30,13 +32,13 @@ fun OnboardingConfirmation(
         modifier.padding(top = 64.dp, bottom = 42.dp, start = 16.dp, end = 16.dp)
     ) {
         Text(
-            text = "You've got mail",
+            text = stringResource(R.string.onboardingConfirmation_title),
             style = TupperdateTypography.h5,
             modifier = Modifier.padding(top = 32.dp, bottom = 16.dp)
         )
 
         Text(
-            text = "You're nearly there! Please enter the registration code you've just received.",
+            text = stringResource(R.string.onboardingConfirmation_reception_text),
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
@@ -44,12 +46,12 @@ fun OnboardingConfirmation(
 
         // TODO Check code with database
 
-        Row(modifier = Modifier.weight(1f)) {}
+        Spacer(modifier = Modifier.weight(1f, true))
 
         BottomBar(
-            buttonValue = "Let's Go",
+            buttonValue = stringResource(R.string.onboardingConfirmation_button_text),
             onButtonClick = onButtonClick,
-            bottomText =  "Can't find your registration code? Make sure to check your spam folder."
+            bottomText = stringResource(R.string.onboardingConfirmation_bottom_text),
         )
     }
 }
@@ -62,9 +64,9 @@ private fun codeInput(
 ) {
     BrandedTextField(
         value = code,
-        label = { Text(text = "Your code") },
+        label = { Text(stringResource(R.string.onboardingConfirmation_code_label)) },
         onValueChange = onCodeChanged,
-        placeholder = { Text("2077") },
+        placeholder = { Text(stringResource(R.string.onboardingConfirmation_code_placeholder)) },
         keyboardType = KeyboardType.Number,
         modifier = modifier.fillMaxWidth(),
     )

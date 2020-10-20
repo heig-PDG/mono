@@ -34,27 +34,26 @@ fun Onboarding(
         )
 
         Text(
-            text = "Discover folks who cook what you like, and start sharing meals with them today.",
+            text = stringResource(R.string.onboarding_presentation),
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
         BrandedTextField(
             value = phone,
             onValueChange = setPhone,
-            label = { Text("Your telephone number") },
-            placeholder = { Text("+41 79 123 45 67") },
+            label = { Text(stringResource(R.string.onboarding_phone_label)) },
+            placeholder = { Text(stringResource(R.string.onboarding_phone_placeholder)) },
             keyboardType = KeyboardType.Phone,
             modifier = Modifier
                 .fillMaxWidth()
         )
 
-
-        Row(modifier = Modifier.weight(1f)) {}
+        Spacer(modifier = Modifier.weight(1f, true))
 
         BottomBar(
-            buttonValue = "Get Started",
+            buttonValue = stringResource(R.string.onboarding_button_text),
             onButtonClick = onButtonClick,
-            bottomText = "This app was created during a group project at HEIG-VD. Make sure to check it out on GitHub."
+            bottomText = stringResource(R.string.onboarding_bottom_text),
         )
     }
 }
