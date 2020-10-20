@@ -3,7 +3,8 @@ package tupperdate.android.onboarding
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.AmbientEmphasisLevels
+import androidx.compose.material.ProvideEmphasis
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.TupperdateTypography
+import tupperdate.android.ui.material.AnimatedTextField
 import tupperdate.android.ui.material.GradientButton
 import java.util.*
 
@@ -23,7 +25,7 @@ fun Onboarding(
     onButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val (email, setEmail) = remember { mutableStateOf("") }
+    val (phone, setPhone) = remember { mutableStateOf("") }
 
     Column(
         modifier.padding(top = 64.dp, bottom = 24.dp, start = 24.dp, end = 24.dp)
@@ -34,11 +36,19 @@ fun Onboarding(
             modifier = Modifier.padding(bottom = 8.dp),
         )
 
-        emailInput(email = email, onValueChange = setEmail)
-
         Text(
             text = "Discover folks who cook what you like, and start sharing meals with them today.",
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        AnimatedTextField(
+            value = phone,
+            onValueChange = setPhone,
+            label = { Text("Your telephone number") },
+            placeholder = { Text("+41 79 123 45 67") },
+            keyboardType = KeyboardType.Phone,
+            modifier = Modifier
+                .fillMaxWidth()
         )
 
 
@@ -55,34 +65,15 @@ fun Onboarding(
             )
         }
 
-        Text(
-            text = "This app was created during a group project at HEIG-VD. Make sure to check it out on GitHub.",
-            style = TupperdateTypography.body2,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)
-        )
+        ProvideEmphasis(emphasis = AmbientEmphasisLevels.current.disabled) {
+            Text(
+                text = "This app was created during a group project at HEIG-VD. Make sure to check it out on GitHub.",
+                style = TupperdateTypography.body2,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)
+            )
+        }
     }
-}
-
-@Composable
-private fun emailInput(
-    email: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val EMAIL_REGEX = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9]+" // Seems enough
-    val isValid = email.count() >= 4 && EMAIL_REGEX.toRegex().matches(email)
-
-    OutlinedTextField(
-        value = email,
-        label = { Text(text = "Your email") },
-        onValueChange = onValueChange,
-        placeholder = { Text("john.aplleseed@tupperdate.me") },
-        isErrorValue = !isValid,
-        keyboardType = KeyboardType.Email,
-        modifier = modifier.fillMaxWidth()
-            .padding(bottom = 8.dp)
-    )
 }
 
 @Preview(showBackground = true)
