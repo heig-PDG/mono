@@ -32,7 +32,7 @@ fun OnboardingConfirmation(
         Text(
             text = "You've got mail",
             style = TupperdateTypography.h5,
-            modifier = Modifier.padding(top = 32.dp, bottom = 8.dp)
+            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp)
         )
 
         Text(

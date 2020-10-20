@@ -2,9 +2,9 @@ package tupperdate.android.appbars
 
 import androidx.compose.foundation.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
@@ -18,7 +18,7 @@ fun onlyReturnTopBar(onReturnClick: () -> Unit,) {
                 Icon(vectorResource(id = R.drawable.ic_navigate_before_black_18dp))
             }
         },
-        backgroundColor = Color.White,
-        elevation = 1.dp,
+        backgroundColor = MaterialTheme.colors.surface,
+        elevation = 0.dp,
     )
 }

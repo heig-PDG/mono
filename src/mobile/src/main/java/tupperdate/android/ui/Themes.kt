@@ -13,6 +13,8 @@ private val TupperdateLightColors = lightColors(
     onSecondary = Color.White,
     secondary = Color.Flamingo500,
     secondaryVariant = Color.Flamingo600,
+    surface = Color.White,
+    onSurface = Color.Black,
 )
 
 private val TupperdateShapes = Shapes()

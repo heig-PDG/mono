@@ -8,9 +8,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
+import tupperdate.android.R
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.TupperdateTypography
 import tupperdate.android.ui.material.BrandedTextField
@@ -26,7 +28,7 @@ fun Onboarding(
         modifier.padding(top = 64.dp, bottom = 42.dp, start = 16.dp, end = 16.dp)
     ) {
         Text(
-            text = "Welcome to Tupper • Date",
+            text = stringResource(R.string.onboarding_welcome),
             style = TupperdateTypography.h3,
             modifier = Modifier.padding(bottom = 8.dp),
         )
