@@ -33,7 +33,7 @@ fun Onboarding(
     ) {
         Text(
             text = stringResource(R.string.onboarding_welcome),
-            style = TupperdateTypography.h3,
+            style = TupperdateTypography.h4,
             modifier = Modifier.padding(bottom = 18.dp),
         )
 
