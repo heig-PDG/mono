@@ -26,7 +26,7 @@ fun TupperdateApp(
     }
 
     val action = remember(navigator) { Action(navigator) }
-    val user = remember { api.authentication.connectedUser() }
+    val user = remember { api.authentication.profile }
 
     TupperdateTheme {
         TupperdateAppDestination(
@@ -43,7 +43,7 @@ private fun TupperdateAppDestination(
     api: Api,
     destination : Destination,
     action: Action,
-    user: Flow<AuthenticationApi.User?>
+    user: Flow<AuthenticationApi.Profile?>
 ) {
     val currentUser by user.collectAsState(null)
 

@@ -9,34 +9,46 @@ import kotlin.random.Random
 @OptIn(ExperimentalCoroutinesApi::class)
 object MockAuthenticationApi : AuthenticationApi {
 
-    private val user = MutableStateFlow<AuthenticationApi.User?>(null)
+    private val user = MutableStateFlow<AuthenticationApi.Profile?>(null)
 
-    override suspend fun connect(email: String): AuthenticationApi.Error? {
+    override suspend fun requestCode(
+        number: String,
+        force: Boolean
+    ): AuthenticationApi.RequestCodeResult {
         val timer = Random.nextLong(from = 1000, until = 3000)
         delay(timer)
-        return if (email.contains("fail")) {
-            AuthenticationApi.Error("Something went wrong.")
-        } else {
-            null
+        return when (number) {
+            "144" -> {
+                user.value = AuthenticationApi.Profile(
+                    displayName = null,
+                    phoneNumber = "144",
+                    profileImageUrl = null,
+                )
+                AuthenticationApi.RequestCodeResult.LoggedIn
+            }
+            "123" -> AuthenticationApi.RequestCodeResult.RequiresVerification
+            "666" -> AuthenticationApi.RequestCodeResult.InternalError
+            else -> AuthenticationApi.RequestCodeResult.InvalidNumberError
         }
     }
 
-    override suspend fun confirm(code: String): AuthenticationApi.Error? {
+    override suspend fun verify(code: String): AuthenticationApi.VerificationResult {
         val timer = Random.nextLong(from = 1000, until = 3000)
         delay(timer)
-        if (code == "0000") {
-            user.value = AuthenticationApi.User(
-                email = "olivier@heig-vd.ch",
-                displayName = "Olivier Liechti",
-                profileImageUrl = null,
-            )
-            return null
-        } else {
-            return AuthenticationApi.Error("Bad code.")
+        return when (code) {
+            "0000" -> {
+                user.value = AuthenticationApi.Profile(
+                    displayName = null,
+                    phoneNumber = "144",
+                    profileImageUrl = null,
+                )
+                AuthenticationApi.VerificationResult.LoggedIn
+            }
+            "666" -> AuthenticationApi.VerificationResult.InternalError
+            else -> AuthenticationApi.VerificationResult.InvalidVerificationError
         }
     }
 
-    override fun connectedUser(): Flow<AuthenticationApi.User?> {
-        return user
-    }
+    override val profile: Flow<AuthenticationApi.Profile?>
+        get() = user
 }
