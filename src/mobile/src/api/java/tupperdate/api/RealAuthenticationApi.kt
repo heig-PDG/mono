@@ -3,10 +3,12 @@ package tupperdate.api
 import com.google.android.gms.tasks.TaskExecutors
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -37,7 +39,14 @@ class RealAuthenticationApi(
             override fun onVerificationCompleted(
                 credential: PhoneAuthCredential,
             ) {
-                continuation.resume(AuthenticationApi.RequestCodeResult.LoggedIn)
+                firebaseAuth.signInWithCredential(credential)
+                    .addOnCompleteListener { result ->
+                        if (result.isSuccessful) {
+                            continuation.resume(AuthenticationApi.RequestCodeResult.LoggedIn)
+                        } else {
+                            continuation.resume(AuthenticationApi.RequestCodeResult.InternalError)
+                        }
+                    }
             }
 
             override fun onVerificationFailed(
@@ -61,13 +70,6 @@ class RealAuthenticationApi(
                 this@RealAuthenticationApi.forceToken.value = token
                 continuation.resume(AuthenticationApi.RequestCodeResult.RequiresVerification)
             }
-
-            override fun onCodeAutoRetrievalTimeOut(
-                verification: String,
-            ) {
-                this@RealAuthenticationApi.verification.value = verification
-                continuation.resume(AuthenticationApi.RequestCodeResult.RequiresVerification)
-            }
         }
 
         val token = forceToken.value
@@ -87,7 +89,25 @@ class RealAuthenticationApi(
     }
 
     override suspend fun verify(code: String): AuthenticationApi.VerificationResult {
-        TODO("Not yet implemented")
+        val verification = this@RealAuthenticationApi.verification.value
+        return if (verification == null) {
+            AuthenticationApi.VerificationResult.InternalError
+        } else {
+            suspendCoroutine { continuation ->
+                firebaseAuth.signInWithCredential(
+                    PhoneAuthProvider.getCredential(
+                        verification,
+                        code
+                    )
+                ).addOnCompleteListener { result ->
+                    if (result.isSuccessful) {
+                        continuation.resume(AuthenticationApi.VerificationResult.LoggedIn)
+                    } else {
+                        continuation.resume(AuthenticationApi.VerificationResult.InvalidVerificationError)
+                    }
+                }
+            }
+        }
     }
 
     override val profile: Flow<AuthenticationApi.Profile?>
