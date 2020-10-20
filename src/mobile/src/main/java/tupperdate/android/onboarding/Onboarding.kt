@@ -70,11 +70,15 @@ private fun emailInput(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val EMAIL_REGEX = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9]+" // Seems enough
+    val isValid = email.count() >= 4 && EMAIL_REGEX.toRegex().matches(email)
+
     OutlinedTextField(
         value = email,
         label = { Text(text = "Your email") },
         onValueChange = onValueChange,
         placeholder = { Text("john.aplleseed@tupperdate.me") },
+        isErrorValue = !isValid,
         keyboardType = KeyboardType.Email,
         modifier = modifier.fillMaxWidth()
             .padding(bottom = 8.dp)
