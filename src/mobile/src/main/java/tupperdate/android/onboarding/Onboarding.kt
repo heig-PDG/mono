@@ -16,8 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.TupperdateTypography
-import tupperdate.android.ui.material.AnimatedTextField
-import tupperdate.android.ui.material.GradientButton
+import tupperdate.android.ui.material.BrandedTextField
+import tupperdate.android.ui.material.BrandedButton
 import java.util.*
 
 @Composable
@@ -41,7 +41,7 @@ fun Onboarding(
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        AnimatedTextField(
+        BrandedTextField(
             value = phone,
             onValueChange = setPhone,
             label = { Text("Your telephone number") },
@@ -54,7 +54,7 @@ fun Onboarding(
 
         Row(modifier = Modifier.weight(1f)) {}
 
-        GradientButton(
+        BrandedButton(
             onClick = onButtonClick,
             modifier = Modifier
                 .fillMaxWidth()

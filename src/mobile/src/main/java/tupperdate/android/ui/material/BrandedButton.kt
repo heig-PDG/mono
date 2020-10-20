@@ -87,7 +87,7 @@ private val Transition = transitionDefinition<State> {
  * @param content the inner contents of the button.
  */
 @Composable
-fun GradientButton(
+fun BrandedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     borderSize: Dp = 2.dp,

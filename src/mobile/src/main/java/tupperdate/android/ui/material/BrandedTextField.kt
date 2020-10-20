@@ -37,7 +37,7 @@ private val Transition = transitionDefinition<Int> {
 }
 
 @Composable
-fun AnimatedTextField(
+fun BrandedTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -62,7 +62,7 @@ fun AnimatedTextField(
 @Composable
 private fun AnimatedTextFieldPreview() {
     TupperdateTheme {
-        AnimatedTextField(
+        BrandedTextField(
             "",
             {},
             Modifier.background(Color.White)
