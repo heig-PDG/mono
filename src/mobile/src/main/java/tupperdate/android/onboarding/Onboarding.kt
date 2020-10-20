@@ -21,6 +21,7 @@ import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.TupperdateTypography
 import tupperdate.android.ui.material.BrandedButton
 import tupperdate.android.ui.material.BrandedTextField
+import tupperdate.android.ui.material.BrandedTitleText
 
 @Composable
 fun Onboarding(
@@ -34,7 +35,10 @@ fun Onboarding(
     ) {
         ProvideTextStyle(TupperdateTypography.h4) {
             Text(stringResource(R.string.onboarding_welcome))
-            Text(stringResource(R.string.onboarding_welcome_name), Modifier.padding(bottom = 18.dp))
+            BrandedTitleText(
+                stringResource(R.string.onboarding_welcome_name),
+                Modifier.padding(bottom = 16.dp)
+            )
         }
 
         Text(
