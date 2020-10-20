@@ -6,6 +6,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import tupperdate.android.R
 
 @Composable
@@ -17,6 +18,7 @@ fun onlyReturnTopBar(onReturnClick: () -> Unit,) {
                 Icon(vectorResource(id = R.drawable.ic_navigate_before_black_18dp))
             }
         },
-        backgroundColor = Color.White
+        backgroundColor = Color.White,
+        elevation = 1.dp,
     )
 }
