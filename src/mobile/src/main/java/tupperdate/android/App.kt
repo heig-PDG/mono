@@ -66,8 +66,8 @@ private fun TupperdateAppDestination(
                 onButtonClick = action.viewOnboardingConfirmation
             )
             is Destination.OnboardingConfirmation -> OnboardingConfirmation(
-                {} // TODO: Add a behaviour to button
-                , action.viewOnboarding
+                onButtonClick = {}, // TODO: Add a behaviour to button
+                onReturnClick = action.back
             )
         }
     }

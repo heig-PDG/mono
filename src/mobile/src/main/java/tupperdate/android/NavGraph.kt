@@ -34,4 +34,8 @@ class Action(navigator: Navigator<Destination>) {
     val viewOnboardingConfirmation: () -> Unit = {
         navigator.navigate(Destination.OnboardingConfirmation)
     }
+
+    val back: () -> Unit = {
+        navigator.back()
+    }
 }
