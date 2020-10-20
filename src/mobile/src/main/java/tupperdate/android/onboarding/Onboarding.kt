@@ -13,11 +13,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.ui.tooling.preview.Preview
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.TupperdateTypography
-import tupperdate.android.ui.material.BrandedTextField
 import tupperdate.android.ui.material.BrandedButton
+import tupperdate.android.ui.material.BrandedTextField
 import java.util.*
 
 @Composable
@@ -28,7 +29,7 @@ fun Onboarding(
     val (phone, setPhone) = remember { mutableStateOf("") }
 
     Column(
-        modifier.padding(top = 64.dp, bottom = 24.dp, start = 24.dp, end = 24.dp)
+        modifier.padding(top = 64.dp, bottom = 42.dp, start = 16.dp, end = 16.dp)
     ) {
         Text(
             text = "Welcome to Tupper • Date",
@@ -58,10 +59,11 @@ fun Onboarding(
             onClick = onButtonClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .preferredHeight(48.dp),
+                .preferredHeight(56.dp),
         ) {
             Text(
-                text = ("Get started").toUpperCase(Locale.getDefault())
+                text = ("Get started").toUpperCase(Locale.getDefault()),
+                fontSize = 18.sp
             )
         }
 
