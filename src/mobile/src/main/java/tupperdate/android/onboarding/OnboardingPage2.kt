@@ -38,8 +38,7 @@ fun OnboardingPage2(
 
         codeInput(code = code, onCodeChanged = setCode)
 
-        //this func will be implemented, but call won't changee
-        //checkReceveidCode(code.toInt())
+        // TODO Check code with database
 
         Row(modifier = Modifier.weight(1f)) {}
         oneButtonBottomBar(onButtonClick,
