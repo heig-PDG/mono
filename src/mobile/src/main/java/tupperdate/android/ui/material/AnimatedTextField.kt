@@ -42,14 +42,16 @@ fun AnimatedTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     label: @Composable (() -> Unit)? = null,
+    placeholder: @Composable (() -> Unit)? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
 ) {
     val colors = transition(Transition, initState = 0, toState = 100)
 
     OutlinedTextField(
         value = value,
-        label = label,
         onValueChange = onValueChange,
+        label = label,
+        placeholder = placeholder,
         keyboardType = keyboardType,
         activeColor = colors[Active],
         modifier = modifier,
