@@ -9,6 +9,7 @@ import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import kotlinx.coroutines.flow.Flow
 import tupperdate.android.home.Home
 import tupperdate.android.onboarding.Onboarding
+import tupperdate.android.onboarding.OnboardingPage2
 import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.utils.Navigator
@@ -63,6 +64,10 @@ private fun TupperdateAppDestination(
             is Destination.BrandingPreview -> BrandingPreview()
             is Destination.Onboarding -> Onboarding(
                 onButtonClick = action.home
+            )
+            is Destination.OnboardingPage2 -> OnboardingPage2(
+                {} // TODO: Add a behaviour to button
+                ,action.viewOnboarding
             )
         }
     }
