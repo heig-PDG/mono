@@ -17,7 +17,7 @@ import tupperdate.api.AuthenticationApi
 @Composable
 fun Home(
     onButtonClick: () -> Unit,
-    user: AuthenticationApi.User?,
+    user: AuthenticationApi.Profile?,
     modifier: Modifier = Modifier,
 ) {
     if (user == null) {
@@ -47,7 +47,7 @@ private fun HomeDisconnected(
 @Composable
 private fun HomeConnected(
     onButtonClick: () -> Unit,
-    user: AuthenticationApi.User,
+    user: AuthenticationApi.Profile,
     modifier: Modifier,
 ) {
     Column(
@@ -76,16 +76,16 @@ private fun HomeDisconnectPreview() {
 @Preview
 @Composable
 private fun HomeConnectedPreview() {
-    val user = AuthenticationApi.User(
-        "john@appleseed.com",
-        "John Appleseed",
-        null
+    val profile = AuthenticationApi.Profile(
+        displayName = "John Appleseed",
+        phoneNumber = "144",
+        profileImageUrl = null,
     )
 
     TupperdateTheme {
         Home(
             onButtonClick = {},
-            user = user,
+            user = profile,
             Modifier.background(Color.White)
                 .fillMaxSize()
         )
