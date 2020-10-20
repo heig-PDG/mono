@@ -3,7 +3,7 @@ package tupperdate.android.onboarding
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.TextField
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -70,13 +70,14 @@ private fun emailInput(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    TextField(
+    OutlinedTextField(
         value = email,
         label = { Text(text = "Your email") },
         onValueChange = onValueChange,
         placeholder = { Text("john.aplleseed@tupperdate.me") },
         keyboardType = KeyboardType.Email,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth()
+            .padding(bottom = 8.dp)
     )
 }
 
