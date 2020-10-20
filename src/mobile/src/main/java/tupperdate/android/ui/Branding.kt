@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
-import tupperdate.android.ui.material.GradientButton
+import tupperdate.android.ui.material.BrandedButton
 import java.util.*
 
 @Composable
@@ -108,7 +108,7 @@ fun BrandingPreview() {
                 Text("Button")
             }
 
-            GradientButton(onClick = {}, padding) {
+            BrandedButton(onClick = {}, padding) {
                 Text("Gradient Button")
             }
         }

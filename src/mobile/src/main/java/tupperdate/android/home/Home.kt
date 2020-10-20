@@ -22,6 +22,7 @@ fun Home(
 ) {
     if (user == null) {
         HomeDisconnected(
+            onButtonClick,
             modifier,
         )
     } else {
@@ -35,12 +36,16 @@ fun Home(
 
 @Composable
 private fun HomeDisconnected(
+    onButtonClick: () -> Unit,
     modifier: Modifier,
 ) {
     Column(
         modifier.padding(10.dp)
     ) {
-        Text(text = "Hi there. You cannot click on anything")
+        Text(text = "Hi there.")
+        Button(onClick = onButtonClick) {
+            Text("Go to onboarding")
+        }
     }
 }
 
