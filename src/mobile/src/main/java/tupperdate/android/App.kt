@@ -21,7 +21,7 @@ fun TupperdateApp(
     api: Api,
     backDispatcher: OnBackPressedDispatcher,
 ) {
-    val user = remember { api.authentication.connectedUser() }
+    val user = remember { api.authentication.profile }
     val currentUser by user.collectAsState(null)
 
     val navigator = rememberSavedInstanceState(
@@ -51,7 +51,7 @@ private fun TupperdateAppDestination(
     api: Api,
     destination: Destination,
     action: Action,
-    user: Flow<AuthenticationApi.User?>,
+    user: Flow<AuthenticationApi.Profile?>
 ) {
     val currentUser by user.collectAsState(null)
 

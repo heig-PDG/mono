@@ -1,5 +1,5 @@
 package tupperdate.api
 
-import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LifecycleOwner
 
-fun AppCompatActivity.api(): Api = MockApi
+fun LifecycleOwner.api(): Api = MockApi

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "443670314838",
+    "firebase_url": "https://tupperdate-developement.firebaseio.com",
+    "project_id": "tupperdate-developement",
+    "storage_bucket": "tupperdate-developement.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:443670314838:android:aa00e2300f4e50acc5a0f7",
+        "android_client_info": {
+          "package_name": "tupperdate.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "443670314838-nuen37ergoojhh2jhku8j73p8otn4mf8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tupperdate.android",
+            "certificate_hash": "389c83cfa8939770e40d07721771816a07649cde"
+          }
+        },
+        {
+          "client_id": "443670314838-ue3u346rt26l4aum2fdgccimnv3mm53b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEbEzXyAVzLttw-p8NxiaOobcPPmdk0PQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "443670314838-ue3u346rt26l4aum2fdgccimnv3mm53b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
