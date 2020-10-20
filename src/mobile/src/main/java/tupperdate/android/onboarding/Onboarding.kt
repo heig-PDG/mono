@@ -34,12 +34,12 @@ fun Onboarding(
         Text(
             text = stringResource(R.string.onboarding_welcome),
             style = TupperdateTypography.h3,
-            modifier = Modifier.padding(bottom = 8.dp),
+            modifier = Modifier.padding(bottom = 18.dp),
         )
 
         Text(
             text = stringResource(R.string.onboarding_presentation),
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 38.dp)
         )
 
         BrandedTextField(

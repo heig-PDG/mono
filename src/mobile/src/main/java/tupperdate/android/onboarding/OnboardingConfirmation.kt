@@ -38,12 +38,12 @@ fun OnboardingConfirmation(
         Text(
             text = stringResource(R.string.onboardingConfirmation_title),
             style = TupperdateTypography.h5,
-            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 16.dp)
         )
 
         Text(
             text = stringResource(R.string.onboardingConfirmation_reception_text),
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 38.dp)
         )
 
         codeInput(code = code, onCodeChanged = setCode)
