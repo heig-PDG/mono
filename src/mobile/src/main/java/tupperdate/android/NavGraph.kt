@@ -13,6 +13,9 @@ sealed class Destination : Parcelable {
 
     @Parcelize
     object Onboarding : Destination()
+
+    @Parcelize
+    object OnboardingPage2 : Destination()
 }
 
 class Action(navigator: Navigator<Destination>) {
@@ -26,5 +29,9 @@ class Action(navigator: Navigator<Destination>) {
 
     val viewOnboarding: () -> Unit = {
         navigator.navigate(Destination.Onboarding)
+    }
+
+    val viewOnboardingPage2: () -> Unit = {
+        navigator.navigate(Destination.OnboardingPage2)
     }
 }
