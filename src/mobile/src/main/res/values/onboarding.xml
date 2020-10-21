@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="onboarding_welcome">Welcome to Tupper • Date</string>
+    <string name="onboarding_welcome">Welcome to</string>
+    <string name="onboarding_welcome_name">Tupper • Date</string>
     <string name="onboarding_presentation">Discover folks who cook what you like, and start sharing meals with them today.</string>
     <string name="onboarding_phone_label">Your telephone number</string>
     <string name="onboarding_phone_placeholder">+41 79 123 45 67</string>

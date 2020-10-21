@@ -1,5 +1,6 @@
 package tupperdate.android.onboarding
 
+import androidx.compose.foundation.ProvideTextStyle
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,6 +21,7 @@ import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.TupperdateTypography
 import tupperdate.android.ui.material.BrandedButton
 import tupperdate.android.ui.material.BrandedTextField
+import tupperdate.android.ui.material.BrandedTitleText
 
 @Composable
 fun Onboarding(
@@ -29,17 +31,19 @@ fun Onboarding(
     val (phone, setPhone) = remember { mutableStateOf("") }
 
     Column(
-        modifier.padding(top = 96.dp, bottom = 42.dp, start = 16.dp, end = 16.dp)
+        modifier.padding(top = 72.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
     ) {
-        Text(
-            text = stringResource(R.string.onboarding_welcome),
-            style = TupperdateTypography.h3,
-            modifier = Modifier.padding(bottom = 18.dp),
-        )
+        ProvideTextStyle(TupperdateTypography.h4) {
+            Text(stringResource(R.string.onboarding_welcome))
+            BrandedTitleText(
+                stringResource(R.string.onboarding_welcome_name),
+                Modifier.padding(bottom = 16.dp)
+            )
+        }
 
         Text(
             text = stringResource(R.string.onboarding_presentation),
-            modifier = Modifier.padding(bottom = 38.dp)
+            modifier = Modifier.padding(bottom = 32.dp)
         )
 
         BrandedTextField(
