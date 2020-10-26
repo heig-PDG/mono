@@ -6,7 +6,10 @@ import com.google.firebase.auth.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.map
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
@@ -55,6 +58,7 @@ class RealAuthenticationApi(
                         } else {
                             resumeOnce {
                                 continuation.resume(AuthenticationApi.RequestCodeResult.InternalError)
+                                result.exception?.printStackTrace();
                             }
                         }
                     }
@@ -70,6 +74,7 @@ class RealAuthenticationApi(
                         )
                     }
                     else -> resumeOnce {
+                        problem.printStackTrace();
                         continuation.resume(
                             AuthenticationApi.RequestCodeResult.InternalError
                         )

@@ -76,7 +76,6 @@ fun Onboarding(
                     AuthenticationApi.RequestCodeResult.InvalidNumberError -> Unit
                     AuthenticationApi.RequestCodeResult.InternalError -> Unit
                     null -> scope.launch {
-                        setRequestCodeResult(null)
                         setRequestCodeResult(auth.requestCode(phone))
                     }
                 }
