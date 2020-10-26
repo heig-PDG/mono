@@ -3,13 +3,12 @@ package tupperdate.api
 import com.google.android.gms.tasks.TaskExecutors
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -36,15 +35,27 @@ class RealAuthenticationApi(
 
         val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
+            private val isResumed = AtomicBoolean(false)
+
+            private fun resumeOnce(f: () -> Unit) {
+                if (isResumed.compareAndSet(false, true)) {
+                    f()
+                }
+            }
+
             override fun onVerificationCompleted(
                 credential: PhoneAuthCredential,
             ) {
                 firebaseAuth.signInWithCredential(credential)
                     .addOnCompleteListener { result ->
                         if (result.isSuccessful) {
-                            continuation.resume(AuthenticationApi.RequestCodeResult.LoggedIn)
+                            resumeOnce {
+                                continuation.resume(AuthenticationApi.RequestCodeResult.LoggedIn)
+                            }
                         } else {
-                            continuation.resume(AuthenticationApi.RequestCodeResult.InternalError)
+                            resumeOnce {
+                                continuation.resume(AuthenticationApi.RequestCodeResult.InternalError)
+                            }
                         }
                     }
             }
@@ -53,12 +64,16 @@ class RealAuthenticationApi(
                 problem: FirebaseException,
             ) {
                 when (problem) {
-                    is FirebaseAuthInvalidCredentialsException -> continuation.resume(
-                        AuthenticationApi.RequestCodeResult.InvalidNumberError
-                    )
-                    else -> continuation.resume(
-                        AuthenticationApi.RequestCodeResult.InternalError
-                    )
+                    is FirebaseAuthInvalidCredentialsException -> resumeOnce {
+                        continuation.resume(
+                            AuthenticationApi.RequestCodeResult.InvalidNumberError
+                        )
+                    }
+                    else -> resumeOnce {
+                        continuation.resume(
+                            AuthenticationApi.RequestCodeResult.InternalError
+                        )
+                    }
                 }
             }
 
@@ -68,7 +83,9 @@ class RealAuthenticationApi(
             ) {
                 this@RealAuthenticationApi.verification.value = verification
                 this@RealAuthenticationApi.forceToken.value = token
-                continuation.resume(AuthenticationApi.RequestCodeResult.RequiresVerification)
+                resumeOnce {
+                    continuation.resume(AuthenticationApi.RequestCodeResult.RequiresVerification)
+                }
             }
         }
 
