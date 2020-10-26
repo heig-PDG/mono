@@ -5,6 +5,7 @@ import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.AmbientEmphasisLevels
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.ProvideEmphasis
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -20,7 +21,6 @@ import tupperdate.android.R
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.TupperdateTypography
 import tupperdate.android.ui.material.BrandedButton
-import tupperdate.android.ui.material.BrandedTextField
 import tupperdate.android.ui.material.BrandedTitleText
 
 @Composable
@@ -46,7 +46,7 @@ fun Onboarding(
             modifier = Modifier.padding(bottom = 32.dp)
         )
 
-        BrandedTextField(
+        OutlinedTextField(
             value = phone,
             onValueChange = setPhone,
             label = { Text(stringResource(R.string.onboarding_phone_label)) },
