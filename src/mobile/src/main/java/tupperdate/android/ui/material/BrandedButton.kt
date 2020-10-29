@@ -9,7 +9,9 @@ import androidx.compose.animation.core.transitionDefinition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.transition
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.runtime.*
@@ -21,13 +23,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.LinearGradient
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.boundsInParent
-import androidx.compose.ui.onPositioned
+import androidx.compose.ui.onGloballyPositioned
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import tupperdate.android.ui.Flamingo700
 import tupperdate.android.ui.Flamingo800
 import tupperdate.android.ui.Smurf700
 import tupperdate.android.ui.Smurf800
+import java.util.*
 
 
 private val FirstColor = ColorPropKey()
@@ -87,7 +91,7 @@ private val Transition = transitionDefinition<State> {
  * @param content the inner contents of the button.
  */
 @Composable
-fun GradientButton(
+fun BrandedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     borderSize: Dp = 2.dp,
@@ -121,7 +125,33 @@ fun GradientButton(
         backgroundColor = Color.White,
         border = stroke,
         shape = RoundedCornerShape(50),
-        modifier = modifier.onPositioned { bounds = it.boundsInParent },
+        modifier = modifier.onGloballyPositioned { bounds = it.boundsInParent },
         content = content,
     )
+}
+
+/**
+ * An alternative to [Button] that uses an animated gradient on its inner border. The gradient
+ * color scheme is Smurf- and Flamingo-based.
+ *
+ * @param value the string inside the button
+ * @param onClick the callback called when the button is clicked.
+ * @param modifier the modifier for the button.
+ */
+@Composable
+fun BrandedButton(
+    value: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    BrandedButton(
+        onClick = onClick,
+        modifier = modifier
+            .preferredHeight(56.dp),
+    ) {
+        Text(
+            text = (value).toUpperCase(Locale.getDefault()),
+            fontSize = 14.sp
+        )
+    }
 }

@@ -17,11 +17,12 @@ import tupperdate.api.AuthenticationApi
 @Composable
 fun Home(
     onButtonClick: () -> Unit,
-    user: AuthenticationApi.User?,
+    user: AuthenticationApi.Profile?,
     modifier: Modifier = Modifier,
 ) {
     if (user == null) {
         HomeDisconnected(
+            onButtonClick,
             modifier,
         )
     } else {
@@ -35,19 +36,23 @@ fun Home(
 
 @Composable
 private fun HomeDisconnected(
+    onButtonClick: () -> Unit,
     modifier: Modifier,
 ) {
     Column(
         modifier.padding(10.dp)
     ) {
-        Text(text = "Hi there. You cannot click on anything")
+        Text(text = "Hi there.")
+        Button(onClick = onButtonClick) {
+            Text("Go to onboarding")
+        }
     }
 }
 
 @Composable
 private fun HomeConnected(
     onButtonClick: () -> Unit,
-    user: AuthenticationApi.User,
+    user: AuthenticationApi.Profile,
     modifier: Modifier,
 ) {
     Column(
@@ -76,16 +81,16 @@ private fun HomeDisconnectPreview() {
 @Preview
 @Composable
 private fun HomeConnectedPreview() {
-    val user = AuthenticationApi.User(
-        "john@appleseed.com",
-        "John Appleseed",
-        null
+    val profile = AuthenticationApi.Profile(
+        displayName = "John Appleseed",
+        phoneNumber = "144",
+        profileImageUrl = null,
     )
 
     TupperdateTheme {
         Home(
             onButtonClick = {},
-            user = user,
+            user = profile,
             Modifier.background(Color.White)
                 .fillMaxSize()
         )

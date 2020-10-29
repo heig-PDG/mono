@@ -8,6 +8,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import kotlinx.coroutines.flow.Flow
 import tupperdate.android.home.Home
+import tupperdate.android.onboarding.Onboarding
+import tupperdate.android.onboarding.OnboardingConfirmation
 import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.utils.Navigator
@@ -17,16 +19,22 @@ import tupperdate.api.AuthenticationApi
 @Composable
 fun TupperdateApp(
     api: Api,
-    backDispatcher: OnBackPressedDispatcher
+    backDispatcher: OnBackPressedDispatcher,
 ) {
+    val user = remember { api.authentication.profile }
+    val currentUser by user.collectAsState(null)
+
     val navigator = rememberSavedInstanceState(
-        saver = Navigator.saver<Destination>(backDispatcher)
+        saver = Navigator.saver(backDispatcher)
     ) {
-        Navigator(Destination.Home, backDispatcher)
+        if (currentUser == null) {
+            Navigator(Destination.Onboarding, backDispatcher)
+        } else {
+            Navigator(Destination.Home, backDispatcher)
+        }
     }
 
     val action = remember(navigator) { Action(navigator) }
-    val user = remember { api.authentication.connectedUser() }
 
     TupperdateTheme {
         TupperdateAppDestination(
@@ -41,19 +49,26 @@ fun TupperdateApp(
 @Composable
 private fun TupperdateAppDestination(
     api: Api,
-    destination : Destination,
+    destination: Destination,
     action: Action,
-    user: Flow<AuthenticationApi.User?>
+    user: Flow<AuthenticationApi.Profile?>
 ) {
     val currentUser by user.collectAsState(null)
 
     destination.let { dest ->
         when (dest) {
             is Destination.Home -> Home(
-                action.viewPreview,
-                currentUser
+                onButtonClick = action.viewOnboarding,
+                user = currentUser
             )
             is Destination.BrandingPreview -> BrandingPreview()
+            is Destination.Onboarding -> Onboarding(
+                onButtonClick = action.viewOnboardingConfirmation
+            )
+            is Destination.OnboardingConfirmation -> OnboardingConfirmation(
+                onButtonClick = {}, // TODO: Add a behaviour to button
+                onReturnClick = action.back
+            )
         }
     }
 }

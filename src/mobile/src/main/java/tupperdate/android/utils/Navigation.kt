@@ -14,11 +14,11 @@ import androidx.compose.runtime.toMutableStateList
  */
 class Navigator<T : Parcelable> private constructor(
     initialBackStack: List<T>,
-    backDispatcher: OnBackPressedDispatcher
+    backDispatcher: OnBackPressedDispatcher,
 ) {
     constructor(
         initial: T,
-        backDispatcher: OnBackPressedDispatcher
+        backDispatcher: OnBackPressedDispatcher,
     ) : this(listOf(initial), backDispatcher)
 
     private val backStack = initialBackStack.toMutableStateList()
