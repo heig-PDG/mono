@@ -13,21 +13,26 @@ import androidx.compose.ui.res.vectorResource
 import tupperdate.android.R
 
 @Composable
-fun mainBottomBar() {
+fun mainBottomBar(
+    onLike: () -> Unit,
+    onDislike: () -> Unit,
+    onReturn: () -> Unit,
+    onRecipeClick: () -> Unit
+) {
     BottomAppBar(backgroundColor = Color.White)
     {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly)
         {
-            IconButton(onClick = {}) {
+            IconButton(onClick = onReturn) {
                 Icon(vectorResource(id = R.drawable.ic_navigate_before_black_18dp))
             }
-            IconButton(onClick = {}) {
+            IconButton(onClick = onDislike) {
                 Icon(vectorResource(id = R.drawable.ic_clear_black_18dp))
             }
-            IconButton(onClick = {}) {
+            IconButton(onClick = onLike) {
                 Icon(vectorResource(id = R.drawable.ic_favorite_border_black_18dp))
             }
-            IconButton(onClick = {}) {
+            IconButton(onClick = onRecipeClick) {
                 Icon(vectorResource(id = R.drawable.ic_fastfood_black_18dp))
             }
         }
