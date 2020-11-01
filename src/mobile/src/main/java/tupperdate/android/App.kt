@@ -58,6 +58,7 @@ private fun TupperdateAppDestination(
     destination.let { dest ->
         when (dest) {
             is Destination.Home -> Home(
+                recipes = api.recipe.stack(),
                 onChatClick = {},
                 onProfileClick = {},
                 onRecipeClick = {},

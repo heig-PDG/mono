@@ -32,7 +32,7 @@ fun recipeCard(offset: Int, recipe: RecipeApi.Recipe) {
                 // TODO modify parameter to use a String url
                 imageResource(id = R.drawable.lobster),
                 Modifier.fillMaxWidth(),
-                contentScale = ContentScale.FillHeight
+                contentScale = ContentScale.Crop
             )
             Row(
                 Modifier.fillMaxWidth().align(Alignment.BottomStart)
@@ -44,7 +44,9 @@ fun recipeCard(offset: Int, recipe: RecipeApi.Recipe) {
                 Column(
                     Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End,
                     verticalArrangement = Arrangement.Top) {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {
+                        // TODO fill this onClick
+                    }) {
                         Icon(vectorResource(id = R.drawable.ic_help_outline_white_18dp))
                     }
                 }

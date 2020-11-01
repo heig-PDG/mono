@@ -12,6 +12,7 @@ import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
+import kotlinx.coroutines.flow.Flow
 import tupperdate.android.appbars.mainBottomBar
 import tupperdate.android.appbars.mainTopBar
 import tupperdate.android.ui.TupperdateTheme
@@ -21,8 +22,6 @@ import tupperdate.api.RealRecipeApi.like
 import tupperdate.api.api
 import kotlin.math.absoluteValue
 
-var presentRecipe= getNewRecipe()
-
 @Composable
 fun Home(
     recipeApi: RecipeApi,
@@ -31,9 +30,25 @@ fun Home(
     onReturn: () -> Unit,
     onRecipeClick: () -> Unit
 ) {
+    val recipes=recipeApi.stack()
+    Home(recipes, onChatClick, onProfileClick, onReturn, onRecipeClick)
+}
+
+@Composable
+fun Home(
+    recipes: Flow<List<RecipeApi.Recipe>>,
+    onChatClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    onReturn: () -> Unit,
+    onRecipeClick: () -> Unit
+) {
+    // TODO make a call to front element of recipes
+    val presentRecipe= (RecipeApi.Recipe("Red lobster",
+        "Look at me, am I not yummy ?",
+        "lobster.jpg"))
     Scaffold(
         topBar = { mainTopBar(onChatClick, onProfileClick) },
-        bodyContent = { defaultContent() },
+        bodyContent = { defaultContent(presentRecipe) },
         bottomBar = { mainBottomBar({ like(presentRecipe) },
             { dislike(presentRecipe) }, onReturn, onRecipeClick) }
     )
@@ -41,12 +56,12 @@ fun Home(
 
 @Composable
 fun defaultContent(
+    presentRecipe: RecipeApi.Recipe,
     modifier: Modifier = Modifier
 ) {
     Row(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxWidth().align(Alignment.CenterVertically)) {
             val (pos, setPos) = remember { mutableStateOf(0) }
-
             Box(modifier = Modifier.width(boxContentWidth.dp).height(boxContentHeight.dp)
                 .align(Alignment.CenterHorizontally)
                 .draggable(Orientation.Horizontal,
@@ -65,8 +80,8 @@ fun defaultContent(
                         dislike(presentRecipe)
                     }
                     setPos(0)
-                    presentRecipe=(getNewRecipe())
-                    recipeCard(pos, presentRecipe) // TODO : get a new recipe and pass it to the box
+                    //the like() call will change the presentRecipe
+                    recipeCard(pos, presentRecipe)
                 } else {
                     recipeCard(pos, presentRecipe)
                 }
@@ -92,5 +107,5 @@ private fun HomeDisconnectPreview() {
 }
 
 const val boxContentWidth: Int = 300
-const val boxContentHeight: Int = 525
+const val boxContentHeight: Int = 383
 const val swipeMargin: Int = 200
