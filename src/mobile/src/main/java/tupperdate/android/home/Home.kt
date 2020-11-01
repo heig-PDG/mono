@@ -98,7 +98,6 @@ private fun HomeDisconnectPreview() {
     }
 }
 
-const val TAG: String = "Main"
 const val boxContentWidth: Int = 300
 const val boxContentHeight: Int = 525
 const val swipeMargin: Int = 200
