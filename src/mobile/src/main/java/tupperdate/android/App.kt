@@ -60,8 +60,6 @@ private fun TupperdateAppDestination(
             is Destination.Home -> Home(
                 onChatClick = {},
                 onProfileClick = {},
-                onLike = {},
-                onDislike = {},
                 onRecipeClick = {},
                 onReturn = {}
             )
