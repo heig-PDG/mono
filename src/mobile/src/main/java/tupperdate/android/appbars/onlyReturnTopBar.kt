@@ -15,7 +15,7 @@ fun onlyReturnTopBar(onReturnClick: () -> Unit,) {
         title = {},
         navigationIcon = {
             IconButton(onClick = onReturnClick) {
-                Icon(vectorResource(id = R.drawable.ic_navigate_before_black_18dp))
+                Icon(vectorResource(id = R.drawable.ic_return))
             }
         },
         backgroundColor = MaterialTheme.colors.surface,

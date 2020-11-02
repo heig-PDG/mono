@@ -40,8 +40,8 @@ fun Home(
     Scaffold(
         topBar = { mainTopBar(onChatClick, onProfileClick) },
         bodyContent = {
-            defaultContent(presentRecipe, { recipeApi.like(presentRecipe) },
-                { recipeApi.dislike(presentRecipe) })
+            DisplayRecipeCard(presentRecipe, { recipeApi.like(presentRecipe) }
+            ) { recipeApi.dislike(presentRecipe) }
         },
         bottomBar = {
             mainBottomBar(
@@ -53,11 +53,10 @@ fun Home(
 }
 
 @Composable
-private fun defaultContent(
+private fun DisplayRecipeCard(
     presentRecipe: RecipeApi.Recipe,
     onLike: () -> Unit,
-    onDislike: () -> Unit,
-    modifier: Modifier = Modifier
+    onDislike: () -> Unit
 ) {
     Row(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxWidth().align(Alignment.CenterVertically)) {
@@ -75,9 +74,9 @@ private fun defaultContent(
             {
                 if (pos.absoluteValue > swipeMargin) {
                     if (pos > 0) {
-                        onLike
+                        onLike()
                     } else if (pos < 0) {
-                        onDislike
+                        onDislike()
                     }
                     setPos(0)
                     //the like() call will change the presentRecipe

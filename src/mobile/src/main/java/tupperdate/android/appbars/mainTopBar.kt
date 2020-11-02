@@ -2,7 +2,6 @@ package tupperdate.android.appbars
 
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.IconButton
 import androidx.compose.material.TopAppBar
@@ -11,20 +10,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import tupperdate.android.R
 
 @Composable
 fun mainTopBar(
-    onChatClick: ()->Unit,
-    onProfileClick: ()->Unit,
-    modifier: Modifier=Modifier
+    onChatClick: () -> Unit,
+    onProfileClick: () -> Unit
 ) {
     TopAppBar(
         title = {
             // TODO : center properly the title and change its color
-            Column(modifier=Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxWidth()) {
                 Text(text = "tupper.date", modifier = Modifier.align(Alignment.CenterHorizontally))
             }
         },

@@ -21,3 +21,8 @@ val Color.Companion.Flamingo600 get() = Color(0xFFFF6BF9)
 val Color.Companion.Flamingo700 get() = Color(0xFFCC00C4)
 val Color.Companion.Flamingo800 get() = Color(0xFF990093)
 val Color.Companion.Flamingo900 get() = Color(0xFF660062)
+
+val Color.Companion.returnButton get() = Color(197, 180, 246)
+val Color.Companion.dislikeButton get() = Color(252, 90, 100)
+val Color.Companion.likeButton get() = Color(142, 200, 255)
+val Color.Companion.recipeAddButton get() = Color(223, 189, 157)
