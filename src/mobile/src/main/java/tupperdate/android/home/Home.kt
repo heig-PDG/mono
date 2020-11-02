@@ -12,51 +12,51 @@ import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
-import kotlinx.coroutines.flow.Flow
 import tupperdate.android.appbars.mainBottomBar
 import tupperdate.android.appbars.mainTopBar
 import tupperdate.android.ui.TupperdateTheme
-import tupperdate.api.RealRecipeApi.dislike
 import tupperdate.api.RecipeApi
-import tupperdate.api.RealRecipeApi.like
 import tupperdate.api.api
 import kotlin.math.absoluteValue
 
 @Composable
+/*
+@ Guy-Laurent : I am forced to do only one function because it is the only way
+to call like() and dislike() without the weird RealRecipeApi import.
+ */
 fun Home(
     recipeApi: RecipeApi,
     onChatClick: () -> Unit,
     onProfileClick: () -> Unit,
-    onReturn: () -> Unit,
+    onReturnClick: () -> Unit,
     onRecipeClick: () -> Unit
 ) {
-    val recipes=recipeApi.stack()
-    Home(recipes, onChatClick, onProfileClick, onReturn, onRecipeClick)
-}
-
-@Composable
-fun Home(
-    recipes: Flow<List<RecipeApi.Recipe>>,
-    onChatClick: () -> Unit,
-    onProfileClick: () -> Unit,
-    onReturn: () -> Unit,
-    onRecipeClick: () -> Unit
-) {
-    // TODO make a call to front element of recipes
-    val presentRecipe= (RecipeApi.Recipe("Red lobster",
+    // TODO make a call to front element of recipeApi
+    val presentRecipe = (RecipeApi.Recipe(
+        "Red lobster",
         "Look at me, am I not yummy ?",
-        "lobster.jpg"))
+        "lobster.jpg"
+    ))
     Scaffold(
-        topBar = {mainTopBar(onChatClick, onProfileClick)},
-        bodyContent = {defaultContent(presentRecipe)},
-        bottomBar = {mainBottomBar({ like(presentRecipe) },
-            { dislike(presentRecipe) }, onReturn, onRecipeClick)}
+        topBar = { mainTopBar(onChatClick, onProfileClick) },
+        bodyContent = {
+            defaultContent(presentRecipe, { recipeApi.like(presentRecipe) },
+                { recipeApi.dislike(presentRecipe) })
+        },
+        bottomBar = {
+            mainBottomBar(
+                { recipeApi.like(presentRecipe) },
+                { recipeApi.dislike(presentRecipe) }, onReturnClick, onRecipeClick
+            )
+        }
     )
 }
 
 @Composable
-fun defaultContent(
+private fun defaultContent(
     presentRecipe: RecipeApi.Recipe,
+    onLike: () -> Unit,
+    onDislike: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(Modifier.fillMaxSize()) {
@@ -75,9 +75,9 @@ fun defaultContent(
             {
                 if (pos.absoluteValue > swipeMargin) {
                     if (pos > 0) {
-                        like(presentRecipe)
+                        onLike
                     } else if (pos < 0) {
-                        dislike(presentRecipe)
+                        onDislike
                     }
                     setPos(0)
                     //the like() call will change the presentRecipe
@@ -93,15 +93,15 @@ fun defaultContent(
 @Preview
 @Composable
 private fun HomeDisconnectPreview() {
-    val owner= LifecycleOwnerAmbient.current
-    val api= remember { owner.api() }
+    val owner = LifecycleOwnerAmbient.current
+    val api = remember { owner.api() }
     TupperdateTheme {
         Home(
             recipeApi = api.recipe,
             onChatClick = {},
             onProfileClick = {},
             onRecipeClick = {},
-            onReturn = {}
+            onReturnClick = {}
         )
     }
 }
