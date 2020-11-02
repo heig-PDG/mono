@@ -23,7 +23,7 @@ fun mainTopBar(
 ) {
     TopAppBar(
         title = {
-            // TODO : center properly the title
+            // TODO : center properly the title and change its color
             Column(modifier=Modifier.fillMaxWidth()) {
                 Text(text = "tupper.date", modifier = Modifier.align(Alignment.CenterHorizontally))
             }

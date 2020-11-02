@@ -47,10 +47,10 @@ fun Home(
         "Look at me, am I not yummy ?",
         "lobster.jpg"))
     Scaffold(
-        topBar = { mainTopBar(onChatClick, onProfileClick) },
-        bodyContent = { defaultContent(presentRecipe) },
-        bottomBar = { mainBottomBar({ like(presentRecipe) },
-            { dislike(presentRecipe) }, onReturn, onRecipeClick) }
+        topBar = {mainTopBar(onChatClick, onProfileClick)},
+        bodyContent = {defaultContent(presentRecipe)},
+        bottomBar = {mainBottomBar({ like(presentRecipe) },
+            { dislike(presentRecipe) }, onReturn, onRecipeClick)}
     )
 }
 
