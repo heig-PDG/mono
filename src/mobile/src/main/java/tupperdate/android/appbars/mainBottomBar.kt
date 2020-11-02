@@ -29,6 +29,7 @@ fun mainBottomBar(
         {
             Button(modifier = Modifier.size(45.dp), onClick = onReturn, shape = CircleShape, backgroundColor = Color(
                 197, 180, 246)) {
+                // TODO find a way to display these buttons in white
                 Icon(vectorResource(id = R.drawable.ic_navigate_before_white_18dp))
             }
             Button(modifier = Modifier.size(50.dp), onClick = onDislike, shape= CircleShape, backgroundColor = Color(

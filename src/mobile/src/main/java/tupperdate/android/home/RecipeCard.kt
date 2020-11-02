@@ -38,8 +38,8 @@ fun recipeCard(offset: Int, recipe: RecipeApi.Recipe) {
                 Modifier.fillMaxWidth().align(Alignment.BottomStart)
                 .padding(5.dp)) {
                 Column(Modifier.width((boxContentWidth*0.75).dp)) {
-                    Text(recipe.title, style = TupperdateTypography.body1)
-                    Text(recipe.description, style = TupperdateTypography.body2)
+                    Text(recipe.title, style = TupperdateTypography.body1,color = Color.White)
+                    Text(recipe.description, style = TupperdateTypography.body2, color= Color.White)
                 }
                 Column(
                     Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End,
