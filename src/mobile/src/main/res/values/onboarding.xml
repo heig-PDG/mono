@@ -6,6 +6,7 @@
     <string name="onboarding_phone_label">Your telephone number</string>
     <string name="onboarding_phone_placeholder">+41 79 123 45 67</string>
     <string name="onboarding_button_text">Get Started</string>
+    <string name="onboarding_button_loading_text">Loading…</string>
     <string name="onboarding_bottom_text">This app was created during a group project at HEIG-VD. Make sure to check it out on GitHub.</string>
 
     <string name="onboardingConfirmation_title">You\'ve received something.</string>

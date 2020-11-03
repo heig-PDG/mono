@@ -59,7 +59,7 @@ fun Onboarding(
         setPhone = setPhone,
         requestCodeResult = requestCodeResult,
         setRequestCodeResult = setRequestCodeResult,
-        requestCode = { code -> scope.launch { setRequestCodeResult(auth.requestCode(code)) }},
+        requestCode = { code -> scope.launch { setRequestCodeResult(auth.requestCode(code)) } },
         modifier = modifier,
     )
 }
@@ -103,7 +103,11 @@ fun Onboarding(
         Spacer(modifier = Modifier.weight(1f, true))
 
         BrandedButton(
-            value = if (sentRequest && requestCodeResult == null) "Loading..." else stringResource(R.string.onboarding_button_text),
+            value = if (sentRequest && requestCodeResult == null) {
+                stringResource(R.string.onboarding_button_loading_text)
+            } else {
+                stringResource(R.string.onboarding_button_text)
+            },
             onClick = {
                 setSentRequest(true)
                 when (requestCodeResult) {
