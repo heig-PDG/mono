@@ -153,8 +153,8 @@ private fun ViewPhoneInput(
     val errorText = when (codeResult) {
         AuthenticationApi.RequestCodeResult.LoggedIn -> null
         AuthenticationApi.RequestCodeResult.RequiresVerification -> null
-        AuthenticationApi.RequestCodeResult.InvalidNumberError -> "Invalid number"
-        AuthenticationApi.RequestCodeResult.InternalError -> "Internal error"
+        AuthenticationApi.RequestCodeResult.InvalidNumberError -> stringResource(R.string.onboarding_requestCode_error_invalid_number)
+        AuthenticationApi.RequestCodeResult.InternalError -> stringResource(R.string.onboarding_requestCode_error_internal)
         null -> null
     }
 
