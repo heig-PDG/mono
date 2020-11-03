@@ -37,7 +37,7 @@ fun Onboarding(
     modifier: Modifier = Modifier,
 ) {
     val scope = LifecycleOwnerAmbient.current.lifecycleScope
-    val (sentRequest, setSentRequest) = remember { mutableStateOf(false) }
+    val (pending, setPending) = remember { mutableStateOf(false) }
     val (phone, setPhone) = remember { mutableStateOf("") }
 
     val (requestCodeResult, setRequestCodeResult) = remember {
@@ -53,8 +53,8 @@ fun Onboarding(
     }
 
     Onboarding(
-        sentRequest = sentRequest,
-        setSentRequest = setSentRequest,
+        pending = pending,
+        setPending = setPending,
         phone = phone,
         setPhone = setPhone,
         requestCodeResult = requestCodeResult,
@@ -66,8 +66,8 @@ fun Onboarding(
 
 @Composable
 fun Onboarding(
-    sentRequest: Boolean,
-    setSentRequest: (Boolean) -> Unit,
+    pending: Boolean,
+    setPending: (Boolean) -> Unit,
     phone: String,
     setPhone: (String) -> Unit,
     requestCodeResult: AuthenticationApi.RequestCodeResult?,
@@ -95,7 +95,7 @@ fun Onboarding(
         ViewPhoneInput(
             phone = phone,
             setPhone = setPhone,
-            setSentRequest = setSentRequest,
+            setSentRequest = setPending,
             codeResult = requestCodeResult,
             setCodeResult = setRequestCodeResult,
         )
@@ -103,13 +103,13 @@ fun Onboarding(
         Spacer(modifier = Modifier.weight(1f, true))
 
         BrandedButton(
-            value = if (sentRequest && requestCodeResult == null) {
+            value = if (pending && requestCodeResult == null) {
                 stringResource(R.string.onboarding_button_loading_text)
             } else {
                 stringResource(R.string.onboarding_button_text)
             },
             onClick = {
-                setSentRequest(true)
+                setPending(true)
                 if (requestCodeResult == null) {
                     requestCode(phone)
                 }
