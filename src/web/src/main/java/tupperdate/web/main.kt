@@ -5,10 +5,7 @@ package tupperdate.web
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.cloud.FirestoreClient
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.response.*
@@ -16,8 +13,6 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import java.io.FileInputStream
-import java.nio.file.Paths
-
 
 private const val DefaultPort = 1234
 private const val DefaultPortEnvVariable = "PORT"
@@ -38,16 +33,13 @@ fun main() {
         // Initialise FirebaseApp
         FirebaseApp.initializeApp(options)
 
-        val ref = FirebaseDatabase.getInstance()
-            .getReference("test")
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val document = dataSnapshot.value
-                println(document)
-            }
-
-            override fun onCancelled(error: DatabaseError) {}
-        })
+        val firestore = FirestoreClient.getFirestore()
+        val testCollection = firestore.collection("test")
+        val data = hashMapOf(
+            "hello" to "there",
+            "general" to "kenobi"
+        )
+        testCollection.document("greetings").set(data as Map<String, Any>)
 
         install(DefaultHeaders)
         install(CallLogging)

@@ -23,6 +23,7 @@ dependencies {
 
     // Firebase
     implementation 'com.google.firebase:firebase-admin:7.0.1'
+    implementation platform('com.google.firebase:firebase-bom:26.0.0')
 }
 
 compileTestKotlin {
