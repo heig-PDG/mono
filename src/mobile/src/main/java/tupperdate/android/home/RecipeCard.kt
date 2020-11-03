@@ -4,9 +4,11 @@ import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.IconButton
+import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,11 +52,12 @@ fun recipeCard(offset: Int, recipe: RecipeApi.Recipe) {
                     Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End,
                     verticalArrangement = Arrangement.Top
                 ) {
-                    IconButton(onClick = {
-                        // TODO fill this onClick
-                    }) {
-                        Icon(vectorResource(id = R.drawable.ic_help_outline_white_18dp))
-                    }
+                    BarButton(veryLittlButtonSize,
+                        onClick = { // TODO fill this onClick
+                        },
+                        Color.Transparent, {
+                            Icon(vectorResource(id = R.drawable.ic_help_outline_white_18dp))
+                        })
                 }
             }
         }
