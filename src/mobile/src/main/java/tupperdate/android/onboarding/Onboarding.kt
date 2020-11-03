@@ -110,12 +110,8 @@ fun Onboarding(
             },
             onClick = {
                 setSentRequest(true)
-                when (requestCodeResult) {
-                    AuthenticationApi.RequestCodeResult.LoggedIn -> Unit
-                    AuthenticationApi.RequestCodeResult.RequiresVerification -> Unit
-                    AuthenticationApi.RequestCodeResult.InvalidNumberError -> Unit
-                    AuthenticationApi.RequestCodeResult.InternalError -> Unit
-                    null -> requestCode(phone)
+                if (requestCodeResult == null) {
+                    onRequest(code = phone);
                 }
             },
             modifier = Modifier
