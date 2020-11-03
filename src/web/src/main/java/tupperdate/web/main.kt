@@ -23,7 +23,7 @@ fun main() {
 
     val server = embeddedServer(Netty, port = port) {
         // Firebase options
-        val serviceAccount = FileInputStream("web\\tupperdate-developement-serice-account-firebase-admin-key.json")
+        val serviceAccount = FileInputStream("web\\tupperdate-developement-service-account-firebase-admin-key.json")
 
         val options = FirebaseOptions.builder()
             .setCredentials(GoogleCredentials.fromStream(serviceAccount))
