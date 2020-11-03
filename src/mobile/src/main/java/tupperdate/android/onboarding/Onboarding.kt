@@ -111,7 +111,7 @@ fun Onboarding(
             onClick = {
                 setSentRequest(true)
                 if (requestCodeResult == null) {
-                    onRequest(code = phone);
+                    requestCode(phone)
                 }
             },
             modifier = Modifier
