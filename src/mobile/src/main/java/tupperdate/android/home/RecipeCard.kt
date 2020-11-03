@@ -4,11 +4,8 @@ import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.IconButton
-import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,13 +13,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
 import tupperdate.android.ui.TupperdateTypography
 import tupperdate.api.RecipeApi
 
 @Composable
-fun recipeCard(offset: Int, recipe: RecipeApi.Recipe) {
+fun recipeCard(offset: Int, recipe: RecipeApi.Recipe, boxWidth: Dp) {
     Card(
         modifier = Modifier.fillMaxSize().offset(x = offset.dp),
         backgroundColor = (Color.Cyan),
@@ -40,19 +38,19 @@ fun recipeCard(offset: Int, recipe: RecipeApi.Recipe) {
                 Modifier.fillMaxWidth().align(Alignment.BottomStart)
                     .padding(5.dp)
             ) {
-                Column(Modifier.width((boxContentWidth * 0.75).dp)) {
+                Column(Modifier.width(boxWidth * 0.75f)) {
                     Text(recipe.title, style = TupperdateTypography.body1, color = Color.White)
                     Text(
                         recipe.description,
                         style = TupperdateTypography.body2,
-                        color = Color.White
+                        color = Color.White,
                     )
                 }
                 Column(
                     Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End,
                     verticalArrangement = Arrangement.Top
                 ) {
-                    BarButton(veryLittlButtonSize,
+                    BarButton(veryLittleButtonSize,
                         onClick = { // TODO fill this onClick
                         },
                         Color.Transparent, {

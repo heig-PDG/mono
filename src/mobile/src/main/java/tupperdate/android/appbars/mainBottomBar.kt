@@ -29,34 +29,34 @@ fun mainBottomBar(
     onReturn: () -> Unit,
     onRecipeClick: () -> Unit
 ) {
-    BottomAppBar(backgroundColor = Color.White)
-    {
+    //BottomAppBar(backgroundColor = Color.White)
+    //{
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly)
         {
             BarButton(
                 littleButtonSize,
-                onReturn,
+                { onReturn() },
                 Color.returnButton,
                 { Icon(vectorResource(id = R.drawable.ic_return)) }
             )
             BarButton(
                 normalButtonSize,
-                onDislike,
+                { onDislike() },
                 backgroundColor = Color.dislikeButton, {
                     Icon(vectorResource(id = R.drawable.ic_clear))
                 })
             BarButton(
                 normalButtonSize,
-                onLike,
+                { onLike() },
                 Color.likeButton, {
                     Icon(vectorResource(id = R.drawable.ic_like))
                 })
             BarButton(
                 littleButtonSize,
-                onRecipeClick,
+                { onRecipeClick() },
                 Color.recipeAddButton, {
                     Icon(vectorResource(id = R.drawable.ic_add_recipe))
                 })
         }
-    }
+    //}
 }

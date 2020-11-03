@@ -2,13 +2,15 @@ package tupperdate.android.home
 
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Layout
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
+import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
@@ -37,7 +39,7 @@ fun Home(
         "Look at me, am I not yummy ?",
         "lobster.jpg"
     ))
-    Scaffold(
+    /*Scaffold(
         topBar = { mainTopBar(onChatClick, onProfileClick) },
         bodyContent = {
             DisplayRecipeCard(presentRecipe, { recipeApi.like(presentRecipe) }
@@ -49,6 +51,14 @@ fun Home(
                 { recipeApi.dislike(presentRecipe) }, onReturnClick, onRecipeClick
             )
         }
+    )*/
+    mainTopBar(onChatClick = onChatClick, onProfileClick = onProfileClick)
+    DisplayRecipeCard(
+        presentRecipe = presentRecipe,
+        onLike = { recipeApi.like(presentRecipe) },
+        onDislike = { recipeApi.dislike(presentRecipe) },
+        onReturnClick = onReturnClick,
+        onRecipeClick = onRecipeClick
     )
 }
 
@@ -56,35 +66,72 @@ fun Home(
 private fun DisplayRecipeCard(
     presentRecipe: RecipeApi.Recipe,
     onLike: () -> Unit,
-    onDislike: () -> Unit
+    onDislike: () -> Unit,
+    onReturnClick: () -> Unit,
+    onRecipeClick: () -> Unit
 ) {
     Row(Modifier.fillMaxSize()) {
-        Column(Modifier.fillMaxWidth().align(Alignment.CenterVertically)) {
-            val (pos, setPos) = remember { mutableStateOf(0) }
-            Box(modifier = Modifier.width(boxContentWidth.dp).height(boxContentHeight.dp)
-                .align(Alignment.CenterHorizontally)
-                .draggable(Orientation.Horizontal,
-                    onDragStarted = {}, onDrag =
-                    { delta ->
-                        run {
-                            setPos(pos + (delta * 0.75).toInt())
+        Column(
+            Modifier.fillMaxWidth().align(Alignment.Bottom)
+                .padding(bottom = veryLittleButtonSize.dp)
+        ) {
+            WithConstraints { -> //why no parameter here ??
+                //determine height and width of card according to constraints
+                //the card measures 90 % of screen width and 75 % of screen height
+                val boxHeight =
+                    with(DensityAmbient.current) { constraints.maxHeight.toDp() * 0.75f }
+                val boxWidth = with(DensityAmbient.current) { constraints.maxWidth.toDp() * 0.9f }
+
+                //the align(..) doesn't work anymore (because of reasons), so we need to
+                //set manually a default pos
+                val defaultPos = ((with(DensityAmbient.current) { constraints.maxWidth.toDp() / 2 })
+                        - boxWidth / 2).value.toInt()
+                val (pos, setPos) = remember { mutableStateOf((defaultPos)) }
+
+                //the defaultPos needs a delta measured
+                val (delta, setDelta) = remember { mutableStateOf(0) }
+                val swipeMargin = (boxWidth / 2).value.toInt()
+
+                Box(modifier = Modifier.align(Alignment.CenterHorizontally)
+                    .width((boxWidth)).height((boxHeight))
+                    .padding(bottom = (veryLittleButtonSize * 0.8f).dp)
+                    .draggable(Orientation.Horizontal,
+                        onDragStarted = {}, onDrag =
+                        { deltaTemp ->
+                            run {
+                                setPos(pos + (deltaTemp * 0.75).toInt())
+                                setDelta(deltaTemp.toInt())
+                            }
+                        }, onDragStopped = {
+                            if (delta.absoluteValue < swipeMargin) {
+                                setPos(defaultPos)
+                                setDelta(0)
+                            }
+                        })
+                )
+                {
+                    if (delta.absoluteValue > swipeMargin) {
+                        if (pos > defaultPos) {
+                            onLike()
+                        } else if (pos < defaultPos) {
+                            onDislike()
                         }
-                    }, onDragStopped = { if (pos.absoluteValue < swipeMargin) setPos(0) })
-            )
-            {
-                if (pos.absoluteValue > swipeMargin) {
-                    if (pos > 0) {
-                        onLike()
-                    } else if (pos < 0) {
-                        onDislike()
+                        setPos(defaultPos)
+                        setDelta(0)
+                        //the like() call will change the presentRecipe
+                        recipeCard(pos, presentRecipe, boxWidth)
+                    } else {
+                        recipeCard(pos, presentRecipe, boxWidth)
                     }
-                    setPos(0)
-                    //the like() call will change the presentRecipe
-                    recipeCard(pos, presentRecipe)
-                } else {
-                    recipeCard(pos, presentRecipe)
                 }
             }
+
+            mainBottomBar(
+                onLike = onLike,
+                onDislike = onDislike,
+                onReturn = onReturnClick,
+                onRecipeClick = onRecipeClick
+            )
         }
     }
 }
@@ -104,7 +151,3 @@ private fun HomeDisconnectPreview() {
         )
     }
 }
-
-const val boxContentWidth: Int = 300
-const val boxContentHeight: Int = 383
-const val swipeMargin: Int = 200

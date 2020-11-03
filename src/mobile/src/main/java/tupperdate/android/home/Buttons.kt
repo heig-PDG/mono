@@ -29,4 +29,4 @@ fun BarButton(
 
 const val littleButtonSize = 45
 const val normalButtonSize = 50
-const val veryLittlButtonSize = 30
+const val veryLittleButtonSize = 30
