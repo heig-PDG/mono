@@ -32,7 +32,8 @@ import tupperdate.api.api
 @Composable
 fun Onboarding(
     auth: AuthenticationApi,
-    onButtonClick: () -> Unit,
+    verificationScreen: () -> Unit,
+    loggedInScreen: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val (phone, setPhone) = remember { mutableStateOf("") }
@@ -71,8 +72,8 @@ fun Onboarding(
             value = stringResource(R.string.onboarding_button_text),
             onClick = {
                 when (requestCodeResult) {
-                    AuthenticationApi.RequestCodeResult.LoggedIn -> Unit
-                    AuthenticationApi.RequestCodeResult.RequiresVerification -> onButtonClick()
+                    AuthenticationApi.RequestCodeResult.LoggedIn -> loggedInScreen()
+                    AuthenticationApi.RequestCodeResult.RequiresVerification -> verificationScreen()
                     AuthenticationApi.RequestCodeResult.InvalidNumberError -> Unit
                     AuthenticationApi.RequestCodeResult.InternalError -> Unit
                     null -> scope.launch {
@@ -153,6 +154,7 @@ private fun OnboardingPreview() {
     TupperdateTheme {
         Onboarding(
             api.authentication,
+            {},
             {},
             Modifier.background(Color.White)
                 .fillMaxSize()

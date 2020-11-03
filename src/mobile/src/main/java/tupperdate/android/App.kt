@@ -64,7 +64,8 @@ private fun TupperdateAppDestination(
             is Destination.BrandingPreview -> BrandingPreview()
             is Destination.Onboarding -> Onboarding(
                 auth = api.authentication,
-                onButtonClick = action.viewOnboardingConfirmation,
+                verificationScreen = action.viewOnboardingConfirmation,
+                loggedInScreen = action.home,
             )
             is Destination.OnboardingConfirmation -> OnboardingConfirmation(
                 onButtonClick = {}, // TODO: Add a behaviour to button
