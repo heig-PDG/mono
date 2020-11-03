@@ -36,6 +36,7 @@ fun Onboarding(
     loggedInScreen: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val (sentRequest, setSentRequest) = remember { mutableStateOf(false) }
     val (phone, setPhone) = remember { mutableStateOf("") }
     val scope = LifecycleOwnerAmbient.current.lifecycleScope
 
@@ -62,6 +63,7 @@ fun Onboarding(
         ViewPhoneInput(
             phone = phone,
             setPhone = setPhone,
+            setSentRequest = setSentRequest,
             codeResult = requestCodeResult,
             setCodeResult = setRequestCodeResult,
         )
@@ -69,8 +71,9 @@ fun Onboarding(
         Spacer(modifier = Modifier.weight(1f, true))
 
         BrandedButton(
-            value = stringResource(R.string.onboarding_button_text),
+            value = if (sentRequest && requestCodeResult == null) "Loading..." else stringResource(R.string.onboarding_button_text),
             onClick = {
+                setSentRequest(true)
                 when (requestCodeResult) {
                     AuthenticationApi.RequestCodeResult.LoggedIn -> loggedInScreen()
                     AuthenticationApi.RequestCodeResult.RequiresVerification -> verificationScreen()
@@ -100,6 +103,7 @@ fun Onboarding(
 private fun ViewPhoneInput(
     phone: String,
     setPhone: (String) -> Unit,
+    setSentRequest: (Boolean) -> Unit,
     codeResult: AuthenticationApi.RequestCodeResult?,
     setCodeResult: (AuthenticationApi.RequestCodeResult?) -> Unit,
     modifier: Modifier = Modifier,
@@ -125,6 +129,7 @@ private fun ViewPhoneInput(
             value = phone,
             onValueChange = {
                 setCodeResult(null)
+                setSentRequest(false)
                 setPhone(it)
             },
             label = { Text(stringResource(R.string.onboarding_phone_label)) },
@@ -173,6 +178,7 @@ private fun ViewPhoneInputNormalPreview() {
             setPhone = setPhone,
             codeResult = null,
             setCodeResult = {},
+            setSentRequest = {},
         )
     }
 }
@@ -188,6 +194,7 @@ private fun ViewPhoneInputNormalInvalidNumber() {
             setPhone = setPhone,
             codeResult = AuthenticationApi.RequestCodeResult.InvalidNumberError,
             setCodeResult = {},
+            setSentRequest = {},
         )
     }
 }
@@ -203,6 +210,7 @@ private fun ViewPhoneInputNormalInternalError() {
             setPhone = setPhone,
             codeResult = AuthenticationApi.RequestCodeResult.InternalError,
             setCodeResult = {},
+            setSentRequest = {},
         )
     }
 }
