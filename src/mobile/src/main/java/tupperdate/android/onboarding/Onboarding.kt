@@ -36,9 +36,9 @@ fun Onboarding(
     loggedInScreen: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val scope = LifecycleOwnerAmbient.current.lifecycleScope
     val (sentRequest, setSentRequest) = remember { mutableStateOf(false) }
     val (phone, setPhone) = remember { mutableStateOf("") }
-    val scope = LifecycleOwnerAmbient.current.lifecycleScope
 
     val (requestCodeResult, setRequestCodeResult) = remember {
         mutableStateOf<AuthenticationApi.RequestCodeResult?>(null)
@@ -51,6 +51,30 @@ fun Onboarding(
         AuthenticationApi.RequestCodeResult.InternalError -> Unit
         null -> Unit
     }
+
+    Onboarding(
+        sentRequest = sentRequest,
+        setSentRequest = setSentRequest,
+        phone = phone,
+        setPhone = setPhone,
+        requestCodeResult = requestCodeResult,
+        setRequestCodeResult = setRequestCodeResult,
+        requestCode = { code -> scope.launch { setRequestCodeResult(auth.requestCode(code)) }},
+        modifier = modifier,
+    )
+}
+
+@Composable
+fun Onboarding(
+    sentRequest: Boolean,
+    setSentRequest: (Boolean) -> Unit,
+    phone: String,
+    setPhone: (String) -> Unit,
+    requestCodeResult: AuthenticationApi.RequestCodeResult?,
+    setRequestCodeResult: (AuthenticationApi.RequestCodeResult?) -> Unit,
+    requestCode: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
 
     Column(
         modifier.padding(top = 72.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
@@ -87,9 +111,7 @@ fun Onboarding(
                     AuthenticationApi.RequestCodeResult.RequiresVerification -> Unit
                     AuthenticationApi.RequestCodeResult.InvalidNumberError -> Unit
                     AuthenticationApi.RequestCodeResult.InternalError -> Unit
-                    null -> scope.launch {
-                        setRequestCodeResult(auth.requestCode(phone))
-                    }
+                    null -> requestCode(phone)
                 }
             },
             modifier = Modifier
