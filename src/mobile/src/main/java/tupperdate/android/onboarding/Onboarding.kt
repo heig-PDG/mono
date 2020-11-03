@@ -44,6 +44,14 @@ fun Onboarding(
         mutableStateOf<AuthenticationApi.RequestCodeResult?>(null)
     }
 
+    when (requestCodeResult) {
+        AuthenticationApi.RequestCodeResult.LoggedIn -> loggedInScreen()
+        AuthenticationApi.RequestCodeResult.RequiresVerification -> verificationScreen()
+        AuthenticationApi.RequestCodeResult.InvalidNumberError -> Unit
+        AuthenticationApi.RequestCodeResult.InternalError -> Unit
+        null -> Unit
+    }
+
     Column(
         modifier.padding(top = 72.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
     ) {
@@ -75,8 +83,8 @@ fun Onboarding(
             onClick = {
                 setSentRequest(true)
                 when (requestCodeResult) {
-                    AuthenticationApi.RequestCodeResult.LoggedIn -> loggedInScreen()
-                    AuthenticationApi.RequestCodeResult.RequiresVerification -> verificationScreen()
+                    AuthenticationApi.RequestCodeResult.LoggedIn -> Unit
+                    AuthenticationApi.RequestCodeResult.RequiresVerification -> Unit
                     AuthenticationApi.RequestCodeResult.InvalidNumberError -> Unit
                     AuthenticationApi.RequestCodeResult.InternalError -> Unit
                     null -> scope.launch {
