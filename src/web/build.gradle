@@ -20,6 +20,9 @@ dependencies {
 
     // SL4J
     implementation "org.slf4j:slf4j-simple:1.7.21"
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-admin:7.0.1'
 }
 
 compileTestKotlin {
