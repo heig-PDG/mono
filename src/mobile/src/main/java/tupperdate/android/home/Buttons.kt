@@ -14,7 +14,7 @@ fun BarButton(
     size: Int,
     onClick: () -> Unit,
     backgroundColor: Color,
-    content: @Composable () -> Unit
+    content: @Composable() () -> Unit
 ) {
     Button(
         modifier = Modifier.size(size.dp),
@@ -22,6 +22,25 @@ fun BarButton(
         shape = CircleShape,
         backgroundColor = backgroundColor,
         contentColor = Color.White
+    ) {
+        content()
+    }
+}
+
+@Composable
+fun BarButton(
+    size: Int,
+    onClick: () -> Unit,
+    backgroundColor: Color,
+    contentColor: Color,
+    content: @Composable() () -> Unit
+) {
+    Button(
+        modifier = Modifier.size(size.dp),
+        onClick = onClick,
+        shape = CircleShape,
+        backgroundColor = backgroundColor,
+        contentColor = contentColor,
     ) {
         content()
     }

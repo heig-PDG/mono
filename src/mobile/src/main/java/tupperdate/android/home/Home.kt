@@ -1,12 +1,13 @@
 package tupperdate.android.home
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Layout
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
@@ -14,6 +15,7 @@ import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
+import io.ktor.client.engine.*
 import tupperdate.android.appbars.mainBottomBar
 import tupperdate.android.appbars.mainTopBar
 import tupperdate.android.ui.TupperdateTheme
@@ -39,20 +41,8 @@ fun Home(
         "Look at me, am I not yummy ?",
         "lobster.jpg"
     ))
-    /*Scaffold(
-        topBar = { mainTopBar(onChatClick, onProfileClick) },
-        bodyContent = {
-            DisplayRecipeCard(presentRecipe, { recipeApi.like(presentRecipe) }
-            ) { recipeApi.dislike(presentRecipe) }
-        },
-        bottomBar = {
-            mainBottomBar(
-                { recipeApi.like(presentRecipe) },
-                { recipeApi.dislike(presentRecipe) }, onReturnClick, onRecipeClick
-            )
-        }
-    )*/
     mainTopBar(onChatClick = onChatClick, onProfileClick = onProfileClick)
+
     DisplayRecipeCard(
         presentRecipe = presentRecipe,
         onLike = { recipeApi.like(presentRecipe) },
@@ -100,7 +90,7 @@ private fun DisplayRecipeCard(
                         { deltaTemp ->
                             run {
                                 setPos(pos + (deltaTemp * 0.75).toInt())
-                                setDelta(deltaTemp.toInt())
+                                setDelta(delta+deltaTemp.toInt())
                             }
                         }, onDragStopped = {
                             if (delta.absoluteValue < swipeMargin) {
