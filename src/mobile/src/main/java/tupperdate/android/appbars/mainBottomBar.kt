@@ -24,34 +24,31 @@ fun mainBottomBar(
     onReturn: () -> Unit,
     onRecipeClick: () -> Unit
 ) {
-    //BottomAppBar(backgroundColor = Color.White)
-    //{
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly)
-        {
-            BarButton(
-                littleButtonSize,
-                { onReturn() },
-                Color.returnButton,
-                { Icon(vectorResource(id = R.drawable.ic_return)) }
-            )
-            BarButton(
-                normalButtonSize,
-                { onDislike() },
-                backgroundColor = Color.dislikeButton, {
-                    Icon(vectorResource(id = R.drawable.ic_clear))
-                })
-            BarButton(
-                normalButtonSize,
-                { onLike() },
-                Color.likeButton, {
-                    Icon(vectorResource(id = R.drawable.ic_like))
-                })
-            BarButton(
-                littleButtonSize,
-                { onRecipeClick() },
-                Color.recipeAddButton, {
-                    Icon(vectorResource(id = R.drawable.ic_add_recipe))
-                })
-        }
-    //}
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly)
+    {
+        BarButton(
+            littleButtonSize,
+            { onReturn() },
+            Color.returnButton,
+            { Icon(vectorResource(id = R.drawable.ic_return)) }
+        )
+        BarButton(
+            normalButtonSize,
+            { onDislike() },
+            backgroundColor = Color.dislikeButton, {
+                Icon(vectorResource(id = R.drawable.ic_clear))
+            })
+        BarButton(
+            normalButtonSize,
+            { onLike() },
+            Color.likeButton, {
+                Icon(vectorResource(id = R.drawable.ic_like))
+            })
+        BarButton(
+            littleButtonSize,
+            { onRecipeClick() },
+            Color.recipeAddButton, {
+                Icon(vectorResource(id = R.drawable.ic_add_recipe))
+            })
+    }
 }

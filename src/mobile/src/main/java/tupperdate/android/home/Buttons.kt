@@ -1,5 +1,6 @@
 package tupperdate.android.home
 
+import androidx.compose.foundation.contentColor
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.foundation.layout.size
@@ -16,15 +17,10 @@ fun BarButton(
     backgroundColor: Color,
     content: @Composable() () -> Unit
 ) {
-    Button(
-        modifier = Modifier.size(size.dp),
-        onClick = onClick,
-        shape = CircleShape,
-        backgroundColor = backgroundColor,
-        contentColor = Color.White
-    ) {
-        content()
-    }
+    BarButton(
+        size = size, onClick = onClick, backgroundColor = backgroundColor,
+        contentColor = Color.White, content
+    )
 }
 
 @Composable
@@ -41,6 +37,7 @@ fun BarButton(
         shape = CircleShape,
         backgroundColor = backgroundColor,
         contentColor = contentColor,
+        elevation = 0.dp
     ) {
         content()
     }

@@ -1,7 +1,5 @@
 package tupperdate.android.home
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -15,7 +13,6 @@ import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
-import io.ktor.client.engine.*
 import tupperdate.android.appbars.mainBottomBar
 import tupperdate.android.appbars.mainTopBar
 import tupperdate.android.ui.TupperdateTheme
@@ -41,6 +38,7 @@ fun Home(
         "Look at me, am I not yummy ?",
         "lobster.jpg"
     ))
+
     mainTopBar(onChatClick = onChatClick, onProfileClick = onProfileClick)
 
     DisplayRecipeCard(
@@ -66,6 +64,7 @@ private fun DisplayRecipeCard(
                 .padding(bottom = veryLittleButtonSize.dp)
         ) {
             WithConstraints { -> //why no parameter here ??
+
                 //determine height and width of card according to constraints
                 //the card measures 90 % of screen width and 75 % of screen height
                 val boxHeight =
