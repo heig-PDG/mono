@@ -18,8 +18,7 @@ jobs:
 
       - name: Load secret files
         run: |
-        echo "$SIGNING_PROPERTIES_PROD" > ./src/mobile/signing.properties.prod
-        echo "$SERVICE_ACCOUNT_FIREBASE" > ./src/web/tupperdate-developement-serice-account-firebase-admin-key.json
+          echo "$SIGNING_PROPERTIES_PROD" > ./src/mobile/signing.properties.prod
         shell: bash
         env:
           SIGNING_PROPERTIES_PROD: ${{ secrets.SIGNING_PROPERTIES_PROD }}
