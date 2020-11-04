@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonConstants
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -121,8 +122,10 @@ fun BrandedButton(
     )
     Button(
         onClick = onClick,
-        contentColor = Color.Black,
-        backgroundColor = Color.White,
+        colors = ButtonConstants.defaultButtonColors(
+            contentColor = Color.Black,
+            backgroundColor = Color.White,
+        ),
         border = stroke,
         shape = RoundedCornerShape(50),
         modifier = modifier.onGloballyPositioned { bounds = it.boundsInParent },

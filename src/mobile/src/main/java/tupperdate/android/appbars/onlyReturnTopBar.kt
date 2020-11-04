@@ -1,6 +1,6 @@
 package tupperdate.android.appbars
 
-import androidx.compose.foundation.Icon
+import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TopAppBar

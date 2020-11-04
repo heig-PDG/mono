@@ -1,14 +1,11 @@
 package tupperdate.api
 
-import com.google.android.gms.tasks.TaskExecutors
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -82,8 +79,8 @@ class RealAuthenticationApi(
             .setPhoneNumber(number)
             .setTimeout(25, TimeUnit.SECONDS)
             .setCallbacks(callbacks)
-            .setExecutor(TaskExecutors.MAIN_THREAD)
             .build()
+        // TODO: Replace setExecutor if necessary
 
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
