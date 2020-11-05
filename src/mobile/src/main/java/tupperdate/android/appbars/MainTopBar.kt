@@ -20,11 +20,18 @@ import tupperdate.android.ui.TupperdateTypography
 
 @Composable
 fun mainTopBar(
+    modifier: Modifier = Modifier,
     onChatClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
-    TopAppBar(backgroundColor = Color.Transparent, elevation = 0.dp) {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween)
+    TopAppBar(
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        )
         {
             BarButton(
                 normalButtonSize,

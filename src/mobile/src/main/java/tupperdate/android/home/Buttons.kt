@@ -20,7 +20,7 @@ fun BarButton(
 ) {
     BarButton(
         size = size, onClick = onClick, backgroundColor = backgroundColor,
-        contentColor = Color.White, content
+        contentColor = Color.White, content = content
     )
 }
 

@@ -104,10 +104,8 @@ private fun DisplayRecipeCard(
                     if (delta.absoluteValue > swipeMargin) {
                         if (pos > defaultPos) {
                             onLike()
-                            Log.d("HOMe", "like")
                         } else if (pos < defaultPos) {
                             onDislike()
-                            Log.d("HOMe", "dislike")
                         }
                         setPos(defaultPos)
                         setDelta(0)
@@ -115,7 +113,6 @@ private fun DisplayRecipeCard(
                         RecipeCard(modifier, pos, presentRecipe, boxWidth)
                     } else {
                         RecipeCard(modifier, pos, presentRecipe, boxWidth)
-                        Log.d("HOMe", "normal")
                     }
                 }
             }
