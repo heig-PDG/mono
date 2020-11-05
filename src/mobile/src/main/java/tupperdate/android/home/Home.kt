@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
-import tupperdate.android.appbars.mainBottomBar
+import tupperdate.android.appbars.MainBottomBar
 import tupperdate.android.appbars.mainTopBar
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.api.RecipeApi
@@ -53,6 +53,7 @@ fun Home(
 
 @Composable
 private fun DisplayRecipeCard(
+    modifier: Modifier = Modifier,
     presentRecipe: RecipeApi.Recipe,
     onLike: () -> Unit,
     onDislike: () -> Unit,
@@ -90,7 +91,7 @@ private fun DisplayRecipeCard(
                         { deltaTemp ->
                             run {
                                 setPos(pos + (deltaTemp * 0.75).toInt())
-                                setDelta(delta+deltaTemp.toInt())
+                                setDelta(delta + deltaTemp.toInt())
                             }
                         }, onDragStopped = {
                             if (delta.absoluteValue < swipeMargin) {
@@ -111,15 +112,15 @@ private fun DisplayRecipeCard(
                         setPos(defaultPos)
                         setDelta(0)
                         //the like() call will change the presentRecipe
-                        recipeCard(pos, presentRecipe, boxWidth)
+                        RecipeCard(modifier, pos, presentRecipe, boxWidth)
                     } else {
-                        recipeCard(pos, presentRecipe, boxWidth)
+                        RecipeCard(modifier, pos, presentRecipe, boxWidth)
                         Log.d("HOMe", "normal")
                     }
                 }
             }
 
-            mainBottomBar(
+            MainBottomBar(
                 onLike = onLike,
                 onDislike = onDislike,
                 onReturn = onReturnClick,

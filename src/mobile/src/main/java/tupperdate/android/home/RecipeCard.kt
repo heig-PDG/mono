@@ -20,7 +20,12 @@ import tupperdate.android.ui.TupperdateTypography
 import tupperdate.api.RecipeApi
 
 @Composable
-fun recipeCard(offset: Int, recipe: RecipeApi.Recipe, boxWidth: Dp) {
+fun RecipeCard(
+    modifier: Modifier = Modifier,
+    offset: Int,
+    recipe: RecipeApi.Recipe,
+    boxWidth: Dp
+) {
     Card(
         modifier = Modifier.fillMaxSize().offset(x = offset.dp),
         backgroundColor = (Color.Cyan),

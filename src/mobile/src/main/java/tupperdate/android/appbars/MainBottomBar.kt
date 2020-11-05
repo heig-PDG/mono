@@ -1,9 +1,9 @@
 package tupperdate.android.appbars
 
-import androidx.compose.foundation.Icon
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,7 +18,8 @@ import tupperdate.android.ui.recipeAddButton
 import tupperdate.android.ui.returnButton
 
 @Composable
-fun mainBottomBar(
+fun MainBottomBar(
+    modifier: Modifier=Modifier,
     onLike: () -> Unit,
     onDislike: () -> Unit,
     onReturn: () -> Unit,
