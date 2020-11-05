@@ -1,5 +1,6 @@
 package tupperdate.android.home
 
+import android.util.Log
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -79,7 +80,7 @@ private fun DisplayRecipeCard(
 
                 //the defaultPos needs a delta measured
                 val (delta, setDelta) = remember { mutableStateOf(0) }
-                val swipeMargin = (boxWidth / 2).value.toInt()
+                val swipeMargin = (boxWidth).value.toInt()
 
                 Box(modifier = Modifier.align(Alignment.CenterHorizontally)
                     .width((boxWidth)).height((boxHeight))
@@ -102,8 +103,10 @@ private fun DisplayRecipeCard(
                     if (delta.absoluteValue > swipeMargin) {
                         if (pos > defaultPos) {
                             onLike()
+                            Log.d("HOMe", "like")
                         } else if (pos < defaultPos) {
                             onDislike()
+                            Log.d("HOMe", "dislike")
                         }
                         setPos(defaultPos)
                         setDelta(0)
@@ -111,6 +114,7 @@ private fun DisplayRecipeCard(
                         recipeCard(pos, presentRecipe, boxWidth)
                     } else {
                         recipeCard(pos, presentRecipe, boxWidth)
+                        Log.d("HOMe", "normal")
                     }
                 }
             }
