@@ -11,6 +11,7 @@ import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
 import tupperdate.android.appbars.MainBottomBar
@@ -26,7 +27,8 @@ fun Home(
     onChatClick: () -> Unit,
     onProfileClick: () -> Unit,
     onReturnClick: () -> Unit,
-    onRecipeClick: () -> Unit
+    onRecipeClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     // TODO make a call to front element of recipeApi
     val presentRecipe = (RecipeApi.Recipe(
@@ -37,13 +39,25 @@ fun Home(
 
     TitleTopBar(onChatClick = onChatClick, onProfileClick = onProfileClick)
 
-    DisplayRecipeCard(
-        presentRecipe = presentRecipe,
-        onLike = { recipeApi.like(presentRecipe) },
-        onDislike = { recipeApi.dislike(presentRecipe) },
-        onReturnClick = onReturnClick,
-        onRecipeClick = onRecipeClick
-    )
+    Row(modifier.fillMaxSize()) {
+        Column(
+            Modifier.fillMaxWidth()
+                .align(Alignment.Bottom)
+                .padding(bottom = veryLittleButtonSize.dp)
+        ) {
+            DisplayRecipeCard(
+                presentRecipe = presentRecipe,
+                onLike = { recipeApi.like(presentRecipe) },
+                onDislike = { recipeApi.dislike(presentRecipe) },
+            )
+            MainBottomBar(
+                onLike = { recipeApi.like(presentRecipe) },
+                onDislike = { recipeApi.like(presentRecipe) },
+                onReturn = onReturnClick,
+                onRecipeClick = onRecipeClick
+            )
+        }
+    }
 }
 
 @Composable
@@ -51,73 +65,65 @@ private fun DisplayRecipeCard(
     presentRecipe: RecipeApi.Recipe,
     onLike: () -> Unit,
     onDislike: () -> Unit,
-    onReturnClick: () -> Unit,
-    onRecipeClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(Modifier.fillMaxSize()) {
-        Column(
-            Modifier.fillMaxWidth().align(Alignment.Bottom)
-                .padding(bottom = veryLittleButtonSize.dp)
-        ) {
-            WithConstraints {
-                //determine height and width of card according to constraints
-                //the card measures 90 % of screen width and 75 % of screen height
-                val boxHeight =
-                    with(DensityAmbient.current) { constraints.maxHeight.toDp() * 0.75f }
-                val boxWidth = with(DensityAmbient.current) { constraints.maxWidth.toDp() * 0.9f }
+    WithConstraints {
+        //determine height and width of card according to constraints
+        //the card measures 90 % of screen width and 75 % of screen height
+        val boxHeight: Dp
+        val boxWidth: Dp
+        val defaultPos: Int
 
-                //the align(..) doesn't work anymore (because of reasons), so we need to
-                //set manually a default pos
-                val defaultPos = ((with(DensityAmbient.current) { constraints.maxWidth.toDp() / 2 })
-                        - boxWidth / 2).value.toInt()
-                val (pos, setPos) = remember { mutableStateOf((defaultPos)) }
+        with(DensityAmbient.current) {
+            boxHeight = constraints.maxHeight.toDp() * 0.75f
+            boxWidth = constraints.maxWidth.toDp() * 0.9f
+            //Modifier.align(...) doesn't work anymore , so we need to
+            //set manually a default pos
+            defaultPos = ((constraints.maxWidth.toDp() / 2) - (boxWidth / 2)).value.toInt()
+        }
 
-                //the defaultPos needs a delta measured
-                val (delta, setDelta) = remember { mutableStateOf(0) }
-                val swipeMargin = (boxWidth).value.toInt()
+        val (pos, setPos) = remember { mutableStateOf((defaultPos)) }
 
-                Box(modifier = Modifier.align(Alignment.CenterHorizontally)
-                    .width((boxWidth))
-                    .height((boxHeight))
-                    .padding(bottom = (veryLittleButtonSize * 0.8f).dp)
-                    .draggable(Orientation.Horizontal,
-                        onDragStarted = {}, onDrag =
-                        { deltaTemp ->
-                            run {
-                                setPos(pos + (deltaTemp * 0.75).toInt())
-                                setDelta(delta + deltaTemp.toInt())
-                            }
-                        }, onDragStopped = {
-                            if (delta.absoluteValue < swipeMargin) {
-                                setPos(defaultPos)
-                                setDelta(0)
-                            }
-                        })
-                )
-                {
-                    if (delta.absoluteValue > swipeMargin) {
-                        if (pos > defaultPos) {
-                            onLike()
-                        } else if (pos < defaultPos) {
-                            onDislike()
+        //the defaultPos needs a delta measured
+        val (delta, setDelta) = remember { mutableStateOf(0) }
+        val swipeMargin = (boxWidth / 2).value.toInt()
+
+        Box(
+            modifier = modifier
+                .width((boxWidth))
+                .height((boxHeight))
+                .padding(bottom = (veryLittleButtonSize * 0.8f).dp)
+                .draggable(Orientation.Horizontal,
+                    onDragStarted = {},
+                    onDrag =
+                    { deltaTemp ->
+                        run {
+                            setPos(pos + (deltaTemp * 0.75).toInt())
+                            setDelta(delta + deltaTemp.toInt())
                         }
-                        setPos(defaultPos)
-                        setDelta(0)
-                        //the like() call will change the presentRecipe
-                        RecipeCard(pos, presentRecipe, boxWidth)
-                    } else {
-                        RecipeCard(pos, presentRecipe, boxWidth)
-                    }
+                    },
+                    onDragStopped =
+                    {
+                        if (delta.absoluteValue < swipeMargin) {
+                            setPos(defaultPos)
+                            setDelta(0)
+                        }
+                    })
+        )
+        {
+            if (delta.absoluteValue > swipeMargin) {
+                if (pos > defaultPos) {
+                    onLike()
+                } else if (pos < defaultPos) {
+                    onDislike()
                 }
+                setPos(defaultPos)
+                setDelta(0)
+                //the like() call will change the presentRecipe
+                RecipeCard(pos, presentRecipe, boxWidth)
+            } else {
+                RecipeCard(pos, presentRecipe, boxWidth)
             }
-
-            MainBottomBar(
-                onLike = onLike,
-                onDislike = onDislike,
-                onReturn = onReturnClick,
-                onRecipeClick = onRecipeClick
-            )
         }
     }
 }
