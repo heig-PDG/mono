@@ -19,13 +19,13 @@ import tupperdate.android.ui.returnButton
 
 @Composable
 fun MainBottomBar(
-    modifier: Modifier=Modifier,
     onLike: () -> Unit,
     onDislike: () -> Unit,
     onReturn: () -> Unit,
-    onRecipeClick: () -> Unit
+    onRecipeClick: () -> Unit,
+    modifier: Modifier=Modifier,
 ) {
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly)
+    Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly)
     {
         BarButton(
             littleButtonSize,

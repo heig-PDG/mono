@@ -19,12 +19,13 @@ import tupperdate.android.home.normalButtonSize
 import tupperdate.android.ui.TupperdateTypography
 
 @Composable
-fun mainTopBar(
-    modifier: Modifier = Modifier,
+fun TitleTopBar(
     onChatClick: () -> Unit,
-    onProfileClick: () -> Unit
+    onProfileClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
+        modifier = modifier,
         backgroundColor = Color.Transparent,
         elevation = 0.dp
     ) {
@@ -44,7 +45,7 @@ fun mainTopBar(
                 modifier = Modifier.align(Alignment.CenterVertically)
             ) {
                 Text(
-                    text = "tupper.date",
+                    text = "tupper.date", // TODO colorize title
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     style = TupperdateTypography.h5
                 )

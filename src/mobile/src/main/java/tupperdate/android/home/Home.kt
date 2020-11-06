@@ -1,6 +1,5 @@
 package tupperdate.android.home
 
-import android.util.Log
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -15,17 +14,13 @@ import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
 import tupperdate.android.appbars.MainBottomBar
-import tupperdate.android.appbars.mainTopBar
+import tupperdate.android.appbars.TitleTopBar
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.api.RecipeApi
 import tupperdate.api.api
 import kotlin.math.absoluteValue
 
 @Composable
-/*
-@ Guy-Laurent : I am forced to do only one function because it is the only way
-to call like() and dislike() without the weird RealRecipeApi import.
- */
 fun Home(
     recipeApi: RecipeApi,
     onChatClick: () -> Unit,
@@ -40,7 +35,7 @@ fun Home(
         "lobster.jpg"
     ))
 
-    mainTopBar(onChatClick = onChatClick, onProfileClick = onProfileClick)
+    TitleTopBar(onChatClick = onChatClick, onProfileClick = onProfileClick)
 
     DisplayRecipeCard(
         presentRecipe = presentRecipe,
@@ -53,20 +48,19 @@ fun Home(
 
 @Composable
 private fun DisplayRecipeCard(
-    modifier: Modifier = Modifier,
     presentRecipe: RecipeApi.Recipe,
     onLike: () -> Unit,
     onDislike: () -> Unit,
     onReturnClick: () -> Unit,
-    onRecipeClick: () -> Unit
+    onRecipeClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(Modifier.fillMaxSize()) {
         Column(
             Modifier.fillMaxWidth().align(Alignment.Bottom)
                 .padding(bottom = veryLittleButtonSize.dp)
         ) {
-            WithConstraints { -> //why no parameter here ??
-
+            WithConstraints {
                 //determine height and width of card according to constraints
                 //the card measures 90 % of screen width and 75 % of screen height
                 val boxHeight =
@@ -84,7 +78,8 @@ private fun DisplayRecipeCard(
                 val swipeMargin = (boxWidth).value.toInt()
 
                 Box(modifier = Modifier.align(Alignment.CenterHorizontally)
-                    .width((boxWidth)).height((boxHeight))
+                    .width((boxWidth))
+                    .height((boxHeight))
                     .padding(bottom = (veryLittleButtonSize * 0.8f).dp)
                     .draggable(Orientation.Horizontal,
                         onDragStarted = {}, onDrag =
@@ -110,9 +105,9 @@ private fun DisplayRecipeCard(
                         setPos(defaultPos)
                         setDelta(0)
                         //the like() call will change the presentRecipe
-                        RecipeCard(modifier, pos, presentRecipe, boxWidth)
+                        RecipeCard(pos, presentRecipe, boxWidth)
                     } else {
-                        RecipeCard(modifier, pos, presentRecipe, boxWidth)
+                        RecipeCard(pos, presentRecipe, boxWidth)
                     }
                 }
             }

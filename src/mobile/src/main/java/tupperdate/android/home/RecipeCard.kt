@@ -21,13 +21,13 @@ import tupperdate.api.RecipeApi
 
 @Composable
 fun RecipeCard(
-    modifier: Modifier = Modifier,
     offset: Int,
     recipe: RecipeApi.Recipe,
-    boxWidth: Dp
+    boxWidth: Dp,
+    modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = Modifier.fillMaxSize().offset(x = offset.dp),
+        modifier = modifier.fillMaxSize().offset(x = offset.dp),
         backgroundColor = (Color.Cyan),
         shape = RoundedCornerShape(8.dp)
     ) {
@@ -40,7 +40,8 @@ fun RecipeCard(
                 contentScale = ContentScale.Crop
             )
             Row(
-                Modifier.fillMaxWidth().align(Alignment.BottomStart)
+                Modifier.fillMaxWidth()
+                    .align(Alignment.BottomStart)
                     .padding(5.dp)
             ) {
                 Column(Modifier.width(boxWidth * 0.75f)) {
@@ -52,7 +53,8 @@ fun RecipeCard(
                     )
                 }
                 Column(
-                    Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End,
+                    Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.End,
                     verticalArrangement = Arrangement.Top
                 ) {
                     BarButton(veryLittleButtonSize,
