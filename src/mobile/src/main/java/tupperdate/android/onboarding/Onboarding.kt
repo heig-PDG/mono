@@ -37,8 +37,25 @@ private enum class Error {
     InvalidNumber,
 }
 
+/* We could use a sealed class and store the error inside
+ * a special type, but Kotlin won't let us remember the State,
+ * only the implemented subclass... Something like this:
+ *
+ * private sealed class State()
+ * private data class Error(val error: String) : State()
+ * private object Pending : State()
+ * private object WaitingForInput : State()
+ *
+ * When this can be achieved, we can remove the redundant error variable.
+ */
+private enum class State {
+    Error,
+    WaitingForInput,
+    Pending,
+}
+
 @Composable
-private fun getErrorString(error: Error) : String {
+private fun getErrorString(error: Error): String {
     return when (error) {
         Error.Internal -> stringResource(R.string.onboarding_requestCode_error_internal)
         Error.InvalidNumber -> stringResource(R.string.onboarding_requestCode_error_invalid_number)
@@ -54,21 +71,25 @@ fun Onboarding(
 ) {
     val scope = LifecycleOwnerAmbient.current.lifecycleScope
 
-    val (pending, setPending) = remember { mutableStateOf(false) }
-
     val (phone, setPhone) = remember { mutableStateOf("") }
 
     val (requestCodeResult, setRequestCodeResult) = remember {
         mutableStateOf<AuthenticationApi.RequestCodeResult?>(null)
     }
 
-    val error = when (requestCodeResult) {
-        AuthenticationApi.RequestCodeResult.InvalidNumberError -> Error.InvalidNumber
-        AuthenticationApi.RequestCodeResult.InternalError -> Error.Internal
-        else -> null
+    val (state, setState) = remember { mutableStateOf(State.WaitingForInput) }
+
+    val error = if (state == State.Error) {
+        when (requestCodeResult) {
+            AuthenticationApi.RequestCodeResult.InvalidNumberError -> Error.InvalidNumber
+            AuthenticationApi.RequestCodeResult.InternalError -> Error.Internal
+            else -> null
+        }
+    } else {
+        null
     }
 
-    val buttonText = if (pending && requestCodeResult == null) {
+    val buttonText = if (state == State.Pending) {
         stringResource(R.string.onboarding_button_loading_text)
     } else {
         stringResource(R.string.onboarding_button_text)
@@ -77,26 +98,27 @@ fun Onboarding(
     Onboarding(
         phone = phone,
         setPhone = {
-            setPending(false)
-            setRequestCodeResult(null)
+            setState(State.WaitingForInput)
             setPhone(it)
         },
         buttonText = buttonText,
-        onClick = { scope.launch {
-            if (requestCodeResult == null) {
-                setPending(true)
-                val response = auth.requestCode(phone)
+        onClick = {
+            scope.launch {
+                if (state != State.Pending) {
+                    setState(State.Pending)
+                    val response = auth.requestCode(phone)
 
-                when (response) {
-                    AuthenticationApi.RequestCodeResult.LoggedIn -> loggedInScreen()
-                    AuthenticationApi.RequestCodeResult.RequiresVerification -> verificationScreen()
-                    AuthenticationApi.RequestCodeResult.InvalidNumberError -> Unit
-                    AuthenticationApi.RequestCodeResult.InternalError -> Unit
+                    when (response) {
+                        AuthenticationApi.RequestCodeResult.LoggedIn -> loggedInScreen()
+                        AuthenticationApi.RequestCodeResult.RequiresVerification -> verificationScreen()
+                        AuthenticationApi.RequestCodeResult.InvalidNumberError -> Unit
+                        AuthenticationApi.RequestCodeResult.InternalError -> Unit
+                    }
+
+                    setRequestCodeResult(response)
                 }
-
-                setRequestCodeResult(response)
             }
-        } },
+        },
         error = error,
         modifier = modifier,
     )
@@ -163,9 +185,7 @@ private fun ViewPhoneInput(
     Column(modifier = modifier) {
         OutlinedTextField(
             value = phone,
-            onValueChange = {
-                setPhone(it)
-            },
+            onValueChange = setPhone,
             label = { Text(stringResource(R.string.onboarding_phone_label)) },
             placeholder = { Text(stringResource(R.string.onboarding_phone_placeholder)) },
             keyboardType = KeyboardType.Phone,
