@@ -28,6 +28,9 @@ import tupperdate.android.ui.material.BrandedButton
 import tupperdate.android.ui.material.BrandedTitleText
 import tupperdate.api.AuthenticationApi
 import tupperdate.api.api
+import kotlin.String
+import kotlin.Unit
+import kotlin.let
 
 private enum class Error {
     Internal,
@@ -50,34 +53,50 @@ fun Onboarding(
     modifier: Modifier = Modifier,
 ) {
     val scope = LifecycleOwnerAmbient.current.lifecycleScope
+
     val (pending, setPending) = remember { mutableStateOf(false) }
+
     val (phone, setPhone) = remember { mutableStateOf("") }
 
     val (requestCodeResult, setRequestCodeResult) = remember {
         mutableStateOf<AuthenticationApi.RequestCodeResult?>(null)
     }
 
-    when (requestCodeResult) {
-        AuthenticationApi.RequestCodeResult.LoggedIn -> loggedInScreen()
-        AuthenticationApi.RequestCodeResult.RequiresVerification -> verificationScreen()
-        AuthenticationApi.RequestCodeResult.InvalidNumberError -> Unit
-        AuthenticationApi.RequestCodeResult.InternalError -> Unit
-        null -> Unit
-    }
     val error = when (requestCodeResult) {
         AuthenticationApi.RequestCodeResult.InvalidNumberError -> Error.InvalidNumber
         AuthenticationApi.RequestCodeResult.InternalError -> Error.Internal
         else -> null
     }
 
+    val buttonText = if (pending && requestCodeResult == null) {
+        stringResource(R.string.onboarding_button_loading_text)
+    } else {
+        stringResource(R.string.onboarding_button_text)
+    }
+
     Onboarding(
-        pending = pending,
-        setPending = setPending,
         phone = phone,
-        setPhone = setPhone,
-        requestCodeResult = requestCodeResult,
-        setRequestCodeResult = setRequestCodeResult,
-        requestCode = { code -> scope.launch { setRequestCodeResult(auth.requestCode(code)) } },
+        setPhone = {
+            setPending(false)
+            setRequestCodeResult(null)
+            setPhone(it)
+        },
+        buttonText = buttonText,
+        onClick = { scope.launch {
+            if (requestCodeResult == null) {
+                setPending(true)
+                val response = auth.requestCode(phone)
+
+                when (response) {
+                    AuthenticationApi.RequestCodeResult.LoggedIn -> loggedInScreen()
+                    AuthenticationApi.RequestCodeResult.RequiresVerification -> verificationScreen()
+                    AuthenticationApi.RequestCodeResult.InvalidNumberError -> Unit
+                    AuthenticationApi.RequestCodeResult.InternalError -> Unit
+                }
+
+                setRequestCodeResult(response)
+            }
+        } },
         error = error,
         modifier = modifier,
     )
@@ -85,17 +104,13 @@ fun Onboarding(
 
 @Composable
 private fun Onboarding(
-    pending: Boolean,
-    setPending: (Boolean) -> Unit,
     phone: String,
     setPhone: (String) -> Unit,
-    requestCodeResult: AuthenticationApi.RequestCodeResult?,
-    setRequestCodeResult: (AuthenticationApi.RequestCodeResult?) -> Unit,
-    requestCode: (String) -> Unit,
+    buttonText: String,
+    onClick: () -> Unit,
     error: Error?,
     modifier: Modifier = Modifier,
 ) {
-
     Column(
         modifier.padding(top = 72.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
     ) {
@@ -115,25 +130,14 @@ private fun Onboarding(
         ViewPhoneInput(
             phone = phone,
             setPhone = setPhone,
-            setSentRequest = setPending,
-            setCodeResult = setRequestCodeResult,
             error = error,
         )
 
         Spacer(modifier = Modifier.weight(1f, true))
 
         BrandedButton(
-            value = if (pending && requestCodeResult == null) {
-                stringResource(R.string.onboarding_button_loading_text)
-            } else {
-                stringResource(R.string.onboarding_button_text)
-            },
-            onClick = {
-                setPending(true)
-                if (requestCodeResult == null) {
-                    requestCode(phone)
-                }
-            },
+            value = buttonText,
+            onClick = onClick,
             modifier = Modifier
                 .fillMaxWidth()
         )
@@ -153,8 +157,6 @@ private fun Onboarding(
 private fun ViewPhoneInput(
     phone: String,
     setPhone: (String) -> Unit,
-    setSentRequest: (Boolean) -> Unit,
-    setCodeResult: (AuthenticationApi.RequestCodeResult?) -> Unit,
     error: Error?,
     modifier: Modifier = Modifier,
 ) {
@@ -162,8 +164,6 @@ private fun ViewPhoneInput(
         OutlinedTextField(
             value = phone,
             onValueChange = {
-                setCodeResult(null)
-                setSentRequest(false)
                 setPhone(it)
             },
             label = { Text(stringResource(R.string.onboarding_phone_label)) },
@@ -210,8 +210,6 @@ private fun ViewPhoneInputNormalPreview() {
         ViewPhoneInput(
             phone = phone,
             setPhone = setPhone,
-            setCodeResult = {},
-            setSentRequest = {},
             error = null,
         )
     }
@@ -226,8 +224,6 @@ private fun ViewPhoneInputNormalInvalidNumber() {
         ViewPhoneInput(
             phone = phone,
             setPhone = setPhone,
-            setCodeResult = {},
-            setSentRequest = {},
             error = Error.InvalidNumber,
         )
     }
@@ -242,8 +238,6 @@ private fun ViewPhoneInputNormalInternalError() {
         ViewPhoneInput(
             phone = phone,
             setPhone = setPhone,
-            setCodeResult = {},
-            setSentRequest = {},
             error = Error.Internal,
         )
     }
