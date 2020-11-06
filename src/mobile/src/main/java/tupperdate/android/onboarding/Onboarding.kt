@@ -29,6 +29,19 @@ import tupperdate.android.ui.material.BrandedTitleText
 import tupperdate.api.AuthenticationApi
 import tupperdate.api.api
 
+private enum class Error {
+    Internal,
+    InvalidNumber,
+}
+
+@Composable
+private fun getErrorString(error: Error) : String {
+    return when (error) {
+        Error.Internal -> stringResource(R.string.onboarding_requestCode_error_internal)
+        Error.InvalidNumber -> stringResource(R.string.onboarding_requestCode_error_invalid_number)
+    }
+}
+
 @Composable
 fun Onboarding(
     auth: AuthenticationApi,
@@ -51,6 +64,11 @@ fun Onboarding(
         AuthenticationApi.RequestCodeResult.InternalError -> Unit
         null -> Unit
     }
+    val error = when (requestCodeResult) {
+        AuthenticationApi.RequestCodeResult.InvalidNumberError -> Error.InvalidNumber
+        AuthenticationApi.RequestCodeResult.InternalError -> Error.Internal
+        else -> null
+    }
 
     Onboarding(
         pending = pending,
@@ -60,12 +78,13 @@ fun Onboarding(
         requestCodeResult = requestCodeResult,
         setRequestCodeResult = setRequestCodeResult,
         requestCode = { code -> scope.launch { setRequestCodeResult(auth.requestCode(code)) } },
+        error = error,
         modifier = modifier,
     )
 }
 
 @Composable
-fun Onboarding(
+private fun Onboarding(
     pending: Boolean,
     setPending: (Boolean) -> Unit,
     phone: String,
@@ -73,6 +92,7 @@ fun Onboarding(
     requestCodeResult: AuthenticationApi.RequestCodeResult?,
     setRequestCodeResult: (AuthenticationApi.RequestCodeResult?) -> Unit,
     requestCode: (String) -> Unit,
+    error: Error?,
     modifier: Modifier = Modifier,
 ) {
 
@@ -96,8 +116,8 @@ fun Onboarding(
             phone = phone,
             setPhone = setPhone,
             setSentRequest = setPending,
-            codeResult = requestCodeResult,
             setCodeResult = setRequestCodeResult,
+            error = error,
         )
 
         Spacer(modifier = Modifier.weight(1f, true))
@@ -134,26 +154,10 @@ private fun ViewPhoneInput(
     phone: String,
     setPhone: (String) -> Unit,
     setSentRequest: (Boolean) -> Unit,
-    codeResult: AuthenticationApi.RequestCodeResult?,
     setCodeResult: (AuthenticationApi.RequestCodeResult?) -> Unit,
+    error: Error?,
     modifier: Modifier = Modifier,
 ) {
-    val isErrorValue = when (codeResult) {
-        AuthenticationApi.RequestCodeResult.LoggedIn -> false
-        AuthenticationApi.RequestCodeResult.RequiresVerification -> false
-        AuthenticationApi.RequestCodeResult.InvalidNumberError -> true
-        AuthenticationApi.RequestCodeResult.InternalError -> true
-        null -> false
-    }
-
-    val errorText = when (codeResult) {
-        AuthenticationApi.RequestCodeResult.LoggedIn -> null
-        AuthenticationApi.RequestCodeResult.RequiresVerification -> null
-        AuthenticationApi.RequestCodeResult.InvalidNumberError -> stringResource(R.string.onboarding_requestCode_error_invalid_number)
-        AuthenticationApi.RequestCodeResult.InternalError -> stringResource(R.string.onboarding_requestCode_error_internal)
-        null -> null
-    }
-
     Column(modifier = modifier) {
         OutlinedTextField(
             value = phone,
@@ -165,14 +169,14 @@ private fun ViewPhoneInput(
             label = { Text(stringResource(R.string.onboarding_phone_label)) },
             placeholder = { Text(stringResource(R.string.onboarding_phone_placeholder)) },
             keyboardType = KeyboardType.Phone,
-            isErrorValue = isErrorValue,
+            isErrorValue = error != null,
             modifier = Modifier
                 .fillMaxWidth()
         )
 
-        if (errorText != null) {
+        error?.let {
             Text(
-                text = errorText,
+                text = getErrorString(it),
                 color = MaterialTheme.colors.error,
             )
         }
@@ -206,9 +210,9 @@ private fun ViewPhoneInputNormalPreview() {
         ViewPhoneInput(
             phone = phone,
             setPhone = setPhone,
-            codeResult = null,
             setCodeResult = {},
             setSentRequest = {},
+            error = null,
         )
     }
 }
@@ -222,9 +226,9 @@ private fun ViewPhoneInputNormalInvalidNumber() {
         ViewPhoneInput(
             phone = phone,
             setPhone = setPhone,
-            codeResult = AuthenticationApi.RequestCodeResult.InvalidNumberError,
             setCodeResult = {},
             setSentRequest = {},
+            error = Error.InvalidNumber,
         )
     }
 }
@@ -238,9 +242,9 @@ private fun ViewPhoneInputNormalInternalError() {
         ViewPhoneInput(
             phone = phone,
             setPhone = setPhone,
-            codeResult = AuthenticationApi.RequestCodeResult.InternalError,
             setCodeResult = {},
             setSentRequest = {},
+            error = Error.Internal,
         )
     }
 }
