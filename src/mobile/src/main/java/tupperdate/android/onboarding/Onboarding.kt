@@ -29,7 +29,7 @@ import tupperdate.android.ui.material.BrandedTitleText
 import tupperdate.api.AuthenticationApi
 import tupperdate.api.api
 
-private sealed class State()
+private sealed class State
 private data class Error(val error: Int) : State()
 private object Pending : State()
 private object WaitingForInput : State()

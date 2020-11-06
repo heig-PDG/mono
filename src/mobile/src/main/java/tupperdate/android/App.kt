@@ -51,7 +51,7 @@ private fun TupperdateAppDestination(
     api: Api,
     destination: Destination,
     action: Action,
-    user: Flow<AuthenticationApi.Profile?>
+    user: Flow<AuthenticationApi.Profile?>,
 ) {
     val currentUser by user.collectAsState(null)
 

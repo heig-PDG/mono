@@ -32,5 +32,5 @@ val TupperdateTypography = Typography(
     body2 = TextStyle(fontFamily = Mulish, fontSize = 14.sp, fontWeight = FontWeight.Normal),
     button = TextStyle(fontFamily = Mulish, fontSize = 14.sp, fontWeight = FontWeight.Bold),
     caption = TextStyle(fontFamily = Mulish, fontSize = 12.sp, fontWeight = FontWeight.SemiBold),
-    overline = TextStyle(fontFamily = Mulish, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+    overline = TextStyle(fontFamily = Mulish, fontSize = 10.sp, fontWeight = FontWeight.Bold),
 )

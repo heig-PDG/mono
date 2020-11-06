@@ -13,7 +13,7 @@ object MockAuthenticationApi : AuthenticationApi {
 
     override suspend fun requestCode(
         number: String,
-        force: Boolean
+        force: Boolean,
     ): AuthenticationApi.RequestCodeResult {
         val timer = Random.nextLong(from = 1000, until = 3000)
         delay(timer)
