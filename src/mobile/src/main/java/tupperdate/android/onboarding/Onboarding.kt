@@ -48,7 +48,7 @@ fun Onboarding(
 
     Onboarding(
         phone = phone,
-        setPhone = {
+        onPhoneInputValueChange = {
             setState(WaitingForInput)
             setPhone(it)
         },
@@ -81,10 +81,13 @@ fun Onboarding(
     )
 }
 
+/**
+ * Stateless onboarding component
+ */
 @Composable
 private fun Onboarding(
     phone: String,
-    setPhone: (String) -> Unit,
+    onPhoneInputValueChange: (String) -> Unit,
     buttonText: String,
     onClick: () -> Unit,
     error: Int?,
@@ -110,7 +113,7 @@ private fun Onboarding(
 
         ViewPhoneInput(
             phone = phone,
-            setPhone = setPhone,
+            onValueChange = onPhoneInputValueChange,
             error = error,
         )
 
@@ -134,17 +137,25 @@ private fun Onboarding(
     }
 }
 
+/**
+ * A stateless input for a phone number
+ *
+ * @param phone Is the phone number to display
+ * @param onValueChange Is executed when the value changes
+ * @param error Is null if there is no error or corresponds to the string resource to display
+ * @param modifier The modifier to apply
+ */
 @Composable
 private fun ViewPhoneInput(
     phone: String,
-    setPhone: (String) -> Unit,
+    onValueChange: (String) -> Unit,
     error: Int?,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
         OutlinedTextField(
             value = phone,
-            onValueChange = setPhone,
+            onValueChange = onValueChange,
             label = { Text(stringResource(R.string.onboarding_phone_label)) },
             placeholder = { Text(stringResource(R.string.onboarding_phone_placeholder)) },
             keyboardType = KeyboardType.Phone,
@@ -188,7 +199,7 @@ private fun ViewPhoneInputNormalPreview() {
     TupperdateTheme {
         ViewPhoneInput(
             phone = phone,
-            setPhone = setPhone,
+            onValueChange = setPhone,
             error = null,
         )
     }
@@ -202,7 +213,7 @@ private fun ViewPhoneInputNormalInvalidNumber() {
     TupperdateTheme {
         ViewPhoneInput(
             phone = phone,
-            setPhone = setPhone,
+            onValueChange = setPhone,
             error = R.string.onboarding_requestCode_error_invalid_number,
         )
     }
@@ -216,7 +227,7 @@ private fun ViewPhoneInputNormalInternalError() {
     TupperdateTheme {
         ViewPhoneInput(
             phone = phone,
-            setPhone = setPhone,
+            onValueChange = setPhone,
             error = R.string.onboarding_requestCode_error_internal,
         )
     }
