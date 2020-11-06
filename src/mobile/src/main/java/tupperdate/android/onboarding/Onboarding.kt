@@ -28,39 +28,11 @@ import tupperdate.android.ui.material.BrandedButton
 import tupperdate.android.ui.material.BrandedTitleText
 import tupperdate.api.AuthenticationApi
 import tupperdate.api.api
-import kotlin.String
-import kotlin.Unit
-import kotlin.let
 
-private enum class Error {
-    Internal,
-    InvalidNumber,
-}
-
-/* We could use a sealed class and store the error inside
- * a special type, but Kotlin won't let us remember the State,
- * only the implemented subclass... Something like this:
- *
- * private sealed class State()
- * private data class Error(val error: String) : State()
- * private object Pending : State()
- * private object WaitingForInput : State()
- *
- * When this can be achieved, we can remove the redundant error variable.
- */
-private enum class State {
-    Error,
-    WaitingForInput,
-    Pending,
-}
-
-@Composable
-private fun getErrorString(error: Error): String {
-    return when (error) {
-        Error.Internal -> stringResource(R.string.onboarding_requestCode_error_internal)
-        Error.InvalidNumber -> stringResource(R.string.onboarding_requestCode_error_invalid_number)
-    }
-}
+private sealed class State()
+private data class Error(val error: Int) : State()
+private object Pending : State()
+private object WaitingForInput : State()
 
 @Composable
 fun Onboarding(
@@ -72,54 +44,39 @@ fun Onboarding(
     val scope = LifecycleOwnerAmbient.current.lifecycleScope
 
     val (phone, setPhone) = remember { mutableStateOf("") }
-
-    val (requestCodeResult, setRequestCodeResult) = remember {
-        mutableStateOf<AuthenticationApi.RequestCodeResult?>(null)
-    }
-
-    val (state, setState) = remember { mutableStateOf(State.WaitingForInput) }
-
-    val error = if (state == State.Error) {
-        when (requestCodeResult) {
-            AuthenticationApi.RequestCodeResult.InvalidNumberError -> Error.InvalidNumber
-            AuthenticationApi.RequestCodeResult.InternalError -> Error.Internal
-            else -> null
-        }
-    } else {
-        null
-    }
-
-    val buttonText = if (state == State.Pending) {
-        stringResource(R.string.onboarding_button_loading_text)
-    } else {
-        stringResource(R.string.onboarding_button_text)
-    }
+    val (state, setState) = remember { mutableStateOf<State>(WaitingForInput) }
 
     Onboarding(
         phone = phone,
         setPhone = {
-            setState(State.WaitingForInput)
+            setState(WaitingForInput)
             setPhone(it)
         },
-        buttonText = buttonText,
+        error = when (state) {
+            is Error -> state.error
+            else -> null
+        },
+        buttonText = when (state) {
+            is Pending -> stringResource(R.string.onboarding_button_loading_text)
+            else -> stringResource(R.string.onboarding_button_text)
+        },
         onClick = {
             scope.launch {
-                if (state != State.Pending) {
-                    setState(State.Pending)
-                    val response = auth.requestCode(phone)
-
-                    when (response) {
-                        AuthenticationApi.RequestCodeResult.LoggedIn -> loggedInScreen()
-                        AuthenticationApi.RequestCodeResult.RequiresVerification -> verificationScreen()
-                        AuthenticationApi.RequestCodeResult.InvalidNumberError -> Unit
-                        AuthenticationApi.RequestCodeResult.InternalError -> Unit
+                if (state != Pending) {
+                    setState(Pending)
+                    when (auth.requestCode(phone)) {
+                        AuthenticationApi.RequestCodeResult.LoggedIn ->
+                            loggedInScreen()
+                        AuthenticationApi.RequestCodeResult.RequiresVerification ->
+                            verificationScreen()
+                        AuthenticationApi.RequestCodeResult.InvalidNumberError ->
+                            setState(Error(R.string.onboarding_requestCode_error_invalid_number))
+                        AuthenticationApi.RequestCodeResult.InternalError ->
+                            setState(Error(R.string.onboarding_requestCode_error_internal))
                     }
-
-                    setRequestCodeResult(response)
                 }
             }
         },
-        error = error,
         modifier = modifier,
     )
 }
@@ -130,17 +87,19 @@ private fun Onboarding(
     setPhone: (String) -> Unit,
     buttonText: String,
     onClick: () -> Unit,
-    error: Error?,
+    error: Int?,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier.padding(top = 72.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
     ) {
         ProvideTextStyle(TupperdateTypography.h4) {
-            Text(stringResource(R.string.onboarding_welcome))
+            Text(
+                text = stringResource(R.string.onboarding_welcome)
+            )
             BrandedTitleText(
-                stringResource(R.string.onboarding_welcome_name),
-                Modifier.padding(bottom = 16.dp)
+                text = stringResource(R.string.onboarding_welcome_name),
+                modifier = Modifier.padding(bottom = 16.dp)
             )
         }
 
@@ -179,7 +138,7 @@ private fun Onboarding(
 private fun ViewPhoneInput(
     phone: String,
     setPhone: (String) -> Unit,
-    error: Error?,
+    error: Int?,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -196,7 +155,7 @@ private fun ViewPhoneInput(
 
         error?.let {
             Text(
-                text = getErrorString(it),
+                text = stringResource(it),
                 color = MaterialTheme.colors.error,
             )
         }
@@ -244,7 +203,7 @@ private fun ViewPhoneInputNormalInvalidNumber() {
         ViewPhoneInput(
             phone = phone,
             setPhone = setPhone,
-            error = Error.InvalidNumber,
+            error = R.string.onboarding_requestCode_error_invalid_number,
         )
     }
 }
@@ -258,7 +217,7 @@ private fun ViewPhoneInputNormalInternalError() {
         ViewPhoneInput(
             phone = phone,
             setPhone = setPhone,
-            error = Error.Internal,
+            error = R.string.onboarding_requestCode_error_internal,
         )
     }
 }

@@ -77,12 +77,12 @@ private val Transition = transitionDefinition<BrandedTitleTextState> {
  * An equivalent to the text composable that does not support line wrapping but displays an
  * animated gradient. Useful for hero content.
  *
- * @param value the contents to display in the [BrandedTitleText]
+ * @param text the contents to display in the [BrandedTitleText]
  * @param modifier a [Modifier] for this composable.
  */
 @Composable
 fun BrandedTitleText(
-    value: String,
+    text: String,
     modifier: Modifier = Modifier,
 ) {
     // On first composition, we don't have access to our bounds. Use a best-effort guess.
@@ -127,7 +127,7 @@ fun BrandedTitleText(
         .height(sizeDp)
         .onGloballyPositioned { bounds = it.boundsInParent }) {
         drawIntoCanvas { canvas ->
-            canvas.nativeCanvas.drawText(value, 0f, sizeFloat, paint)
+            canvas.nativeCanvas.drawText(text, 0f, sizeFloat, paint)
         }
     }
 }
@@ -135,5 +135,5 @@ fun BrandedTitleText(
 @Composable
 @Preview
 private fun BrandedTitleTextPreview() {
-    BrandedTitleText(value = "Hello world")
+    BrandedTitleText(text = "Hello world")
 }
