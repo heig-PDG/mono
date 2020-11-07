@@ -17,7 +17,7 @@ import tupperdate.android.ui.material.BrandedButton
 fun BottomBar(
     buttonValue: String,
     onButtonClick: () -> Unit,
-    bottomText: String
+    bottomText: String,
 ) {
     Column() {
         BrandedButton(
