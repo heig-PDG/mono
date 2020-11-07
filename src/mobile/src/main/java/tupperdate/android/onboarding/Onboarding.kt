@@ -30,9 +30,22 @@ import tupperdate.api.AuthenticationApi
 import tupperdate.api.api
 
 private sealed class State
-private data class Error(val error: Int) : State()
+private data class Error(val error: LocalError) : State()
 private object Pending : State()
 private object WaitingForInput : State()
+
+private enum class LocalError {
+    Internal,
+    InvalidNumber,
+}
+
+@Composable
+private fun getErrorString(error: LocalError) : String {
+    return when(error) {
+        LocalError.Internal -> stringResource(R.string.onboarding_requestCode_error_internal)
+        LocalError.InvalidNumber -> stringResource(R.string.onboarding_requestCode_error_invalid_number)
+    }
+}
 
 @Composable
 fun Onboarding(
@@ -70,9 +83,9 @@ fun Onboarding(
                         AuthenticationApi.RequestCodeResult.RequiresVerification ->
                             verificationScreen()
                         AuthenticationApi.RequestCodeResult.InvalidNumberError ->
-                            setState(Error(R.string.onboarding_requestCode_error_invalid_number))
+                            setState(Error(LocalError.InvalidNumber))
                         AuthenticationApi.RequestCodeResult.InternalError ->
-                            setState(Error(R.string.onboarding_requestCode_error_internal))
+                            setState(Error(LocalError.InvalidNumber))
                     }
                 }
             }
@@ -90,7 +103,7 @@ private fun Onboarding(
     onPhoneInputValueChange: (String) -> Unit,
     buttonText: String,
     onClick: () -> Unit,
-    error: Int?,
+    error: LocalError?,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -149,7 +162,7 @@ private fun Onboarding(
 private fun ViewPhoneInput(
     phone: String,
     onValueChange: (String) -> Unit,
-    error: Int?,
+    error: LocalError?,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -166,7 +179,7 @@ private fun ViewPhoneInput(
 
         error?.let {
             Text(
-                text = stringResource(it),
+                text = getErrorString(it),
                 color = MaterialTheme.colors.error,
             )
         }
@@ -214,7 +227,7 @@ private fun ViewPhoneInputNormalInvalidNumber() {
         ViewPhoneInput(
             phone = phone,
             onValueChange = setPhone,
-            error = R.string.onboarding_requestCode_error_invalid_number,
+            error = LocalError.InvalidNumber,
         )
     }
 }
@@ -228,7 +241,7 @@ private fun ViewPhoneInputNormalInternalError() {
         ViewPhoneInput(
             phone = phone,
             onValueChange = setPhone,
-            error = R.string.onboarding_requestCode_error_internal,
+            error = LocalError.Internal,
         )
     }
 }
