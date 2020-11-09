@@ -51,7 +51,7 @@ private fun TupperdateAppDestination(
     api: Api,
     destination: Destination,
     action: Action,
-    user: Flow<AuthenticationApi.Profile?>
+    user: Flow<AuthenticationApi.Profile?>,
 ) {
     val currentUser by user.collectAsState(null)
 
@@ -63,7 +63,9 @@ private fun TupperdateAppDestination(
             )
             is Destination.BrandingPreview -> BrandingPreview()
             is Destination.Onboarding -> Onboarding(
-                onButtonClick = action.viewOnboardingConfirmation
+                auth = api.authentication,
+                verificationScreen = action.viewOnboardingConfirmation,
+                loggedInScreen = action.home,
             )
             is Destination.OnboardingConfirmation -> OnboardingConfirmation(
                 onButtonClick = {}, // TODO: Add a behaviour to button
