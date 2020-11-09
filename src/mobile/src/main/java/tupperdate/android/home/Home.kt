@@ -119,6 +119,7 @@ private fun DisplayRecipeCard(
                 setPos(defaultPos)
                 setDelta(0)
                 //the like() call will change the presentRecipe
+            }
         }
     }
 }
