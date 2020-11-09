@@ -109,6 +109,7 @@ private fun DisplayRecipeCard(
                     })
         )
         {
+            RecipeCard(offset = pos, boxWidth = boxWidth, recipe = presentRecipe)
             if (delta.absoluteValue > swipeMargin) {
                 if (pos > defaultPos) {
                     onLike()
@@ -118,10 +119,6 @@ private fun DisplayRecipeCard(
                 setPos(defaultPos)
                 setDelta(0)
                 //the like() call will change the presentRecipe
-                RecipeCard(offset = pos, boxWidth = boxWidth, recipe = presentRecipe)
-            } else {
-                RecipeCard(offset = pos, boxWidth = boxWidth, recipe = presentRecipe)
-            }
         }
     }
 }
