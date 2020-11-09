@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonConstants
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,7 +17,7 @@ fun BarButton(
     onClick: () -> Unit,
     backgroundColor: Color,
     contentColor: Color= Color.White,
-    content: @Composable() () -> Unit,
+    content: @Composable () -> Unit,
 ) {
     Button(
         modifier = modifier.size(size),

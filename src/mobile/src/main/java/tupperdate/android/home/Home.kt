@@ -13,7 +13,6 @@ import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.unit.Dp
 import androidx.ui.tooling.preview.Preview
-import tupperdate.android.appbars.MainBottomBar
 import tupperdate.android.appbars.TitleTopBar
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.api.RecipeApi
@@ -49,7 +48,7 @@ fun Home(
                 onLike = { recipeApi.like(presentRecipe) },
                 onDislike = { recipeApi.dislike(presentRecipe) },
             )
-            MainBottomBar(
+            SwipeCardBottomBar(
                 onLike = { recipeApi.like(presentRecipe) },
                 onDislike = { recipeApi.like(presentRecipe) },
                 onReturn = onReturnClick,

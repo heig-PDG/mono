@@ -1,4 +1,4 @@
-package tupperdate.android.appbars
+package tupperdate.android.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -9,16 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.vectorResource
 import tupperdate.android.R
-import tupperdate.android.home.BarButton
-import tupperdate.android.home.LittleButtonSize
-import tupperdate.android.home.NormalButtonSize
 import tupperdate.android.ui.DislikeButton
 import tupperdate.android.ui.LikeButton
 import tupperdate.android.ui.RecipeAddButton
 import tupperdate.android.ui.ReturnButton
 
 @Composable
-fun MainBottomBar(
+fun SwipeCardBottomBar(
     modifier: Modifier = Modifier,
     onLike: () -> Unit,
     onDislike: () -> Unit,

@@ -20,9 +20,9 @@ import tupperdate.android.ui.TupperdateTypography
 
 @Composable
 fun TitleTopBar(
+    modifier: Modifier = Modifier,
     onChatClick: () -> Unit,
     onProfileClick: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
         modifier = modifier,
