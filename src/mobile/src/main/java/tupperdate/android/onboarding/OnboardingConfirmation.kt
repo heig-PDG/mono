@@ -4,6 +4,7 @@ import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.AmbientEmphasisLevels
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.ProvideEmphasis
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -20,7 +21,6 @@ import tupperdate.android.appbars.onlyReturnTopBar
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.TupperdateTypography
 import tupperdate.android.ui.material.BrandedButton
-import tupperdate.android.ui.material.BrandedTextField
 
 @Composable
 fun OnboardingConfirmation(
@@ -76,7 +76,7 @@ private fun codeInput(
     onCodeChanged: ((String)) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BrandedTextField(
+    OutlinedTextField(
         value = code,
         label = { Text(stringResource(R.string.onboardingConfirmation_code_label)) },
         onValueChange = onCodeChanged,
