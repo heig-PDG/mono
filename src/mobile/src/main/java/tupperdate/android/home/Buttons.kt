@@ -4,37 +4,24 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonConstants
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun BarButton(
-    size: Int,
+    modifier: Modifier = Modifier,
+    size: Dp,
     onClick: () -> Unit,
     backgroundColor: Color,
+    contentColor: Color= Color.White,
     content: @Composable() () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    BarButton(
-        modifier = modifier, size = size,
-        onClick = onClick, backgroundColor = backgroundColor,
-        contentColor = Color.White, content = content
-    )
-}
-
-@Composable
-fun BarButton(
-    size: Int,
-    onClick: () -> Unit,
-    backgroundColor: Color,
-    contentColor: Color,
-    content: @Composable() () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     Button(
-        modifier = modifier.size(size.dp),
+        modifier = modifier.size(size),
         shape = CircleShape,
         onClick = onClick,
         colors = ButtonConstants.defaultButtonColors(
@@ -47,6 +34,7 @@ fun BarButton(
     }
 }
 
-const val littleButtonSize = 45
-const val normalButtonSize = 50
-const val veryLittleButtonSize = 30
+val LittleButtonSize = 45.dp
+val NormalButtonSize = 50.dp
+val VeryLittleButtonSize = 30.dp
+

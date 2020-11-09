@@ -12,7 +12,6 @@ import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
 import tupperdate.android.appbars.MainBottomBar
 import tupperdate.android.appbars.TitleTopBar
@@ -23,12 +22,12 @@ import kotlin.math.absoluteValue
 
 @Composable
 fun Home(
+    modifier: Modifier = Modifier,
     recipeApi: RecipeApi,
     onChatClick: () -> Unit,
     onProfileClick: () -> Unit,
     onReturnClick: () -> Unit,
     onRecipeClick: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     // TODO make a call to front element of recipeApi
     val presentRecipe = (RecipeApi.Recipe(
@@ -43,7 +42,7 @@ fun Home(
         Column(
             Modifier.fillMaxWidth()
                 .align(Alignment.Bottom)
-                .padding(bottom = veryLittleButtonSize.dp)
+                .padding(bottom = VeryLittleButtonSize)
         ) {
             DisplayRecipeCard(
                 presentRecipe = presentRecipe,
@@ -62,10 +61,10 @@ fun Home(
 
 @Composable
 private fun DisplayRecipeCard(
+    modifier: Modifier = Modifier,
     presentRecipe: RecipeApi.Recipe,
     onLike: () -> Unit,
     onDislike: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     WithConstraints {
         //determine height and width of card according to constraints
@@ -77,8 +76,7 @@ private fun DisplayRecipeCard(
         with(DensityAmbient.current) {
             boxHeight = constraints.maxHeight.toDp() * 0.75f
             boxWidth = constraints.maxWidth.toDp() * 0.9f
-            //Modifier.align(...) doesn't work anymore , so we need to
-            //set manually a default pos
+            // WithConstraints forces us to define manually a default position and work with
             defaultPos = ((constraints.maxWidth.toDp() / 2) - (boxWidth / 2)).value.toInt()
         }
 
@@ -92,7 +90,7 @@ private fun DisplayRecipeCard(
             modifier = modifier
                 .width((boxWidth))
                 .height((boxHeight))
-                .padding(bottom = (veryLittleButtonSize * 0.8f).dp)
+                .padding(bottom = (VeryLittleButtonSize * 0.8f))
                 .draggable(Orientation.Horizontal,
                     onDragStarted = {},
                     onDrag =
@@ -120,9 +118,9 @@ private fun DisplayRecipeCard(
                 setPos(defaultPos)
                 setDelta(0)
                 //the like() call will change the presentRecipe
-                RecipeCard(pos, presentRecipe, boxWidth)
+                RecipeCard(offset = pos, boxWidth = boxWidth, recipe = presentRecipe)
             } else {
-                RecipeCard(pos, presentRecipe, boxWidth)
+                RecipeCard(offset = pos, boxWidth = boxWidth, recipe = presentRecipe)
             }
         }
     }

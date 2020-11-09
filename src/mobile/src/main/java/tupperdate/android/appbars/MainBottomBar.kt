@@ -10,46 +10,43 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.vectorResource
 import tupperdate.android.R
 import tupperdate.android.home.BarButton
-import tupperdate.android.home.littleButtonSize
-import tupperdate.android.home.normalButtonSize
-import tupperdate.android.ui.dislikeButton
-import tupperdate.android.ui.likeButton
-import tupperdate.android.ui.recipeAddButton
-import tupperdate.android.ui.returnButton
+import tupperdate.android.home.LittleButtonSize
+import tupperdate.android.home.NormalButtonSize
+import tupperdate.android.ui.DislikeButton
+import tupperdate.android.ui.LikeButton
+import tupperdate.android.ui.RecipeAddButton
+import tupperdate.android.ui.ReturnButton
 
 @Composable
 fun MainBottomBar(
+    modifier: Modifier = Modifier,
     onLike: () -> Unit,
     onDislike: () -> Unit,
     onReturn: () -> Unit,
     onRecipeClick: () -> Unit,
-    modifier: Modifier=Modifier,
 ) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly)
     {
         BarButton(
-            littleButtonSize,
-            { onReturn() },
-            Color.returnButton,
-            { Icon(vectorResource(id = R.drawable.ic_return)) }
+            size = LittleButtonSize,
+            onClick = { onReturn() },
+            backgroundColor = Color.ReturnButton,
+            content = { Icon(vectorResource(id = R.drawable.ic_return)) }
         )
         BarButton(
-            normalButtonSize,
-            { onDislike() },
-            backgroundColor = Color.dislikeButton, {
-                Icon(vectorResource(id = R.drawable.ic_clear))
-            })
+            size = NormalButtonSize,
+            onClick = { onDislike() },
+            backgroundColor = Color.DislikeButton,
+            content = { Icon(vectorResource(id = R.drawable.ic_clear)) })
         BarButton(
-            normalButtonSize,
-            { onLike() },
-            Color.likeButton, {
-                Icon(vectorResource(id = R.drawable.ic_like))
-            })
+            size = NormalButtonSize,
+            onClick = { onLike() },
+            backgroundColor = Color.LikeButton,
+            content = { Icon(vectorResource(id = R.drawable.ic_like)) })
         BarButton(
-            littleButtonSize,
-            { onRecipeClick() },
-            Color.recipeAddButton, {
-                Icon(vectorResource(id = R.drawable.ic_add_recipe))
-            })
+            size = LittleButtonSize,
+            onClick = { onRecipeClick() },
+            backgroundColor = Color.RecipeAddButton,
+            content = { Icon(vectorResource(id = R.drawable.ic_add_recipe)) })
     }
 }

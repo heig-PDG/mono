@@ -15,7 +15,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
 import tupperdate.android.home.BarButton
-import tupperdate.android.home.normalButtonSize
+import tupperdate.android.home.NormalButtonSize
 import tupperdate.android.ui.TupperdateTypography
 
 @Composable
@@ -35,11 +35,11 @@ fun TitleTopBar(
         )
         {
             BarButton(
-                normalButtonSize,
-                { onChatClick() },
-                Color.Transparent,
-                Color.Black,
-                { Icon(vectorResource(id = R.drawable.ic_chat_24px)) }
+                size = NormalButtonSize,
+                onClick = { onChatClick() },
+                backgroundColor = Color.Transparent,
+                contentColor = Color.Black,
+                content = { Icon(vectorResource(id = R.drawable.ic_chat_24px)) }
             )
             Column(
                 modifier = Modifier.align(Alignment.CenterVertically)
@@ -51,10 +51,11 @@ fun TitleTopBar(
                 )
             }
             BarButton(
-                normalButtonSize,
-                { onProfileClick() },
-                Color.Transparent,
-                Color.Black, {
+                size = NormalButtonSize,
+                onClick = { onProfileClick() },
+                backgroundColor = Color.Transparent,
+                contentColor = Color.Black,
+                content = {
                     Icon(vectorResource(id = R.drawable.ic_account_circle_black_18dp))
                 })
         }
