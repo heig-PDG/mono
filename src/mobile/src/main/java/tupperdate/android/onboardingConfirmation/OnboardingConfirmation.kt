@@ -68,6 +68,10 @@ fun OnboardingConfirmation(
             setCode(it)
             setState(WaitingForInput)
         },
+        buttonText = when (state) {
+            Pending -> stringResource(R.string.onboardingConfirmation_button_text_pending)
+            else -> stringResource(R.string.onboardingConfirmation_button_text)
+        },
         onButtonClick = {
             scope.launch {
                 setState(Pending)
@@ -90,6 +94,7 @@ fun OnboardingConfirmation(
 private fun OnboardingConfirmation(
     code: String,
     onCodeChanged: (String) -> Unit,
+    buttonText: String,
     onButtonClick: () -> Unit,
     onReturnClick: () -> Unit,
     isErrorValue: Boolean,
@@ -123,7 +128,7 @@ private fun OnboardingConfirmation(
         Spacer(modifier = Modifier.weight(1f, true))
 
         BrandedButton(
-            value = stringResource(R.string.onboardingConfirmation_button_text),
+            value = buttonText,
             onClick = onButtonClick,
             modifier = Modifier
                 .fillMaxWidth()
@@ -174,11 +179,12 @@ private fun OnboardingConfirmationPreview() {
         OnboardingConfirmation(
             code = code,
             onCodeChanged = setCode,
-            {},
-            {},
-            false,
-            null,
-            Modifier.background(Color.White)
+            buttonText = "Button text",
+            onButtonClick = {},
+            onReturnClick = {},
+            isErrorValue = false,
+            errorMsg = null,
+            modifier = Modifier.background(Color.White)
                 .fillMaxSize()
         )
     }
@@ -193,11 +199,12 @@ private fun OnboardingConfirmationErrorPreview() {
         OnboardingConfirmation(
             code = code,
             onCodeChanged = setCode,
-            {},
-            {},
-            true,
-            "This is a fictive error message",
-            Modifier.background(Color.White)
+            buttonText = "Button text",
+            onButtonClick = {},
+            onReturnClick = {},
+            isErrorValue = true,
+            errorMsg = "This is a fictive error message",
+            modifier = Modifier.background(Color.White)
                 .fillMaxSize()
         )
     }

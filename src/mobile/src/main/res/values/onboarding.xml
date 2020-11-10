@@ -15,6 +15,7 @@
     <string name="onboardingConfirmation_title">You\'ve received something.</string>
     <string name="onboardingConfirmation_reception_text">You\'re nearly there! Please enter the registration code you\'ve just received.</string>
     <string name="onboardingConfirmation_button_text">Let\'s Go</string>
+    <string name="onboardingConfirmation_button_text_pending">Verifying...</string>
     <string name="onboardingConfirmation_bottom_text">Can\'t find your registration code? Make sure to check your spam folder.</string>
     <string name="onboardingConfirmation_code_label">Your code</string>
     <string name="onboardingConfirmation_code_placeholder">2077</string>
