@@ -54,7 +54,7 @@ private fun getErrorMsg(state: State): String? {
 fun OnboardingConfirmation(
     auth: AuthenticationApi,
     onReturnClick: () -> Unit,
-    loggedInScreen: () -> Unit,
+    onLoggedIn: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scope = LifecycleOwnerAmbient.current.lifecycleScope
@@ -72,7 +72,7 @@ fun OnboardingConfirmation(
             scope.launch {
                 setState(Pending)
                 when (auth.verify(code)) {
-                    AuthenticationApi.VerificationResult.LoggedIn -> loggedInScreen()
+                    AuthenticationApi.VerificationResult.LoggedIn -> onLoggedIn()
                     AuthenticationApi.VerificationResult.InvalidVerificationError ->
                         setState(VerificationError)
                     AuthenticationApi.VerificationResult.InternalError -> setState(InternalError)

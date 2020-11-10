@@ -70,7 +70,7 @@ private fun TupperdateAppDestination(
             is Destination.OnboardingConfirmation -> OnboardingConfirmation(
                 auth = api.authentication,
                 onReturnClick = action.back,
-                loggedInScreen = action.home,
+                onLoggedIn = action.home,
             )
         }
     }
