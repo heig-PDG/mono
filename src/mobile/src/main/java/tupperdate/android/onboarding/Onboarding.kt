@@ -42,7 +42,7 @@ private enum class LocalError {
 @Composable
 private fun getErrorString(error: LocalError) : String {
     return when(error) {
-        LocalError.Internal -> stringResource(R.string.onboarding_requestCode_error_internal)
+        LocalError.Internal -> stringResource(R.string.onboarding_error_internal)
         LocalError.InvalidNumber -> stringResource(R.string.onboarding_requestCode_error_invalid_number)
     }
 }
