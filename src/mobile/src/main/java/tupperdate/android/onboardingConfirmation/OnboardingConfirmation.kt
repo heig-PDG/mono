@@ -66,7 +66,7 @@ fun OnboardingConfirmation(
         code = code,
         onCodeChanged = {
             setCode(it)
-            setState(Pending)
+            setState(WaitingForInput)
         },
         onButtonClick = {
             scope.launch {
