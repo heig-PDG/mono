@@ -56,11 +56,14 @@ fun Home(
             }
         },
         bottomBar = {
-            SwipeCardBottomBar(
-                onLike = { /* TODO */ },
-                onDislike = { /* TODO */ },
-                onReturn = onReturnClick,
-                onRecipeClick = onRecipeClick
+            RecipeActions(
+                onLikeClick = { /* TODO */ },
+                onDislikeClick = { /* TODO */ },
+                onBackClick = onReturnClick,
+                onNewRecipeClick = onRecipeClick,
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
             )
         },
         modifier = modifier,
