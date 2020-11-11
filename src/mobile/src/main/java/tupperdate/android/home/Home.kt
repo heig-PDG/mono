@@ -1,6 +1,5 @@
 package tupperdate.android.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,7 +8,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
@@ -31,7 +29,7 @@ fun Home(
     modifier: Modifier = Modifier,
 ) {
     // TODO make a call to elements of recipeApi
-    val recipes = List(3) { index ->
+    val recipes = List(4) { index ->
         RecipeApi.Recipe(
             title = "Red lobster",
             description = "Description $index",
@@ -47,7 +45,6 @@ fun Home(
             )
         },
         bodyContent = { paddingValues ->
-            // TODO (alex) : Investigate incorrect padding in SwipeStack.
             SwipeStack(
                 recipes,
                 Modifier
