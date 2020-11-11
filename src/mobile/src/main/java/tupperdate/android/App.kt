@@ -9,7 +9,7 @@ import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import kotlinx.coroutines.flow.Flow
 import tupperdate.android.home.Home
 import tupperdate.android.onboarding.Onboarding
-import tupperdate.android.onboarding.OnboardingConfirmation
+import tupperdate.android.onboardingConfirmation.OnboardingConfirmation
 import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.utils.Navigator
@@ -68,8 +68,9 @@ private fun TupperdateAppDestination(
                 loggedInScreen = action.home,
             )
             is Destination.OnboardingConfirmation -> OnboardingConfirmation(
-                onButtonClick = {}, // TODO: Add a behaviour to button
-                onReturnClick = action.back
+                auth = api.authentication,
+                onReturnClick = action.back,
+                onLoggedIn = action.home,
             )
         }
     }
