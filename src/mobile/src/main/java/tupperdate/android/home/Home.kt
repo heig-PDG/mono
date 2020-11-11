@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
@@ -28,14 +30,7 @@ fun Home(
     onRecipeClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // TODO make a call to elements of recipeApi
-    val recipes = List(4) { index ->
-        RecipeApi.Recipe(
-            title = "Red lobster",
-            description = "Description $index",
-            pictureUrl = "https://via.placeholder.com/450"
-        )
-    }
+    val recipes by remember { recipeApi.stack() }.collectAsState(emptyList())
     Scaffold(
         topBar = {
             TupperdateTopBar(
