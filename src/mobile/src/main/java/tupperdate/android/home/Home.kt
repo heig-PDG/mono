@@ -1,16 +1,19 @@
 package tupperdate.android.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
-import tupperdate.android.appbars.TitleTopBar
+import tupperdate.android.appbars.TupperdateTopBar
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.layout.SwipeStack
 import tupperdate.android.ui.layout.rememberSwipeStackState
@@ -37,12 +40,14 @@ fun Home(
     }
     Scaffold(
         topBar = {
-            TitleTopBar(
+            TupperdateTopBar(
                 onChatClick = onChatClick,
                 onProfileClick = onProfileClick,
+                Modifier.fillMaxWidth()
             )
         },
         bodyContent = { paddingValues ->
+            // TODO (alex) : Investigate incorrect padding in SwipeStack.
             SwipeStack(
                 recipes,
                 Modifier
