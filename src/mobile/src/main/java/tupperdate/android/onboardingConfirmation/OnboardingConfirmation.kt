@@ -146,7 +146,7 @@ private fun OnboardingConfirmation(
 }
 
 @Composable
-private fun codeInput(
+private fun CodeInput(
     code: String,
     onCodeChanged: ((String)) -> Unit,
     isErrorValue: Boolean,
