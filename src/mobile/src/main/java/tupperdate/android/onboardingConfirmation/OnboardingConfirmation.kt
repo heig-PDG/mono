@@ -118,7 +118,7 @@ private fun OnboardingConfirmation(
             modifier = Modifier.padding(bottom = 38.dp)
         )
 
-        codeInput(
+        CodeInput(
             code = code,
             onCodeChanged = onCodeChanged,
             isErrorValue = isErrorValue,
