@@ -1,10 +1,12 @@
 package tupperdate.android.ui
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Shapes
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
 private val TupperdateLightColors = lightColors(
     onPrimary = Color.White,
@@ -17,7 +19,11 @@ private val TupperdateLightColors = lightColors(
     onSurface = Color.Black,
 )
 
-private val TupperdateShapes = Shapes()
+private val TupperdateShapes = Shapes(
+    large = RoundedCornerShape(32.dp),
+    medium = RoundedCornerShape(16.dp),
+    small = RoundedCornerShape(8.dp),
+)
 
 @Composable
 fun TupperdateTheme(

@@ -141,4 +141,7 @@ dependencies {
     implementation "androidx.compose.material:material:1.0.0-alpha06"
 
     implementation "androidx.ui:ui-tooling:1.0.0-alpha06"
+
+    // Jetpack Compose + Coil
+    implementation "dev.chrisbanes.accompanist:accompanist-coil:0.3.2"
 }
