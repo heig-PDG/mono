@@ -1,98 +1,87 @@
 package tupperdate.android.home
 
-import androidx.compose.foundation.Text
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
+import tupperdate.android.appbars.TupperdateTopBar
 import tupperdate.android.ui.TupperdateTheme
-import tupperdate.api.AuthenticationApi
+import tupperdate.android.ui.layout.SwipeStack
+import tupperdate.android.ui.layout.rememberSwipeStackState
+import tupperdate.api.RecipeApi
+import tupperdate.api.api
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Home(
-    onButtonClick: () -> Unit,
-    user: AuthenticationApi.Profile?,
+    recipeApi: RecipeApi,
+    onChatClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    onReturnClick: () -> Unit,
+    onRecipeClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (user == null) {
-        HomeDisconnected(
-            onButtonClick,
-            modifier,
-        )
-    } else {
-        HomeConnected(
-            onButtonClick,
-            user,
-            modifier,
-        )
-    }
-}
-
-@Composable
-private fun HomeDisconnected(
-    onButtonClick: () -> Unit,
-    modifier: Modifier,
-) {
-    Column(
-        modifier.padding(10.dp)
-    ) {
-        Text(text = "Hi there.")
-        Button(onClick = onButtonClick) {
-            Text("Go to onboarding")
-        }
-    }
-}
-
-@Composable
-private fun HomeConnected(
-    onButtonClick: () -> Unit,
-    user: AuthenticationApi.Profile,
-    modifier: Modifier,
-) {
-    Column(
-        modifier.padding(10.dp)
-    ) {
-        Text(text = "Hi there ${user.displayName}")
-        Button(onClick = onButtonClick) {
-            Text("View Branding")
-        }
-    }
+    val recipes by remember { recipeApi.stack() }.collectAsState(emptyList())
+    Scaffold(
+        topBar = {
+            TupperdateTopBar(
+                onChatClick = onChatClick,
+                onProfileClick = onProfileClick,
+                Modifier.fillMaxWidth()
+            )
+        },
+        bodyContent = { paddingValues ->
+            SwipeStack(
+                recipes,
+                Modifier
+                    .padding(paddingValues)
+                    .padding(16.dp),
+                // For the moment, reject all swipes.
+                swipeStackState = rememberSwipeStackState(confirmStateChange = { false })
+            ) { recipe ->
+                RecipeCard(
+                    recipe = recipe,
+                    onInfoClick = {},
+                    Modifier.fillMaxSize()
+                )
+            }
+        },
+        bottomBar = {
+            RecipeActions(
+                onLikeClick = { /* TODO */ },
+                onDislikeClick = { /* TODO */ },
+                onBackClick = onReturnClick,
+                onNewRecipeClick = onRecipeClick,
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
+        },
+        modifier = modifier,
+    )
 }
 
 @Preview
 @Composable
 private fun HomeDisconnectPreview() {
+    val owner = LifecycleOwnerAmbient.current
+    val api = remember { owner.api() }
     TupperdateTheme {
         Home(
-            onButtonClick = {},
-            user = null,
-            Modifier.background(Color.White)
-                .fillMaxSize()
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun HomeConnectedPreview() {
-    val profile = AuthenticationApi.Profile(
-        displayName = "John Appleseed",
-        phoneNumber = "144",
-        profileImageUrl = null,
-    )
-
-    TupperdateTheme {
-        Home(
-            onButtonClick = {},
-            user = profile,
-            Modifier.background(Color.White)
-                .fillMaxSize()
+            recipeApi = api.recipe,
+            onChatClick = {},
+            onProfileClick = {},
+            onRecipeClick = {},
+            onReturnClick = {}
         )
     }
 }

@@ -58,8 +58,12 @@ private fun TupperdateAppDestination(
     destination.let { dest ->
         when (dest) {
             is Destination.Home -> Home(
-                onButtonClick = action.viewOnboarding,
-                user = currentUser
+                recipeApi = api.recipe,
+                // TODO add behaviours on these buttons
+                onChatClick = {},
+                onProfileClick = {},
+                onRecipeClick = {},
+                onReturnClick = {}
             )
             is Destination.BrandingPreview -> BrandingPreview()
             is Destination.Onboarding -> Onboarding(
