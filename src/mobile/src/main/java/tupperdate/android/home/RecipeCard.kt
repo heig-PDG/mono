@@ -108,7 +108,7 @@ fun RecipeCard(
                 }
                 Spacer(Modifier.weight(1f, true))
                 IconButton(onInfoClick) {
-                    Icon(vectorResource(R.drawable.ic_recipe_card_help))
+                    Icon(vectorResource(R.drawable.ic_home_recipe_card_help))
                 }
             }
         }

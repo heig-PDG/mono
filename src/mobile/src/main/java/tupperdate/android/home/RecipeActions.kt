@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonConstants
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,25 +31,25 @@ fun RecipeActions(
     Row(modifier, Arrangement.SpaceEvenly, Alignment.CenterVertically) {
         IconButton(
             onClick = onBackClick,
-            icon = vectorResource(R.drawable.ic_return),
+            icon = vectorResource(R.drawable.ic_home_cancel),
             backgroundColor = Color.ReturnButton,
             Modifier.preferredSize(SmallSize)
         )
         IconButton(
             onClick = onDislikeClick,
-            icon = vectorResource(R.drawable.ic_clear),
+            icon = vectorResource(R.drawable.ic_home_dislike_recipe),
             backgroundColor = Color.DislikeButton,
             Modifier.preferredSize(HugeSize)
         )
         IconButton(
             onClick = onLikeClick,
-            icon = vectorResource(R.drawable.ic_like),
+            icon = vectorResource(R.drawable.ic_home_like_recipe),
             backgroundColor = Color.LikeButton,
             Modifier.preferredSize(HugeSize)
         )
         IconButton(
             onClick = onNewRecipeClick,
-            icon = vectorResource(R.drawable.ic_add_recipe),
+            icon = vectorResource(R.drawable.ic_home_new_recipe),
             backgroundColor = Color.RecipeAddButton,
             Modifier.preferredSize(SmallSize)
         )
@@ -69,7 +71,8 @@ private fun IconButton(
         colors = ButtonConstants.defaultButtonColors(
             backgroundColor = backgroundColor,
             contentColor = contentColor
-        )
+        ),
+        contentPadding = ButtonConstants.DefaultTextContentPadding,
     ) {
         Icon(icon)
     }
