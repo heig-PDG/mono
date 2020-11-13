@@ -31,19 +31,19 @@ fun RecipeActions(
     Row(modifier, Arrangement.SpaceEvenly, Alignment.CenterVertically) {
         IconButton(
             onClick = onBackClick,
-            icon = vectorResource(R.drawable.ic_return),
+            icon = vectorResource(R.drawable.ic_home_cancel),
             backgroundColor = Color.ReturnButton,
             Modifier.preferredSize(SmallSize)
         )
         IconButton(
             onClick = onDislikeClick,
-            icon = vectorResource(R.drawable.ic_clear),
+            icon = vectorResource(R.drawable.ic_home_dislike_recipe),
             backgroundColor = Color.DislikeButton,
             Modifier.preferredSize(HugeSize)
         )
         IconButton(
             onClick = onLikeClick,
-            icon = vectorResource(R.drawable.ic_like),
+            icon = vectorResource(R.drawable.ic_home_like_recipe),
             backgroundColor = Color.LikeButton,
             Modifier.preferredSize(HugeSize)
         )
