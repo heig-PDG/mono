@@ -51,7 +51,7 @@ fun TupperdateTopBar(
             }
             Text(Title, style = TupperdateTypography.h6)
             IconButton(onClick = onProfileClick) {
-                Icon(vectorResource(R.drawable.ic_account_circle_black_18dp))
+                Icon(vectorResource(R.drawable.ic_home_accounts))
             }
         }
     }
