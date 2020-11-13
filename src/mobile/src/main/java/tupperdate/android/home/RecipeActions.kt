@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonConstants
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,7 +49,7 @@ fun RecipeActions(
         )
         IconButton(
             onClick = onNewRecipeClick,
-            icon = vectorResource(R.drawable.ic_add_recipe),
+            icon = vectorResource(R.drawable.ic_home_new_recipe),
             backgroundColor = Color.RecipeAddButton,
             Modifier.preferredSize(SmallSize)
         )
@@ -69,7 +71,8 @@ private fun IconButton(
         colors = ButtonConstants.defaultButtonColors(
             backgroundColor = backgroundColor,
             contentColor = contentColor
-        )
+        ),
+        contentPadding = ButtonConstants.DefaultTextContentPadding,
     ) {
         Icon(icon)
     }
