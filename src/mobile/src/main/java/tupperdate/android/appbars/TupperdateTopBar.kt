@@ -46,7 +46,8 @@ fun TupperdateTopBar(
     ) {
         Providers(AmbientContentColor provides TopBarIconColor) {
             IconButton(onClick = onChatClick) {
-                Icon(vectorResource(R.drawable.ic_chat_24px))
+                // TODO change icon when notified
+                Icon(vectorResource(R.drawable.ic_home_messages))
             }
             Text(Title, style = TupperdateTypography.h6)
             IconButton(onClick = onProfileClick) {
