@@ -57,3 +57,4 @@ This table represents the total time invested. It will be updated weekly.
 | 2020-11-06 | 45h 53m 46s |
 | 2020-11-10 | 49h 53m 46s |
 | 2020-11-13 | 52h 18m 10s |
+| 2020-11-17 | 53h 18m 10s |
