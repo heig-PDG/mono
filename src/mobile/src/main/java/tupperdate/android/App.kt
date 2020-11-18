@@ -59,7 +59,9 @@ private fun TupperdateAppDestination(
     destination.let { dest ->
         when (dest) {
             is Destination.EditRecipePage -> EditRecipePage(
-
+                onCloseClick = {},
+                onDeleteClick = {},
+                onSaveClick = {},
             )
 
             is Destination.Home -> Home(
@@ -67,7 +69,7 @@ private fun TupperdateAppDestination(
                 // TODO add behaviours on these buttons
                 onChatClick = {},
                 onProfileClick = {},
-                onRecipeClick = {},
+                onRecipeClick = action.editRecipePage,
                 onReturnClick = {}
             )
             is Destination.BrandingPreview -> BrandingPreview()
