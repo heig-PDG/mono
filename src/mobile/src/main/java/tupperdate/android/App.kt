@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import kotlinx.coroutines.flow.Flow
+import tupperdate.android.editRecipe.EditRecipePage
 import tupperdate.android.home.Home
 import tupperdate.android.onboarding.Onboarding
 import tupperdate.android.onboardingConfirmation.OnboardingConfirmation
@@ -57,6 +58,10 @@ private fun TupperdateAppDestination(
 
     destination.let { dest ->
         when (dest) {
+            is Destination.EditRecipePage -> EditRecipePage(
+
+            )
+
             is Destination.Home -> Home(
                 recipeApi = api.recipe,
                 // TODO add behaviours on these buttons

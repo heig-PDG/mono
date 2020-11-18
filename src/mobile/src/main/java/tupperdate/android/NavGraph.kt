@@ -6,6 +6,9 @@ import tupperdate.android.utils.Navigator
 
 sealed class Destination : Parcelable {
     @Parcelize
+    object EditRecipePage : Destination()
+
+    @Parcelize
     object Home : Destination()
 
     @Parcelize
@@ -19,6 +22,10 @@ sealed class Destination : Parcelable {
 }
 
 class Action(navigator: Navigator<Destination>) {
+    val editRecipePage:()->Unit ={
+        navigator.navigate(Destination.EditRecipePage)
+    }
+
     val home: () -> Unit = {
         navigator.navigate(Destination.Home)
     }
