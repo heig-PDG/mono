@@ -1,7 +1,9 @@
 package tupperdate.android.editRecipe
 
+import androidx.compose.foundation.AmbientContentColor
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
+import androidx.compose.foundation.contentColor
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -29,39 +31,42 @@ fun EditRecipePage(
 ) {
     val (recipeTitle, setRecipeTitle) = remember { mutableStateOf("Lobster") }
     val (recipeDescr, setRecipeDescr) = remember { mutableStateOf("From Santa Monica") }
+
     Column(modifier.fillMaxSize()) {
         Box(
             modifier = modifier.fillMaxWidth().weight(0.65f)
-                .background(Color.Black)
+                .background(Color.Transparent)
         ) {
-            /*Column(modifier.width(constraints.maxWidth.dp).height(pictureBoxHeight.dp),
+            Column(Modifier.matchParentSize().padding(generalPadding),
                 horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.SpaceBetween) {
-                IconButton(onClick = {}) {
+                IconButton(onClick = { onCloseClick() }) {
                     Icon(vectorResource(id = R.drawable.ic_home_dislike_recipe))
                 }
-                IconButton(onClick = {}) {
-                    Icon(vectorResource(id = R.drawable.ic_home_dislike_recipe))
+                IconButton(onClick = {},
+                    Modifier.background(color = Color.Transparent)
+                 ) {
+                    Icon(vectorResource(id = R.drawable.ic_editrecipe_edit),
+                       tint = Color.White //why is the param named "tint" and not "color" ??
+                    )
                 }
-            }*/
+            }
         }
         Box(
             modifier = modifier.fillMaxWidth().weight(1f).background(Color.White)
-                .padding(5.dp).padding(top = 5.dp)
+                .padding(generalPadding).padding(top = generalPadding)
         ) {
             Column(modifier.fillMaxSize()) {
                 OutlinedTextField(
-                    modifier = modifier.padding(5.dp).fillMaxWidth(),
-                    //TODO find out how to put an empty value
+                    modifier = modifier.padding(generalPadding).fillMaxWidth(),
                     value = recipeTitle,
                     onValueChange = { vala -> setRecipeTitle(vala) },
                     label = { Text(stringResource(id = R.string.edit_recipe_label_title)) },
                     placeholder = { Text(stringResource(id = R.string.edit_recipe_placeholder_title)) },
                 )
                 Row(
-                    modifier.fillMaxWidth().padding(5.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                )
-                {
+                    modifier.fillMaxWidth().padding(generalPadding),
+                    horizontalArrangement = Arrangement.spacedBy(generalPadding)
+                ) {
                     BrandedButton(
                         value = "DELETE",
                         onClick = {
@@ -79,38 +84,36 @@ fun EditRecipePage(
                     )
                 }
                 Row(
-                    modifier.fillMaxWidth().padding(10.dp),
-                    horizontalArrangement = Arrangement.SpaceAround
+                    modifier.fillMaxWidth().padding(generalPadding),
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    val buttonModifier = Modifier.height(75.dp).width(80.dp)
-                        .padding(horizontal = 7.dp, vertical = 7.dp)
+                    val buttonModifier=Modifier
+                            //this is the only way to have one-line buttons
+                        .width(80.dp).height(75.dp).padding(start= generalPadding, end= generalPadding)
                     RecipeButton(
-                        onClick = {},
                         untoggledText = "NOT VEGGIE",
                         toggledText = "VEGETARIAN",
-                        iconToggledId = R.drawable.ic_editrecipe_veggie,
-                        iconUntoggledId = R.drawable.ic_editrecipe_not_veggie,
-                        modifier = buttonModifier,
+                        iconToggledId = R.drawable.ic_editrecipe_not_veggie,
+                        iconUntoggledId = R.drawable.ic_editrecipe_veggie,
+                        buttonModifier
                     )
                     RecipeButton(
-                        onClick = {},
                         untoggledText = "WARM",
                         toggledText = "COLD",
                         iconToggledId = R.drawable.ic_editrecipe_cold,
                         iconUntoggledId = R.drawable.ic_editrecipe_warm,
-                        modifier = buttonModifier,
+                        buttonModifier
                     )
                     RecipeButton(
-                        onClick = {},
                         untoggledText = "ALLERGENS",
                         toggledText = "ALLERGENS",
                         iconToggledId = R.drawable.ic_editrecipe_allergens,
                         iconUntoggledId = R.drawable.ic_editrecipe_allergens,
-                        modifier = buttonModifier,
+                        buttonModifier
                     )
                 }
                 OutlinedTextField(
-                    modifier = modifier.padding(top = 10.dp).fillMaxWidth(),
+                    modifier = modifier.padding(top = generalPadding).fillMaxWidth(),
                     value = recipeDescr,
                     label = { Text(stringResource(id = R.string.edit_recipe_label_description)) },
                     placeholder = { Text(stringResource(id = R.string.edit_recipe_placeholder_description)) },
@@ -123,7 +126,6 @@ fun EditRecipePage(
 
 @Composable
 fun RecipeButton(
-    onClick: () -> Unit,
     untoggledText: String,
     toggledText: String,
     iconToggledId: Int,
@@ -147,7 +149,7 @@ fun RecipeButton(
         elevation = ButtonConstants.defaultElevation(0.dp, 0.dp, 0.dp),
         colors = ButtonConstants.defaultButtonColors(
             backgroundColor = Color.Transparent,
-            contentColor = Color.LightGray
+            contentColor = Color.Gray
         )
     ) {
         Column(
@@ -164,6 +166,8 @@ fun RecipeButton(
         }
     }
 }
+
+val generalPadding = 8.dp
 
 @Preview
 @Composable
