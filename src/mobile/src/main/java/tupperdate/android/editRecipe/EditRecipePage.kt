@@ -35,6 +35,7 @@ fun EditRecipePage(
                 Modifier.matchParentSize().padding(8.dp),
                 horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.SpaceBetween
             ) {
+                //this button is invisible but really exists
                 IconButton(onClick = { onCloseClick() }) {
                     Icon(vectorResource(id = R.drawable.ic_home_dislike_recipe))
                 }
@@ -50,88 +51,7 @@ fun EditRecipePage(
             }
         }
         MainSurface(onDeleteClick = onDeleteClick, onSaveClick = onSaveClick,
-        modifier = Modifier.weight(1f))
-        /*Surface(
-            modifier = modifier.fillMaxSize().weight(1f),
-            shape = RoundedCornerShape(topLeft = 8.dp, topRight = 8.dp)
-        ) {
-            Box(
-                modifier = Modifier.background(Color.White)
-                    .padding(8.dp).padding(top = 8.dp),
-            ) {
-                Column(modifier.fillMaxSize()) {
-                    OutlinedTextField(
-                        modifier = modifier.padding(8.dp).fillMaxWidth(),
-                        value = recipeTitle,
-                        onValueChange = { vala -> setRecipeTitle(vala) },
-                        label = { Text(stringResource(id = R.string.edit_recipe_label_title)) },
-                        placeholder = { Text(stringResource(id = R.string.edit_recipe_placeholder_title)) },
-                    )
-                    Row(
-                        modifier.fillMaxWidth().padding(8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        BrandedButton(
-                            value = "DELETE",
-                            onClick = {
-                                onDeleteClick()
-                            },
-                            modifier = modifier.weight(1f, fill = true),
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                        BrandedButton(
-                            value = "SAVE",
-                            onClick = {
-                                RecipeApi.Recipe(recipeTitle, recipeDescr, "")
-                                onSaveClick()
-                            },
-                            modifier = modifier.weight(1f, fill = true),
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                    }
-                    Row(
-                        modifier.fillMaxWidth().padding(8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(
-                            8.dp,
-                            Alignment.CenterHorizontally
-                        ),
-                    ) {
-                        val buttonModifier = Modifier
-                            //this is the only way to have one-line buttons with a 80 dp size
-                            .width(80.dp).height(75.dp)
-                        RecipeButton(
-                            untoggledText = "NOT VEGGIE",
-                            toggledText = "VEGETARIAN",
-                            iconToggledId = R.drawable.ic_editrecipe_not_veggie,
-                            iconUntoggledId = R.drawable.ic_editrecipe_veggie,
-                            buttonModifier
-                        )
-                        RecipeButton(
-                            untoggledText = "WARM",
-                            toggledText = "COLD",
-                            iconToggledId = R.drawable.ic_editrecipe_cold,
-                            iconUntoggledId = R.drawable.ic_editrecipe_warm,
-                            buttonModifier
-                        )
-                        RecipeButton(
-                            untoggledText = "CLEAN",
-                            toggledText = "ALLERGENS",
-                            iconToggledId = R.drawable.ic_editrecipe_allergens, //TODO find a crossed allergen icon
-                            iconUntoggledId = R.drawable.ic_editrecipe_allergens,
-                            buttonModifier
-                        )
-                    }
-                    Divider(color = Color.Gray, thickness = 1.dp)
-                    OutlinedTextField(
-                        modifier = modifier.padding(top = 8.dp).fillMaxWidth(),
-                        value = recipeDescr,
-                        label = { Text(stringResource(id = R.string.edit_recipe_label_description)) },
-                        placeholder = { Text(stringResource(id = R.string.edit_recipe_placeholder_description)) },
-                        onValueChange = { vala -> setRecipeDescr(vala) },
-                    )
-                }
-            }
-        }*/
+        modifier = modifier.weight(1f))
     }
 }
 
