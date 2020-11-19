@@ -126,7 +126,7 @@ fun RecipeButton(
     Button(
         modifier = modifier,
         onClick = {
-            if (iconId == iconUntoggledId) {
+            if (text == untoggledText) {
                 setIconId(iconToggledId)
                 setText(toggledText)
             } else {
