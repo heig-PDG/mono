@@ -5,8 +5,6 @@ import com.google.cloud.firestore.QueryDocumentSnapshot
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import tupperdate.common.model.Recipe
 import tupperdate.web.await
 import kotlin.random.Random
@@ -42,10 +40,7 @@ fun Routing.recipes(firestore: Firestore) {
                     .getOrNull(0)
             } while (recipe == null)
 
-            val json = Json.encodeToString(recipe.toObject(Recipe::class.java))
-
-            call.response.headers.append("Content-Type", "application/json", false)
-            call.respond(json)
+            call.respond(recipe.toObject(Recipe::class.java))
         }
     }
 }

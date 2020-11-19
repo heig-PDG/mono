@@ -17,15 +17,14 @@ dependencies {
 
     // Server-side Ktor dependencies
     implementation "io.ktor:ktor-server-netty:1.4.0"
+    implementation "io.ktor:ktor-serialization:1.4.0"
+
 
     // SL4J
     implementation "org.slf4j:slf4j-simple:1.7.21"
 
     // Firebase
     implementation 'com.google.firebase:firebase-admin:7.0.1'
-
-    // Kotlinx dependencies.
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
 }
 
 compileTestKotlin {
