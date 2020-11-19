@@ -1,27 +1,20 @@
 package tupperdate.android.editRecipe
 
-import androidx.compose.foundation.AmbientContentColor
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
-import androidx.compose.foundation.contentColor
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.ui.tooling.preview.Preview
-import tupperdate.android.ui.TupperdateTheme
-import tupperdate.android.ui.material.BrandedButton
 import tupperdate.android.R
-import tupperdate.api.RecipeApi
+import tupperdate.android.ui.TupperdateTheme
 
 @Composable
 fun EditRecipePage(
@@ -56,10 +49,14 @@ fun EditRecipePage(
                 }
             }
         }
-        Surface(modifier = Modifier.fillMaxSize().weight(1f),
-            shape = RoundedCornerShape(topLeft = 8.dp, topRight = 8.dp)) {
+        MainSurface(onDeleteClick = onDeleteClick, onSaveClick = onSaveClick,
+        modifier = Modifier.weight(1f))
+        /*Surface(
+            modifier = modifier.fillMaxSize().weight(1f),
+            shape = RoundedCornerShape(topLeft = 8.dp, topRight = 8.dp)
+        ) {
             Box(
-                modifier = modifier.background(Color.White)
+                modifier = Modifier.background(Color.White)
                     .padding(8.dp).padding(top = 8.dp),
             ) {
                 Column(modifier.fillMaxSize()) {
@@ -100,7 +97,7 @@ fun EditRecipePage(
                         ),
                     ) {
                         val buttonModifier = Modifier
-                            //this is the only way to have one-line buttons
+                            //this is the only way to have one-line buttons with a 80 dp size
                             .width(80.dp).height(75.dp)
                         RecipeButton(
                             untoggledText = "NOT VEGGIE",
@@ -109,7 +106,6 @@ fun EditRecipePage(
                             iconUntoggledId = R.drawable.ic_editrecipe_veggie,
                             buttonModifier
                         )
-                        Divider(color = Color.Gray, thickness = 2.dp)
                         RecipeButton(
                             untoggledText = "WARM",
                             toggledText = "COLD",
@@ -117,7 +113,6 @@ fun EditRecipePage(
                             iconUntoggledId = R.drawable.ic_editrecipe_warm,
                             buttonModifier
                         )
-                        Divider(color = Color.Gray, thickness = 2.dp)
                         RecipeButton(
                             untoggledText = "CLEAN",
                             toggledText = "ALLERGENS",
@@ -126,6 +121,7 @@ fun EditRecipePage(
                             buttonModifier
                         )
                     }
+                    Divider(color = Color.Gray, thickness = 1.dp)
                     OutlinedTextField(
                         modifier = modifier.padding(top = 8.dp).fillMaxWidth(),
                         value = recipeDescr,
@@ -135,50 +131,7 @@ fun EditRecipePage(
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun RecipeButton(
-    untoggledText: String,
-    toggledText: String,
-    iconToggledId: Int,
-    iconUntoggledId: Int,
-    modifier: Modifier = Modifier,
-) {
-    val (iconId, setIconId) = remember { mutableStateOf(iconUntoggledId) }
-    val (text, setText) = remember { mutableStateOf(untoggledText) }
-    Button(
-        modifier = modifier,
-        onClick = {
-            if (iconId == iconUntoggledId) {
-                setIconId(iconToggledId)
-                setText(toggledText)
-            } else {
-                setIconId(iconUntoggledId)
-                setText(untoggledText)
-            }
-        },
-        border = null,
-        elevation = ButtonConstants.defaultElevation(0.dp, 0.dp, 0.dp),
-        colors = ButtonConstants.defaultButtonColors(
-            backgroundColor = Color.Transparent,
-            contentColor = Color.Gray
-        )
-    ) {
-        Column(
-            modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Icon(asset = vectorResource(id = iconId))
-            Text(
-                fontSize = 10.sp,
-                color = Color.LightGray,
-                text = text
-            )
-        }
+        }*/
     }
 }
 
