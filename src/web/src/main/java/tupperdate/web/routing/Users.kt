@@ -2,36 +2,28 @@ package tupperdate.web.routing
 
 import com.google.cloud.firestore.Firestore
 import io.ktor.application.*
-import io.ktor.response.*
+import io.ktor.request.*
 import io.ktor.routing.*
-import tupperdate.web.await
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import tupperdate.common.model.User
 
 fun Routing.users(firestore: Firestore) {
     route("/users") {
-        val users = firestore.collection("users/")
+        val users = firestore.collection("users")
 
-        get {
-            call.respondText(users.get().await().map { doc -> doc.id }.toString())
-        }
+        post {
+            // Add auto-generated document to firestore
+            val userDocument = users.document()
 
-        get("recipes") {
-            call.respondText(users.get().await().map { doc -> doc.data.getValue("") }.toString())
-        }
+            // Get post data
+            val json = call.receiveText()
 
-        route("{userId}") {
-            get {
-                val userId = call.parameters["userId"] ?: "Error"
+            // Parse JSON (and add auto-generated id to it)
+            val user = Json.decodeFromString<User>(json).copy(id = userDocument.id)
 
-                call.respondText {
-                    users.document(userId).get().await().data.toString()
-                }
-            }
-
-            route("recipes") {
-                get("{recipeId}") {
-
-                }
-            }
+            // Add user data to newly generated document
+            userDocument.set(user)
         }
     }
 }
