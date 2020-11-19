@@ -23,6 +23,9 @@ dependencies {
 
     // Firebase
     implementation 'com.google.firebase:firebase-admin:7.0.1'
+
+    // Kotlinx dependencies.
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
 }
 
 compileTestKotlin {

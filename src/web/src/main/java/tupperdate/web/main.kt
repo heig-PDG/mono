@@ -8,10 +8,10 @@ import com.google.firebase.FirebaseOptions
 import com.google.firebase.cloud.FirestoreClient
 import io.ktor.application.*
 import io.ktor.features.*
-import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import tupperdate.web.routing.recipes
 
 private const val DefaultPort = 1234
 private const val DefaultPortEnvVariable = "PORT"
@@ -50,15 +50,7 @@ fun main() {
         install(DefaultHeaders)
         install(CallLogging)
         install(Routing) {
-            get("/") {
-                val testCollection = firestore.collection("test")
-                val data = hashMapOf(
-                    "hello" to "there",
-                    "general" to "kenobi"
-                )
-                testCollection.document("greetings").set(data as Map<String, Any>)
-                call.respondText("Hello world")
-            }
+            recipes(firestore)
         }
     }
 
