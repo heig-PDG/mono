@@ -38,7 +38,11 @@ fun RecipeInfoButton(
         Column(
             modifier
                 .clip(RoundedCornerShape(16.dp))
-                .clickable(onClick = onClick, indication = RippleIndication())
+                .clickable(
+                    onClick = onClick,
+                    enabled = enabled,
+                    indication = RippleIndication()
+                )
                 .padding(16.dp),
             Arrangement.spacedBy(8.dp),
             Alignment.CenterHorizontally,

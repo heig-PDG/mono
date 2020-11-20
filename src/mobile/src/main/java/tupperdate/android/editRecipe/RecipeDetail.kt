@@ -36,7 +36,7 @@ fun RecipeDetail(
     heroImage: String,
     header: @Composable ColumnScope.() -> Unit,
     icons: @Composable () -> Unit,
-    description: @Composable () -> Unit,
+    description: @Composable ColumnScope.() -> Unit,
     onClose: () -> Unit,
     modifier: Modifier = Modifier,
     onEdit: (() -> Unit)? = null,
