@@ -8,5 +8,4 @@ data class User(
     val displayName: String? = null,
     val phone: String? = null,
     val profilePictureUrl: String? = null,
-    val recipes: List<Recipe>? = null,
 )
