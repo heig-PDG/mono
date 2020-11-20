@@ -80,8 +80,8 @@ fun MainSurface(
                     RecipeButton(
                         untoggledText = "NOT VEGGIE",
                         toggledText = "VEGETARIAN",
-                        iconToggledId = R.drawable.ic_editrecipe_not_veggie,
-                        iconUntoggledId = R.drawable.ic_editrecipe_veggie,
+                        iconToggledId = R.drawable.ic_editrecipe_veggie,
+                        iconUntoggledId = R.drawable.ic_editrecipe_not_veggie,
                         buttonModifier
                     )
                     RecipeButton(
