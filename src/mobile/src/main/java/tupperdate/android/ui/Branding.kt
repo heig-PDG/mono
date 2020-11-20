@@ -108,7 +108,7 @@ fun BrandingPreview() {
                 Text("Button")
             }
 
-            BrandedButton(onClick = {}, modifier = padding) {
+            BrandedButton(onClick = {}, padding) {
                 Text("Gradient Button")
             }
         }
