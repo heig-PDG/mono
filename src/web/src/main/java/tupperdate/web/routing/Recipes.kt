@@ -11,9 +11,10 @@ import tupperdate.web.await
 
 fun Routing.recipes(firestore: Firestore) {
     route("/recipes") {
-        val recipeCollection = firestore.collection("recipes/")
+        val recipeCollection = firestore.collectionGroup("recipes")
+
         get("next") {
-            var recipe: QueryDocumentSnapshot?
+            /*var recipe: QueryDocumentSnapshot?
             do {
                 recipe = recipeCollection
                     .whereGreaterThan("id", autoId())
@@ -23,9 +24,15 @@ fun Routing.recipes(firestore: Firestore) {
                     .await()
                     .documents
                     .getOrNull(0)
-            } while (recipe == null)
+            } while (recipe == null)*/
 
-            call.respond(recipe.toObject(Recipe::class.java))
+            val recipe = recipeCollection
+                .limit(1)
+                .get()
+                .await()
+                .documents[0]
+
+            call.respond(recipe.data.toString())
         }
     }
 }
