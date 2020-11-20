@@ -23,7 +23,7 @@ import tupperdate.api.RecipeApi
 fun MainSurface(
     onDeleteClick: () -> Unit,
     onSaveClick: () -> Unit,
-    modifier: Modifier=Modifier
+    modifier: Modifier = Modifier,
 ) {
     val (recipeTitle, setRecipeTitle) = remember { mutableStateOf("Lobster") }
     val (recipeDescr, setRecipeDescr) = remember { mutableStateOf("From Santa Monica") }

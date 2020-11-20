@@ -50,8 +50,10 @@ fun EditRecipePage(
                 }
             }
         }
-        MainSurface(onDeleteClick = onDeleteClick, onSaveClick = onSaveClick,
-        modifier = modifier.weight(1f))
+        MainSurface(
+            onDeleteClick = onDeleteClick, onSaveClick = onSaveClick,
+            modifier = modifier.weight(1f)
+        )
     }
 }
 
