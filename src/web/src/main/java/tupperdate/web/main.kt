@@ -8,10 +8,16 @@ import com.google.firebase.FirebaseOptions
 import com.google.firebase.cloud.FirestoreClient
 import io.ktor.application.*
 import io.ktor.features.*
-import io.ktor.response.*
+import io.ktor.http.*
 import io.ktor.routing.*
+import io.ktor.serialization.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import kotlinx.serialization.StringFormat
+import kotlinx.serialization.serializer
+import tupperdate.common.model.Recipe
+import tupperdate.web.routing.recipes
+import tupperdate.web.routing.users
 
 private const val DefaultPort = 1234
 private const val DefaultPortEnvVariable = "PORT"
@@ -49,16 +55,12 @@ fun main() {
     val server = embeddedServer(Netty, port = port) {
         install(DefaultHeaders)
         install(CallLogging)
+        install(ContentNegotiation) {
+            json()
+        }
         install(Routing) {
-            get("/") {
-                val testCollection = firestore.collection("test")
-                val data = hashMapOf(
-                    "hello" to "there",
-                    "general" to "kenobi"
-                )
-                testCollection.document("greetings").set(data as Map<String, Any>)
-                call.respondText("Hello world")
-            }
+            recipes(firestore)
+            users(firestore)
         }
     }
 
