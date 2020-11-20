@@ -8,7 +8,6 @@ interface RecipeApi {
         val title: String,
         val description: String,
         val pictureUrl: String,
-
     )
 
     fun like(recipe: Recipe)
