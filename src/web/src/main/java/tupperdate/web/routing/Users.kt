@@ -2,6 +2,7 @@ package tupperdate.web.routing
 
 import com.google.cloud.firestore.Firestore
 import io.ktor.application.*
+import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -29,9 +30,18 @@ fun Routing.users(firestore: Firestore) {
         }
 
         get("{userId}") {
-            val userId = call.parameters["userId"] ?: "Error"
-            val userDocument = users.document(userId)
-            call.respondText(userDocument.get().await().data.toString())
+            val userId = call.parameters["userId"] ?: ""
+            val user = users
+                .document(userId)
+                .get()
+                .await()
+
+            if (user == null) {
+                call.respond(HttpStatusCode.NotFound)
+            } else {
+                // TODO: Find a cleaner way (not using the !!)
+                call.respond(HttpStatusCode.OK, user.toObject(User::class.java)!!)
+            }
         }
     }
 }
