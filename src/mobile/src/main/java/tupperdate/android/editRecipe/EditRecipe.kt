@@ -1,5 +1,6 @@
 package tupperdate.android.editRecipe
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -7,16 +8,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageAsset
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.ui.tooling.preview.Preview
 import tupperdate.android.R
-import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.material.BrandedButton
+import tupperdate.api.ImageApi
 
 /**
  * A data class representing the different fields that can be edited in a recipe.
@@ -46,8 +47,11 @@ fun EditRecipe(
     onRecipeChange: (EditableRecipe) -> Unit,
     onDeleteClick: () -> Unit,
     onSaveClick: () -> Unit,
+    imageApi: ImageApi,
     modifier: Modifier = Modifier,
 ) {
+    val image = remember { imageApi.read() }.collectAsState(initial = null).value
+
     RecipeDetail(
         heroImage = heroImageUrl,
         header = {
@@ -79,8 +83,14 @@ fun EditRecipe(
         },
         onClose = onDeleteClick,
         modifier = modifier,
-        onEdit = { /* TODO : Support image changes. */ },
+        onEdit = {
+            imageApi.launch()
+        },
     )
+
+    if (image != null) {
+        Image(image.asImageAsset())
+    }
 }
 
 /**
@@ -124,6 +134,7 @@ private fun EditRecipeHeader(
 
 // PREVIEWS
 
+/*
 @Preview(showBackground = true)
 @Composable
 private fun EditRecipePreview() {
@@ -148,3 +159,5 @@ private fun EditRecipePreview() {
         )
     }
 }
+
+ */

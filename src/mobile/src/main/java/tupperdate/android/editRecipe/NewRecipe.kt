@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import tupperdate.api.ImageApi
 import tupperdate.api.RecipeApi
 
 @Composable
@@ -14,6 +15,7 @@ fun NewRecipe(
     api: RecipeApi,
     onSaved: () -> Unit,
     onCancelled: () -> Unit,
+    imageApi: ImageApi,
     modifier: Modifier = Modifier,
 ) {
     val image = "https://via.placeholder.com/450" // TODO : Handle images.
@@ -41,6 +43,7 @@ fun NewRecipe(
                 onSaved()
             }
         },
+        imageApi = imageApi,
         modifier = modifier,
     )
 }

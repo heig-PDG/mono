@@ -108,6 +108,7 @@ private fun LoggedIn(
     when (destination) {
         LoggedInDestination.NewRecipe -> NewRecipe(
             api = api.recipe,
+            imageApi = api.images,
             onSaved = action.back,
             onCancelled = action.back,
         )
