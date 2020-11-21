@@ -1,10 +1,9 @@
 package tupperdate.api
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 
-object RealRecipeApi : RecipeApi {
+class RealRecipeApi(private val auth: RealAuthenticationApi) : RecipeApi {
 
     override fun like(recipe: RecipeApi.Recipe) {
     }
@@ -12,8 +11,12 @@ object RealRecipeApi : RecipeApi {
     override fun dislike(recipe: RecipeApi.Recipe) {
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun stack(): Flow<List<RecipeApi.Recipe>> {
-        return emptyFlow()
+        return auth.auth
+            .filterNotNull()
+            // TODO : Actually fetch from the API here.
+            .flatMapLatest { emptyFlow() }
     }
 
     override val backStackEnabled: Flow<Boolean>
