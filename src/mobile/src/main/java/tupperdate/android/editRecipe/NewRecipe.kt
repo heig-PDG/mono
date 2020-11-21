@@ -12,7 +12,7 @@ import tupperdate.api.RecipeApi
 
 @Composable
 fun NewRecipe(
-    api: RecipeApi,
+    recipeApi: RecipeApi,
     imageApi: ImageApi,
     onSaved: () -> Unit,
     onCancelled: () -> Unit,
@@ -39,7 +39,7 @@ fun NewRecipe(
         // TODO : Actually put more data in the API.
         onSaveClick = {
             scope.launch {
-                api.create(title = recipe.title, description = recipe.description)
+                recipeApi.create(title = recipe.title, description = recipe.description)
                 onSaved()
             }
         },
