@@ -2,6 +2,7 @@ package tupperdate.web.routing
 
 import com.google.cloud.firestore.Firestore
 import io.ktor.application.*
+import io.ktor.http.auth.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -10,6 +11,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import tupperdate.common.model.Recipe
 import tupperdate.common.model.User
+import tupperdate.web.auth.firebaseAuthPrincipal
 import tupperdate.web.autoId
 import tupperdate.web.util.await
 
@@ -21,7 +23,11 @@ fun Routing.recipes(firestore: Firestore) {
          *                           GET                                *
          ****************************************************************/
 
-        get("next/{numRecipes}") {
+        /**
+         * Get a number of recipes
+         * @param: numRecipes as an int in the endpoint
+         */
+        get("{numRecipes}") {
             val numRecipes = (call.parameters["numRecipes"] ?: "").toInt()
             val recipes = recipeCollectionGroup
                 .orderBy("added")
@@ -37,28 +43,18 @@ fun Routing.recipes(firestore: Firestore) {
          *                            POST                              *
          ****************************************************************/
 
-        // Temporary method to add recipes with a random user
+        /**
+         * Post a recipe for the authenticated user
+         */
         post {
             val userCollection = firestore.collection("users")
-            val userId = call.parameters["userId"] ?: ""
+            val userId = call.firebaseAuthPrincipal?.uid ?: ""
 
 
-            val userDocument = userCollection.document(userId)
-            // Generate a new user document, temporarily
-            val newRandomUserDoc = userCollection.document()
-            val randomUser = User(
-                id = newRandomUserDoc.id,
-                displayName = "Random Person " + autoId(),
-                phone = "Random phone " + autoId(),
-                profilePictureUrl = "https://thispersondoesnotexist.com/",
-            )
-            // Assign the random user to new document
-            newRandomUserDoc.set(randomUser)
+            val userDoc = userCollection.document(userId)
 
-            // Add a document in the subcollection "recipes"
-            val newRecipeDoc = newRandomUserDoc
-                .collection("recipes")
-                .document()
+            // Generate document with auto-id
+            val recipeDoc = userDoc.collection("recipes").document()
 
             // Get post data
             val json = call.receiveText()
@@ -66,11 +62,11 @@ fun Routing.recipes(firestore: Firestore) {
             // Parse JSON (and add auto-generated id to it)
             val recipe = Json.decodeFromString<Recipe>(json)
                 .copy(
-                    id = newRecipeDoc.id,
+                    id = recipeDoc.id,
                     added = System.currentTimeMillis() / 1000,
                 )
 
-            newRecipeDoc.set(recipe)
+            recipeDoc.set(recipe)
         }
     }
 }
