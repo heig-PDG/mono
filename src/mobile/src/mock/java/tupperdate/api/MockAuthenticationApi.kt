@@ -4,6 +4,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlin.random.Random
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -51,4 +52,7 @@ object MockAuthenticationApi : AuthenticationApi {
 
     override val profile: Flow<AuthenticationApi.Profile?>
         get() = user
+
+    override val auth: Flow<AuthenticationApi.AuthInfo?>
+        get() = user.map { AuthenticationApi.AuthInfo("toky the token") }
 }

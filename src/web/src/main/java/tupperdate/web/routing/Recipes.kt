@@ -7,7 +7,6 @@ import io.ktor.http.auth.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import jdk.nashorn.internal.objects.Global.toObject
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import tupperdate.common.model.Recipe
@@ -37,7 +36,7 @@ fun Routing.recipes(firestore: Firestore) {
                 .await()
                 .toList()
 
-            call.respond(recipes.map { toObject(Recipe::class.java) })
+            call.respond(recipes.map { it.toObject(Recipe::class.java) })
         }
 
         /****************************************************************

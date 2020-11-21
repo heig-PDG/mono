@@ -7,6 +7,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
@@ -130,6 +131,14 @@ class RealAuthenticationApi(
             }
         }
     }
+
+    override val auth: Flow<AuthenticationApi.AuthInfo?>
+        get() = currentUser(firebaseAuth)
+            .map { user ->
+                val token = user?.getIdToken(false)?.await()?.token
+                token?.let { AuthenticationApi.AuthInfo(it) }
+            }
+            .catch { emit(null) }
 
     override val profile: Flow<AuthenticationApi.Profile?>
         get() = currentUser(firebaseAuth)
