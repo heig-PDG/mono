@@ -10,7 +10,7 @@ import kotlinx.serialization.json.Json
 import tupperdate.common.model.Recipe
 import tupperdate.common.model.User
 import tupperdate.web.autoId
-import tupperdate.web.await
+import tupperdate.web.util.await
 
 fun Routing.recipes(firestore: Firestore) {
     route("/recipes") {

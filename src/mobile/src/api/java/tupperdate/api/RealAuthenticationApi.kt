@@ -1,5 +1,6 @@
 package tupperdate.api
 
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -13,6 +14,7 @@ import kotlin.coroutines.suspendCoroutine
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RealAuthenticationApi(
+    private val activity: AppCompatActivity,
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 ) : AuthenticationApi {
 
@@ -97,6 +99,7 @@ class RealAuthenticationApi(
                     setForceResendingToken(token)
                 }
             }
+            .setActivity(activity)
             .setPhoneNumber(number)
             .setTimeout(25, TimeUnit.SECONDS)
             .setCallbacks(callbacks)

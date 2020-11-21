@@ -9,7 +9,7 @@ import io.ktor.routing.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import tupperdate.common.model.User
-import tupperdate.web.await
+import tupperdate.web.util.await
 
 fun Routing.users(firestore: Firestore) {
     route("/users") {
