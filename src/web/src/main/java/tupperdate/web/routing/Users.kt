@@ -2,6 +2,7 @@ package tupperdate.web.routing
 
 import com.google.cloud.firestore.Firestore
 import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
@@ -47,20 +48,22 @@ fun Routing.users(firestore: Firestore) {
         /**
          * Post a new user given the request provides an authentication token
          */
-        post {
-            val userId = call.firebaseAuthPrincipal?.uid ?: ""
+        authenticate {
+            post {
+                val userId = call.firebaseAuthPrincipal?.uid ?: ""
 
-            // Add auto-generated document to firestore
-            val userDocument = users.document(userId)
+                // Add auto-generated document to firestore
+                val userDocument = users.document(userId)
 
-            // Get post data
-            val json = call.receiveText()
+                // Get post data
+                val json = call.receiveText()
 
-            // Parse JSON (and add auto-generated id to it)
-            val user = Json.decodeFromString<User>(json).copy(id = userId)
+                // Parse JSON (and add auto-generated id to it)
+                val user = Json.decodeFromString<User>(json).copy(id = userId)
 
-            // Add user data to newly generated document
-            userDocument.set(user)
+                // Add user data to newly generated document
+                userDocument.set(user)
+            }
         }
     }
 }
