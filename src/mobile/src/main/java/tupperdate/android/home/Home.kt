@@ -74,16 +74,17 @@ fun Home(
 @Preview
 @Composable
 private fun HomeDisconnectPreview() {
-    val owner = LifecycleOwnerAmbient.current
-    val api = remember { owner.api() }
-    TupperdateTheme {
-        Home(
-            recipeApi = api.recipe,
-            onChatClick = {},
-            onProfileClick = {},
-            onRecipeClick = {},
-            onReturnClick = {},
-            onRecipeDetailsClick = {},
-        )
-    }
+    // TODO : Provide
+    // val owner = LifecycleOwnerAmbient.current
+    // val api = remember { owner.api() }
+    // TupperdateTheme {
+    //     Home(
+    //         recipeApi = api.recipe,
+    //         onChatClick = {},
+    //         onProfileClick = {},
+    //         onRecipeClick = {},
+    //         onReturnClick = {},
+    //         onRecipeDetailsClick = {},
+    //     )
+    // }
 }
