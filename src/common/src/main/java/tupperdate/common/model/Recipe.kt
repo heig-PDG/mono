@@ -9,6 +9,5 @@ data class Recipe(
     val description: String? = null,
     val added: Long? = null,
     val foodPictureUrl: String? = null,
-    val dislikes: List<String> = emptyList(),
     val attributes: Map<String, Boolean> = emptyMap()
 )
