@@ -28,6 +28,7 @@ fun Home(
     onProfileClick: () -> Unit,
     onReturnClick: () -> Unit,
     onRecipeClick: () -> Unit,
+    onRecipeDetailsClick: (RecipeApi.Recipe) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val recipes by remember { recipeApi.stack() }.collectAsState(emptyList())
@@ -50,7 +51,7 @@ fun Home(
             ) { recipe ->
                 RecipeCard(
                     recipe = recipe,
-                    onInfoClick = {},
+                    onInfoClick = { onRecipeDetailsClick(recipe) },
                     Modifier.fillMaxSize()
                 )
             }
@@ -73,15 +74,17 @@ fun Home(
 @Preview
 @Composable
 private fun HomeDisconnectPreview() {
-    val owner = LifecycleOwnerAmbient.current
-    val api = remember { owner.api() }
-    TupperdateTheme {
-        Home(
-            recipeApi = api.recipe,
-            onChatClick = {},
-            onProfileClick = {},
-            onRecipeClick = {},
-            onReturnClick = {}
-        )
-    }
+    // TODO : Provide
+    // val owner = LifecycleOwnerAmbient.current
+    // val api = remember { owner.api() }
+    // TupperdateTheme {
+    //     Home(
+    //         recipeApi = api.recipe,
+    //         onChatClick = {},
+    //         onProfileClick = {},
+    //         onRecipeClick = {},
+    //         onReturnClick = {},
+    //         onRecipeDetailsClick = {},
+    //     )
+    // }
 }

@@ -1,5 +1,5 @@
 package tupperdate.api
 
-import androidx.lifecycle.LifecycleOwner
+import androidx.appcompat.app.AppCompatActivity
 
-fun LifecycleOwner.api(): Api = RealApi(this)
+fun AppCompatActivity.api(): Api = RealApi(this)

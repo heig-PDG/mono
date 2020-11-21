@@ -103,8 +103,8 @@ private fun Profile(
 @Preview
 private fun AuthenticationTestingPreview() {
     // Use a real device to launch the preview.
-    val owner = LifecycleOwnerAmbient.current
-    val api = remember { owner.api() }
-
-    AuthenticationTesting(api, Modifier.fillMaxSize())
+    // val owner = LifecycleOwnerAmbient.current
+    // val api = remember { owner.api() }
+    //
+    // AuthenticationTesting(api, Modifier.fillMaxSize())
 }

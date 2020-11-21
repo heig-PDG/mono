@@ -1,9 +1,9 @@
 package tupperdate.api
 
-import androidx.lifecycle.LifecycleOwner
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 
-class RealApi(owner: LifecycleOwner) : Api {
-    override val authentication = RealAuthenticationApi(FirebaseAuth.getInstance())
+class RealApi(owner: AppCompatActivity) : Api {
+    override val authentication = RealAuthenticationApi(owner, FirebaseAuth.getInstance())
     override val recipe = RealRecipeApi
 }
