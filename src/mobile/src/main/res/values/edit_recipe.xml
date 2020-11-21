@@ -4,4 +4,16 @@
     <string name="edit_recipe_placeholder_title">Name of your recipe</string>
     <string name="edit_recipe_label_description">Description</string>
     <string name="edit_recipe_placeholder_description">Your recipe description…</string>
+    <string name="edit_recipe_delete">DELETE</string>
+    <string name="edit_recipe_save">SAVE</string>
+    <string name="edit_recipe_veggie">VEGGIE</string>
+    <string name="edit_recipe_not_veggie">NOT VEGGIE</string>
+    <string name="edit_recipe_warm">WARM</string>
+    <string name="edit_recipe_cold">COLD</string>
+    <string name="edit_recipe_allergens">ALLERGENS</string>
+    <string name="edit_recipe_no_allergens">NO ALLERGENS</string>
+    <string name="edit_recipe_title">RECIPE</string>
+    <string name="edit_recipe_description">DESCRIPTION</string>
+    <string name="edit_recipe_skip">SKIP</string>
+    <string name="edit_recipe_like">LIKE</string>
 </resources>
