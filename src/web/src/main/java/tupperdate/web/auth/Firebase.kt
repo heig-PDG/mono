@@ -94,6 +94,8 @@ private fun ApplicationRequest.firebaseToken(): String? {
 
 /**
  * Returns the [FirebaseAuthPrincipal] that is associated with the currently logged in user.
+ *
+ * TODO : Maybe we do not want to use this, if we offer additional authentication schemes.
  */
 val ApplicationCall.firebaseAuthPrincipal: FirebaseAuthPrincipal?
     get() = this.authentication.principal()
