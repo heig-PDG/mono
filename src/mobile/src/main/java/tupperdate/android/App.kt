@@ -7,6 +7,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import kotlinx.coroutines.flow.Flow
+import tupperdate.android.editRecipe.NewRecipe
+import tupperdate.android.editRecipe.ViewRecipe
 import tupperdate.android.home.Home
 import tupperdate.android.onboarding.Onboarding
 import tupperdate.android.onboardingConfirmation.OnboardingConfirmation
@@ -57,13 +59,25 @@ private fun TupperdateAppDestination(
 
     destination.let { dest ->
         when (dest) {
+            is Destination.ViewRecipe -> ViewRecipe(
+                api = api.recipe,
+                recipe = dest.recipe,
+                onBack = action.back,
+            )
+            is Destination.NewRecipe -> NewRecipe(
+                api = api.recipe,
+                onSaved = action.back,
+                onCancelled = action.back,
+            )
+
             is Destination.Home -> Home(
                 recipeApi = api.recipe,
                 // TODO add behaviours on these buttons
                 onChatClick = {},
                 onProfileClick = {},
-                onRecipeClick = {},
-                onReturnClick = {}
+                onRecipeClick = action.newRecipe,
+                onReturnClick = {},
+                onRecipeDetailsClick = action.viewRecipe,
             )
             is Destination.BrandingPreview -> BrandingPreview()
             is Destination.Onboarding -> Onboarding(

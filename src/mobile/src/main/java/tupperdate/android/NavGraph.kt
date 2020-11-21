@@ -3,8 +3,16 @@ package tupperdate.android
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import tupperdate.android.utils.Navigator
+import tupperdate.api.RecipeApi
 
 sealed class Destination : Parcelable {
+
+    @Parcelize
+    object NewRecipe : Destination()
+
+    @Parcelize
+    data class ViewRecipe(val recipe: RecipeApi.Recipe) : Destination()
+
     @Parcelize
     object Home : Destination()
 
@@ -18,7 +26,16 @@ sealed class Destination : Parcelable {
     object OnboardingConfirmation : Destination()
 }
 
-class Action(navigator: Navigator<Destination>) {
+class Action(private val navigator: Navigator<Destination>) {
+
+    val newRecipe: () -> Unit = {
+        navigator.navigate(Destination.NewRecipe)
+    }
+
+    val viewRecipe : (RecipeApi.Recipe) -> Unit = {
+        navigator.navigate(Destination.ViewRecipe(it))
+    }
+
     val home: () -> Unit = {
         navigator.navigate(Destination.Home)
     }

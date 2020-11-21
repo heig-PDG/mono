@@ -22,6 +22,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.LinearGradient
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.onGloballyPositioned
@@ -89,6 +90,7 @@ private val Transition = transitionDefinition<State> {
  * @param onClick the callback called when the button is clicked.
  * @param modifier the modifier for the button.
  * @param borderSize the width of the gradient border.
+ * @param shape the shape of the button.
  * @param content the inner contents of the button.
  */
 @Composable
@@ -96,6 +98,7 @@ fun BrandedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     borderSize: Dp = 2.dp,
+    shape: Shape = RoundedCornerShape(50),
     content: @Composable RowScope.() -> Unit,
 ) {
     // On first composition, we don't have access to our bounds. Use a best-effort guess.
@@ -127,7 +130,7 @@ fun BrandedButton(
             backgroundColor = Color.White,
         ),
         border = stroke,
-        shape = RoundedCornerShape(50),
+        shape = shape,
         modifier = modifier.onGloballyPositioned { bounds = it.boundsInParent },
         content = content,
     )
@@ -140,17 +143,20 @@ fun BrandedButton(
  * @param value the string inside the button
  * @param onClick the callback called when the button is clicked.
  * @param modifier the modifier for the button.
+ * @param shape the shape of the button.
  */
 @Composable
 fun BrandedButton(
     value: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    shape: Shape = RoundedCornerShape(50),
 ) {
     BrandedButton(
         onClick = onClick,
         modifier = modifier
             .preferredHeight(56.dp),
+        shape = shape,
     ) {
         Text(
             text = (value).toUpperCase(Locale.getDefault()),

@@ -28,6 +28,7 @@ fun Home(
     onProfileClick: () -> Unit,
     onReturnClick: () -> Unit,
     onRecipeClick: () -> Unit,
+    onRecipeDetailsClick: (RecipeApi.Recipe) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val recipes by remember { recipeApi.stack() }.collectAsState(emptyList())
@@ -50,7 +51,7 @@ fun Home(
             ) { recipe ->
                 RecipeCard(
                     recipe = recipe,
-                    onInfoClick = {},
+                    onInfoClick = { onRecipeDetailsClick(recipe) },
                     Modifier.fillMaxSize()
                 )
             }
@@ -81,7 +82,8 @@ private fun HomeDisconnectPreview() {
             onChatClick = {},
             onProfileClick = {},
             onRecipeClick = {},
-            onReturnClick = {}
+            onReturnClick = {},
+            onRecipeDetailsClick = {},
         )
     }
 }
