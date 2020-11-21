@@ -13,9 +13,9 @@ import tupperdate.api.RecipeApi
 @Composable
 fun NewRecipe(
     api: RecipeApi,
+    imageApi: ImageApi,
     onSaved: () -> Unit,
     onCancelled: () -> Unit,
-    imageApi: ImageApi,
     modifier: Modifier = Modifier,
 ) {
     val image = "https://via.placeholder.com/450" // TODO : Handle images.
