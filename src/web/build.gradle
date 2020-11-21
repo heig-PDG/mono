@@ -25,6 +25,7 @@ dependencies {
 
     // Firebase
     implementation 'com.google.firebase:firebase-admin:7.0.1'
+    implementation 'com.google.cloud:google-cloud-firestore:2.1.0'
 }
 
 compileTestKotlin {

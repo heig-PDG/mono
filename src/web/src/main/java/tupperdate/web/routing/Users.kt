@@ -15,6 +15,30 @@ fun Routing.users(firestore: Firestore) {
     route("/users") {
         val users = firestore.collection("users")
 
+        /****************************************************************
+         *                           GET                                *
+         ****************************************************************/
+
+        get("{userId}") {
+            val userId = call.parameters["userId"] ?: ""
+
+            val user = users
+                .document(userId)
+                .get()
+                .await()
+
+            if (user == null) {
+                call.respond(HttpStatusCode.NotFound)
+            } else {
+                // TODO: Find a cleaner way (not using the !!)
+                call.respond(HttpStatusCode.OK, user.toObject(User::class.java)!!)
+            }
+        }
+
+        /****************************************************************
+         *                           POST                               *
+         ****************************************************************/
+
         post {
             // Add auto-generated document to firestore
             val userDocument = users.document()
@@ -27,21 +51,6 @@ fun Routing.users(firestore: Firestore) {
 
             // Add user data to newly generated document
             userDocument.set(user)
-        }
-
-        get("{userId}") {
-            val userId = call.parameters["userId"] ?: ""
-            val user = users
-                .document(userId)
-                .get()
-                .await()
-
-            if (user == null) {
-                call.respond(HttpStatusCode.NotFound)
-            } else {
-                // TODO: Find a cleaner way (not using the !!)
-                call.respond(HttpStatusCode.OK, user.toObject(User::class.java)!!)
-            }
         }
     }
 }
