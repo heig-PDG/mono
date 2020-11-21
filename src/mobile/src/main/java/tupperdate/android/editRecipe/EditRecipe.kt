@@ -32,7 +32,7 @@ data class EditableRecipe(
 /**
  * A composable that displays some editable fields for recipes.
  *
- * @param hero the URL at which the image should be fetched.
+ * @param heroImageUrl the URL at which the image should be fetched.
  * @param recipe the [EditableRecipe] to display.
  * @param onRecipeChange a callback called when the recipe is changed.
  * @param onDeleteClick a callback called when the delete button is pressed.
@@ -41,7 +41,7 @@ data class EditableRecipe(
  */
 @Composable
 fun EditRecipe(
-    hero: String,
+    heroImageUrl: String,
     recipe: EditableRecipe,
     onRecipeChange: (EditableRecipe) -> Unit,
     onDeleteClick: () -> Unit,
@@ -49,7 +49,7 @@ fun EditRecipe(
     modifier: Modifier = Modifier,
 ) {
     RecipeDetail(
-        heroImage = hero,
+        heroImage = heroImageUrl,
         header = {
             EditRecipeHeader(
                 title = recipe.title,
@@ -108,13 +108,13 @@ private fun EditRecipeHeader(
         Alignment.CenterVertically,
     ) {
         BrandedButton(
-            value = "DELETE",
+            value = stringResource(id = R.string.edit_recipe_delete),
             onClick = onDeleteClick,
             modifier = modifier.weight(1f, fill = true),
             shape = RoundedCornerShape(8.dp)
         )
         BrandedButton(
-            value = "SAVE",
+            value = stringResource(id = R.string.edit_recipe_save),
             onClick = onSaveClick,
             modifier = modifier.weight(1f, fill = true),
             shape = RoundedCornerShape(8.dp)
@@ -140,7 +140,7 @@ private fun EditRecipePreview() {
             )
         }
         EditRecipe(
-            hero = "",
+            heroImageUrl = "",
             recipe = recipe,
             onRecipeChange = setRecipe,
             onDeleteClick = {},

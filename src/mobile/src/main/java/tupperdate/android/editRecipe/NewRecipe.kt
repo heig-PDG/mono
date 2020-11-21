@@ -30,7 +30,7 @@ fun NewRecipe(
     }
     val scope = LifecycleOwnerAmbient.current.lifecycleScope
     EditRecipe(
-        hero = image,
+        heroImageUrl = image,
         recipe = recipe,
         onRecipeChange = setRecipe,
         onDeleteClick = { onCancelled() },

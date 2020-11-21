@@ -14,9 +14,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import tupperdate.android.R
 import tupperdate.android.ui.DislikeButton
 import tupperdate.android.ui.LikeButton
 import tupperdate.api.RecipeApi
@@ -33,7 +35,7 @@ fun ViewRecipe(
         heroImage = recipe.pictureUrl,
         header = {
             Text(
-                text = "RECIPE",
+                text = stringResource(id = R.string.edit_recipe_title),
                 modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.overline
             )
@@ -68,7 +70,7 @@ fun ViewRecipe(
         // TODO : Actually read this from the API.
         description = {
             Text(
-                text = "DESCRIPTION",
+                text = stringResource(id = R.string.edit_recipe_description),
                 modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.overline
             )
@@ -103,7 +105,7 @@ private fun ViewRecipeButtons(
                 contentColor = Color.White,
             )
         ) {
-            Text("SKIP")
+            Text(stringResource(id = R.string.edit_recipe_skip))
         }
         Button(
             onClick = onLike,
@@ -114,7 +116,7 @@ private fun ViewRecipeButtons(
                 contentColor = Color.White,
             )
         ) {
-            Text("LIKE")
+            Text(stringResource(id = R.string.edit_recipe_like))
         }
     }
 }
