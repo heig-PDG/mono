@@ -27,12 +27,12 @@ fun Routing.users(firestore: Firestore) {
                 .document(userId)
                 .get()
                 .await()
+                .toObject(User::class.java)
 
-            if (user == null) {
-                call.respond(HttpStatusCode.NotFound)
+            if (user != null) {
+                call.respond(HttpStatusCode.OK, user)
             } else {
-                // TODO: Find a cleaner way (not using the !!)
-                call.respond(HttpStatusCode.OK, user.toObject(User::class.java)!!)
+                call.respond(HttpStatusCode.NotFound)
             }
         }
 

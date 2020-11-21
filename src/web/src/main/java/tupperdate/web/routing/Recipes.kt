@@ -2,6 +2,7 @@ package tupperdate.web.routing
 
 import com.google.cloud.firestore.Firestore
 import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.http.auth.*
 import io.ktor.request.*
 import io.ktor.response.*
@@ -24,7 +25,7 @@ fun Routing.recipes(firestore: Firestore) {
          ****************************************************************/
 
         /**
-         * Get a number of recipes
+         * Get a number of recipes ordered by date added
          * @param: numRecipes as an int in the endpoint
          */
         get("{numRecipes}") {
@@ -46,27 +47,29 @@ fun Routing.recipes(firestore: Firestore) {
         /**
          * Post a recipe for the authenticated user
          */
-        post {
-            val userCollection = firestore.collection("users")
-            val userId = call.firebaseAuthPrincipal?.uid ?: ""
+        authenticate {
+            post {
+                val userCollection = firestore.collection("users")
+                val userId = call.firebaseAuthPrincipal?.uid ?: ""
 
 
-            val userDoc = userCollection.document(userId)
+                val userDoc = userCollection.document(userId)
 
-            // Generate document with auto-id
-            val recipeDoc = userDoc.collection("recipes").document()
+                // Generate document with auto-id
+                val recipeDoc = userDoc.collection("recipes").document()
 
-            // Get post data
-            val json = call.receiveText()
+                // Get post data
+                val json = call.receiveText()
 
-            // Parse JSON (and add auto-generated id to it)
-            val recipe = Json.decodeFromString<Recipe>(json)
-                .copy(
-                    id = recipeDoc.id,
-                    added = System.currentTimeMillis() / 1000,
-                )
+                // Parse JSON (and add auto-generated id to it)
+                val recipe = Json.decodeFromString<Recipe>(json)
+                    .copy(
+                        id = recipeDoc.id,
+                        added = System.currentTimeMillis() / 1000,
+                    )
 
-            recipeDoc.set(recipe)
+                recipeDoc.set(recipe)
+            }
         }
     }
 }
