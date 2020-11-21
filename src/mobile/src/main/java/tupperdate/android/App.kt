@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import tupperdate.android.editRecipe.NewRecipe
 import tupperdate.android.editRecipe.ViewRecipe
 import tupperdate.android.home.Home
+import tupperdate.android.matchPopUp.MatchPopUpPretextPage
 import tupperdate.android.onboarding.Onboarding
 import tupperdate.android.onboardingConfirmation.OnboardingConfirmation
 import tupperdate.android.ui.BrandingPreview
@@ -17,6 +18,7 @@ import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.utils.Navigator
 import tupperdate.api.Api
 import tupperdate.api.AuthenticationApi
+import tupperdate.api.RecipeApi
 
 @Composable
 fun TupperdateApp(
@@ -89,6 +91,12 @@ private fun TupperdateAppDestination(
                 auth = api.authentication,
                 onReturnClick = action.back,
                 onLoggedIn = action.home,
+            )
+            //TODO delete below point after merging
+            is Destination.MatchPopUpPretextPage -> MatchPopUpPretextPage(
+                onChattingClick = {},
+                recipe1 = RecipeApi.Recipe("Lobster", "Red lobster from Santa Monica", "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg"),
+                recipe2 = RecipeApi.Recipe("Langusta", "Langusta from Britain", "https://www.enviedebienmanger.fr/sites/default/files/demi-langouste_grilleue_au_beurre_et_curry_0.png")
             )
         }
     }

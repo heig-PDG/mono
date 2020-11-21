@@ -6,6 +6,9 @@ import tupperdate.android.utils.Navigator
 import tupperdate.api.RecipeApi
 
 sealed class Destination : Parcelable {
+    //TODO delete this object once merged
+    @Parcelize
+    object MatchPopUpPretextPage : Destination()
 
     @Parcelize
     object NewRecipe : Destination()
@@ -27,12 +30,15 @@ sealed class Destination : Parcelable {
 }
 
 class Action(private val navigator: Navigator<Destination>) {
+    val matchPopUp: () -> Unit = {
+        navigator.navigate(Destination.MatchPopUpPretextPage)
+    }
 
     val newRecipe: () -> Unit = {
         navigator.navigate(Destination.NewRecipe)
     }
 
-    val viewRecipe : (RecipeApi.Recipe) -> Unit = {
+    val viewRecipe: (RecipeApi.Recipe) -> Unit = {
         navigator.navigate(Destination.ViewRecipe(it))
     }
 
