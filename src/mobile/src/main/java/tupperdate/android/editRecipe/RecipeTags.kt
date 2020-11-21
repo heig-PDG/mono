@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -46,7 +47,8 @@ fun RecipeTags(
         RecipeInfoButton(
             onClick = onClickVegan ?: NoOp,
             icon = vectorResource(if (vegan) R.drawable.ic_editrecipe_veggie else R.drawable.ic_editrecipe_not_veggie),
-            title = (if (vegan) "VEGAN" else "NOT VEGAN"),
+            title = (if (vegan) stringResource(id = R.string.edit_recipe_veggie)
+            else stringResource(id = R.string.edit_recipe_not_veggie)),
             Modifier.weight(1f),
             enabled = onClickVegan != null,
         )
@@ -54,7 +56,8 @@ fun RecipeTags(
         RecipeInfoButton(
             onClick = onClickHot ?: NoOp,
             icon = vectorResource(if (hot) R.drawable.ic_editrecipe_warm else R.drawable.ic_editrecipe_cold),
-            title = (if (hot) "WARM" else "COLD"),
+            title = (if (hot) stringResource(id = R.string.edit_recipe_warm)
+            else stringResource(id = R.string.edit_recipe_cold)),
             Modifier.weight(1f),
             enabled = onClickHot != null,
         )
@@ -63,7 +66,8 @@ fun RecipeTags(
             onClick = onClickAllergens ?: NoOp,
             // TODO : Icon.
             icon = vectorResource(if (hasAllergens) R.drawable.ic_editrecipe_allergens else R.drawable.ic_editrecipe_allergens),
-            title = (if (hasAllergens) "ALLERGENS" else "NO ALLERGENS"),
+            title = (if (hasAllergens) stringResource(id = R.string.edit_recipe_allergens)
+            else stringResource(id = R.string.edit_recipe_no_allergens)),
             Modifier.weight(1f),
             enabled = onClickAllergens != null,
         )

@@ -60,7 +60,7 @@ private fun RecipeInfoPreviewEnabled() {
         RecipeInfoButton(
             onClick = {},
             icon = vectorResource(R.drawable.ic_editrecipe_veggie),
-            title = "NOT VEGAN",
+            title = "NOT VEGAN", //not put in strings.xml because it is previews
         )
     }
 }
