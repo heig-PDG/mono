@@ -26,7 +26,7 @@ fun Routing.recipes(firestore: Firestore) {
 
         /**
          * Get a number of recipes ordered by date added
-         * @param: numRecipes as an int in the endpoint
+         * @param: numRecipes as an int in the endpoint path
          */
         get("{numRecipes}") {
             val numRecipes = (call.parameters["numRecipes"] ?: "").toInt()

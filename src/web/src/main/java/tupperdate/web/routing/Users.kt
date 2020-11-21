@@ -20,6 +20,10 @@ fun Routing.users(firestore: Firestore) {
          *                           GET                                *
          ****************************************************************/
 
+        /**
+         * Get a user by id
+         * @param userId as a [String] id in the endpoint path
+         */
         get("{userId}") {
             val userId = call.parameters["userId"] ?: ""
 
@@ -40,6 +44,9 @@ fun Routing.users(firestore: Firestore) {
          *                           POST                               *
          ****************************************************************/
 
+        /**
+         * Post a new user given the request provides an authentication token
+         */
         post {
             val userId = call.firebaseAuthPrincipal?.uid ?: ""
 
