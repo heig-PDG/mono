@@ -1,10 +1,12 @@
 package tupperdate.android
 
 import androidx.activity.OnBackPressedDispatcher
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
+import androidx.compose.ui.Modifier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import tupperdate.android.editRecipe.NewRecipe
@@ -12,6 +14,7 @@ import tupperdate.android.editRecipe.ViewRecipe
 import tupperdate.android.home.Home
 import tupperdate.android.onboarding.Onboarding
 import tupperdate.android.onboardingConfirmation.OnboardingConfirmation
+import tupperdate.android.testing.AuthenticationTesting
 import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.utils.Navigator
 import tupperdate.api.Api
@@ -121,10 +124,13 @@ private fun LoggedIn(
             recipeApi = api.recipe,
             // TODO add behaviours on these buttons
             onChatClick = {},
-            onProfileClick = {},
+            onProfileClick = action.authenticationTesting, // TODO : Have a real user profile.
             onRecipeClick = action.newRecipe,
             onReturnClick = {},
             onRecipeDetailsClick = action.viewRecipe,
+        )
+        LoggedInDestination.AuthenticationTesting -> AuthenticationTesting(
+            api = api,
         )
     }
 }
