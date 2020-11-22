@@ -55,21 +55,27 @@ fun Routing.users(firestore: Firestore) {
 
         /**
          * Get a user by id
-         * @param userId as a [String] id in the endpoint path
+         * @param userId : [String] Id of the user
+         * @produces application/json : [User] object if found
          */
-        get("{userId}") {
-            val userId = call.parameters["userId"] ?: ""
+        get {
+            try {
+                val userId = call.request.queryParameters["userId"]
+                    ?: throw BadRequestException("invalid userId supplied")
 
-            val user = users
-                .document(userId)
-                .get()
-                .await()
-                .toObject(User::class.java)
+                val user = users
+                    .document(userId)
+                    .get()
+                    .await()
+                    .toObject(User::class.java)
 
-            if (user != null) {
-                call.respond(HttpStatusCode.OK, user)
-            } else {
-                call.respond(HttpStatusCode.NotFound)
+                if (user != null) {
+                    call.respond(HttpStatusCode.OK, user)
+                } else {
+                    call.respond(HttpStatusCode.NotFound)
+                }
+            } catch(exception: BadRequestException) {
+                call.respond(HttpStatusCode.BadRequest)
             }
         }
     }
