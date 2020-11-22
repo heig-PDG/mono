@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.io.File
 
-interface ImageApi {
-    fun launch()
+interface ImagePickerApi {
+    fun pick()
     val current: Flow<Uri?>
 }
 
-class ActualImageApi(activity: AppCompatActivity) : ImageApi {
+class ActualImagePickerApi(activity: AppCompatActivity) : ImagePickerApi {
     private val authority = "me.tupperdate.provider"
 
     private val path = File(activity.filesDir, "images").apply { mkdirs() }
@@ -24,19 +24,21 @@ class ActualImageApi(activity: AppCompatActivity) : ImageApi {
         file
     )
 
-    override val current: MutableStateFlow<Uri?>
-        get() = MutableStateFlow(null)
+    private val uriFlow = MutableStateFlow<Uri?>(null)
+
+    override val current: Flow<Uri?>
+        get() = uriFlow
 
     private val registration = activity.registerForActivityResult(
         ActivityResultContracts.TakePicture()
     ) { success ->
         if (success) {
-            current.value = uri
+            uriFlow.value = uri
         }
     }
 
-    override fun launch() {
-        current.value = null
+    override fun pick() {
+        uriFlow.value = null
         registration.launch(uri)
     }
 }

@@ -6,11 +6,11 @@ import com.google.firebase.auth.FirebaseAuth
 class RealApi(activity: AppCompatActivity) : Api {
     override val authentication: RealAuthenticationApi
     override val recipe: RealRecipeApi
-    override val images: ImageApi
+    override val images: ImagePickerApi
 
     init {
         authentication = RealAuthenticationApi(activity, FirebaseAuth.getInstance())
         recipe = RealRecipeApi(authentication)
-        images = ActualImageApi(activity)
+        images = ActualImagePickerApi(activity)
     }
 }

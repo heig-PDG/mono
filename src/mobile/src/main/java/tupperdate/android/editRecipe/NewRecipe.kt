@@ -9,13 +9,13 @@ import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.lifecycle.lifecycleScope
 import dev.chrisbanes.accompanist.coil.CoilImageConstants
 import kotlinx.coroutines.launch
-import tupperdate.api.ImageApi
+import tupperdate.api.ImagePickerApi
 import tupperdate.api.RecipeApi
 
 @Composable
 fun NewRecipe(
     recipeApi: RecipeApi,
-    imageApi: ImageApi,
+    imagePickerApi: ImagePickerApi,
     onSaved: () -> Unit,
     onCancelled: () -> Unit,
     modifier: Modifier = Modifier,
@@ -23,7 +23,7 @@ fun NewRecipe(
     val scope = LifecycleOwnerAmbient.current.lifecycleScope
 
     val placeholder = "https://via.placeholder.com/450"
-    val imageUri = remember { imageApi.current }.collectAsState(initial = null).value
+    val imageUri = remember { imagePickerApi.current }.collectAsState(initial = null).value
 
     val heroImage = if (imageUri == null) {
         // TODO: Remove this, we do not want to invalidate the cache just because we added an image...
@@ -58,7 +58,7 @@ fun NewRecipe(
                 onSaved()
             }
         },
-        onEdit = { imageApi.launch() },
+        onEdit = { imagePickerApi.pick() },
         modifier = modifier,
     )
 }
