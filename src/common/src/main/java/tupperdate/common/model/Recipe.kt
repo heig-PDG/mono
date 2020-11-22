@@ -7,6 +7,7 @@ data class Recipe(
     val id: String? = null,
     val title: String? = null,
     val description: String? = null,
+    val added: Long? = null,
     val foodPictureUrl: String? = null,
-    val attributes: Map<String, Boolean>? = null
+    val attributes: Map<String, Boolean> = emptyMap()
 )
