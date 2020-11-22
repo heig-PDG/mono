@@ -14,7 +14,7 @@ data class Recipe(
 
 @Serializable
 data class RecipeAttributes(
-    val hasAllergens: Boolean,
-    val vegetarian: Boolean,
-    val warm: Boolean,
+    val hasAllergens: Boolean? = null,
+    val vegetarian: Boolean? = null,
+    val warm: Boolean? = null,
 )
