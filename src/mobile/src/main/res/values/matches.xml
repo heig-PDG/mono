@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="matches_title1">Congrats !</string>
+    <string name="matches_title2">It\'s a match !</string>
+    <string name="matches_button_text">START CHATTING</string>
+    <string name="matches_you">YOU</string>
+    <string name="matches_them">THEM</string>
+</resources>
