@@ -12,13 +12,19 @@ import tupperdate.common.dto.RecipeDTO
 import tupperdate.web.auth.firebaseAuthPrincipal
 import tupperdate.web.util.await
 
+/**
+ * Posts a [NewRecipeDTO] to the database, and returns the built [RecipeDTO].
+ *
+ * @param store the [Firestore] instance that is used.
+ */
 fun Route.recipesPost(store: Firestore) = post {
     val uid = requireNotNull(call.firebaseAuthPrincipal?.uid)
     val doc = store.collection("users").document(uid).collection("recipes").document()
     val dto = call.receive<NewRecipeDTO>()
     val now = System.currentTimeMillis() / 1000
 
-    // TODO : Use a some better representations for the model.
+    // TODO (alex) : See how we can handle exceptions.
+    // TODO (matt) : See how we can avoid code duplication.
     doc.set(
         mapOf(
             "id" to doc.id,

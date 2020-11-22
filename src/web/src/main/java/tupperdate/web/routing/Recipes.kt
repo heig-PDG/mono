@@ -16,7 +16,8 @@ fun Route.recipes(firestore: Firestore) {
     route("/recipes") {
         val recipes = firestore.collectionGroup("recipes")
 
-        // TODO : Provide the differently.
+        // TODO (alex) : Provide the store differently ?
+        // TODO (matt) : Apply a similar pattern for /like and /dislike endpoints.
         recipesPost(firestore)
         recipesGet(firestore)
 
