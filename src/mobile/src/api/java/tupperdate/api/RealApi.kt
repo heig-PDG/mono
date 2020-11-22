@@ -4,19 +4,29 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import io.ktor.client.*
 import io.ktor.client.features.*
+import io.ktor.client.features.auth.*
 import io.ktor.client.features.json.*
 import io.ktor.client.request.*
+import io.ktor.http.*
+import tupperdate.api.auth.firebase
 
 class RealApi(activity: AppCompatActivity) : Api {
+
+    override val authentication = RealAuthenticationApi(activity, FirebaseAuth.getInstance())
+
     private val http = HttpClient {
+        install(Auth) {
+            firebase(authentication)
+        }
         install(JsonFeature)
         defaultRequest {
             // TODO : Use HTTPS.
-            host = "api.tupperdate.me"
-            port = 80
+            host = "192.168.1.212"
+            port = 1234
+            contentType(ContentType.parse("application/json"))
         }
     }
-    override val authentication = RealAuthenticationApi(activity, FirebaseAuth.getInstance())
-    override val recipe = RealRecipeApi(authentication, http)
+
+    override val recipe = RealRecipeApi(http)
     override val images = ActualImagePickerApi(activity)
 }

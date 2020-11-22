@@ -3,14 +3,15 @@ package tupperdate.api
 import io.ktor.client.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import tupperdate.api.dto.asRecipe
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.common.dto.RecipeAttributesDTO
 import tupperdate.common.dto.RecipeDTO
 
 class RealRecipeApi(
-    private val auth: RealAuthenticationApi,
     private val client: HttpClient,
 ) : RecipeApi {
 
@@ -23,15 +24,12 @@ class RealRecipeApi(
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun stack(): Flow<List<RecipeApi.Recipe>> {
         // TODO : Invalidate requests with server-sent notifications.
-        return auth.auth
-            .filterNotNull()
-            .flatMapLatest { auth ->
-                val recipes = client.get<List<RecipeDTO>>("/recipes") {
-                    header("Authorization", "Bearer ${auth.token}")
-                    parameter("count", 4) // TODO : Rename this to count
-                }
-                flowOf(recipes.map(RecipeDTO::asRecipe))
+        return flow {
+            val recipes = client.get<List<RecipeDTO>>("/recipes") {
+                parameter("count", 4)
             }
+            emit(recipes.map(RecipeDTO::asRecipe))
+        }
     }
 
     override val backStackEnabled: Flow<Boolean>
@@ -48,9 +46,7 @@ class RealRecipeApi(
         hasAllergens: Boolean
     ) {
         // TODO : Handle exceptions.
-        val auth = auth.auth.filterNotNull().first()
-        client.post<NewRecipeDTO> {
-            header("Authorization", "Bearer ${auth.token}")
+        client.post<Unit>("/recipes") {
             body = NewRecipeDTO(
                 title = title,
                 description = description,
