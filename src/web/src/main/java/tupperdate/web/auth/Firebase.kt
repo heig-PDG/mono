@@ -89,7 +89,9 @@ fun Authentication.Configuration.firebase(
  * Extracts the firebase authentication token from the [ApplicationRequest].
  */
 private fun ApplicationRequest.firebaseToken(): String? {
-    return header("X-TUPPERDATE-AUTH")
+    val data = header("Authorization") ?: return null
+    if (!data.startsWith("Bearer")) return null
+    return data.replaceFirst("Bearer", "").trim()
 }
 
 /**
