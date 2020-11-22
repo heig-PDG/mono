@@ -10,7 +10,7 @@ import java.io.File
 
 interface ImageApi {
     fun launch()
-    fun read(): Flow<Uri?>
+    val current: Flow<Uri?>
 }
 
 class ActualImageApi(activity: AppCompatActivity) : ImageApi {
@@ -18,27 +18,25 @@ class ActualImageApi(activity: AppCompatActivity) : ImageApi {
 
     private val path = File(activity.filesDir, "images").apply { mkdirs() }
     private val file = File(path, "capture.jpg")
-    private val uri  = FileProvider.getUriForFile(
+    private val uri = FileProvider.getUriForFile(
         activity.applicationContext,
         authority,
         file
     )
 
-    private val imageUri = MutableStateFlow<Uri?>(null)
+    override val current: MutableStateFlow<Uri?>
+        get() = MutableStateFlow(null)
+
     private val registration = activity.registerForActivityResult(
         ActivityResultContracts.TakePicture()
     ) { success ->
         if (success) {
-            imageUri.value = uri
+            current.value = uri
         }
     }
 
     override fun launch() {
-        imageUri.value = null
+        current.value = null
         registration.launch(uri)
-    }
-
-    override fun read(): Flow<Uri?> {
-        return imageUri
     }
 }

@@ -23,7 +23,7 @@ fun NewRecipe(
     val scope = LifecycleOwnerAmbient.current.lifecycleScope
 
     val placeholder = "https://via.placeholder.com/450"
-    val imageUri = remember { imageApi.read() }.collectAsState(initial = null).value
+    val imageUri = remember { imageApi.current }.collectAsState(initial = null).value
 
     val heroImage = if (imageUri == null) {
         // TODO: Remove this, we do not want to invalidate the cache just because we added an image...

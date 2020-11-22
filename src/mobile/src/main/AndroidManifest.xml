@@ -3,10 +3,6 @@
     package="tupperdate.android">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true"
-        />
 
     <queries>
         <intent>
