@@ -2,8 +2,10 @@ package tupperdate.android.onboarding
 
 import androidx.compose.foundation.ProvideTextStyle
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.AmbientEmphasisLevels
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
@@ -12,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -27,7 +28,6 @@ import tupperdate.android.ui.TupperdateTypography
 import tupperdate.android.ui.material.BrandedButton
 import tupperdate.android.ui.material.BrandedTitleText
 import tupperdate.api.AuthenticationApi
-import tupperdate.api.api
 
 private sealed class State
 private data class Error(val error: LocalError) : State()
@@ -51,7 +51,6 @@ private fun getErrorString(error: LocalError) : String {
 fun Onboarding(
     auth: AuthenticationApi,
     verificationScreen: () -> Unit,
-    loggedInScreen: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scope = LifecycleOwnerAmbient.current.lifecycleScope
@@ -78,8 +77,7 @@ fun Onboarding(
                 if (state != Pending) {
                     setState(Pending)
                     when (auth.requestCode(phone)) {
-                        AuthenticationApi.RequestCodeResult.LoggedIn ->
-                            loggedInScreen()
+                        AuthenticationApi.RequestCodeResult.LoggedIn -> Unit
                         AuthenticationApi.RequestCodeResult.RequiresVerification ->
                             verificationScreen()
                         AuthenticationApi.RequestCodeResult.InvalidNumberError ->

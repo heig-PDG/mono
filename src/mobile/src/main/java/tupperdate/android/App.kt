@@ -153,12 +153,10 @@ private fun LoggedOut(
         LoggedOutDestination.Onboarding -> Onboarding(
             auth = api.authentication,
             verificationScreen = action.viewConfirmation,
-            loggedInScreen = { /* Ignored. */ },
         )
         LoggedOutDestination.OnboardingConfirmation -> OnboardingConfirmation(
             auth = api.authentication,
             onReturnClick = action.back,
-            onLoggedIn = { /* Ignored. */ },
         )
     }
 }
