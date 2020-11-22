@@ -1,27 +1,18 @@
 package tupperdate.api
 
 import io.ktor.client.*
-import io.ktor.client.features.*
-import io.ktor.client.features.json.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import tupperdate.common.model.Recipe
+import kotlinx.coroutines.flow.*
+import tupperdate.api.dto.asRecipe
+import tupperdate.common.dto.NewRecipeDTO
+import tupperdate.common.dto.RecipeAttributesDTO
+import tupperdate.common.dto.RecipeDTO
 
-class RealRecipeApi(private val auth: RealAuthenticationApi) : RecipeApi {
-
-    private val client = HttpClient {
-        install(JsonFeature)
-        // TODO : Use some top-level variables, a build variant or some env variables.
-        defaultRequest {
-            // TODO : Use HTTPS.
-            host = "api.tupperdate.me"
-            port = 80
-        }
-    }
+class RealRecipeApi(
+    private val auth: RealAuthenticationApi,
+    private val client: HttpClient,
+) : RecipeApi {
 
     override fun like(recipe: RecipeApi.Recipe) {
     }
@@ -35,18 +26,11 @@ class RealRecipeApi(private val auth: RealAuthenticationApi) : RecipeApi {
         return auth.auth
             .filterNotNull()
             .flatMapLatest { auth ->
-                val recipes = client.get<List<Recipe>>("/recipes/4") {
+                val recipes = client.get<List<RecipeDTO>>("/recipes") {
                     header("Authorization", "Bearer ${auth.token}")
+                    parameter("count", 4) // TODO : Rename this to count
                 }
-                // TODO : Factorize this.
-                val mapped = recipes.map {
-                    RecipeApi.Recipe(
-                        title = it.title ?: "",
-                        description = it.title ?: "",
-                        pictureUrl = it.title ?: "",
-                    )
-                }
-                flowOf(mapped)
+                flowOf(recipes.map(RecipeDTO::asRecipe))
             }
     }
 
@@ -57,5 +41,19 @@ class RealRecipeApi(private val auth: RealAuthenticationApi) : RecipeApi {
     }
 
     override suspend fun create(title: String, description: String) {
+        // TODO : Handle exceptions.
+        val auth = auth.auth.filterNotNull().first()
+        client.post<NewRecipeDTO> {
+            header("Authorization", "Bearer ${auth.token}")
+            body = NewRecipeDTO(
+                title = title,
+                description = description,
+                attributes = RecipeAttributesDTO(
+                    vegetarian = false,
+                    hasAllergens = false,
+                    warm = false,
+                )
+            )
+        }
     }
 }
