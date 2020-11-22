@@ -4,7 +4,7 @@ info:
   description: API for tupperdate
   version: 1.0.0
 servers:
-  - url: http://api.tupperdate.
+  - url: http://api.tupperdate.me
   
 tags:
 - name: users
