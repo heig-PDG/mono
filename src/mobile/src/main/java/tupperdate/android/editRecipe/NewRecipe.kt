@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.lifecycle.lifecycleScope
+import dev.chrisbanes.accompanist.coil.CoilImageConstants
 import kotlinx.coroutines.launch
 import tupperdate.api.ImageApi
 import tupperdate.api.RecipeApi
@@ -23,7 +24,15 @@ fun NewRecipe(
 
     val placeholder = "https://via.placeholder.com/450"
     val imageUri = remember { imageApi.read() }.collectAsState(initial = null).value
-    val heroImage = imageUri ?: placeholder
+
+    val heroImage = if (imageUri == null) {
+        // TODO: Remove this, we do not want to invalidate the cache just because we added an image...
+        //       or maybe we do
+        CoilImageConstants.defaultImageLoader().memoryCache.clear()
+        placeholder
+    } else {
+        imageUri
+    }
 
     val (recipe, setRecipe) = remember {
         mutableStateOf(

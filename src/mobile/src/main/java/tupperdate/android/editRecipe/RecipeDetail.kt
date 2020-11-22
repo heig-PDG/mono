@@ -15,7 +15,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.coil.CoilImage
-import dev.chrisbanes.accompanist.coil.CoilImageConstants
 import tupperdate.android.R
 import tupperdate.android.ui.modifier.overlap
 
@@ -42,9 +41,6 @@ fun RecipeDetail(
     modifier: Modifier = Modifier,
     onEdit: (() -> Unit)? = null,
 ) {
-    // TODO: Remove this, we do not want to invalidate the cache just because we added an image...
-    //       or maybe we do
-    CoilImageConstants.defaultImageLoader().memoryCache.clear()
 
     Column(modifier) {
         Box {
