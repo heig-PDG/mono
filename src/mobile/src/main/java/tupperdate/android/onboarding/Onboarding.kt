@@ -190,18 +190,18 @@ private fun ViewPhoneInput(
 @Composable
 private fun OnboardingPreview() {
     // Use a real device to launch the preview.
-    val owner = LifecycleOwnerAmbient.current
-    val api = remember { owner.api() }
-
-    TupperdateTheme {
-        Onboarding(
-            api.authentication,
-            {},
-            {},
-            Modifier.background(Color.White)
-                .fillMaxSize()
-        )
-    }
+    // TODO : Use a stateless preview.
+    // val owner = LifecycleOwnerAmbient.current
+    // val api = remember { owner.api() }
+    // TupperdateTheme {
+    //     Onboarding(
+    //         api.authentication,
+    //         {},
+    //         {},
+    //         Modifier.background(Color.White)
+    //             .fillMaxSize()
+    //     )
+    // }
 }
 
 @Preview(showBackground = true)

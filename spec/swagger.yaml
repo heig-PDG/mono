@@ -20,7 +20,7 @@ paths:
     post:
       tags:
       - "users"
-      summary: "Post a new user"
+      summary: "Post a new user given an authentication token"
       description: ""
       operationId: "postNewUser"
       consumes:
@@ -89,7 +89,6 @@ paths:
         "405":
           description: "Invalid input"
 
-  /recipes/next:
     get:
       tags:
       - "recipes"
@@ -130,6 +129,8 @@ definitions:
         type: "string"
       description:
         type: "string"
+      timeAdded:
+        type: "integer"
       foodPictureUrl:
         type: "string"
       attributes:

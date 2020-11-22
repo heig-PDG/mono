@@ -1,11 +1,13 @@
 package tupperdate.api
 
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
@@ -13,6 +15,7 @@ import kotlin.coroutines.suspendCoroutine
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RealAuthenticationApi(
+    private val activity: AppCompatActivity,
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 ) : AuthenticationApi {
 
@@ -97,6 +100,7 @@ class RealAuthenticationApi(
                     setForceResendingToken(token)
                 }
             }
+            .setActivity(activity)
             .setPhoneNumber(number)
             .setTimeout(25, TimeUnit.SECONDS)
             .setCallbacks(callbacks)
@@ -127,6 +131,14 @@ class RealAuthenticationApi(
             }
         }
     }
+
+    override val auth: Flow<AuthenticationApi.AuthInfo?>
+        get() = currentUser(firebaseAuth)
+            .map { user ->
+                val token = user?.getIdToken(false)?.await()?.token
+                token?.let { AuthenticationApi.AuthInfo(it) }
+            }
+            .catch { emit(null) }
 
     override val profile: Flow<AuthenticationApi.Profile?>
         get() = currentUser(firebaseAuth)

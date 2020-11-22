@@ -5,17 +5,17 @@ package tupperdate.web
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.cloud.FirestoreClient
 import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.features.*
-import io.ktor.http.*
+import io.ktor.http.auth.*
 import io.ktor.routing.*
 import io.ktor.serialization.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import kotlinx.serialization.StringFormat
-import kotlinx.serialization.serializer
-import tupperdate.common.model.Recipe
+import tupperdate.web.auth.firebase
 import tupperdate.web.routing.recipes
 import tupperdate.web.routing.users
 
@@ -53,6 +53,9 @@ fun main() {
     val firestore = FirestoreClient.getFirestore()
 
     val server = embeddedServer(Netty, port = port) {
+        install(Authentication) {
+            firebase(FirebaseAuth.getInstance())
+        }
         install(DefaultHeaders)
         install(CallLogging)
         install(ContentNegotiation) {

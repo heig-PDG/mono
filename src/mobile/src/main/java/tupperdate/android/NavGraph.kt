@@ -5,57 +5,63 @@ import kotlinx.android.parcel.Parcelize
 import tupperdate.android.utils.Navigator
 import tupperdate.api.RecipeApi
 
-sealed class Destination : Parcelable {
-    //TODO delete this object once merged
-    @Parcelize
-    object MatchPopUpPretextPage : Destination()
+// DESTINATIONS AVAILABLE WHEN THE USER IS LOGGED OUT
+
+sealed class LoggedOutDestination : Parcelable {
 
     @Parcelize
-    object NewRecipe : Destination()
+    object BrandingPreview : LoggedOutDestination()
 
     @Parcelize
-    data class ViewRecipe(val recipe: RecipeApi.Recipe) : Destination()
+    object Onboarding : LoggedOutDestination()
 
     @Parcelize
-    object Home : Destination()
-
-    @Parcelize
-    object BrandingPreview : Destination()
-
-    @Parcelize
-    object Onboarding : Destination()
-
-    @Parcelize
-    object OnboardingConfirmation : Destination()
+    object OnboardingConfirmation : LoggedOutDestination()
 }
 
-class Action(private val navigator: Navigator<Destination>) {
-    val matchPopUp: () -> Unit = {
-        navigator.navigate(Destination.MatchPopUpPretextPage)
+class LoggedOutAction(private val navigator: Navigator<LoggedOutDestination>) {
+
+    val viewOnboarding: () -> Unit = {
+        navigator.navigate(LoggedOutDestination.Onboarding)
     }
 
+    val viewConfirmation: () -> Unit = {
+        navigator.navigate(LoggedOutDestination.OnboardingConfirmation)
+    }
+
+    val back: () -> Unit = {
+        navigator.back()
+    }
+}
+
+// DESTINATIONS AVAILABLE WHEN THE USER IS LOGGED IN
+
+sealed class LoggedInDestination : Parcelable {
+
+    @Parcelize
+    object NewRecipe : LoggedInDestination()
+
+    @Parcelize
+    data class ViewRecipe(val recipe: RecipeApi.Recipe) : LoggedInDestination()
+
+    @Parcelize
+    object Home : LoggedInDestination()
+
+}
+
+class LoggedInAction(private val navigator: Navigator<LoggedInDestination>) {
+
+
     val newRecipe: () -> Unit = {
-        navigator.navigate(Destination.NewRecipe)
+        navigator.navigate(LoggedInDestination.NewRecipe)
     }
 
     val viewRecipe: (RecipeApi.Recipe) -> Unit = {
-        navigator.navigate(Destination.ViewRecipe(it))
+        navigator.navigate(LoggedInDestination.ViewRecipe(it))
     }
 
     val home: () -> Unit = {
-        navigator.navigate(Destination.Home)
-    }
-
-    val viewPreview: () -> Unit = {
-        navigator.navigate(Destination.BrandingPreview)
-    }
-
-    val viewOnboarding: () -> Unit = {
-        navigator.navigate(Destination.Onboarding)
-    }
-
-    val viewOnboardingConfirmation: () -> Unit = {
-        navigator.navigate(Destination.OnboardingConfirmation)
+        navigator.navigate(LoggedInDestination.Home)
     }
 
     val back: () -> Unit = {

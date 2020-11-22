@@ -2,6 +2,8 @@ package tupperdate.web.routing
 
 import com.google.cloud.firestore.Firestore
 import io.ktor.application.*
+import io.ktor.auth.*
+import io.ktor.http.auth.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -9,62 +11,64 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import tupperdate.common.model.Recipe
 import tupperdate.common.model.User
+import tupperdate.web.auth.firebaseAuthPrincipal
 import tupperdate.web.autoId
-import tupperdate.web.await
+import tupperdate.web.util.await
 
 fun Routing.recipes(firestore: Firestore) {
     route("/recipes") {
         val recipeCollectionGroup = firestore.collectionGroup("recipes")
 
-        get("next") {
-            /*var recipe: QueryDocumentSnapshot?
-            do {
-                recipe = recipeCollection
-                    .whereGreaterThan("id", autoId())
-                    .orderBy("id")
-                    .limit(1)
-                    .get()
-                    .await()
-                    .documents
-                    .getOrNull(0)
-            } while (recipe == null)*/
+        /****************************************************************
+         *                           GET                                *
+         ****************************************************************/
 
-            val recipe = recipeCollectionGroup
-                .limit(1)
+        /**
+         * Get a number of recipes ordered by date added
+         * @param: numRecipes as an int in the endpoint path
+         */
+        get("{numRecipes}") {
+            val numRecipes = (call.parameters["numRecipes"] ?: "").toInt()
+            val recipes = recipeCollectionGroup
+                .orderBy("added")
+                .limit(numRecipes)
                 .get()
                 .await()
-                .documents[0]
+                .toList()
 
-            call.respond(recipe.toObject(Recipe::class.java))
+            call.respond(recipes.map { it.toObject(Recipe::class.java) })
         }
 
-        // Temporary method to add recipes with a random user
-        post {
-            val usersCollection = firestore.collection("users")
+        /****************************************************************
+         *                            POST                              *
+         ****************************************************************/
 
-            // Generate a new user document
-            val newRandomUserDoc = usersCollection.document()
-            val randomUser = User(
-                id = newRandomUserDoc.id,
-                displayName = "Random Person " + autoId(),
-                phone = "Random phone " + autoId(),
-                profilePictureUrl = "https://thispersondoesnotexist.com/",
-            )
-            // Assign the random user to new document
-            newRandomUserDoc.set(randomUser)
+        /**
+         * Post a recipe for the authenticated user
+         */
+        authenticate {
+            post {
+                val userCollection = firestore.collection("users")
+                val userId = call.firebaseAuthPrincipal?.uid ?: ""
 
-            // Add a document in the subcollection "recipes"
-            val newRecipeDoc = newRandomUserDoc
-                .collection("recipes")
-                .document()
 
-            // Get post data
-            val json = call.receiveText()
+                val userDoc = userCollection.document(userId)
 
-            // Parse JSON (and add auto-generated id to it)
-            val recipe = Json.decodeFromString<Recipe>(json).copy(id = newRecipeDoc.id)
+                // Generate document with auto-id
+                val recipeDoc = userDoc.collection("recipes").document()
 
-            newRecipeDoc.set(recipe)
+                // Get post data
+                val json = call.receiveText()
+
+                // Parse JSON (and add auto-generated id to it)
+                val recipe = Json.decodeFromString<Recipe>(json)
+                    .copy(
+                        id = recipeDoc.id,
+                        added = System.currentTimeMillis() / 1000,
+                    )
+
+                recipeDoc.set(recipe)
+            }
         }
     }
 }
