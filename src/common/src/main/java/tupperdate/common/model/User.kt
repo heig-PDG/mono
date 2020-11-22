@@ -5,8 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NewUser(
     val displayName: String? = null,
-    val phone: String? = null,
-    val profilePictureUrl: String? = null,
 )
 
 @Serializable
