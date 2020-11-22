@@ -17,10 +17,6 @@ fun Routing.users(firestore: Firestore) {
     route("/users") {
         val users = firestore.collection("users")
 
-        /****************************************************************
-         *                           GET                                *
-         ****************************************************************/
-
         /**
          * Get a user by id
          * @param userId as a [String] id in the endpoint path
@@ -40,10 +36,6 @@ fun Routing.users(firestore: Firestore) {
                 call.respond(HttpStatusCode.NotFound)
             }
         }
-
-        /****************************************************************
-         *                           POST                               *
-         ****************************************************************/
 
         /**
          * Post a new user given the request provides an authentication token
