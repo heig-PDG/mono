@@ -37,6 +37,7 @@ jobs:
         run: |
           heroku container:login
           heroku container:release -a heig-pdg web
+          heroku container:release -a heig-pdg-api web
         env:
           HEROKU_API_KEY: ${{ secrets.TOKEN_HEROKU }}
 
