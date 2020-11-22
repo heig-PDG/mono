@@ -36,7 +36,7 @@ class RealRecipeApi(private val auth: RealAuthenticationApi) : RecipeApi {
             .filterNotNull()
             .flatMapLatest { auth ->
                 val recipes = client.get<List<Recipe>>("/recipes/4") {
-                    header("X-TUPPERDATE-AUTH", auth.token)
+                    header("Authorization", "Bearer ${auth.token}")
                 }
                 // TODO : Factorize this.
                 val mapped = recipes.map {

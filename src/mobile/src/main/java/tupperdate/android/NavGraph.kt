@@ -47,6 +47,8 @@ sealed class LoggedInDestination : Parcelable {
     @Parcelize
     object Home : LoggedInDestination()
 
+    @Parcelize
+    object AuthenticationTesting : LoggedInDestination()
 }
 
 class LoggedInAction(private val navigator: Navigator<LoggedInDestination>) {
@@ -65,5 +67,9 @@ class LoggedInAction(private val navigator: Navigator<LoggedInDestination>) {
 
     val back: () -> Unit = {
         navigator.back()
+    }
+
+    val authenticationTesting: () -> Unit = {
+        navigator.navigate(LoggedInDestination.AuthenticationTesting)
     }
 }
