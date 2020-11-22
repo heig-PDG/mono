@@ -110,6 +110,7 @@ fun Routing.recipes(firestore: Firestore) {
                             user1LikedRecipes = emptyList(),
                             user2LikedRecipes = emptyList(),
                         )
+
                     // add liked recipe
                     chatObject =
                         if (callerIsUser1) {

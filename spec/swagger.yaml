@@ -33,12 +33,17 @@ paths:
         description: "User object that needs to be registered"
         required: true
         schema:
-          $ref: "#/definitions/User"
+          $ref: "#/definitions/NewUser"
       responses:
+        "200":
+          description: "OK : if the new user was successfully registered"
+          schema:
+            $ref: "#/definitions/User"
+        "403":
+          description: "Unauthorized : if the request isn't authenticated"
         "405":
-          description: "Invalid input"
+          description: "Invalid input : if the json body can't be parsed to a newUser object"
 
-  /users/{userId}:
     get:
       tags:
       - "users"
@@ -49,13 +54,13 @@ paths:
       - "application/json"
       parameters:
       - name: "userId"
-        in: "path"
+        in: "query"
         description: "ID of user"
         required: true
         type: "string"
       responses:
         "200":
-          description: "OK"
+          description: "OK : if the was found"
           schema:
             $ref: "#/definitions/User"
         "400":
@@ -67,7 +72,7 @@ paths:
     post:
       tags:
       - "recipes"
-      summary: "Post a recipe for an authenticated user"
+      summary: "Post a recipe as an authenticated user"
       description: ""
       operationId: "postRecipe"
       consumes:
@@ -77,33 +82,88 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "Recipe object that needs to be registered for the authenticated user"
+        description: "NewRecipe object that needs to be registered as the authenticated user"
         required: true
         schema:
-          $ref: "#/definitions/Recipe"
+          $ref: "#/definitions/NewRecipe"
       responses:
         "200":
-          description: "OK"
+          description: "OK : if the new recipe was successfully registered"
           schema:
             $ref: "#/definitions/Recipe"
-        "405":
-          description: "Invalid input"
-
+        "400":
+          description: "Bad request : if the request request body could not be parsed to a NewRecipe object"
+        "403":
+          description: "Unauthorized : if the request isn't authenticated"
+          
     get:
       tags:
       - "recipes"
-      summary: "Get a random recipe"
+      summary: "Get a number of unseen recipes"
       description: ""
-      operationId: "getRandomRecipe"
+      operationId: "getRecipes"
       produces:
       - "application/json"
+      parameters:
+      - name: "numRecipes"
+        in: "query"
+        description: "number of recipes to fetch"
+        required: true
+        type: "integer"
       responses:
         "200":
           description: "OK"
           schema:
             $ref: "#/definitions/Recipe"
+        "400":
+          description: "Bad request : if the request parameter isn't an positive integer"
+            
+  /recipes/like:
+    post:
+      tags:
+      - "recipes"
+      summary: "Like a recipe as an authenticated user"
+      description: ""
+      operationId: "likeRecipe"
+      parameters:
+      - name: "recipeId"
+        in: "query"
+        description: "id of the recipe to like"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "OK"
+          
+  /recipes/dislike:
+    post:
+      tags:
+      - "recipes"
+      summary: "Dislike a recipe as an authenticated user"
+      description: ""
+      operationId: "dislikeRecipe"
+      parameters:
+      - name: "recipeId"
+        in: "query"
+        description: "id of the recipe to dislike"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "OK"
             
 definitions:
+  NewUser:
+    type: "object"
+    properties:
+      displayName:
+        type: "string"
+      phone:
+        type: "string"
+      profilePictureUrl:
+        type: "string"
+    xml:
+      name: "NewUser"
   User:
     type: "object"
     properties:
@@ -115,10 +175,22 @@ definitions:
         type: "string"
       profilePictureUrl:
         type: "string"
-      recipes:
-        $ref: "#/definitions/Recipe"
     xml:
       name: "User"
+      
+  NewRecipe:
+    type: "object"
+    properties:
+      title:
+        type: "string"
+      description:
+        type: "string"
+      foodPictureUrl:
+        type: "string"
+      attributes:
+        type: "string"
+    xml:
+      name: "NewRecipe"
 
   Recipe:
     type: "object"
