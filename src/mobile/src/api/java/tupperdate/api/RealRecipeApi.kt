@@ -40,7 +40,13 @@ class RealRecipeApi(
     override fun back() {
     }
 
-    override suspend fun create(title: String, description: String) {
+    override suspend fun create(
+        title: String,
+        description: String,
+        vegetarian: Boolean,
+        warm: Boolean,
+        hasAllergens: Boolean
+    ) {
         // TODO : Handle exceptions.
         val auth = auth.auth.filterNotNull().first()
         client.post<NewRecipeDTO> {
@@ -49,9 +55,9 @@ class RealRecipeApi(
                 title = title,
                 description = description,
                 attributes = RecipeAttributesDTO(
-                    vegetarian = false,
-                    hasAllergens = false,
-                    warm = false,
+                    vegetarian = vegetarian,
+                    hasAllergens = hasAllergens,
+                    warm = warm,
                 )
             )
         }

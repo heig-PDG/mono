@@ -20,8 +20,8 @@ import tupperdate.android.ui.material.BrandedButton
 data class EditableRecipe(
     val title: String,
     val description: String,
-    val vegan: Boolean,
-    val hot: Boolean,
+    val vegetarian: Boolean,
+    val warm: Boolean,
     val hasAllergens: Boolean,
 )
 
@@ -57,11 +57,11 @@ fun EditRecipe(
         },
         icons = {
             RecipeTags(
-                vegan = recipe.vegan,
-                hot = recipe.hot,
+                vegan = recipe.vegetarian,
+                hot = recipe.warm,
                 hasAllergens = recipe.hasAllergens,
-                onClickVegan = { onRecipeChange(recipe.copy(vegan = !recipe.vegan)) },
-                onClickHot = { onRecipeChange(recipe.copy(hot = !recipe.hot)) },
+                onClickVegan = { onRecipeChange(recipe.copy(vegetarian = !recipe.vegetarian)) },
+                onClickHot = { onRecipeChange(recipe.copy(warm = !recipe.warm)) },
                 onClickAllergens = { onRecipeChange(recipe.copy(hasAllergens = !recipe.hasAllergens)) }
             )
         },

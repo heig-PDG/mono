@@ -22,5 +22,11 @@ interface RecipeApi {
 
     fun back()
 
-    suspend fun create(title: String, description: String)
+    suspend fun create(
+        title: String,
+        description: String,
+        vegetarian: Boolean,
+        warm: Boolean,
+        hasAllergens: Boolean,
+    )
 }
