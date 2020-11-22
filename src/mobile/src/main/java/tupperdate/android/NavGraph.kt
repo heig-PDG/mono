@@ -51,7 +51,6 @@ sealed class LoggedInDestination : Parcelable {
 
 class LoggedInAction(private val navigator: Navigator<LoggedInDestination>) {
 
-
     val newRecipe: () -> Unit = {
         navigator.navigate(LoggedInDestination.NewRecipe)
     }
