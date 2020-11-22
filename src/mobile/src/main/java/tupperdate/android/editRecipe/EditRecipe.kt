@@ -7,15 +7,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.ui.tooling.preview.Preview
 import tupperdate.android.R
-import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.material.BrandedButton
 
 /**
@@ -32,7 +28,7 @@ data class EditableRecipe(
 /**
  * A composable that displays some editable fields for recipes.
  *
- * @param heroImageUrl the URL at which the image should be fetched.
+ * @param heroImage the image to display. Can be a drawable, URI, URL, ...
  * @param recipe the [EditableRecipe] to display.
  * @param onRecipeChange a callback called when the recipe is changed.
  * @param onDeleteClick a callback called when the delete button is pressed.
@@ -41,15 +37,16 @@ data class EditableRecipe(
  */
 @Composable
 fun EditRecipe(
-    heroImageUrl: String,
+    heroImage: Any,
     recipe: EditableRecipe,
     onRecipeChange: (EditableRecipe) -> Unit,
     onDeleteClick: () -> Unit,
     onSaveClick: () -> Unit,
+    onEdit: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     RecipeDetail(
-        heroImage = heroImageUrl,
+        heroImage = heroImage,
         header = {
             EditRecipeHeader(
                 title = recipe.title,
@@ -78,8 +75,8 @@ fun EditRecipe(
             )
         },
         onClose = onDeleteClick,
+        onEdit = onEdit,
         modifier = modifier,
-        onEdit = { /* TODO : Support image changes. */ },
     )
 }
 
@@ -124,6 +121,7 @@ private fun EditRecipeHeader(
 
 // PREVIEWS
 
+/*
 @Preview(showBackground = true)
 @Composable
 private fun EditRecipePreview() {
@@ -148,3 +146,5 @@ private fun EditRecipePreview() {
         )
     }
 }
+
+ */

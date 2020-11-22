@@ -25,7 +25,7 @@ import tupperdate.api.RecipeApi
 
 @Composable
 fun ViewRecipe(
-    api: RecipeApi,
+    recipeApi: RecipeApi,
     recipe: RecipeApi.Recipe,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
@@ -47,13 +47,13 @@ fun ViewRecipe(
             ViewRecipeButtons(
                 onSkip = {
                     scope.launch {
-                        api.dislike(recipe)
+                        recipeApi.dislike(recipe)
                         onBack()
                     }
                 },
                 onLike = {
                     scope.launch {
-                        api.like(recipe)
+                        recipeApi.like(recipe)
                         onBack()
                     }
                 },

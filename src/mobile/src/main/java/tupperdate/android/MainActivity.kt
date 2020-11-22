@@ -10,6 +10,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val api = api()
+
         setContent {
             TupperdateTheme {
                 TupperdateApp(
