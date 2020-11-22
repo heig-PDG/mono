@@ -1,0 +1,269 @@
+openapi: 3.0.0
+info:
+  title: Tupperdate API
+  description: API for tupperdate
+  version: 1.0.0
+servers:
+  - url: http://api.tupperdate.me
+  
+tags:
+- name: users
+  description: Everything about users
+
+- name: recipes
+  description: Everything about recipes
+
+security:
+  - firebaseAuth: []
+
+paths:
+  # users
+  /users/{userId}:
+    put:
+      tags:
+      - users
+      summary: Post a new user given an authentication token
+      description: ""
+      operationId: postNewUser
+      
+      parameters:
+      - in: path
+        name: userId
+        description: ID of user
+        required: true
+        schema:
+          type: string
+        
+      requestBody:
+        description: NewUser object that needs to be registered
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MyUserDTO'
+              
+      responses:
+        '200':
+          description: OK; if the new user was successfully registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MyUserDTO'
+        '400':
+          description: Bad request; if the json body can't be parsed to a newUser object
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+    get:
+      tags:
+      - users
+      summary: Get a user by id
+      description: ""
+      operationId: getUserById
+
+      parameters:
+      - in: path
+        name: userId
+        description: ID of user
+        required: true
+        schema:
+          type: string
+        
+      responses:
+        '200':
+          description: OK; if the user was found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Not Found; if the user can't be found
+  # recipes
+  
+  /recipes:
+    post:
+      tags:
+      - recipes
+      summary: Post a recipe as an authenticated user
+      description: ""
+      operationId: postRecipe
+      
+      requestBody:
+        description: NewRecipe object that needs to be registered as the authenticated user
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewRecipeDTO'
+              
+      responses:
+        '200':
+          description: OK; if the new recipe was successfully registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeDTO'
+        '400':
+          description: Bad request; if the request request body could not be parsed to a NewRecipe object
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+          
+    get:
+      tags:
+      - recipes
+      summary: Get a number of unseen recipes
+      description: ""
+      operationId: getRecipes
+      
+      parameters:
+      - name: numRecipes
+        in: query
+        description: number of recipes to fetch
+        required: true
+        schema:
+          type: integer
+        
+      responses:
+        '200':
+          description: OK; if the recipes could be fetched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeDTO'
+        '400':
+          description: Bad request; if the request parameter isn't a positive integer
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+          
+  /recipes/{recipeId}/like:
+    put:
+      tags:
+      - recipes
+      summary: Like a recipe as an authenticated user
+      description: ""
+      operationId: likeRecipe
+      
+      parameters:
+      - name: recipeId
+        in: path
+        description: id of the recipe to like
+        required: true
+        schema:
+          type: string
+        
+      responses:
+        '200':
+          description: OK; if the recipe was successfully liked
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Not found; if the recipe can't be found
+          
+  /recipes/{recipeId}/dislike:
+    put:
+      tags:
+      - recipes
+      summary: Dislike a recipe as an authenticated user
+      description: ""
+      operationId: dislikeRecipe
+      
+      parameters:
+      - name: recipeId
+        in: path
+        description: id of the recipe to dislike
+        required: true
+        schema:
+          type: string
+        
+      responses:
+        '200':
+          description: OK; if the recipe was successfully disliked
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Not found; if the recipe can't be found
+  
+components:
+  securitySchemes:
+    firebaseAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      
+  responses:
+    UnauthorizedError:
+      description: Unauthorized; if the access token is missing or invalid
+
+  schemas:
+    MyUserDTO:
+      properties:
+        displayName:
+          type: string
+      required:  
+        - displayName
+  
+    UserDTO:
+      properties:
+        id:
+          type: string
+        displayName:
+          type: string
+        phone:
+          type: string
+        picture:
+          type: string
+      required:
+        - id
+        - displayName
+        - phone
+        - picture
+  
+    RecipeAttributesDTO:
+      properties:
+        hasAllergens:
+          type: boolean
+        vegetarian:
+          type: boolean
+        warm:
+          type: boolean
+      required:
+        - hasAllergens
+        - vegetarian
+        - warm
+  
+    NewRecipeDTO:
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        attributes:
+          $ref: '#/components/schemas/RecipeAttributesDTO'
+      required:
+        - title
+        - description
+        - attributes
+  
+    RecipeDTO:
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        timestamp:
+          type: string
+        picture:
+          type: string
+        attributes:
+          $ref: '#/components/schemas/RecipeAttributesDTO'
+      required:
+        - id
+        - title
+        - description
+        - timestamp
+        - picture
+        - attributes

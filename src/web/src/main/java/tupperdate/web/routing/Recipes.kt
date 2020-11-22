@@ -3,16 +3,13 @@ package tupperdate.web.routing
 import com.google.cloud.firestore.Firestore
 import io.ktor.application.*
 import io.ktor.auth.*
-import io.ktor.http.auth.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import tupperdate.common.model.Recipe
-import tupperdate.common.model.User
 import tupperdate.web.auth.firebaseAuthPrincipal
-import tupperdate.web.autoId
 import tupperdate.web.util.await
 
 fun Routing.recipes(firestore: Firestore) {
