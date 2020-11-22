@@ -44,8 +44,8 @@ fun RecipeDetail(
     Column(modifier) {
         Box {
             CoilImage(
-                heroImage,
-                Modifier
+                data = heroImage,
+                modifier = Modifier
                     .preferredHeight(290.dp)
                     .fillMaxWidth(),
                 contentScale = ContentScale.Crop,
