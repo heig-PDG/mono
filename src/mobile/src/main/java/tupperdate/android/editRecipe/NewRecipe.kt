@@ -5,9 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
-import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tupperdate.api.ImageApi
@@ -24,9 +22,8 @@ fun NewRecipe(
     val scope = LifecycleOwnerAmbient.current.lifecycleScope
 
     val placeholder = "https://via.placeholder.com/450"
-    val image = remember { imageApi.read() }.collectAsState(initial = null).value
-
-    val heroImage = image?.toDrawable(ContextAmbient.current.resources) ?: placeholder
+    val imageUri = remember { imageApi.read() }.collectAsState(initial = null).value
+    val heroImage = imageUri ?: placeholder
 
     val (recipe, setRecipe) = remember {
         mutableStateOf(
