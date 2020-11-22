@@ -33,7 +33,7 @@ import tupperdate.android.ui.modifier.overlap
  */
 @Composable
 fun RecipeDetail(
-    heroImage: String,
+    heroImage: Any,
     header: @Composable ColumnScope.() -> Unit,
     icons: @Composable () -> Unit,
     description: @Composable ColumnScope.() -> Unit,

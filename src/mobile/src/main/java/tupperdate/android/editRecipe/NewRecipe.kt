@@ -1,10 +1,13 @@
 package tupperdate.android.editRecipe
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
+import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tupperdate.api.ImageApi
@@ -18,7 +21,13 @@ fun NewRecipe(
     onCancelled: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val image = "https://via.placeholder.com/450" // TODO : Handle images.
+    val scope = LifecycleOwnerAmbient.current.lifecycleScope
+
+    val placeholder = "https://via.placeholder.com/450"
+    val image = remember { imageApi.read() }.collectAsState(initial = null).value
+
+    val heroImage = image?.toDrawable(ContextAmbient.current.resources) ?: placeholder
+
     val (recipe, setRecipe) = remember {
         mutableStateOf(
             EditableRecipe(
@@ -30,9 +39,9 @@ fun NewRecipe(
             )
         )
     }
-    val scope = LifecycleOwnerAmbient.current.lifecycleScope
+
     EditRecipe(
-        heroImageUrl = image,
+        heroImage = heroImage,
         recipe = recipe,
         onRecipeChange = setRecipe,
         onDeleteClick = { onCancelled() },
@@ -43,7 +52,7 @@ fun NewRecipe(
                 onSaved()
             }
         },
-        imageApi = imageApi,
+        onEdit = { imageApi.launch() },
         modifier = modifier,
     )
 }

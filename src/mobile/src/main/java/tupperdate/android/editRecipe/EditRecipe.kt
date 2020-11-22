@@ -1,6 +1,5 @@
 package tupperdate.android.editRecipe
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -8,16 +7,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asImageAsset
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
 import tupperdate.android.ui.material.BrandedButton
-import tupperdate.api.ImageApi
 
 /**
  * A data class representing the different fields that can be edited in a recipe.
@@ -33,7 +28,7 @@ data class EditableRecipe(
 /**
  * A composable that displays some editable fields for recipes.
  *
- * @param heroImageUrl the URL at which the image should be fetched.
+ * @param heroImage the image to display. Can be a drawable, URI, URL, ...
  * @param recipe the [EditableRecipe] to display.
  * @param onRecipeChange a callback called when the recipe is changed.
  * @param onDeleteClick a callback called when the delete button is pressed.
@@ -42,18 +37,16 @@ data class EditableRecipe(
  */
 @Composable
 fun EditRecipe(
-    heroImageUrl: String,
+    heroImage: Any,
     recipe: EditableRecipe,
     onRecipeChange: (EditableRecipe) -> Unit,
     onDeleteClick: () -> Unit,
     onSaveClick: () -> Unit,
-    imageApi: ImageApi,
+    onEdit: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val image = remember { imageApi.read() }.collectAsState(initial = null).value
-
     RecipeDetail(
-        heroImage = heroImageUrl,
+        heroImage = heroImage,
         header = {
             EditRecipeHeader(
                 title = recipe.title,
@@ -82,15 +75,9 @@ fun EditRecipe(
             )
         },
         onClose = onDeleteClick,
+        onEdit = onEdit,
         modifier = modifier,
-        onEdit = {
-            imageApi.launch()
-        },
     )
-
-    if (image != null) {
-        Image(image.asImageAsset())
-    }
 }
 
 /**

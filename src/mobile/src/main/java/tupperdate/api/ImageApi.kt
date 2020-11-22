@@ -15,13 +15,12 @@ interface ImageApi {
 }
 
 class ActualImageApi(activity: AppCompatActivity) : ImageApi {
+    private val image = MutableStateFlow<Image?>(null)
     private val registration = activity.registerForActivityResult(
         ActivityResultContracts.TakePicturePreview()
     ) {
         image.value = it
     }
-
-    private val image = MutableStateFlow<Image?>(null)
 
     override fun launch() {
         registration.launch(null)
