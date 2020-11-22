@@ -1,7 +1,6 @@
 package tupperdate.android
 
 import android.os.Parcelable
-import androidx.compose.runtime.Composable
 import kotlinx.android.parcel.Parcelize
 import tupperdate.android.utils.Navigator
 import tupperdate.api.RecipeApi
@@ -69,7 +68,7 @@ class LoggedInAction(private val navigator: Navigator<LoggedInDestination>) {
         navigator.back()
     }
 
-    val profile: ()->Unit={
+    val profile: () -> Unit = {
         navigator.navigate(LoggedInDestination.Profile)
     }
 }

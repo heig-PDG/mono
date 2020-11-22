@@ -29,9 +29,12 @@ fun Profile(
     onCloseClick: () -> Unit,
     onEditClick: () -> Unit,
     onSaveClick: () -> Unit,
-    onSignOutClick: () -> Unit
+    onSignOutClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    //it's funny to have Thor as default image, isnt'it ?
+    userImageUrl: String = "https://images.firstpost.com/wp-content/uploads/2019/04/thor380.jpg"
 ) {
-    ScrollableColumn(Modifier.fillMaxSize().padding(16.dp)) {
+    ScrollableColumn(modifier.fillMaxSize().padding(16.dp)) {
         Row(
             Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -39,7 +42,7 @@ fun Profile(
         ) {
             Text(
                 text = stringResource(id = R.string.profile_title),
-                style = MaterialTheme.typography.subtitle1
+                style = MaterialTheme.typography.h6
             )
             IconButton(onClick = { onCloseClick() }) {
                 Icon(
@@ -55,9 +58,10 @@ fun Profile(
         ) {
             Column(horizontalAlignment = (Alignment.CenterHorizontally)) {
                 CoilImage(
-                    data = "https://images.firstpost.com/wp-content/uploads/2019/04/thor380.jpg",
-                    modifier = Modifier.size(96.dp).clip(CircleShape)
+                    modifier = Modifier.size(96.dp)
+                        .clip(CircleShape)
                         .border(2.dp, Color.Gray, CircleShape),
+                    data = userImageUrl,
                     contentScale = ContentScale.Crop
                 )
                 Button(
@@ -69,22 +73,27 @@ fun Profile(
                     elevation = ButtonConstants.defaultElevation(0.dp)
                 ) {
                     Text(
-                        text = stringResource(id = R.string.profile_editpic), fontSize = 7.sp
+                        text = stringResource(id = R.string.profile_editpic),
+                        style = MaterialTheme.typography.overline
                     )
                 }
             }
         }
 
         OutlinedTextField(
-            value = "", onValueChange = { /*TODO do something with that*/ },
-            modifier = Modifier.fillMaxWidth().padding(bottom = 37.dp),
+            value = "",
+            onValueChange = { /*TODO do something with that*/ },
+            modifier = Modifier.fillMaxWidth()
+                .padding(bottom = 37.dp),
             label = { Text(stringResource(id = R.string.profile_name)) },
             placeholder = { Text(stringResource(id = R.string.profile_name_placeholder)) }
         )
 
         OutlinedTextField(
-            value = "", onValueChange = {/*TODO do something with that*/ },
-            modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp),
+            value = "",
+            onValueChange = { /*TODO do something with that*/ },
+            modifier = Modifier.fillMaxWidth()
+                .padding(bottom = 32.dp),
             label = { Text(stringResource(id = R.string.profile_email)) },
             placeholder = { Text(stringResource(id = R.string.profile_email_placeholder)) }
         )
