@@ -118,7 +118,7 @@ paths:
       operationId: getRecipes
       
       parameters:
-      - name: numRecipes
+      - name: count
         in: query
         description: number of recipes to fetch
         required: true

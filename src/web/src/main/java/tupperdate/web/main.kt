@@ -62,8 +62,10 @@ fun main() {
             json()
         }
         install(Routing) {
-            recipes(firestore)
-            users(firestore)
+            authenticate {
+                recipes(firestore)
+                users(firestore)
+            }
         }
     }
 
