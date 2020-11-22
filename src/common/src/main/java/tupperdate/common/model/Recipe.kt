@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 data class Recipe(
     val id: String? = null,
     val title: String? = null,
-    val description: String? = null,
+    val timestamp: String? = null,
     val added: Long? = null,
-    val foodPictureUrl: String? = null,
+    val picture: String? = null,
     val attributes: Map<String, Boolean> = emptyMap()
 )

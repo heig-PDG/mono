@@ -80,7 +80,9 @@ fun Routing.recipes(firestore: Firestore) {
             post("like/{recipeId}") {
                 try {
                     val chatCollection = firestore.collection("chats")
-                    val recipeId = call.parameters["recipeId"] ?: ""
+                    val recipeId = call.parameters["recipeId"]
+                        ?: throw BadRequestException("the request request body could not be parsed to a NewRecipe object")
+
                     var callerIsUser1 = true
 
                     var userId1 = call.firebaseAuthPrincipal?.uid
