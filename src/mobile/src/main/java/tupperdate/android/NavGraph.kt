@@ -8,6 +8,7 @@ import tupperdate.api.RecipeApi
 // DESTINATIONS AVAILABLE WHEN THE USER IS LOGGED OUT
 
 sealed class LoggedOutDestination : Parcelable {
+
     @Parcelize
     object BrandingPreview : LoggedOutDestination()
 
@@ -36,8 +37,6 @@ class LoggedOutAction(private val navigator: Navigator<LoggedOutDestination>) {
 // DESTINATIONS AVAILABLE WHEN THE USER IS LOGGED IN
 
 sealed class LoggedInDestination : Parcelable {
-    @Parcelize
-    object Profile : LoggedInDestination()
 
     @Parcelize
     object NewRecipe : LoggedInDestination()
@@ -68,10 +67,6 @@ class LoggedInAction(private val navigator: Navigator<LoggedInDestination>) {
 
     val back: () -> Unit = {
         navigator.back()
-    }
-
-    val profile: () -> Unit = {
-        navigator.navigate(LoggedInDestination.Profile)
     }
 
     val authenticationTesting: () -> Unit = {
