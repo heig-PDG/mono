@@ -21,8 +21,8 @@ class RealApi(activity: AppCompatActivity) : Api {
         install(JsonFeature)
         defaultRequest {
             // TODO : Use HTTPS.
-            host = "192.168.1.212"
-            port = 1234
+            host = "api.tupperdate.me"
+            port = 80
             contentType(ContentType.parse("application/json"))
         }
     }
