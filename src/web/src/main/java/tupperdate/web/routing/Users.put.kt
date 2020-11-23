@@ -8,10 +8,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import tupperdate.common.dto.MyUserDTO
 import tupperdate.web.auth.firebaseAuthPrincipal
-import tupperdate.web.exceptions.BadRequestException
-import tupperdate.web.exceptions.ForbiddenException
-import tupperdate.web.exceptions.UnauthorizedException
-import tupperdate.web.model.User
+import tupperdate.web.exceptions.statusException
 import tupperdate.web.model.toUser
 import tupperdate.web.util.await
 
@@ -21,9 +18,9 @@ import tupperdate.web.util.await
  * @param store the [Firestore] instance that is used.
  */
 fun Route.usersPut(store: Firestore) = put("{userId}") {
-    val pathUserId = call.parameters["userId"] ?: throw BadRequestException()
-    val authUserId = call.firebaseAuthPrincipal?.uid ?: throw UnauthorizedException()
-    if (authUserId != pathUserId) throw ForbiddenException()
+    val pathUserId = call.parameters["userId"] ?: statusException(HttpStatusCode.BadRequest)
+    val authUserId = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+    if (authUserId != pathUserId) throw statusException(HttpStatusCode.Forbidden)
 
     val doc = store.collection("users").document(authUserId)
     val dto = call.receive<MyUserDTO>()

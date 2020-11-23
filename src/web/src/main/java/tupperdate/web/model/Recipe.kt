@@ -31,10 +31,10 @@ fun NewRecipeDTO.toRecipe(id: String, picture: String): Recipe {
 fun Recipe.toRecipeDTO(): RecipeDTO {
     return RecipeDTO(
         id = requireNotNull(this.id),
-        title = this.title ?: "",
-        description = this.description ?: "",
+        title = this.title ?: "No title",
+        description = this.description ?: "No description",
         timestamp = this.timestamp ?: 0,
-        picture = this.picture ?: "",
+        picture = this.picture ?: "https://www.specialtyproduce.com/sppics/691.png",
         attributes = RecipeAttributesDTO(
             hasAllergens = this.attributes?.get("hasAllergens") ?: true,
             vegetarian = this.attributes?.get("vegetarian") ?: false,
