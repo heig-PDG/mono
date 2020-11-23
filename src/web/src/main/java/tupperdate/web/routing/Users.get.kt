@@ -18,27 +18,19 @@ import tupperdate.web.util.await
  * @param store the [Firestore] instance that is used.
  */
 fun Route.usersGet(store: Firestore) = get("{userId}") {
-    try {
-        val users = store.collection("users")
+    val pathUserId = call.parameters["userId"] ?: throw BadRequestException()
+    val authUserId = call.firebaseAuthPrincipal?.uid ?: throw UnauthorizedException()
 
-        val pathUserId = call.parameters["userId"] ?: throw BadRequestException()
-        val authUserId = call.firebaseAuthPrincipal?.uid ?: throw UnauthorizedException()
+    // TODO: Decide what happens if an authenticated user gets another user
+    val user = store.collection("users")
+        .document(pathUserId)
+        .get()
+        .await()
+        .toObject(UserDTO::class.java)
 
-        // TODO: Decide what happens if an authenticated user gets another user
-        val user = users
-            .document(pathUserId)
-            .get()
-            .await()
-            .toObject(UserDTO::class.java)
-
-        if (user != null) {
-            call.respond(HttpStatusCode.OK, Json.encodeToString(user))
-        } else {
-            call.respond(HttpStatusCode.NotFound)
-        }
-    } catch (exception: BadRequestException) {
-        call.respond(HttpStatusCode.BadRequest)
-    } catch (exception: UnauthorizedException) {
-        call.respond(HttpStatusCode.Unauthorized)
+    if (user != null) {
+        call.respond(HttpStatusCode.OK, Json.encodeToString(user))
+    } else {
+        call.respond(HttpStatusCode.NotFound)
     }
 }
