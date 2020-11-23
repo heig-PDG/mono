@@ -1,12 +1,10 @@
 package tupperdate.android
 
 import androidx.activity.OnBackPressedDispatcher
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
-import androidx.compose.ui.Modifier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import tupperdate.android.editRecipe.NewRecipe
@@ -14,6 +12,7 @@ import tupperdate.android.editRecipe.ViewRecipe
 import tupperdate.android.home.Home
 import tupperdate.android.onboarding.Onboarding
 import tupperdate.android.onboardingConfirmation.OnboardingConfirmation
+import tupperdate.android.profile.Profile
 import tupperdate.android.testing.AuthenticationTesting
 import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.utils.Navigator
@@ -129,6 +128,18 @@ private fun LoggedIn(
             onReturnClick = {},
             onRecipeDetailsClick = action.viewRecipe,
         )
+        LoggedInDestination.Profile -> Profile(
+            onCloseClick = {},
+            onEditClick = {},
+            onSaveClick = {},
+            onSignOutClick = {},
+            onFirstNameChanged = {},
+            onEmailChanged = {},
+            firstName = "Thor",
+            email = "thor@asgard.god",
+            userImageUrl = "https://images.firstpost.com/wp-content/uploads/2019/04/thor380.jpg"
+        )
+
         LoggedInDestination.AuthenticationTesting -> AuthenticationTesting(
             api = api,
         )

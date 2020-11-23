@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_title">Your profile</string>
+    <string name="profile_name">DISPLAY NAME</string>
+    <string name="profile_email">EMAIL</string>
+    <string name="profile_name_placeholder">Your first name</string>
+    <string name="profile_email_placeholder">Your email</string>
+    <string name="profile_editpic">EDIT</string>
+    <string name="profile_save">SAVE</string>
+    <string name="profile_sign_out">SIGN OUT</string>
+</resources>
