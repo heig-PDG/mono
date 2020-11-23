@@ -2,10 +2,7 @@ package tupperdate.android.chats
 
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.material.AmbientEmphasisLevels
 import androidx.compose.material.MaterialTheme.typography
@@ -58,7 +55,12 @@ private fun Conversation(
         Arrangement.spacedBy(16.dp),
         Alignment.CenterVertically
     ) {
-        ProfilePicture(image, highlighted)
+        ProfilePicture(
+            image,
+            highlighted,
+            Modifier.size(56.dp)
+        )
+
         val emphasis = if (highlighted) AmbientEmphasisLevels.current.high
         else AmbientEmphasisLevels.current.medium
         ProvideEmphasis(emphasis) {
