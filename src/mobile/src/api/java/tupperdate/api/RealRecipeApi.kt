@@ -1,18 +1,22 @@
 package tupperdate.api
 
+import androidx.appcompat.app.AppCompatActivity
 import io.ktor.client.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import org.apache.commons.codec.binary.Base64
 import tupperdate.api.dto.asRecipe
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.common.dto.RecipeAttributesDTO
 import tupperdate.common.dto.RecipeDTO
+import java.io.File
 
 class RealRecipeApi(
     private val client: HttpClient,
+    private val activity: AppCompatActivity,
 ) : RecipeApi {
 
     override fun like(recipe: RecipeApi.Recipe) {
@@ -47,6 +51,15 @@ class RealRecipeApi(
     ) {
         // TODO : Handle exceptions.
         client.post<Unit>("/recipes") {
+            // TODO : Improve client-side image handling.
+            // TODO : Compress images.
+            val image = File(File(activity.filesDir, "images"), "capture.jpg")
+            val imageData = if (image.exists()) {
+                val array = image.inputStream().buffered().readBytes()
+                Base64.encodeBase64String(array)
+            } else {
+                null
+            }
             body = NewRecipeDTO(
                 title = title,
                 description = description,
@@ -54,7 +67,8 @@ class RealRecipeApi(
                     vegetarian = vegetarian,
                     hasAllergens = hasAllergens,
                     warm = warm,
-                )
+                ),
+                imageBase64 = imageData,
             )
         }
     }
