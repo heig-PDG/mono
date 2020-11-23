@@ -1,25 +1,23 @@
 package tupperdate.android.chats
 
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumnFor
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.AmbientEmphasisLevels
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.ProvideEmphasis
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow.Ellipsis
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
-import dev.chrisbanes.accompanist.coil.CoilImage
 import tupperdate.android.ui.TupperdateTheme
-import tupperdate.android.ui.modifier.dotted
+import tupperdate.android.ui.components.ProfilePicture
 
 data class Conversation(
     val id: String,
@@ -72,21 +70,6 @@ private fun Conversation(
             }
         }
     }
-}
-
-@Composable
-private fun ProfilePicture(
-    image: Any,
-    highlighted: Boolean,
-    modifier: Modifier = Modifier,
-) {
-    CoilImage(
-        image, modifier
-            .dotted(highlighted)
-            .clip(CircleShape)
-            .size(56.dp)
-            .border(4.dp, Color.Black.copy(alpha = 0.2f), CircleShape)
-    )
 }
 
 @Preview(showBackground = true)
