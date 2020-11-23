@@ -60,7 +60,7 @@ private fun Conversation(
         Arrangement.spacedBy(16.dp),
         Alignment.CenterVertically
     ) {
-        ConversationIcon(image, highlighted)
+        ProfilePicture(image, highlighted)
         val emphasis = if (highlighted) AmbientEmphasisLevels.current.high
         else AmbientEmphasisLevels.current.medium
         ProvideEmphasis(emphasis) {
@@ -75,7 +75,7 @@ private fun Conversation(
 }
 
 @Composable
-private fun ConversationIcon(
+private fun ProfilePicture(
     image: Any,
     highlighted: Boolean,
     modifier: Modifier = Modifier,
