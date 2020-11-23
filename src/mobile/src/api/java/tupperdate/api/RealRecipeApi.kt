@@ -1,27 +1,19 @@
 package tupperdate.api
 
 import io.ktor.client.*
-import io.ktor.client.features.*
-import io.ktor.client.features.json.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import tupperdate.common.model.Recipe
+import tupperdate.api.dto.asRecipe
+import tupperdate.common.dto.NewRecipeDTO
+import tupperdate.common.dto.RecipeAttributesDTO
+import tupperdate.common.dto.RecipeDTO
 
-class RealRecipeApi(private val auth: RealAuthenticationApi) : RecipeApi {
-
-    private val client = HttpClient {
-        install(JsonFeature)
-        // TODO : Use some top-level variables, a build variant or some env variables.
-        defaultRequest {
-            // TODO : Use HTTPS.
-            host = "api.tupperdate.me"
-            port = 80
-        }
-    }
+class RealRecipeApi(
+    private val client: HttpClient,
+) : RecipeApi {
 
     override fun like(recipe: RecipeApi.Recipe) {
     }
@@ -32,22 +24,12 @@ class RealRecipeApi(private val auth: RealAuthenticationApi) : RecipeApi {
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun stack(): Flow<List<RecipeApi.Recipe>> {
         // TODO : Invalidate requests with server-sent notifications.
-        return auth.auth
-            .filterNotNull()
-            .flatMapLatest { auth ->
-                val recipes = client.get<List<Recipe>>("/recipes/4") {
-                    header("X-TUPPERDATE-AUTH", auth.token)
-                }
-                // TODO : Factorize this.
-                val mapped = recipes.map {
-                    RecipeApi.Recipe(
-                        title = it.title ?: "",
-                        description = it.title ?: "",
-                        pictureUrl = it.title ?: "",
-                    )
-                }
-                flowOf(mapped)
+        return flow {
+            val recipes = client.get<List<RecipeDTO>>("/recipes") {
+                parameter("count", 4)
             }
+            emit(recipes.map(RecipeDTO::asRecipe))
+        }
     }
 
     override val backStackEnabled: Flow<Boolean>
@@ -56,6 +38,24 @@ class RealRecipeApi(private val auth: RealAuthenticationApi) : RecipeApi {
     override fun back() {
     }
 
-    override suspend fun create(title: String, description: String) {
+    override suspend fun create(
+        title: String,
+        description: String,
+        vegetarian: Boolean,
+        warm: Boolean,
+        hasAllergens: Boolean
+    ) {
+        // TODO : Handle exceptions.
+        client.post<Unit>("/recipes") {
+            body = NewRecipeDTO(
+                title = title,
+                description = description,
+                attributes = RecipeAttributesDTO(
+                    vegetarian = vegetarian,
+                    hasAllergens = hasAllergens,
+                    warm = warm,
+                )
+            )
+        }
     }
 }

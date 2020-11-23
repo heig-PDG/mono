@@ -2,13 +2,31 @@ package tupperdate.api
 
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import io.ktor.client.*
+import io.ktor.client.features.*
+import io.ktor.client.features.auth.*
+import io.ktor.client.features.json.*
+import io.ktor.client.request.*
+import io.ktor.http.*
+import tupperdate.api.auth.firebase
 
-class RealApi(owner: AppCompatActivity) : Api {
-    override val authentication: RealAuthenticationApi
-    override val recipe: RealRecipeApi
+class RealApi(activity: AppCompatActivity) : Api {
 
-    init {
-        authentication = RealAuthenticationApi(owner, FirebaseAuth.getInstance())
-        recipe = RealRecipeApi(authentication)
+    override val authentication = RealAuthenticationApi(activity, FirebaseAuth.getInstance())
+
+    private val http = HttpClient {
+        install(Auth) {
+            firebase(authentication)
+        }
+        install(JsonFeature)
+        defaultRequest {
+            // TODO : Use HTTPS.
+            host = "api.tupperdate.me"
+            port = 80
+            contentType(ContentType.parse("application/json"))
+        }
     }
+
+    override val recipe = RealRecipeApi(http)
+    override val images = ActualImagePickerApi(activity)
 }

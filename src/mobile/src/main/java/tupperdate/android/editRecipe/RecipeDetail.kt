@@ -33,7 +33,7 @@ import tupperdate.android.ui.modifier.overlap
  */
 @Composable
 fun RecipeDetail(
-    heroImage: String,
+    heroImage: Any,
     header: @Composable ColumnScope.() -> Unit,
     icons: @Composable () -> Unit,
     description: @Composable ColumnScope.() -> Unit,
@@ -41,11 +41,12 @@ fun RecipeDetail(
     modifier: Modifier = Modifier,
     onEdit: (() -> Unit)? = null,
 ) {
+
     Column(modifier) {
         Box {
             CoilImage(
-                heroImage,
-                Modifier
+                data = heroImage,
+                modifier = Modifier
                     .preferredHeight(290.dp)
                     .fillMaxWidth(),
                 contentScale = ContentScale.Crop,

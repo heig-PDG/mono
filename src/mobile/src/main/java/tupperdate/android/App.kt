@@ -13,6 +13,7 @@ import tupperdate.android.home.Home
 import tupperdate.android.onboarding.Onboarding
 import tupperdate.android.onboardingConfirmation.OnboardingConfirmation
 import tupperdate.android.profile.Profile
+import tupperdate.android.testing.AuthenticationTesting
 import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.utils.Navigator
 import tupperdate.api.Api
@@ -108,12 +109,13 @@ private fun LoggedIn(
 ) {
     when (destination) {
         LoggedInDestination.NewRecipe -> NewRecipe(
-            api = api.recipe,
+            recipeApi = api.recipe,
+            imagePickerApi = api.images,
             onSaved = action.back,
             onCancelled = action.back,
         )
         is LoggedInDestination.ViewRecipe -> ViewRecipe(
-            api = api.recipe,
+            recipeApi = api.recipe,
             recipe = destination.recipe,
             onBack = action.back,
         )
@@ -121,18 +123,25 @@ private fun LoggedIn(
             recipeApi = api.recipe,
             // TODO add behaviours on these buttons
             onChatClick = {},
-            onProfileClick = {},
+            onProfileClick = action.authenticationTesting, // TODO : Have a real user profile.
             onRecipeClick = action.newRecipe,
             onReturnClick = {},
             onRecipeDetailsClick = action.viewRecipe,
         )
-
         LoggedInDestination.Profile -> Profile(
             onCloseClick = {},
             onEditClick = {},
             onSaveClick = {},
             onSignOutClick = {},
+            onFirstNameChanged = {},
+            onEmailChanged = {},
+            firstName = "Thor",
+            email = "thor@asgard.god",
             userImageUrl = "https://images.firstpost.com/wp-content/uploads/2019/04/thor380.jpg"
+        )
+
+        LoggedInDestination.AuthenticationTesting -> AuthenticationTesting(
+            api = api,
         )
     }
 }
@@ -155,12 +164,10 @@ private fun LoggedOut(
         LoggedOutDestination.Onboarding -> Onboarding(
             auth = api.authentication,
             verificationScreen = action.viewConfirmation,
-            loggedInScreen = { /* Ignored. */ },
         )
         LoggedOutDestination.OnboardingConfirmation -> OnboardingConfirmation(
             auth = api.authentication,
             onReturnClick = action.back,
-            onLoggedIn = { /* Ignored. */ },
         )
     }
 }

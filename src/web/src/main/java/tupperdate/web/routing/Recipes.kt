@@ -2,73 +2,107 @@ package tupperdate.web.routing
 
 import com.google.cloud.firestore.Firestore
 import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.http.auth.*
-import io.ktor.request.*
+import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
-import tupperdate.common.model.Recipe
-import tupperdate.common.model.User
+import tupperdate.common.model.Chat
 import tupperdate.web.auth.firebaseAuthPrincipal
-import tupperdate.web.autoId
+import tupperdate.web.exceptions.BadRequestException
+import tupperdate.web.exceptions.ForbiddenException
+import tupperdate.web.exceptions.UnauthorizedException
 import tupperdate.web.util.await
 
-fun Routing.recipes(firestore: Firestore) {
+fun Route.recipes(firestore: Firestore) {
     route("/recipes") {
-        val recipeCollectionGroup = firestore.collectionGroup("recipes")
+        val recipes = firestore.collectionGroup("recipes")
 
-        /****************************************************************
-         *                           GET                                *
-         ****************************************************************/
-
-        /**
-         * Get a number of recipes ordered by date added
-         * @param: numRecipes as an int in the endpoint path
-         */
-        get("{numRecipes}") {
-            val numRecipes = (call.parameters["numRecipes"] ?: "").toInt()
-            val recipes = recipeCollectionGroup
-                .orderBy("added")
-                .limit(numRecipes)
-                .get()
-                .await()
-                .toList()
-
-            call.respond(recipes.map { it.toObject(Recipe::class.java) })
-        }
-
-        /****************************************************************
-         *                            POST                              *
-         ****************************************************************/
+        // TODO (alex) : Provide the store differently ?
+        // TODO (matt) : Apply a similar pattern for /like and /dislike endpoints.
+        recipesPost(firestore)
+        recipesGet(firestore)
 
         /**
-         * Post a recipe for the authenticated user
+         * Post a like to a recipe as an authenticated user
+         * @authenticated
          */
-        authenticate {
-            post {
-                val userCollection = firestore.collection("users")
-                val userId = call.firebaseAuthPrincipal?.uid ?: ""
+        put("like/{recipeId}") {
+            try {
+                val chatCollection = firestore.collection("chats")
+                var userId1 = call.firebaseAuthPrincipal?.uid
+                    ?: throw UnauthorizedException()
 
+                val recipeId = call.parameters["recipeId"]
+                    ?: throw BadRequestException("the request request body could not be parsed to a NewRecipe object")
 
-                val userDoc = userCollection.document(userId)
+                var userId2 =
+                    recipes
+                        .whereEqualTo("id", recipeId)
+                        .limit(1)
+                        .get()
+                        .await()
+                        .documents[0]
+                        .reference
+                        .parent
+                        .id
 
-                // Generate document with auto-id
-                val recipeDoc = userDoc.collection("recipes").document()
+                if (userId1 == userId2) {
+                    throw ForbiddenException("A user can't like its own recipe")
+                }
 
-                // Get post data
-                val json = call.receiveText()
+                // Order userId1 and userId2 in alphanumerical order (1 is inferior to 2)
+                var callerIsUser1 = true
+                if (userId1 > userId2) {
+                    callerIsUser1 = false
 
-                // Parse JSON (and add auto-generated id to it)
-                val recipe = Json.decodeFromString<Recipe>(json)
-                    .copy(
-                        id = recipeDoc.id,
-                        added = System.currentTimeMillis() / 1000,
+                    val temp = userId1
+                    userId1 = userId2
+                    userId2 = temp
+                }
+
+                // Get chat document or create it
+                val chatDoc = chatCollection.document(userId1 + "_" + userId2)
+
+                var chatObject = chatDoc.get().await().toObject(Chat::class.java)
+                    ?: Chat(
+                        id = chatDoc.id,
+                        userId1 = userId1,
+                        userId2 = userId2,
+                        user1LikedRecipes = emptyList(),
+                        user2LikedRecipes = emptyList(),
                     )
 
-                recipeDoc.set(recipe)
+                // add liked recipe to correct list
+                chatObject =
+                    if (callerIsUser1) {
+                        chatObject.copy(
+                            user1LikedRecipes = (chatObject.user1LikedRecipes
+                                ?: emptyList()) + recipeId
+                        )
+                    } else {
+                        chatObject.copy(
+                            user2LikedRecipes = (chatObject.user2LikedRecipes
+                                ?: emptyList()) + recipeId
+                        )
+                    }
+
+                chatDoc.set(chatObject)
+
+                call.respond(HttpStatusCode.OK)
+            } catch (exception: UnauthorizedException) {
+                call.respond(HttpStatusCode.Unauthorized)
+            } catch (exception: BadRequestException) {
+                call.respond(HttpStatusCode.BadRequest)
+            } catch (exception: ForbiddenException) {
+                call.respond(HttpStatusCode.Forbidden)
             }
+        }
+
+        /**
+         * Post a dislike to a recipe as an authenticated user
+         * @authenticated
+         */
+        put("dislike/{recipeId}") {
+            call.respond(HttpStatusCode.NotImplemented)
         }
     }
 }

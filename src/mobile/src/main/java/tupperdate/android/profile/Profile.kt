@@ -129,7 +129,7 @@ fun Profile(
 
 @Preview
 @Composable
-fun ProfilePreview() {
+private fun ProfilePreview() {
     TupperdateTheme {
         Profile(
             onCloseClick = {},

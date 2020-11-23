@@ -9,10 +9,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.drawWithCache
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.LinearGradient
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -20,27 +17,9 @@ import androidx.ui.tooling.preview.Preview
 import dev.chrisbanes.accompanist.coil.CoilImage
 import tupperdate.android.R
 import tupperdate.android.ui.TupperdateTheme
+import tupperdate.android.ui.modifier.shade
 import tupperdate.api.RecipeApi
 
-/**
- * A custom [Modifier] that draws a shade over the picture, using a cached draw layer. The
- * associated [LinearGradient] will only be re-created when the dimensions of the underlying
- * composable are invalidated.
- */
-private fun Modifier.shade(): Modifier = this then Modifier.drawWithCache {
-    val gradient = LinearGradient(
-        listOf(Color.Transparent, Color.Black.copy(alpha = 0.8f)),
-        startX = size.width / 2,
-        startY = 0f,
-        endX = size.width / 2,
-        endY = size.height,
-        tileMode = TileMode.Clamp,
-    )
-    onDrawWithContent {
-        drawContent()
-        drawRect(gradient)
-    }
-}
 
 /**
  * A composable that displays a certain recipe.

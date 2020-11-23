@@ -1,22 +1,25 @@
 package tupperdate.android.testing
 
+import android.widget.Toast
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ClipboardManagerAmbient
+import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.lifecycleScope
-import androidx.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
 import tupperdate.api.Api
 import tupperdate.api.AuthenticationApi
-import tupperdate.api.api
 
 @Composable
-private fun AuthenticationTesting(
+fun AuthenticationTesting(
     api: Api,
     modifier: Modifier = Modifier,
 ) {
@@ -32,6 +35,7 @@ private fun AuthenticationTesting(
         mutableStateOf<AuthenticationApi.VerificationResult?>(null)
     }
     val profile by remember { api.authentication.profile }.collectAsState(null)
+    val authInfo by remember { api.authentication.auth }.collectAsState(null)
 
     Column(modifier) {
         TextField(
@@ -59,6 +63,7 @@ private fun AuthenticationTesting(
             }
         }) { Text("Verify code") }
         Profile(profile)
+        JWTToken(authInfo?.token ?: "Not available")
     }
 }
 
@@ -100,11 +105,25 @@ private fun Profile(
 }
 
 @Composable
-@Preview
-private fun AuthenticationTestingPreview() {
-    // Use a real device to launch the preview.
-    // val owner = LifecycleOwnerAmbient.current
-    // val api = remember { owner.api() }
-    //
-    // AuthenticationTesting(api, Modifier.fillMaxSize())
+private fun JWTToken(
+    token: String,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier) {
+        Text("JWT Token", style = MaterialTheme.typography.overline)
+        Text(
+            token,
+            style = MaterialTheme.typography.body1,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        val clipboard = ClipboardManagerAmbient.current
+        val context = ContextAmbient.current
+        Button(onClick = {
+            clipboard.setText(AnnotatedString(token))
+            Toast.makeText(context, "JWT token in clipboard", Toast.LENGTH_SHORT).show()
+        }) {
+            Text("Copy to clipboard")
+        }
+    }
 }
