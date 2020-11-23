@@ -5,3 +5,5 @@ class UnauthorizedException(message: String? = "Unauthorized: the access token i
 class BadRequestException(message: String? = "Bad Request") : Exception(message)
 
 class ForbiddenException(message: String? = "Forbidden") : Exception(message)
+
+class NotFoundException(message: String? = "Not Found") : Exception(message)
