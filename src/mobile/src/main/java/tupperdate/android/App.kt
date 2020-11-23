@@ -1,7 +1,4 @@
-import tupperdate.android.LoggedInAction
-import tupperdate.android.LoggedInDestination
-import tupperdate.android.LoggedOutAction
-import tupperdate.android.LoggedOutDestination
+//import tupperdate.android.testing.AuthenticationTesting
 import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -9,13 +6,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import tupperdate.android.LoggedInAction
+import tupperdate.android.LoggedInDestination
+import tupperdate.android.LoggedOutAction
+import tupperdate.android.LoggedOutDestination
 import tupperdate.android.editRecipe.NewRecipe
 import tupperdate.android.editRecipe.ViewRecipe
 import tupperdate.android.home.Home
 import tupperdate.android.onboarding.Onboarding
 import tupperdate.android.onboardingConfirmation.OnboardingConfirmation
 import tupperdate.android.profile.Profile
-//import tupperdate.android.testing.AuthenticationTesting
 import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.utils.Navigator
 import tupperdate.api.Api
@@ -109,7 +109,7 @@ private fun LoggedIn(
     action: LoggedInAction,
     destination: LoggedInDestination,
 ) {
-    val profile = remember { api.users.profile }.collectAsState(initial = null).value
+    val profile = remember { api.users.profile() }.collectAsState(initial = null).value
 
     when (destination) {
         is LoggedInDestination.NewRecipe -> NewRecipe(
@@ -133,16 +133,12 @@ private fun LoggedIn(
             onRecipeDetailsClick = action.viewRecipe,
         )
         is LoggedInDestination.Profile ->
-            if (profile != null) {
-                Profile(
-                    profile = profile,
-                    onCloseClick = {},
-                    onSaveClick = {},
-                    onSignOutClick = {},
-                )
-            } else {
-                action.back
-            }
+            Profile(
+                userApi = api.users,
+                profile = profile ?: api.users.emptyProfile,
+                onCloseClick = action.back,
+                onSignOutClick = {},
+            )
 
         /*
         is LoggedInDestination.AuthenticationTesting -> LoggedInDestination.AuthenticationTesting(

@@ -15,10 +15,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import androidx.ui.tooling.preview.Preview
+import kotlinx.coroutines.launch
 import tupperdate.android.R
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.components.ProfilePicture
@@ -27,14 +30,16 @@ import tupperdate.api.UserApi
 
 @Composable
 fun Profile(
+    userApi: UserApi,
     profile: UserApi.Profile,
     onCloseClick: () -> Unit,
-    onSaveClick: () -> Unit,
     onSignOutClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val scope = LifecycleOwnerAmbient.current.lifecycleScope
+
     val initName = profile.displayName ?: ""
-    val (name, setName) = remember { mutableStateOf("") }
+    val (name, setName) = remember { mutableStateOf(initName) }
 
     val profilePic = profile.profileImageUrl ?: "https://via.placeholder.com/150"
 
@@ -44,7 +49,10 @@ fun Profile(
         onNameChange = setName,
         onCloseClick = onCloseClick,
         onEditClick = {},
-        onSaveClick = onSaveClick,
+        onSaveClick = {
+            scope.launch { userApi.updateProfile(name) }
+            onCloseClick()
+        },
         onSignOutClick = onSignOutClick,
         modifier = modifier,
     )

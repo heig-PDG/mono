@@ -1,5 +1,6 @@
 package tupperdate.api
 
+import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.flow.Flow
@@ -12,24 +13,29 @@ class RealUserApi(
     private val uid: Flow<String?>,
 ) : UserApi {
 
-    override val profile: Flow<UserApi.Profile?>
-        get() = uid.map { uid ->
-            try {
-                val currentProfile = client.get<UserDTO>("/users/$uid")
+    override fun profile(): Flow<UserApi.Profile?>
+        = uid.map { uid ->
+                try {
+                    val currentProfile = client.get<UserDTO>("/users/$uid")
 
-                return@map UserApi.Profile(
-                    displayName = currentProfile.displayName,
-                    profileImageUrl = currentProfile.picture,
-                )
-            } catch (t: Throwable) {
-                return@map null
+                    return@map UserApi.Profile(
+                        displayName = currentProfile.displayName,
+                        profileImageUrl = currentProfile.picture,
+                    )
+                } catch (t: Throwable) {
+                    Log.d("UserDebug", t.message.toString())
+                    return@map null
+                }
             }
-        }
 
     override suspend fun updateProfile(name: String) {
-        uid.map {
-            client.put<Unit>("/users/$uid") {
+        uid.map { uid ->
+            try {
+            client.put<UserDTO>("/users/$uid") {
                 body = MyUserDTO(name)
+            }
+            } catch (t: Throwable) {
+                Log.d("UserDebug", t.message.toString())
             }
         }
     }
