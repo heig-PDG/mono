@@ -9,7 +9,7 @@ import io.ktor.routing.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import tupperdate.common.dto.MyUserDTO
-import tupperdate.common.model.User
+import tupperdate.web.model.User
 import tupperdate.web.auth.firebaseAuthPrincipal
 import tupperdate.web.exceptions.*
 

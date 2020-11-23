@@ -5,7 +5,7 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import tupperdate.common.model.Chat
+import tupperdate.web.model.Chat
 import tupperdate.web.auth.firebaseAuthPrincipal
 import tupperdate.web.exceptions.BadRequestException
 import tupperdate.web.exceptions.ForbiddenException
