@@ -6,12 +6,14 @@ import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 import tupperdate.common.dto.MyUserDTO
-import tupperdate.web.model.User
 import tupperdate.web.auth.firebaseAuthPrincipal
-import tupperdate.web.exceptions.*
+import tupperdate.web.exceptions.BadRequestException
+import tupperdate.web.exceptions.ForbiddenException
+import tupperdate.web.exceptions.UnauthorizedException
+import tupperdate.web.model.User
+import tupperdate.web.model.toUser
+import tupperdate.web.util.await
 
 /**
  * Post a new user given an authentication token
@@ -19,31 +21,14 @@ import tupperdate.web.exceptions.*
  * @param store the [Firestore] instance that is used.
  */
 fun Route.usersPut(store: Firestore) = put("{userId}") {
-    try {
-        val users = store.collection("users")
+    val pathUserId = call.parameters["userId"] ?: throw BadRequestException()
+    val authUserId = call.firebaseAuthPrincipal?.uid ?: throw UnauthorizedException()
+    if (authUserId != pathUserId) throw ForbiddenException()
 
-        val pathUserId = call.parameters["userId"] ?: throw BadRequestException()
-        val authUserId = call.firebaseAuthPrincipal?.uid ?: throw UnauthorizedException()
-        if (authUserId != pathUserId) throw ForbiddenException()
+    val doc = store.collection("users").document(authUserId)
+    val dto = call.receive<MyUserDTO>()
+    val user = dto.toUser(doc.id, "", "https://thispersondoesnotexist.com/image")
 
-        val userDocument = users.document(authUserId)
-
-        val json = call.receiveText()
-
-        val myUserDTO = Json.decodeFromString<MyUserDTO>(json)
-
-        val user = User(
-            id = authUserId,
-            displayName = myUserDTO.displayName,
-        )
-        // Add user data to newly generated document
-        userDocument.set(user)
-
-        call.respond(HttpStatusCode.OK)
-
-    } catch (exception: UnauthorizedException) {
-        call.respond(HttpStatusCode.Unauthorized)
-    } catch (exception: ForbiddenException) {
-        call.respond(HttpStatusCode.Forbidden)
-    }
+    doc.set(user).await()
+    call.respond(HttpStatusCode.OK)
 }
