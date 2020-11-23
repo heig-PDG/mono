@@ -12,6 +12,9 @@ dependencies {
     // Kotlin libraries
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0"
     api "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
+
+    // Apache libraries
+    api "commons-codec:commons-codec:1.15"
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {

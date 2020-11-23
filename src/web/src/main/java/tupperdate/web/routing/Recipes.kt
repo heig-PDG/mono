@@ -1,13 +1,14 @@
 package tupperdate.web.routing
 
-import com.google.cloud.firestore.Firestore
+import com.google.firebase.FirebaseApp
+import com.google.firebase.cloud.FirestoreClient
 import io.ktor.routing.*
 
-fun Route.recipes(store: Firestore) {
+fun Route.recipes(firebase: FirebaseApp) {
     route("/recipes") {
         // TODO (alex) : Provide the store differently ?
-        recipesPost(store)
-        recipesGet(store)
-        recipesPut(store)
+        recipesPost(firebase)
+        recipesGet(FirestoreClient.getFirestore(firebase))
+        recipesPut(FirestoreClient.getFirestore(firebase))
     }
 }
