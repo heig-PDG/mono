@@ -4,8 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
+import androidx.compose.ui.platform.LifecycleOwnerAmbient
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import tupperdate.android.LoggedInAction
 import tupperdate.android.LoggedInDestination
 import tupperdate.android.LoggedOutAction
@@ -20,6 +23,7 @@ import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.utils.Navigator
 import tupperdate.api.Api
 import tupperdate.api.AuthenticationApi
+import tupperdate.api.UserApi
 
 /**
  * A sealed class representing the different states that the user interface can be in.
@@ -36,7 +40,7 @@ private sealed class UiState {
     object LoggedOut : UiState()
 
     /**
-     * The user is logged in and has a valid [AuthenticationApi.Profile].
+     * The user is logged in and has a valid [UserApi.Profile].
      */
     object LoggedIn : UiState()
 }
@@ -49,7 +53,6 @@ private sealed class UiState {
 private fun Flow<Boolean?>.collectAsState(): UiState =
     map { if (it == null) UiState.LoggedOut else UiState.LoggedIn }
         .collectAsState(UiState.Loading).value
-
 
 /**
  * The main composable of the app.
@@ -82,6 +85,11 @@ fun TupperdateApp(
         }
 
         is UiState.LoggedIn -> {
+            val scope = LifecycleOwnerAmbient.current.lifecycleScope
+            scope.launch {
+                api.users.updateProfile()
+            }
+
             // The user is currently logged in. Start at the Home.
             val nav = rememberSavedInstanceState(saver = Navigator.saver(backDispatcher)) {
                 Navigator<LoggedInDestination>(
@@ -109,7 +117,7 @@ private fun LoggedIn(
     action: LoggedInAction,
     destination: LoggedInDestination,
 ) {
-    val profile = remember { api.users.profile() }.collectAsState(initial = null).value
+    val profile = remember { api.users.profile }.collectAsState(initial = null).value
 
     when (destination) {
         is LoggedInDestination.NewRecipe -> NewRecipe(

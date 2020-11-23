@@ -50,7 +50,7 @@ fun Profile(
         onCloseClick = onCloseClick,
         onEditClick = {},
         onSaveClick = {
-            scope.launch { userApi.updateProfile(name) }
+            scope.launch { userApi.putProfile(name) }
             onCloseClick()
         },
         onSignOutClick = onSignOutClick,

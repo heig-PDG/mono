@@ -20,10 +20,15 @@ interface UserApi {
     /**
      * A [Flow] that returns the currently connected user [Profile].
      */
-    fun profile(): Flow<Profile?>
+    val profile: Flow<Profile?>
+
+    /**
+     * A function that will update the local [Profile] value
+     */
+    suspend fun updateProfile()
 
     /**
      * A method that will allow us to update our [Profile]
      */
-    suspend fun updateProfile(name: String)
+    suspend fun putProfile(name: String)
 }
