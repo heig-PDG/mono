@@ -13,14 +13,13 @@ data class Recipe(
     val attributes: Map<String, Boolean>? = null,
 )
 
-fun NewRecipeDTO.toRecipe(id: String, picture: String = ""): Recipe {
+fun NewRecipeDTO.toRecipe(id: String, picture: String): Recipe {
     return Recipe(
         id = id,
         title = this.title,
         description = this.description,
         timestamp = System.currentTimeMillis() / 1000,
-        // TODO: Handle pictures
-        picture = null,
+        picture = picture,
         attributes = mapOf(
             "hasAllergens" to this.attributes.hasAllergens,
             "vegetarian" to this.attributes.vegetarian,
