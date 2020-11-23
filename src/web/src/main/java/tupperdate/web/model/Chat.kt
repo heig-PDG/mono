@@ -1,8 +1,5 @@
-package tupperdate.common.model
+package tupperdate.web.model
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class Chat (
     val id: String? = null,
     val userId1 : String? = null,

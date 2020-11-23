@@ -10,12 +10,13 @@ import com.google.firebase.cloud.FirestoreClient
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
-import io.ktor.http.auth.*
+import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.serialization.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import tupperdate.web.auth.firebase
+import tupperdate.web.exceptions.registerException
 import tupperdate.web.routing.recipes
 import tupperdate.web.routing.users
 
@@ -61,6 +62,11 @@ fun main() {
         install(ContentNegotiation) {
             json()
         }
+
+        install(StatusPages) {
+            registerException()
+        }
+
         install(Routing) {
             authenticate {
                 recipes(firestore)
