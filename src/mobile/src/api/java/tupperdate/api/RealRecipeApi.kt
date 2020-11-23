@@ -1,5 +1,6 @@
 package tupperdate.api
 
+import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -45,17 +46,20 @@ class RealRecipeApi(
         warm: Boolean,
         hasAllergens: Boolean,
     ) {
-        // TODO : Handle exceptions.
-        client.post<Unit>("/recipes") {
-            body = NewRecipeDTO(
-                title = title,
-                description = description,
-                attributes = RecipeAttributesDTO(
-                    vegetarian = vegetarian,
-                    hasAllergens = hasAllergens,
-                    warm = warm,
+        try {
+            client.post<Unit>("/recipes") {
+                body = NewRecipeDTO(
+                    title = title,
+                    description = description,
+                    attributes = RecipeAttributesDTO(
+                        vegetarian = vegetarian,
+                        hasAllergens = hasAllergens,
+                        warm = warm,
+                    )
                 )
-            )
+            }
+        } catch (t: Throwable) {
+            Log.d("UserDebug", t.message.toString())
         }
     }
 }

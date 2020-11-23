@@ -123,8 +123,7 @@ private fun LoggedIn(
         is LoggedInDestination.NewRecipe -> NewRecipe(
             recipeApi = api.recipe,
             imagePickerApi = api.images,
-            onSaved = action.back,
-            onCancelled = action.back,
+            onBack = action.back,
         )
         is LoggedInDestination.ViewRecipe -> ViewRecipe(
             recipeApi = api.recipe,
