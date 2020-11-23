@@ -11,6 +11,15 @@ import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.coil.CoilImage
 import tupperdate.android.ui.modifier.dotted
 
+/**
+ * A [Composable] which is used to display a user profile picture in a branded way.
+ * Our branding consists of having the image in a circle with a small grey border around it.
+ *
+ * If the [ProfilePicture] is highlighted, a small blue dot will be shown.
+ *
+ * @param image Is a value that can be displayed by a [CoilImage]
+ * @param highlighted true if a small blue dot should be shown
+ */
 @Composable
 fun ProfilePicture(
     image: Any,
