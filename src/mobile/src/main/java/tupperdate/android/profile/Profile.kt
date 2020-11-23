@@ -39,7 +39,7 @@ fun Profile(
     val scope = LifecycleOwnerAmbient.current.lifecycleScope
 
     val initName = profile.displayName ?: ""
-    val (name, setName) = remember { mutableStateOf(initName) }
+    val (name, setName) = remember(profile) { mutableStateOf(initName) }
 
     val profilePic = profile.profileImageUrl ?: "https://via.placeholder.com/150"
 

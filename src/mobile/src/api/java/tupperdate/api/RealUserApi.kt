@@ -41,14 +41,24 @@ class RealUserApi(
 
     override suspend fun putProfile(name: String) {
         val currentUid = uid.filterNotNull().first()
+        val oldProfile = mutableProfile.value
 
         try {
-            val userDTO : UserDTO = client.put("/users/$currentUid") {
+            // Update locally
+            mutableProfile.value = UserApi.Profile(
+                name,
+                oldProfile?.profileImageUrl,
+            )
+
+            // Send to server
+            client.put<UserDTO>("/users/$currentUid") {
                 body = MyUserDTO(name)
             }
-            mutableProfile.value = userDTO.toProfile()
         } catch (t: Throwable) {
             Log.d("UserDebug", t.message.toString())
+
+            // If error, reset old value
+            mutableProfile.value = oldProfile
         }
     }
 }
