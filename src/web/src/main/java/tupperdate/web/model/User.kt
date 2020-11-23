@@ -20,6 +20,7 @@ fun MyUserDTO.toUser(id: String, phone: String, picture: String): User {
 }
 
 fun User.toUserDTO(): UserDTO {
+    // TODO: Fix default value problem
     return UserDTO(
         id = requireNotNull(this.id),
         displayName = this.displayName ?: "",

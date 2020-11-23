@@ -22,6 +22,7 @@ import tupperdate.web.util.await
 fun Route.recipesPost(store: Firestore) = post {
     val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
     val doc = store.collection("users").document(uid).collection("recipes").document()
+    // TODO: Fix default image
     val recipe = call.receive<NewRecipeDTO>().toRecipe(doc.id, "https://thispersondoesnotexist.com/image")
 
     doc.set(recipe).await()

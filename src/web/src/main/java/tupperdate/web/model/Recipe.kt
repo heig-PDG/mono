@@ -29,6 +29,7 @@ fun NewRecipeDTO.toRecipe(id: String, picture: String): Recipe {
 }
 
 fun Recipe.toRecipeDTO(): RecipeDTO {
+    // TODO: fix default values problem
     return RecipeDTO(
         id = requireNotNull(this.id),
         title = this.title ?: "No title",
