@@ -9,6 +9,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,18 +24,39 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 import tupperdate.android.R
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.material.BrandedButton
+import tupperdate.api.AuthenticationApi
 
 @Composable
 fun Profile(
+    user: AuthenticationApi.Profile,
+    onCloseClick: () -> Unit,
+    onSaveClick: () -> Unit,
+    onSignOutClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val (name, setName) = remember { mutableStateOf(user.displayName ?: "") }
+
+    Profile(
+        name = name,
+        imageUrl = "",
+        onNameChange = setName,
+        onCloseClick = onCloseClick,
+        onEditClick = {},
+        onSaveClick = onSaveClick,
+        onSignOutClick = onSignOutClick,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun Profile(
+    name: String,
+    imageUrl: String,
+    onNameChange: (String) -> Unit,
     onCloseClick: () -> Unit,
     onEditClick: () -> Unit,
     onSaveClick: () -> Unit,
     onSignOutClick: () -> Unit,
-    onFirstNameChanged: () -> Unit,
-    onEmailChanged: () -> Unit,
-    userImageUrl: String,
-    firstName: String,
-    email: String,
     modifier: Modifier = Modifier,
 ) {
     ScrollableColumn(modifier.fillMaxSize().padding(16.dp)) {
@@ -63,7 +86,7 @@ fun Profile(
                     modifier = Modifier.size(96.dp)
                         .clip(CircleShape)
                         .border(2.dp, Color.Gray, CircleShape),
-                    data = userImageUrl,
+                    data = imageUrl,
                     contentScale = ContentScale.Crop
                 )
                 Button(
@@ -75,7 +98,7 @@ fun Profile(
                     elevation = ButtonConstants.defaultElevation(0.dp)
                 ) {
                     Text(
-                        text = stringResource(id = R.string.profile_editpic),
+                        text = stringResource(R.string.profile_editpic),
                         style = MaterialTheme.typography.overline
                     )
                 }
@@ -83,14 +106,15 @@ fun Profile(
         }
 
         OutlinedTextField(
-            value = firstName,
-            onValueChange = { onFirstNameChanged() }, //impossible to callback it otherwise
+            value = name,
+            onValueChange = onNameChange,
             modifier = Modifier.fillMaxWidth()
                 .padding(bottom = 37.dp),
-            label = { Text(stringResource(id = R.string.profile_name)) },
-            placeholder = { Text(stringResource(id = R.string.profile_name_placeholder)) }
+            label = { Text(stringResource(R.string.profile_name)) },
+            placeholder = { Text(stringResource(R.string.profile_name_placeholder)) }
         )
 
+        /*
         OutlinedTextField(
             value = email,
             onValueChange = { onEmailChanged() },
@@ -99,9 +123,10 @@ fun Profile(
             label = { Text(stringResource(id = R.string.profile_email)) },
             placeholder = { Text(stringResource(id = R.string.profile_email_placeholder)) }
         )
+         */
 
         BrandedButton(
-            value = stringResource(id = R.string.profile_save),
+            value = stringResource(R.string.profile_save),
             onClick = onSaveClick,
             modifier = Modifier.fillMaxWidth()
         )
@@ -119,7 +144,7 @@ fun Profile(
             )
         ) {
             Text(
-                text = stringResource(id = R.string.profile_sign_out),
+                text = stringResource(R.string.profile_sign_out),
                 color = Color.Red
             )
         }
@@ -130,17 +155,16 @@ fun Profile(
 @Preview
 @Composable
 private fun ProfilePreview() {
+    val (name, setName) = remember { mutableStateOf("Thor") }
     TupperdateTheme {
         Profile(
+            name = name,
+            imageUrl = "https://images.firstpost.com/wp-content/uploads/2019/04/thor380.jpg",
+            onNameChange = setName,
             onCloseClick = {},
             onEditClick = {},
             onSaveClick = {},
             onSignOutClick = {},
-            onFirstNameChanged = {},
-            onEmailChanged = {},
-            firstName = "Thor",
-            email = "thor@asgard.god",
-            userImageUrl = "https://images.firstpost.com/wp-content/uploads/2019/04/thor380.jpg"
         )
     }
 }
