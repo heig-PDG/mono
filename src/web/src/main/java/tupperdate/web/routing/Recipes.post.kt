@@ -1,5 +1,6 @@
 package tupperdate.web.routing
 
+import com.google.cloud.firestore.FieldValue
 import com.google.cloud.firestore.Firestore
 import io.ktor.application.*
 import io.ktor.http.*
@@ -25,7 +26,11 @@ fun Route.recipesPost(store: Firestore) = post {
     // TODO: Fix default image
     val recipe = call.receive<NewRecipeDTO>().toRecipe(doc.id, "https://thispersondoesnotexist.com/image")
 
+    // TODO: Firestore transaction
     doc.set(recipe).await()
+
+    // set own recipe as seen
+    doc.update("seen", FieldValue.arrayUnion((uid to true)))
 
     call.respond(recipe.toRecipeDTO())
 }
