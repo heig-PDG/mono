@@ -132,11 +132,10 @@ class RealAuthenticationApi(
         }
     }
 
-    override val auth: Flow<AuthenticationApi.AuthInfo?>
-        get() = currentUser(firebaseAuth)
+    val auth: Flow<AuthInfo?> = currentUser(firebaseAuth)
             .map { user ->
                 val token = user?.getIdToken(false)?.await()?.token
-                token?.let { AuthenticationApi.AuthInfo(it) }
+                token?.let { AuthInfo(it) }
             }
             .catch { emit(null) }
 
@@ -146,6 +145,10 @@ class RealAuthenticationApi(
     override val uid: Flow<String?>
         get() = currentUser(firebaseAuth).map { it?.uid }
 }
+
+data class AuthInfo(
+    val token: String,
+)
 
 /**
  * Returns a [Flow] of the current [FirebaseUser], and emits one on every authentication change.

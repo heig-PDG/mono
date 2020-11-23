@@ -22,5 +22,5 @@ interface UserApi {
     /**
      * A method that will allow us to update our [Profile]
      */
-    fun updateProfile(profile: Profile)
+    suspend fun updateProfile(name: String)
 }

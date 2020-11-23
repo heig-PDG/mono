@@ -4,6 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import tupperdate.common.dto.MyUserDTO
 import tupperdate.common.dto.UserDTO
 
 class RealUserApi(
@@ -13,16 +14,24 @@ class RealUserApi(
 
     override val profile: Flow<UserApi.Profile?>
         get() = uid.map { uid ->
-            val currentProfile = client.get<UserDTO>("/users/$uid")
+            try {
+                val currentProfile = client.get<UserDTO>("/users/$uid")
 
-            return@map UserApi.Profile(
-                displayName = currentProfile.displayName,
-                profileImageUrl = currentProfile.picture,
-            )
+                return@map UserApi.Profile(
+                    displayName = currentProfile.displayName,
+                    profileImageUrl = currentProfile.picture,
+                )
+            } catch (t: Throwable) {
+                return@map null
+            }
         }
 
-    override fun updateProfile(profile: UserApi.Profile) {
-        TODO("Not yet implemented")
+    override suspend fun updateProfile(name: String) {
+        uid.map {
+            client.put<Unit>("/users/$uid") {
+                body = MyUserDTO(name)
+            }
+        }
     }
 
 }

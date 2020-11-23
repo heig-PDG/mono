@@ -1,5 +1,7 @@
-package tupperdate.android
-
+import tupperdate.android.LoggedInAction
+import tupperdate.android.LoggedInDestination
+import tupperdate.android.LoggedOutAction
+import tupperdate.android.LoggedOutDestination
 import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -107,7 +109,7 @@ private fun LoggedIn(
     action: LoggedInAction,
     destination: LoggedInDestination,
 ) {
-    val profile = remember { api.users.profile}.collectAsState(initial = null).value
+    val profile = remember { api.users.profile }.collectAsState(initial = null).value
 
     when (destination) {
         is LoggedInDestination.NewRecipe -> NewRecipe(
@@ -131,13 +133,15 @@ private fun LoggedIn(
             onRecipeDetailsClick = action.viewRecipe,
         )
         is LoggedInDestination.Profile ->
-            profile?.let {
+            if (profile != null) {
                 Profile(
-                    profile = it,
+                    profile = profile,
                     onCloseClick = {},
                     onSaveClick = {},
                     onSignOutClick = {},
                 )
+            } else {
+                action.back
             }
 
         /*
