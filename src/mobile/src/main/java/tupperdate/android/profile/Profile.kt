@@ -34,10 +34,11 @@ fun Profile(
     modifier: Modifier = Modifier,
 ) {
     val (name, setName) = remember { mutableStateOf(user.displayName ?: "") }
+    val profilePic = user.profileImageUrl ?: "https://via.placeholder.com/150"
 
     Profile(
         name = name,
-        imageUrl = "",
+        imageUrl = profilePic,
         onNameChange = setName,
         onCloseClick = onCloseClick,
         onEditClick = {},

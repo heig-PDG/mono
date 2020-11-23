@@ -129,15 +129,10 @@ private fun LoggedIn(
             onRecipeDetailsClick = action.viewRecipe,
         )
         LoggedInDestination.Profile -> Profile(
+            user = user,
             onCloseClick = {},
-            onEditClick = {},
             onSaveClick = {},
             onSignOutClick = {},
-            onFirstNameChanged = {},
-            onEmailChanged = {},
-            firstName = "Thor",
-            email = "thor@asgard.god",
-            userImageUrl = "https://images.firstpost.com/wp-content/uploads/2019/04/thor380.jpg"
         )
 
         LoggedInDestination.AuthenticationTesting -> AuthenticationTesting(
