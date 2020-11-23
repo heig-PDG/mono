@@ -60,7 +60,7 @@ private fun Conversation(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier.clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier.clickable(onClick = onClick).padding(vertical = 8.dp),
         Arrangement.spacedBy(16.dp),
         Alignment.CenterVertically
     ) {

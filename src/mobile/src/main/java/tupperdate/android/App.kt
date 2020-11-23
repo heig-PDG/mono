@@ -7,6 +7,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import tupperdate.android.chats.Conversation
+import tupperdate.android.chats.ConversationsPage
 import tupperdate.android.editRecipe.NewRecipe
 import tupperdate.android.editRecipe.ViewRecipe
 import tupperdate.android.home.Home
@@ -18,6 +20,7 @@ import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.utils.Navigator
 import tupperdate.api.Api
 import tupperdate.api.AuthenticationApi
+import tupperdate.api.RecipeApi
 
 /**
  * A sealed class representing the different states that the user interface can be in.
@@ -139,9 +142,14 @@ private fun LoggedIn(
             email = "thor@asgard.god",
             userImageUrl = "https://images.firstpost.com/wp-content/uploads/2019/04/thor380.jpg"
         )
-
         LoggedInDestination.AuthenticationTesting -> AuthenticationTesting(
             api = api,
+        )
+        LoggedInDestination.ConversationsPage -> ConversationsPage(
+            onRecipeClick = action.home,
+            onProfileClick = action.profile,
+            recipes = listOf(/*TODO fill this parameter*/),
+            conversations = listOf(/*TODO fill this parameter*/)
         )
     }
 }
