@@ -4,6 +4,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlin.random.Random
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -42,4 +43,7 @@ object MockAuthenticationApi : AuthenticationApi {
 
     override val connected: Flow<Boolean>
         get() = localConnected
+
+    override val uid: Flow<String?>
+        get() = flowOf(null)
 }

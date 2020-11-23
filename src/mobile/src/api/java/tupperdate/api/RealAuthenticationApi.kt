@@ -132,8 +132,8 @@ class RealAuthenticationApi(
         }
     }
 
-    val auth: Flow<AuthenticationApi.AuthInfo?>
-        = currentUser(firebaseAuth)
+    override val auth: Flow<AuthenticationApi.AuthInfo?>
+        get() = currentUser(firebaseAuth)
             .map { user ->
                 val token = user?.getIdToken(false)?.await()?.token
                 token?.let { AuthenticationApi.AuthInfo(it) }
@@ -142,6 +142,9 @@ class RealAuthenticationApi(
 
     override val connected: Flow<Boolean>
         get() = currentUser(firebaseAuth).map { it != null }
+
+    override val uid: Flow<String?>
+        get() = currentUser(firebaseAuth).map { it?.uid }
 }
 
 /**

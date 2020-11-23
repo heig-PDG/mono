@@ -42,20 +42,9 @@ interface AuthenticationApi {
     suspend fun verify(code: String): VerificationResult
 
     /**
-     * A data class representing some information that can be used for authentication. The data
-     * contained in an [AuthInfo] should not be used in application code.
-     */
-    data class AuthInfo(
-        val token: String,
-    )
-
-    /**
-     * A [Flow] that returns the current [AuthInfo].
-     */
-    //val auth: Flow<AuthInfo?>
-
-    /**
      * A [Flow] that returns whether the user is currently connected or not.
      */
     val connected: Flow<Boolean>
+
+    val uid: Flow<String?>
 }

@@ -18,4 +18,9 @@ interface UserApi {
      * A [Flow] that returns the currently connected user [Profile].
      */
     val profile: Flow<Profile?>
+
+    /**
+     * A method that will allow us to update our [Profile]
+     */
+    fun updateProfile(profile: Profile)
 }

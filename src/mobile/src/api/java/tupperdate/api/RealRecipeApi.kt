@@ -43,7 +43,7 @@ class RealRecipeApi(
         description: String,
         vegetarian: Boolean,
         warm: Boolean,
-        hasAllergens: Boolean
+        hasAllergens: Boolean,
     ) {
         // TODO : Handle exceptions.
         client.post<Unit>("/recipes") {

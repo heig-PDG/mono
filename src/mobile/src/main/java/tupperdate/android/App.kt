@@ -12,6 +12,7 @@ import tupperdate.android.editRecipe.ViewRecipe
 import tupperdate.android.home.Home
 import tupperdate.android.onboarding.Onboarding
 import tupperdate.android.onboardingConfirmation.OnboardingConfirmation
+import tupperdate.android.profile.Profile
 //import tupperdate.android.testing.AuthenticationTesting
 import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.utils.Navigator
@@ -105,54 +106,46 @@ private fun LoggedIn(
     api: Api,
     action: LoggedInAction,
     destination: LoggedInDestination,
-    //user: AuthenticationApi.Profile, // TODO : Pass this as an ambient ?
 ) {
-    /*
-    if (user.displayName == null) {
-        Profile(
-            user = user,
-            onCloseClick = {},
-            onSaveClick = {},
-            onSignOutClick = {},
+    val profile = remember { api.users.profile}.collectAsState(initial = null).value
+
+    when (destination) {
+        is LoggedInDestination.NewRecipe -> NewRecipe(
+            recipeApi = api.recipe,
+            imagePickerApi = api.images,
+            onSaved = action.back,
+            onCancelled = action.back,
         )
-    } else {
+        is LoggedInDestination.ViewRecipe -> ViewRecipe(
+            recipeApi = api.recipe,
+            recipe = destination.recipe,
+            onBack = action.back,
+        )
+        is LoggedInDestination.Home -> Home(
+            recipeApi = api.recipe,
+            // TODO add behaviours on these buttons
+            onChatClick = {},
+            onProfileClick = action.profile,
+            onRecipeClick = action.newRecipe,
+            onReturnClick = {},
+            onRecipeDetailsClick = action.viewRecipe,
+        )
+        is LoggedInDestination.Profile ->
+            profile?.let {
+                Profile(
+                    profile = it,
+                    onCloseClick = {},
+                    onSaveClick = {},
+                    onSignOutClick = {},
+                )
+            }
 
-     */
-        when (destination) {
-            is LoggedInDestination.NewRecipe -> NewRecipe(
-                recipeApi = api.recipe,
-                imagePickerApi = api.images,
-                onSaved = action.back,
-                onCancelled = action.back,
-            )
-            is LoggedInDestination.ViewRecipe -> ViewRecipe(
-                recipeApi = api.recipe,
-                recipe = destination.recipe,
-                onBack = action.back,
-            )
-            is LoggedInDestination.Home -> Home(
-                recipeApi = api.recipe,
-                // TODO add behaviours on these buttons
-                onChatClick = {},
-                onProfileClick = action.profile,
-                onRecipeClick = action.newRecipe,
-                onReturnClick = {},
-                onRecipeDetailsClick = action.viewRecipe,
-            )
-            /*
-            is LoggedInDestination.Profile -> Profile(
-                user = user,
-                onCloseClick = {},
-                onSaveClick = {},
-                onSignOutClick = {},
-            )
-
-            is LoggedInDestination.AuthenticationTesting -> LoggedInDestination.AuthenticationTesting(
-                api = api,
-            )
-             */
-        }
-    //}
+        /*
+        is LoggedInDestination.AuthenticationTesting -> LoggedInDestination.AuthenticationTesting(
+            api = api,
+        )
+         */
+    }
 }
 
 /**
