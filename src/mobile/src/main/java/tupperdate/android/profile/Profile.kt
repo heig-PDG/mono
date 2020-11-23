@@ -3,7 +3,9 @@ package tupperdate.android.profile
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -11,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -62,13 +65,20 @@ private fun Profile(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = stringResource(id = R.string.profile_title),
+                text = stringResource(R.string.profile_title),
                 style = MaterialTheme.typography.h6
             )
-            IconButton(onClick = onCloseClick) {
+            IconButton(
+                onClick = onCloseClick,
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .background(Color.LightGray)
+                    .size(32.dp)
+            ) {
                 Icon(
-                    asset = vectorResource(id = R.drawable.ic_home_dislike_recipe),
-                    tint = Color.Black
+                    asset = vectorResource(R.drawable.ic_home_dislike_recipe),
+                    tint = Color.Black,
+                    modifier = Modifier.size(12.dp)
                 )
             }
         }
