@@ -38,6 +38,12 @@ object MockRecipeApi : RecipeApi {
     override fun back() {
     }
 
-    override suspend fun create(title: String, description: String) {
+    override suspend fun create(
+        title: String,
+        description: String,
+        vegetarian: Boolean,
+        warm: Boolean,
+        hasAllergens: Boolean
+    ) {
     }
 }

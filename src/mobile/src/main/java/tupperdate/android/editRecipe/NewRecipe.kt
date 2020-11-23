@@ -39,8 +39,8 @@ fun NewRecipe(
             EditableRecipe(
                 title = "",
                 description = "",
-                vegan = true,
-                hot = false,
+                vegetarian = true,
+                warm = false,
                 hasAllergens = true,
             )
         )
@@ -54,7 +54,13 @@ fun NewRecipe(
         // TODO : Actually put more data in the API.
         onSaveClick = {
             scope.launch {
-                recipeApi.create(title = recipe.title, description = recipe.description)
+                recipeApi.create(
+                    title = recipe.title,
+                    description = recipe.description,
+                    vegetarian = recipe.vegetarian,
+                    warm = recipe.warm,
+                    hasAllergens = recipe.hasAllergens,
+                )
                 onSaved()
             }
         },
