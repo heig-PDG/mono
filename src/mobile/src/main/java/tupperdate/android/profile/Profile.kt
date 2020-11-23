@@ -77,7 +77,10 @@ private fun Profile(
             Modifier.padding(top = 40.dp, bottom = 37.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
-            Column(horizontalAlignment = (Alignment.CenterHorizontally)) {
+            Column(
+                horizontalAlignment = (Alignment.CenterHorizontally),
+                verticalArrangement = (Arrangement.spacedBy((-36).dp))
+            ) {
                 ProfilePicture(
                     image = imageUrl,
                     highlighted = false,
@@ -86,7 +89,7 @@ private fun Profile(
                 Button(
                     onClick = onEditClick,
                     colors = ButtonConstants.defaultButtonColors(
-                        contentColor = Color.Black,
+                        contentColor = Color.White,
                         backgroundColor = Color.Transparent
                     ),
                     elevation = ButtonConstants.defaultElevation(0.dp)
@@ -153,7 +156,7 @@ private fun ProfilePreview() {
     TupperdateTheme {
         Profile(
             name = name,
-            imageUrl = "https://images.firstpost.com/wp-content/uploads/2019/04/thor380.jpg",
+            imageUrl = "https://www.thispersondoesnotexist.com/image",
             onNameChange = setName,
             onCloseClick = {},
             onEditClick = {},
