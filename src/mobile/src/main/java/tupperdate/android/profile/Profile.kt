@@ -33,7 +33,9 @@ fun Profile(
     onSignOutClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val (name, setName) = remember { mutableStateOf(user.displayName ?: "") }
+    val initName = user.displayName ?: ""
+    val (name, setName) = remember { mutableStateOf(initName) }
+
     val profilePic = user.profileImageUrl ?: "https://via.placeholder.com/150"
 
     Profile(

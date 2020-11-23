@@ -107,8 +107,17 @@ private fun LoggedIn(
     destination: LoggedInDestination,
     user: AuthenticationApi.Profile, // TODO : Pass this as an ambient ?
 ) {
+    if (user.displayName == null) {
+        Profile(
+            user = user,
+            onCloseClick = {},
+            onSaveClick = {},
+            onSignOutClick = {},
+        )
+    }
+
     when (destination) {
-        LoggedInDestination.NewRecipe -> NewRecipe(
+        is LoggedInDestination.NewRecipe -> NewRecipe(
             recipeApi = api.recipe,
             imagePickerApi = api.images,
             onSaved = action.back,
@@ -119,23 +128,22 @@ private fun LoggedIn(
             recipe = destination.recipe,
             onBack = action.back,
         )
-        LoggedInDestination.Home -> Home(
+        is LoggedInDestination.Home -> Home(
             recipeApi = api.recipe,
             // TODO add behaviours on these buttons
             onChatClick = {},
-            onProfileClick = action.authenticationTesting, // TODO : Have a real user profile.
+            onProfileClick = action.profile,
             onRecipeClick = action.newRecipe,
             onReturnClick = {},
             onRecipeDetailsClick = action.viewRecipe,
         )
-        LoggedInDestination.Profile -> Profile(
+        is LoggedInDestination.Profile -> Profile(
             user = user,
             onCloseClick = {},
             onSaveClick = {},
             onSignOutClick = {},
         )
-
-        LoggedInDestination.AuthenticationTesting -> AuthenticationTesting(
+        is LoggedInDestination.AuthenticationTesting -> AuthenticationTesting(
             api = api,
         )
     }
