@@ -132,26 +132,16 @@ class RealAuthenticationApi(
         }
     }
 
-    override val auth: Flow<AuthenticationApi.AuthInfo?>
-        get() = currentUser(firebaseAuth)
+    val auth: Flow<AuthenticationApi.AuthInfo?>
+        = currentUser(firebaseAuth)
             .map { user ->
                 val token = user?.getIdToken(false)?.await()?.token
                 token?.let { AuthenticationApi.AuthInfo(it) }
             }
             .catch { emit(null) }
 
-    override val profile: Flow<AuthenticationApi.Profile?>
-        get() = currentUser(firebaseAuth)
-            // TODO : Retrieve some additional profile data.
-            .map {
-                it?.let { user ->
-                    AuthenticationApi.Profile(
-                        displayName = null,
-                        phoneNumber = user.phoneNumber,
-                        profileImageUrl = null,
-                    )
-                }
-            }
+    override val connected: Flow<Boolean>
+        get() = currentUser(firebaseAuth).map { it != null }
 }
 
 /**

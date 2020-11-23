@@ -23,20 +23,20 @@ import tupperdate.android.R
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.components.ProfilePicture
 import tupperdate.android.ui.material.BrandedButton
-import tupperdate.api.AuthenticationApi
 
 @Composable
 fun Profile(
-    user: AuthenticationApi.Profile,
+    //user: AuthenticationApi.Profile,
     onCloseClick: () -> Unit,
     onSaveClick: () -> Unit,
     onSignOutClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val initName = user.displayName ?: ""
-    val (name, setName) = remember { mutableStateOf(initName) }
+    //val initName = user.displayName ?: ""
+    val (name, setName) = remember { mutableStateOf("") }
 
-    val profilePic = user.profileImageUrl ?: "https://via.placeholder.com/150"
+    //val profilePic = user.profileImageUrl ?: "https://via.placeholder.com/150"
+    val profilePic = "https://via.placeholder.com/150"
 
     Profile(
         name = name,
@@ -124,17 +124,6 @@ private fun Profile(
             placeholder = { Text(stringResource(R.string.profile_name_placeholder)) }
         )
 
-        /*
-        OutlinedTextField(
-            value = email,
-            onValueChange = { onEmailChanged() },
-            modifier = Modifier.fillMaxWidth()
-                .padding(bottom = 32.dp),
-            label = { Text(stringResource(id = R.string.profile_email)) },
-            placeholder = { Text(stringResource(id = R.string.profile_email_placeholder)) }
-        )
-         */
-
         BrandedButton(
             value = stringResource(R.string.profile_save),
             onClick = onSaveClick,
@@ -160,7 +149,6 @@ private fun Profile(
         }
     }
 }
-
 
 @Preview
 @Composable

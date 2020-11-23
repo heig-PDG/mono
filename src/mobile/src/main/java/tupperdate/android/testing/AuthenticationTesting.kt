@@ -1,23 +1,6 @@
 package tupperdate.android.testing
 
-import android.widget.Toast
-import androidx.compose.foundation.Text
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.TextField
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ClipboardManagerAmbient
-import androidx.compose.ui.platform.ContextAmbient
-import androidx.compose.ui.platform.LifecycleOwnerAmbient
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
-import tupperdate.api.Api
-import tupperdate.api.AuthenticationApi
-
+/*
 @Composable
 fun AuthenticationTesting(
     api: Api,
@@ -127,3 +110,4 @@ private fun JWTToken(
         }
     }
 }
+*/
