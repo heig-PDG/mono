@@ -23,7 +23,8 @@ fun Route.recipesGet(store: Firestore) = get {
     val count = countParam.toIntOrNull() ?: throw BadRequestException()
 
     // TODO (matt) : Filter already liked/disliked recipes
-    val retrieved = store.collectionGroup("recipes").orderBy("timestamp").limit(count).get().await()
+    val retrieved = store.collectionGroup("recipes").orderBy("timestamp")
+        .limit(count).get().await()
     val recipes = retrieved.toObjects(Recipe::class.java)
     val dtos = recipes.map { it.toRecipeDTO() }
 

@@ -5,15 +5,13 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import tupperdate.common.dto.*
 import tupperdate.web.auth.firebaseAuthPrincipal
 import tupperdate.web.exceptions.*
 import tupperdate.web.util.await
 
 /**
- * Get a user by id
+ * Retrieves a [UserDTO] by user id
  *
  * @param store the [Firestore] instance that is used.
  */

@@ -16,7 +16,7 @@ import tupperdate.web.model.toUser
 import tupperdate.web.util.await
 
 /**
- * Post a new user given an authentication token
+ * Post a new [MyUserDTO]
  *
  * @param store the [Firestore] instance that is used.
  */
