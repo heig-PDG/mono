@@ -131,7 +131,8 @@ private fun LoggedIn(
             onCloseClick = {},
             onEditClick = {},
             onSaveClick = {},
-            onSignOutClick = {}
+            onSignOutClick = {},
+            userImageUrl = "https://images.firstpost.com/wp-content/uploads/2019/04/thor380.jpg"
         )
     }
 }

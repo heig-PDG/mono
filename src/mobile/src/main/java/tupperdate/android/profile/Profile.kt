@@ -17,7 +17,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.ui.tooling.preview.Preview
 import dev.chrisbanes.accompanist.coil.CoilImage
 import tupperdate.android.R
@@ -30,9 +29,12 @@ fun Profile(
     onEditClick: () -> Unit,
     onSaveClick: () -> Unit,
     onSignOutClick: () -> Unit,
+    onFirstNameChanged: () -> Unit,
+    onEmailChanged: () -> Unit,
+    userImageUrl: String,
+    firstName: String,
+    email: String,
     modifier: Modifier = Modifier,
-    //it's funny to have Thor as default image, isnt'it ?
-    userImageUrl: String = "https://images.firstpost.com/wp-content/uploads/2019/04/thor380.jpg"
 ) {
     ScrollableColumn(modifier.fillMaxSize().padding(16.dp)) {
         Row(
@@ -44,7 +46,7 @@ fun Profile(
                 text = stringResource(id = R.string.profile_title),
                 style = MaterialTheme.typography.h6
             )
-            IconButton(onClick = { onCloseClick() }) {
+            IconButton(onClick = onCloseClick) {
                 Icon(
                     asset = vectorResource(id = R.drawable.ic_home_dislike_recipe),
                     tint = Color.Black
@@ -65,7 +67,7 @@ fun Profile(
                     contentScale = ContentScale.Crop
                 )
                 Button(
-                    onClick = { onEditClick() },
+                    onClick = onEditClick,
                     colors = ButtonConstants.defaultButtonColors(
                         contentColor = Color.Black,
                         backgroundColor = Color.Transparent
@@ -81,8 +83,8 @@ fun Profile(
         }
 
         OutlinedTextField(
-            value = "",
-            onValueChange = { /*TODO do something with that*/ },
+            value = firstName,
+            onValueChange = { onFirstNameChanged() }, //impossible to callback it otherwise
             modifier = Modifier.fillMaxWidth()
                 .padding(bottom = 37.dp),
             label = { Text(stringResource(id = R.string.profile_name)) },
@@ -90,8 +92,8 @@ fun Profile(
         )
 
         OutlinedTextField(
-            value = "",
-            onValueChange = { /*TODO do something with that*/ },
+            value = email,
+            onValueChange = { onEmailChanged() },
             modifier = Modifier.fillMaxWidth()
                 .padding(bottom = 32.dp),
             label = { Text(stringResource(id = R.string.profile_email)) },
@@ -100,12 +102,12 @@ fun Profile(
 
         BrandedButton(
             value = stringResource(id = R.string.profile_save),
-            onClick = { onSaveClick() },
+            onClick = onSaveClick,
             modifier = Modifier.fillMaxWidth()
         )
 
         Button(
-            onClick = { onSignOutClick() },
+            onClick = onSignOutClick,
             modifier = Modifier.fillMaxWidth()
                 .padding(top = 16.dp)
                 .preferredHeight(56.dp),
@@ -133,6 +135,12 @@ fun ProfilePreview() {
             onCloseClick = {},
             onEditClick = {},
             onSaveClick = {},
-            onSignOutClick = {})
+            onSignOutClick = {},
+            onFirstNameChanged = {},
+            onEmailChanged = {},
+            firstName = "Thor",
+            email = "thor@asgard.god",
+            userImageUrl = "https://images.firstpost.com/wp-content/uploads/2019/04/thor380.jpg"
+        )
     }
 }
