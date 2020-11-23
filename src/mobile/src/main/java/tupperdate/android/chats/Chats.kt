@@ -13,17 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.drawWithCache
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow.Ellipsis
-import androidx.compose.ui.unit.center
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
 import dev.chrisbanes.accompanist.coil.CoilImage
-import tupperdate.android.ui.Smurf500
 import tupperdate.android.ui.TupperdateTheme
-import kotlin.math.sqrt
+import tupperdate.android.ui.modifier.dotted
 
 data class Conversation(
     val id: String,
@@ -91,27 +87,6 @@ private fun ConversationIcon(
             .size(56.dp)
             .border(4.dp, Color.Black.copy(alpha = 0.2f), CircleShape)
     )
-}
-
-/**
- * A [Modifier] which can draw a dot if the underlying layer currently requires attention. It will
- * be drawn on a 45-degree line of the biggest inner circle that could fit the composable.
- *
- * @param visible true if the circle should be drawn, false otherwise.
- */
-private fun Modifier.dotted(visible: Boolean) = this then Modifier.drawWithCache {
-    val radius = size.minDimension / 2 - 2.dp.toPx()
-    val offset = Offset(
-        x = radius * sqrt(2f) / 2f,
-        y = radius * sqrt(2f) / -2f,
-    )
-    onDrawWithContent {
-        drawContent()
-        if (visible) {
-            drawCircle(Color.White, 6.dp.toPx(), size.center() + offset)
-            drawCircle(Color.Smurf500, 4.dp.toPx(), size.center() + offset)
-        }
-    }
 }
 
 @Preview(showBackground = true)
