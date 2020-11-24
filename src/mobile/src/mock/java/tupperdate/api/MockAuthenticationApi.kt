@@ -4,13 +4,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flowOf
 import kotlin.random.Random
 
 @OptIn(ExperimentalCoroutinesApi::class)
 object MockAuthenticationApi : AuthenticationApi {
-
-    private val user = MutableStateFlow<AuthenticationApi.Profile?>(null)
+    private val localConnected = MutableStateFlow(false)
 
     override suspend fun requestCode(
         number: String,
@@ -20,11 +19,7 @@ object MockAuthenticationApi : AuthenticationApi {
         delay(timer)
         return when (number) {
             "144" -> {
-                user.value = AuthenticationApi.Profile(
-                    displayName = null,
-                    phoneNumber = "144",
-                    profileImageUrl = null,
-                )
+                localConnected.value = true
                 AuthenticationApi.RequestCodeResult.LoggedIn
             }
             "123" -> AuthenticationApi.RequestCodeResult.RequiresVerification
@@ -38,11 +33,7 @@ object MockAuthenticationApi : AuthenticationApi {
         delay(timer)
         return when (code) {
             "0000" -> {
-                user.value = AuthenticationApi.Profile(
-                    displayName = null,
-                    phoneNumber = "144",
-                    profileImageUrl = null,
-                )
+                localConnected.value = true
                 AuthenticationApi.VerificationResult.LoggedIn
             }
             "666" -> AuthenticationApi.VerificationResult.InternalError
@@ -50,9 +41,9 @@ object MockAuthenticationApi : AuthenticationApi {
         }
     }
 
-    override val profile: Flow<AuthenticationApi.Profile?>
-        get() = user
+    override val connected: Flow<Boolean>
+        get() = localConnected
 
-    override val auth: Flow<AuthenticationApi.AuthInfo?>
-        get() = user.map { AuthenticationApi.AuthInfo("toky the token") }
+    override val uid: Flow<String?>
+        get() = flowOf(null)
 }
