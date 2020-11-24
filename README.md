@@ -24,7 +24,7 @@ The sub-folder structure is as follows:
 
 - `.github/` contains GitHub-specific files, such as issue templates, and the workflows that run whenever we make changes to the app;
 - `docker` contains our different docker images, and our Docker-related scripts;
-- `spec/` contains our [OpenAPI spec](https://spec.tupperdate.me),
+- `spec/` contains our [OpenAPI spec](http://spec.tupperdate.me),
 - `src/` contains the source code of our application;
 - `vcs` contains some scripts related to our VCS;
 - `website/` contains our landing page; amd
