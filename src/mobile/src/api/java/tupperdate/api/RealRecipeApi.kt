@@ -1,5 +1,6 @@
 package tupperdate.api
 
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -47,9 +48,8 @@ class RealRecipeApi(
         description: String,
         vegetarian: Boolean,
         warm: Boolean,
-        hasAllergens: Boolean
+        hasAllergens: Boolean,
     ) {
-        // TODO : Handle exceptions.
         client.post<Unit>("/recipes") {
             // TODO : Improve client-side image handling.
             // TODO : Compress images.
