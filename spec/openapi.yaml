@@ -48,7 +48,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MyUserDTO'
+                $ref: '#/components/schemas/UserDTO'
         '400':
           description: Bad request; if the json body can't be parsed to a newUser object
         '401':
