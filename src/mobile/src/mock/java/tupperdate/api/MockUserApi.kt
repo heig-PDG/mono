@@ -1,12 +1,22 @@
 package tupperdate.api
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.MutableStateFlow
 
 object MockUserApi : UserApi {
-    override fun profile(): Flow<UserApi.Profile?> = flowOf(null)
+    private val mutableProfile: MutableStateFlow<UserApi.Profile?> = MutableStateFlow(null)
 
-    override suspend fun updateProfile(name: String) {
+    override val profile: Flow<UserApi.Profile?>
+        get() = mutableProfile
+
+    override suspend fun updateProfile() {
+    }
+
+    override suspend fun putProfile(name: String) {
+        mutableProfile.value = UserApi.Profile(
+            name,
+            "https://www.thispersondoesnotexist.com/image"
+        )
     }
 
 }
