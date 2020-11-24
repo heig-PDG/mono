@@ -19,6 +19,7 @@ import tupperdate.android.appbars.ChatTopBar
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.api.RecipeApi
 import tupperdate.android.R
+import tupperdate.android.ui.components.ProfilePicture
 
 @Composable
 fun ConversationsPage(
@@ -66,12 +67,10 @@ private fun RecipeImage(
     imageUrl: String,
     modifier: Modifier = Modifier
 ) {
-    CoilImage(
-        modifier = modifier.size(56.dp)
-            .clip(CircleShape)
-            .border(2.dp, Color.Gray, CircleShape),
-        data = imageUrl,
-        contentScale = ContentScale.Crop
+    ProfilePicture(
+        modifier = modifier.size(56.dp),
+        image = imageUrl,
+        highlighted = false
     )
 }
 

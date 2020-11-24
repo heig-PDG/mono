@@ -5,9 +5,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
+import androidx.compose.ui.platform.LifecycleOwnerAmbient
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import tupperdate.android.chats.Conversation
+import kotlinx.coroutines.launch
 import tupperdate.android.chats.ConversationsPage
 import tupperdate.android.editRecipe.NewRecipe
 import tupperdate.android.editRecipe.ViewRecipe
@@ -15,12 +17,12 @@ import tupperdate.android.home.Home
 import tupperdate.android.onboarding.Onboarding
 import tupperdate.android.onboardingConfirmation.OnboardingConfirmation
 import tupperdate.android.profile.Profile
-import tupperdate.android.testing.AuthenticationTesting
 import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.utils.Navigator
 import tupperdate.api.Api
 import tupperdate.api.AuthenticationApi
-import tupperdate.api.RecipeApi
+import tupperdate.api.UserApi
+
 
 /**
  * A sealed class representing the different states that the user interface can be in.
@@ -37,9 +39,9 @@ private sealed class UiState {
     object LoggedOut : UiState()
 
     /**
-     * The user is logged in and has a valid [AuthenticationApi.Profile].
+     * The user is logged in and has a valid [UserApi.Profile].
      */
-    data class LoggedIn(val user: AuthenticationApi.Profile) : UiState()
+    object LoggedIn : UiState()
 }
 
 /**
@@ -47,8 +49,8 @@ private sealed class UiState {
  * display the appropriate UI.
  */
 @Composable
-private fun Flow<AuthenticationApi.Profile?>.collectAsState(): UiState =
-    map { if (it == null) UiState.LoggedOut else UiState.LoggedIn(it) }
+private fun Flow<Boolean?>.collectAsState(): UiState =
+    map { if (it == null) UiState.LoggedOut else UiState.LoggedIn }
         .collectAsState(UiState.Loading).value
 
 /**
@@ -62,8 +64,8 @@ fun TupperdateApp(
     api: Api,
     backDispatcher: OnBackPressedDispatcher,
 ) {
-    val user = remember { api.authentication.profile }
-    when (val state = user.collectAsState()) {
+    val loggedIn = remember { api.authentication.connected }
+    when (loggedIn.collectAsState()) {
 
         UiState.Loading -> {
             /* Display nothing. */
@@ -82,6 +84,11 @@ fun TupperdateApp(
         }
 
         is UiState.LoggedIn -> {
+            val scope = LifecycleOwnerAmbient.current.lifecycleScope
+            scope.launch {
+                api.users.updateProfile()
+            }
+
             // The user is currently logged in. Start at the Home.
             val nav = rememberSavedInstanceState(saver = Navigator.saver(backDispatcher)) {
                 Navigator<LoggedInDestination>(
@@ -90,7 +97,7 @@ fun TupperdateApp(
                 )
             }
             val act = remember(nav) { LoggedInAction(nav) }
-            LoggedIn(api, act, nav.current, state.user)
+            LoggedIn(api, act, nav.current)
         }
     }
 }
@@ -108,43 +115,38 @@ private fun LoggedIn(
     api: Api,
     action: LoggedInAction,
     destination: LoggedInDestination,
-    user: AuthenticationApi.Profile, // TODO : Pass this as an ambient ?
 ) {
+    val profile = remember { api.users.profile }.collectAsState(initial = null).value
+
     when (destination) {
-        LoggedInDestination.NewRecipe -> NewRecipe(
+        is LoggedInDestination.NewRecipe -> NewRecipe(
             recipeApi = api.recipe,
             imagePickerApi = api.images,
-            onSaved = action.back,
-            onCancelled = action.back,
+            onBack = action.back,
         )
         is LoggedInDestination.ViewRecipe -> ViewRecipe(
             recipeApi = api.recipe,
             recipe = destination.recipe,
             onBack = action.back,
         )
-        LoggedInDestination.Home -> Home(
+        is LoggedInDestination.Home -> Home(
             recipeApi = api.recipe,
             // TODO add behaviours on these buttons
             onChatClick = {},
-            onProfileClick = action.authenticationTesting, // TODO : Have a real user profile.
+            onProfileClick = action.profile,
             onRecipeClick = action.newRecipe,
             onReturnClick = {},
             onRecipeDetailsClick = action.viewRecipe,
         )
-        LoggedInDestination.Profile -> Profile(
-            onCloseClick = {},
-            onEditClick = {},
-            onSaveClick = {},
-            onSignOutClick = {},
-            onFirstNameChanged = {},
-            onEmailChanged = {},
-            firstName = "Thor",
-            email = "thor@asgard.god",
-            userImageUrl = "https://images.firstpost.com/wp-content/uploads/2019/04/thor380.jpg"
-        )
-        LoggedInDestination.AuthenticationTesting -> AuthenticationTesting(
-            api = api,
-        )
+
+        is LoggedInDestination.Profile ->
+            Profile(
+                userApi = api.users,
+                profile = profile ?: api.users.emptyProfile,
+                onCloseClick = action.back,
+                onSignOutClick = {},
+            )
+
         LoggedInDestination.ConversationsPage -> ConversationsPage(
             onRecipeClick = action.home,
             onProfileClick = action.profile,

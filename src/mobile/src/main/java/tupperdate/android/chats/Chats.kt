@@ -1,29 +1,20 @@
 package tupperdate.android.chats
 
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumnFor
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.AmbientEmphasisLevels
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.ProvideEmphasis
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.drawWithCache
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow.Ellipsis
-import androidx.compose.ui.unit.center
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
-import dev.chrisbanes.accompanist.coil.CoilImage
-import tupperdate.android.ui.Smurf500
 import tupperdate.android.ui.TupperdateTheme
-import kotlin.math.sqrt
+import tupperdate.android.ui.components.ProfilePicture
 
 data class Conversation(
     val id: String,
@@ -64,7 +55,12 @@ private fun Conversation(
         Arrangement.spacedBy(16.dp),
         Alignment.CenterVertically
     ) {
-        ConversationIcon(image, highlighted)
+        ProfilePicture(
+            image,
+            highlighted,
+            Modifier.size(56.dp)
+        )
+
         val emphasis = if (highlighted) AmbientEmphasisLevels.current.high
         else AmbientEmphasisLevels.current.medium
         ProvideEmphasis(emphasis) {
@@ -74,42 +70,6 @@ private fun Conversation(
                     Text(subtitle, maxLines = 1, style = typography.subtitle2, overflow = Ellipsis)
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun ConversationIcon(
-    image: Any,
-    highlighted: Boolean,
-    modifier: Modifier = Modifier,
-) {
-    CoilImage(
-        image, modifier
-            .dotted(highlighted)
-            .clip(CircleShape)
-            .size(56.dp)
-            .border(4.dp, Color.Black.copy(alpha = 0.2f), CircleShape)
-    )
-}
-
-/**
- * A [Modifier] which can draw a dot if the underlying layer currently requires attention. It will
- * be drawn on a 45-degree line of the biggest inner circle that could fit the composable.
- *
- * @param visible true if the circle should be drawn, false otherwise.
- */
-private fun Modifier.dotted(visible: Boolean) = this then Modifier.drawWithCache {
-    val radius = size.minDimension / 2 - 2.dp.toPx()
-    val offset = Offset(
-        x = radius * sqrt(2f) / 2f,
-        y = radius * sqrt(2f) / -2f,
-    )
-    onDrawWithContent {
-        drawContent()
-        if (visible) {
-            drawCircle(Color.White, 6.dp.toPx(), size.center() + offset)
-            drawCircle(Color.Smurf500, 4.dp.toPx(), size.center() + offset)
         }
     }
 }
