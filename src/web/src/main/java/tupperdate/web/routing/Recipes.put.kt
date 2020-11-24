@@ -10,6 +10,7 @@ import io.ktor.routing.*
 import tupperdate.web.auth.firebaseAuthPrincipal
 import tupperdate.web.exceptions.statusException
 import tupperdate.web.model.Chat
+import tupperdate.web.model.Recipe
 import tupperdate.web.util.await
 
 
@@ -21,11 +22,13 @@ import tupperdate.web.util.await
 fun Route.recipesPut(store: Firestore) {
     put("{recipeId}/like") {
         val recipeId = call.parameters["recipeId"] ?: statusException(HttpStatusCode.BadRequest)
-        val recipeDoc = store.collectionGroup("recipes").whereEqualTo("id", recipeId).limit(1)
-            .get().await().documents[0].reference
+        val recipeDoc = store.collection("recipes").document(recipeId)
+        val time = recipeDoc.get().await().toObject(Recipe::class.java)?.timestamp ?: statusException(HttpStatusCode.NotFound)
 
         var userId1 = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
         var userId2 = recipeDoc.parent.parent?.id ?: statusException(HttpStatusCode.Conflict)
+
+        val userDoc = store.collection("users").document(userId1)
 
         // A user can't like his own recipe
         if (userId1 == userId2) statusException(HttpStatusCode.Forbidden)
@@ -58,23 +61,21 @@ fun Route.recipesPut(store: Firestore) {
         )
 
         // set recipe as seen
-        // TODO: Remodel the concept of seen recipes using a timestamp sorted stack
-        // recipeDoc.update("seen", FieldValue.arrayUnion((userId1 to true)))
+        userDoc.set("lastSeenRecipe" to time)
 
         call.respond(HttpStatusCode.NotImplemented)
     }
 
     put("{recipeId}/dislike") {
-        /*
-        val recipeId = call.parameters["recipeId"] ?: statusException(HttpStatusCode.BadRequest)
-        var userId1 =
-            call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
-        var doc = store.collectionGroup("recipes").whereEqualTo("id", recipeId).limit(1)
-            .get().await().documents[0].reference
 
-        TODO: Remodel the concept of seen recipes using a timestamp sorted stack
-        doc.update("seen", FieldValue.arrayUnion((userId1 to true)))
-        */
+        val recipeId = call.parameters["recipeId"] ?: statusException(HttpStatusCode.BadRequest)
+        var uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+        val userDoc = store.collection("users").document(uid)
+        val recipeDoc = store.collection("recipes").document(recipeId)
+        val time = recipeDoc.get().await().toObject(Recipe::class.java)?.timestamp ?: statusException(HttpStatusCode.NotFound)
+
+        userDoc.set("lastSeenRecipe" to time)
+
         call.respond(HttpStatusCode.NotImplemented)
     }
 }

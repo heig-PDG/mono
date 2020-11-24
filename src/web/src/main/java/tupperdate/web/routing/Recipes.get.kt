@@ -23,12 +23,14 @@ fun Route.recipesGet(store: Firestore) = get {
     val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
     val countParam = call.parameters["count"] ?: statusException(HttpStatusCode.BadRequest)
     val count = countParam.toIntOrNull() ?: statusException(HttpStatusCode.BadRequest)
-    /*
-    TODO: Remodel the concept of seen recipes using a timestamp sorted stack
-    val retrieved = store.collection("recipes")
-        .whereNotEqualTo(FieldPath.of("seen", uid), true).orderBy("timestamp").limit(count).get().await()
-    */
-    val retrieved = store.collectionGroup("recipes").orderBy("timestamp").limit(count).get().await()
+
+    // TODO: Transaction
+    val lastSeenRecipe = store.collection("users").document(uid).get().await().get("lastSeenRecipe") ?: 0
+
+    // TODO: Filter user own recipes
+    val retrieved = store.collection("recipes").whereGreaterThanOrEqualTo("timestamp", lastSeenRecipe)
+        .orderBy("timestamp").limit(count).get().await()
+
     val recipes = retrieved.toObjects(Recipe::class.java)
     val dtos = recipes.map { it.toRecipeDTO() }
 

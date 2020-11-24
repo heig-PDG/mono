@@ -30,9 +30,10 @@ fun Route.recipesPost(firebase: FirebaseApp) = post {
     val bucket = StorageClient.getInstance(firebase).bucket()
 
     val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
-    val doc = store.collection("users").document(uid).collection("recipes").document()
-
     val dto = call.receive<NewRecipeDTO>()
+
+    val doc = store.collection("recipes").document()
+
     val id = UUID.randomUUID().toString()
     val bytes = dto.imageBase64?.let { Base64.decodeBase64(it) }
     // TODO : Don't add pictures for new recipes that don't provide any.
@@ -49,9 +50,9 @@ fun Route.recipesPost(firebase: FirebaseApp) = post {
         pict = url.toString()
     }
 
-    val recipe = dto.toRecipe(doc.id, pict)
-
     // TODO: Firestore transaction
+    // For now, assume no two recipes are posted at the same time (bad assumption)
+    val recipe = dto.toRecipe(doc.id, uid, pict)
     doc.set(recipe).await()
 
     call.respond(recipe.toRecipeDTO())
