@@ -16,8 +16,7 @@ import tupperdate.api.RecipeApi
 fun NewRecipe(
     recipeApi: RecipeApi,
     imagePickerApi: ImagePickerApi,
-    onSaved: () -> Unit,
-    onCancelled: () -> Unit,
+    onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scope = LifecycleOwnerAmbient.current.lifecycleScope
@@ -50,7 +49,7 @@ fun NewRecipe(
         heroImage = heroImage,
         recipe = recipe,
         onRecipeChange = setRecipe,
-        onDeleteClick = { onCancelled() },
+        onDeleteClick = { onBack() },
         // TODO : Actually put more data in the API.
         onSaveClick = {
             scope.launch {
@@ -61,7 +60,7 @@ fun NewRecipe(
                     warm = recipe.warm,
                     hasAllergens = recipe.hasAllergens,
                 )
-                onSaved()
+                onBack()
             }
         },
         onEdit = { imagePickerApi.pick() },
