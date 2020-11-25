@@ -50,7 +50,7 @@ private sealed class UiState {
  * display the appropriate UI.
  */
 @Composable
-private fun Flow<Boolean?>.collectAsState(): UiState =
+private fun Flow<String?>.collectAsState(): UiState =
     map { if (it == null) UiState.LoggedOut else UiState.LoggedIn }
         .collectAsState(UiState.Loading).value
 
@@ -65,7 +65,7 @@ fun TupperdateApp(
     api: Api,
     backDispatcher: OnBackPressedDispatcher,
 ) {
-    val loggedIn = remember { api.authentication.connected }
+    val loggedIn = remember { api.authentication.uid }
     when (loggedIn.collectAsState()) {
 
         UiState.Loading -> {
