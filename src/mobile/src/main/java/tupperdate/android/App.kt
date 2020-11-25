@@ -1,4 +1,3 @@
-//import tupperdate.android.testing.AuthenticationTesting
 import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
