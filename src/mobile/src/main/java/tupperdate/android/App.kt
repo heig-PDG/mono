@@ -1,4 +1,5 @@
 import androidx.activity.OnBackPressedDispatcher
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -15,6 +16,7 @@ import tupperdate.android.LoggedOutDestination
 import tupperdate.android.editRecipe.NewRecipe
 import tupperdate.android.editRecipe.ViewRecipe
 import tupperdate.android.home.Home
+import tupperdate.android.launching.Launching
 import tupperdate.android.onboarding.Onboarding
 import tupperdate.android.onboardingConfirmation.OnboardingConfirmation
 import tupperdate.android.profile.Profile
@@ -60,6 +62,7 @@ private fun Flow<String?>.collectAsState(): UiState =
  * @param api the [Api] instance to use.
  * @param backDispatcher an [OnBackPressedDispatcher] instance, used to integrate with back presses
  */
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun TupperdateApp(
     api: Api,
@@ -69,7 +72,7 @@ fun TupperdateApp(
     when (loggedIn.collectAsState()) {
 
         UiState.Loading -> {
-            /* Display nothing. */
+            Launching()
         }
 
         UiState.LoggedOut -> {
