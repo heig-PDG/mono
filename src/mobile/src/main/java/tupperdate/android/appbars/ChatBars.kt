@@ -1,17 +1,16 @@
 package tupperdate.android.appbars
 
-import android.text.BoringLayout
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
@@ -48,6 +47,29 @@ fun ChatTopBar(
                 Text(text = nameOther, style = MaterialTheme.typography.subtitle1)
                 Text(text = otherOnline,
                     style = MaterialTheme.typography.subtitle2)
+            }
+        }
+    }
+}
+
+@Composable
+fun bottomBar(
+    onSendClick:()->Unit,
+    modifier: Modifier=Modifier
+) {
+    Row(modifier.fillMaxWidth().background(Color.Smurf100)) {
+        Row(
+            Modifier.fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 10.dp)
+                .background(Color.Transparent),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            OutlinedTextField(modifier = Modifier.padding(end = 10.dp)
+                .height(24.dp),
+                value = "",
+                onValueChange = {})
+            IconButton(onClick = onSendClick) {
+                Icon(asset = vectorResource(id = R.drawable.ic_chat_send))
             }
         }
     }
