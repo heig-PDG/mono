@@ -19,6 +19,7 @@ import tupperdate.android.home.Home
 import tupperdate.android.onboarding.Onboarding
 import tupperdate.android.onboardingConfirmation.OnboardingConfirmation
 import tupperdate.android.profile.Profile
+import tupperdate.android.testing.AuthenticationTesting
 import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.utils.Navigator
 import tupperdate.api.Api
@@ -148,11 +149,8 @@ private fun LoggedIn(
                 onSignOutClick = {},
             )
 
-        /*
-        is LoggedInDestination.AuthenticationTesting -> LoggedInDestination.AuthenticationTesting(
-            api = api,
-        )
-         */
+        is LoggedInDestination.AuthenticationTesting ->
+            AuthenticationTesting(api)
     }
 }
 

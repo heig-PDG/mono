@@ -1,6 +1,29 @@
 package tupperdate.android.testing
 
-/*
+import android.widget.Toast
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ClipboardManagerAmbient
+import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.LifecycleOwnerAmbient
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import tupperdate.api.Api
+import tupperdate.api.AuthenticationApi
+import tupperdate.api.UserApi
+
 @Composable
 fun AuthenticationTesting(
     api: Api,
@@ -17,7 +40,7 @@ fun AuthenticationTesting(
     val (verificationResult, setVerificationResult) = remember {
         mutableStateOf<AuthenticationApi.VerificationResult?>(null)
     }
-    val profile by remember { api.authentication.profile }.collectAsState(null)
+    val profile by remember { api.users.profile }.collectAsState(null)
     val authInfo by remember { api.authentication.auth }.collectAsState(null)
 
     Column(modifier) {
@@ -81,7 +104,7 @@ private fun VerificationResultStatus(
 
 @Composable
 private fun Profile(
-    state: AuthenticationApi.Profile?,
+    state: UserApi.Profile?,
     modifier: Modifier = Modifier,
 ) {
     Text("Profile $state", modifier)
@@ -110,4 +133,3 @@ private fun JWTToken(
         }
     }
 }
-*/
