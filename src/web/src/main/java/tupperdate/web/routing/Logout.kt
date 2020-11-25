@@ -19,7 +19,7 @@ fun Route.account(auth: FirebaseAuth) {
     }
 }
 
-fun Route.logout(auth: FirebaseAuth) = post("/logout") {
+fun Route.logout(auth: FirebaseAuth) = post("logout") {
     val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
     auth.revokeRefreshTokens(uid)
 
