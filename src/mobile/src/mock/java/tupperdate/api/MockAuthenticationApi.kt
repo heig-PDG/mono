@@ -46,4 +46,7 @@ object MockAuthenticationApi : AuthenticationApi {
 
     override val uid: Flow<String?>
         get() = flowOf(null)
+
+    override val auth: Flow<AuthenticationApi.AuthInfo?>
+        get() = flowOf(null)
 }

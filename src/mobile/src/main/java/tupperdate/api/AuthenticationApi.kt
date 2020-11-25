@@ -17,6 +17,10 @@ interface AuthenticationApi {
         InternalError,
     }
 
+    data class AuthInfo(
+        val token: String,
+    )
+
     /**
      * Returns a [RequestCodeResult] indicating the status of the phone number verification. Some
      * verifications might succeed directly, on phones with the right version of Google Play
@@ -47,4 +51,6 @@ interface AuthenticationApi {
     val connected: Flow<Boolean>
 
     val uid: Flow<String?>
+
+    val auth: Flow<AuthInfo?>
 }
