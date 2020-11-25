@@ -30,7 +30,7 @@ fun OneConversation(
     onReturnClick: () -> Unit,
     imageOther: Any,
     nameOther: String,
-    otherOnline: String,
+    otherOnlineStatus: String,
     onSendClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -40,7 +40,7 @@ fun OneConversation(
                 onReturnClick = onReturnClick,
                 imageOther = imageOther,
                 nameOther = nameOther,
-                otherOnline = otherOnline
+                otherOnline = otherOnlineStatus
             )
         },
         bodyContent = { MessagesColumn(msgList = msgList) },
@@ -103,7 +103,7 @@ private fun DisplayMessage(
 @Preview
 @Composable
 private fun OneConversationPreview() {
-    val msgList = listOf<Message>(
+    val msgList = listOf(
         Message("Do you dream of Scorchers ?", true),
         Message("Only when I missed hunting one", true)
     )
@@ -113,7 +113,7 @@ private fun OneConversationPreview() {
             onReturnClick = {},
             imageOther = "https://pbs.twimg.com/profile_images/1257192502916001794/f1RW6Ogf_400x400.jpg",
             nameOther = "Aloy",
-            otherOnline = "online",
+            otherOnlineStatus = "online",
             onSendClick = {}
         )
     }

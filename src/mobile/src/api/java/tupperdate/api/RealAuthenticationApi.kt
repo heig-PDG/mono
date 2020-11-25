@@ -16,7 +16,7 @@ import kotlin.coroutines.suspendCoroutine
 @OptIn(ExperimentalCoroutinesApi::class)
 class RealAuthenticationApi(
     private val activity: AppCompatActivity,
-    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance(),
 ) : AuthenticationApi {
 
     /**
@@ -32,7 +32,7 @@ class RealAuthenticationApi(
 
     override suspend fun requestCode(
         number: String,
-        force: Boolean
+        force: Boolean,
     ): AuthenticationApi.RequestCodeResult = suspendCoroutine { continuation ->
 
         val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -57,7 +57,7 @@ class RealAuthenticationApi(
                         } else {
                             resumeOnce {
                                 continuation.resume(AuthenticationApi.RequestCodeResult.InternalError)
-                                result.exception?.printStackTrace();
+                                result.exception?.printStackTrace()
                             }
                         }
                     }
@@ -73,7 +73,7 @@ class RealAuthenticationApi(
                         )
                     }
                     else -> resumeOnce {
-                        problem.printStackTrace();
+                        problem.printStackTrace()
                         continuation.resume(
                             AuthenticationApi.RequestCodeResult.InternalError
                         )
@@ -132,10 +132,11 @@ class RealAuthenticationApi(
         }
     }
 
-    val auth: Flow<AuthInfo?> = currentUser(firebaseAuth)
+    override val auth: Flow<AuthenticationApi.AuthInfo?>
+        get() = currentUser(firebaseAuth)
             .map { user ->
                 val token = user?.getIdToken(false)?.await()?.token
-                token?.let { AuthInfo(it) }
+                token?.let { AuthenticationApi.AuthInfo(it) }
             }
             .catch { emit(null) }
 
@@ -145,10 +146,6 @@ class RealAuthenticationApi(
     override val uid: Flow<String?>
         get() = currentUser(firebaseAuth).map { it?.uid }
 }
-
-data class AuthInfo(
-    val token: String,
-)
 
 /**
  * Returns a [Flow] of the current [FirebaseUser], and emits one on every authentication change.

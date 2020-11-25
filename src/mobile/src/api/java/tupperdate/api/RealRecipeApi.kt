@@ -1,6 +1,5 @@
 package tupperdate.api
 
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -50,26 +49,30 @@ class RealRecipeApi(
         warm: Boolean,
         hasAllergens: Boolean,
     ) {
-        client.post<Unit>("/recipes") {
-            // TODO : Improve client-side image handling.
-            // TODO : Compress images.
-            val image = File(File(activity.filesDir, "images"), "capture.jpg")
-            val imageData = if (image.exists()) {
-                val array = image.inputStream().buffered().readBytes()
-                Base64.encodeBase64String(array)
-            } else {
-                null
+        try {
+            client.post<Unit>("/recipes") {
+                // TODO : Improve client-side image handling.
+                // TODO : Compress images.
+                val image = File(File(activity.filesDir, "images"), "capture.jpg")
+                val imageData = if (image.exists()) {
+                    val array = image.inputStream().buffered().readBytes()
+                    Base64.encodeBase64String(array)
+                } else {
+                    null
+                }
+                body = NewRecipeDTO(
+                    title = title,
+                    description = description,
+                    attributes = RecipeAttributesDTO(
+                        vegetarian = vegetarian,
+                        hasAllergens = hasAllergens,
+                        warm = warm,
+                    ),
+                    imageBase64 = imageData,
+                )
             }
-            body = NewRecipeDTO(
-                title = title,
-                description = description,
-                attributes = RecipeAttributesDTO(
-                    vegetarian = vegetarian,
-                    hasAllergens = hasAllergens,
-                    warm = warm,
-                ),
-                imageBase64 = imageData,
-            )
+        } catch (problem: Throwable) {
+            problem.printStackTrace()
         }
     }
 }

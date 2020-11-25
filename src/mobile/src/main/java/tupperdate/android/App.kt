@@ -11,12 +11,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import tupperdate.android.chats.ConversationsPage
+import tupperdate.android.chats.OneConversation
 import tupperdate.android.editRecipe.NewRecipe
 import tupperdate.android.editRecipe.ViewRecipe
 import tupperdate.android.home.Home
 import tupperdate.android.onboarding.Onboarding
 import tupperdate.android.onboardingConfirmation.OnboardingConfirmation
 import tupperdate.android.profile.Profile
+import tupperdate.android.testing.AuthenticationTesting
 import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.utils.Navigator
 import tupperdate.api.Api
@@ -49,7 +51,7 @@ private sealed class UiState {
  * display the appropriate UI.
  */
 @Composable
-private fun Flow<Boolean?>.collectAsState(): UiState =
+private fun Flow<String?>.collectAsState(): UiState =
     map { if (it == null) UiState.LoggedOut else UiState.LoggedIn }
         .collectAsState(UiState.Loading).value
 
@@ -64,7 +66,7 @@ fun TupperdateApp(
     api: Api,
     backDispatcher: OnBackPressedDispatcher,
 ) {
-    val loggedIn = remember { api.authentication.connected }
+    val loggedIn = remember { api.authentication.uid }
     when (loggedIn.collectAsState()) {
 
         UiState.Loading -> {
@@ -136,6 +138,7 @@ private fun LoggedIn(
             onProfileClick = action.profile,
             onRecipeClick = action.newRecipe,
             onReturnClick = {},
+            onTitleClick = action.authenticationTesting,
             onRecipeDetailsClick = action.viewRecipe,
         )
 
@@ -146,12 +149,21 @@ private fun LoggedIn(
                 onCloseClick = action.back,
                 onSignOutClick = {},
             )
-
-        LoggedInDestination.ConversationsPage -> ConversationsPage(
+        is LoggedInDestination.ConversationsPage -> ConversationsPage(
             onRecipeClick = action.home,
             onProfileClick = action.profile,
             recipes = listOf(/*TODO fill this parameter*/),
             conversations = listOf(/*TODO fill this parameter*/)
+        )
+        is LoggedInDestination.AuthenticationTesting ->
+            AuthenticationTesting(api)
+        is LoggedInDestination.OneConversation -> OneConversation(
+            msgList = listOf(),
+            onReturnClick = action.back,
+            imageOther = "",
+            nameOther = "",
+            otherOnlineStatus = "online",
+            onSendClick = {}
         )
     }
 }

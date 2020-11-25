@@ -1,6 +1,26 @@
 package tupperdate.android.testing
 
-/*
+import android.widget.Toast
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.TextField
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ClipboardManagerAmbient
+import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.LifecycleOwnerAmbient
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import tupperdate.api.Api
+import tupperdate.api.AuthenticationApi
+import tupperdate.api.UserApi
+
 @Composable
 fun AuthenticationTesting(
     api: Api,
@@ -17,34 +37,39 @@ fun AuthenticationTesting(
     val (verificationResult, setVerificationResult) = remember {
         mutableStateOf<AuthenticationApi.VerificationResult?>(null)
     }
-    val profile by remember { api.authentication.profile }.collectAsState(null)
+    val profile by remember { api.users.profile }.collectAsState(null)
     val authInfo by remember { api.authentication.auth }.collectAsState(null)
 
-    Column(modifier) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+
         TextField(
             value = phone,
             onValueChange = setPhone,
             label = { Text("Phone") },
         )
         RequestCodeStatus(requestCodeResult)
+
         TextField(
             value = verification,
             onValueChange = setVerification,
             label = { Text("Verification code") },
         )
         VerificationResultStatus(verificationResult)
+
         Button(onClick = {
             scope.launch {
                 setRequestCodeResult(null)
                 setRequestCodeResult(api.authentication.requestCode(phone))
             }
         }) { Text("Send code") }
+
         Button(onClick = {
             scope.launch {
                 setVerificationResult(null)
                 setVerificationResult(api.authentication.verify(verification))
             }
         }) { Text("Verify code") }
+
         Profile(profile)
         JWTToken(authInfo?.token ?: "Not available")
     }
@@ -81,7 +106,7 @@ private fun VerificationResultStatus(
 
 @Composable
 private fun Profile(
-    state: AuthenticationApi.Profile?,
+    state: UserApi.Profile?,
     modifier: Modifier = Modifier,
 ) {
     Text("Profile $state", modifier)
@@ -110,4 +135,3 @@ private fun JWTToken(
         }
     }
 }
-*/

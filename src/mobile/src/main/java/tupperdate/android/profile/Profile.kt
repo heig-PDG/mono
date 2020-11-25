@@ -2,7 +2,6 @@ package tupperdate.android.profile
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
