@@ -8,6 +8,7 @@ data class User(
     val displayName: String? = null,
     val phone: String? = null,
     val picture: String? = null,
+    val fcmTokens: List<String> = emptyList(),
 )
 
 fun MyUserDTO.toUser(id: String, phone: String, picture: String): User {

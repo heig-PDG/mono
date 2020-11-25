@@ -7,6 +7,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.cloud.FirestoreClient
+import com.google.firebase.messaging.FirebaseMessaging
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
@@ -17,6 +18,7 @@ import io.ktor.server.netty.*
 import tupperdate.web.auth.firebase
 import tupperdate.web.exceptions.registerException
 import tupperdate.web.routing.accounts
+import tupperdate.web.routing.notifications
 import tupperdate.web.routing.recipes
 import tupperdate.web.routing.users
 
@@ -76,6 +78,10 @@ fun main() {
                 accounts(FirebaseAuth.getInstance(firebase))
                 recipes(firebase)
                 users(FirestoreClient.getFirestore(firebase))
+                notifications(
+                    messaging = FirebaseMessaging.getInstance(firebase),
+                    firestore = FirestoreClient.getFirestore(firebase),
+                )
             }
         }
     }
