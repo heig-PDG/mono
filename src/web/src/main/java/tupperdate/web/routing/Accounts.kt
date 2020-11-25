@@ -9,10 +9,6 @@ import io.ktor.routing.*
 import tupperdate.web.auth.firebaseAuthPrincipal
 import tupperdate.web.exceptions.statusException
 
-/**
- *
- */
-
 fun Route.accounts(auth: FirebaseAuth) {
     route("/accounts") {
         logout(auth)
