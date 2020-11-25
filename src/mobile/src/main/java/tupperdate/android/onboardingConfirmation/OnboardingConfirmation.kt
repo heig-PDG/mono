@@ -1,13 +1,11 @@
 package tupperdate.android.onboardingConfirmation
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.AmbientEmphasisLevels
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.ProvideEmphasis
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -133,7 +131,7 @@ private fun OnboardingConfirmation(
                 .fillMaxWidth()
         )
 
-        ProvideEmphasis(emphasis = AmbientEmphasisLevels.current.disabled) {
+        Providers(AmbientContentAlpha provides ContentAlpha.disabled) {
             Text(
                 text = stringResource(R.string.onboardingConfirmation_bottom_text),
                 style = TupperdateTypography.body2,
@@ -157,7 +155,7 @@ private fun CodeInput(
         label = { Text(stringResource(R.string.onboardingConfirmation_code_label)) },
         onValueChange = onCodeChanged,
         placeholder = { Text(stringResource(R.string.onboardingConfirmation_code_placeholder)) },
-        keyboardType = KeyboardType.Number,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         isErrorValue = isErrorValue,
         modifier = modifier.fillMaxWidth(),
     )
