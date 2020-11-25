@@ -36,8 +36,7 @@ class FirebaseAuthenticationProvider(
     ) : AuthenticationProvider.Configuration(name) {
         internal var authenticationFunction: AuthenticationFunction<String> = { token ->
             try {
-                // Check if id token is valid and was issued before refresh tokens were revoked
-                val checked = auth.verifyIdToken(token, true)
+                val checked = auth.verifyIdToken(token)
                 FirebaseAuthPrincipal(checked.uid)
             } catch (argEx: IllegalArgumentException) {
                 null
