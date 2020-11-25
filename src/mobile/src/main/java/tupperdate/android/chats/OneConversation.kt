@@ -53,7 +53,8 @@ private fun MessagesColumn(
     msgList:List<Message>,
     modifier: Modifier = Modifier
 ) {
-    LazyColumnFor(items = msgList) {
+    LazyColumnFor(items = msgList,
+    modifier = modifier.padding(horizontal = 16.dp)) {
         DisplayMessage(
             message = it
         )
