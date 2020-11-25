@@ -1,5 +1,6 @@
 package tupperdate.api
 
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*

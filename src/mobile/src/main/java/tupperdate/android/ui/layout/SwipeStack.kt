@@ -5,7 +5,6 @@ import androidx.compose.animation.asDisposableClock
 import androidx.compose.animation.core.AnimationClockObservable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.SpringSpec
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,10 +15,10 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.drawLayer
 import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.platform.AnimationClockAmbient
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp

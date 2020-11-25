@@ -1,17 +1,14 @@
 package tupperdate.android.editRecipe
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AmbientEmphasisLevels
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProvideEmphasis
+import androidx.compose.material.*
 import androidx.compose.material.ripple.RippleIndication
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,10 +28,10 @@ fun RecipeInfoButton(
     enabled: Boolean = true,
 ) {
     val emphasis = when {
-        enabled -> AmbientEmphasisLevels.current.medium
-        else -> AmbientEmphasisLevels.current.disabled
+        enabled -> ContentAlpha.medium
+        else -> ContentAlpha.disabled
     }
-    ProvideEmphasis(emphasis) {
+    Providers(AmbientContentAlpha provides emphasis) {
         Column(
             modifier
                 .clip(RoundedCornerShape(16.dp))
