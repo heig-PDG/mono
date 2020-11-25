@@ -10,6 +10,7 @@ import tupperdate.web.exceptions.statusException
 
 fun Route.logout(auth: FirebaseAuth) = post("logout") {
     val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+    // TODO: This revokes all refresh tokens from every logged in device. Maybe do something else
     auth.revokeRefreshTokens(uid)
 
     call.respond(HttpStatusCode.OK)
