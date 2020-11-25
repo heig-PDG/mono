@@ -13,7 +13,7 @@ import tupperdate.web.exceptions.statusException
  *
  */
 
-fun Route.account(auth: FirebaseAuth) {
+fun Route.accounts(auth: FirebaseAuth) {
     route("/accounts") {
         logout(auth)
     }
