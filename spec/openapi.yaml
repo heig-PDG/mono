@@ -7,6 +7,9 @@ servers:
   - url: http://api.tupperdate.me
   
 tags:
+- name: accounts
+  description: Everything about accounts
+  
 - name: users
   description: Everything about users
 
@@ -17,6 +20,21 @@ security:
   - firebaseAuth: []
 
 paths:
+  # accounts
+  /accounts/logout:
+    post:
+      tags:
+      - accounts
+      summary: Logout a user by revoking his refresh token
+      description: ""
+      operationId: logoutUser
+        
+      responses:
+        '200':
+          description: OK; if the user was successfully logged out
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
   # users
   /users/{userId}:
     put:
@@ -80,6 +98,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '404':
           description: Not Found; if the user can't be found
+
   # recipes
   
   /recipes:

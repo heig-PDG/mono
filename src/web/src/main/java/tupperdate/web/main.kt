@@ -16,6 +16,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import tupperdate.web.auth.firebase
 import tupperdate.web.exceptions.registerException
+import tupperdate.web.routing.accounts
 import tupperdate.web.routing.recipes
 import tupperdate.web.routing.users
 
@@ -72,6 +73,7 @@ fun main() {
 
         install(Routing) {
             authenticate {
+                accounts(FirebaseAuth.getInstance(firebase))
                 recipes(firebase)
                 users(FirestoreClient.getFirestore(firebase))
             }
