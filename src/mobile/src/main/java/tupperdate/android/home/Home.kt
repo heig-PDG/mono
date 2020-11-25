@@ -26,6 +26,7 @@ fun Home(
     onReturnClick: () -> Unit,
     onRecipeClick: () -> Unit,
     onRecipeDetailsClick: (RecipeApi.Recipe) -> Unit,
+    onTitleClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val recipes by remember { recipeApi.stack() }.collectAsState(emptyList())
@@ -34,7 +35,8 @@ fun Home(
             TupperdateTopBar(
                 onChatClick = onChatClick,
                 onProfileClick = onProfileClick,
-                Modifier.fillMaxWidth()
+                onTitleClick = onTitleClick,
+                modifier = Modifier.fillMaxWidth()
             )
         },
         bodyContent = { paddingValues ->
