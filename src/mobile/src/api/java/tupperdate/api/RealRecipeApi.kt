@@ -51,7 +51,6 @@ class RealRecipeApi(
     ) {
         try {
             client.post<Unit>("/recipes") {
-                println("SENDING")
                 // TODO : Improve client-side image handling.
                 // TODO : Compress images.
                 val image = File(File(activity.filesDir, "images"), "capture.jpg")
