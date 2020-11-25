@@ -137,6 +137,7 @@ private fun LoggedIn(
             onProfileClick = action.profile,
             onRecipeClick = action.newRecipe,
             onReturnClick = {},
+            onTitleClick = action.authenticationTesting,
             onRecipeDetailsClick = action.viewRecipe,
         )
         is LoggedInDestination.Profile ->
