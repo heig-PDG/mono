@@ -1,6 +1,8 @@
 package tupperdate.api
 
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toFile
 import io.ktor.client.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -12,7 +14,6 @@ import tupperdate.api.dto.asRecipe
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.common.dto.RecipeAttributesDTO
 import tupperdate.common.dto.RecipeDTO
-import java.io.File
 
 class RealRecipeApi(
     private val client: HttpClient,
@@ -48,18 +49,14 @@ class RealRecipeApi(
         vegetarian: Boolean,
         warm: Boolean,
         hasAllergens: Boolean,
+        imageUri: Uri?,
     ) {
         try {
             client.post<Unit>("/recipes") {
                 // TODO : Improve client-side image handling.
                 // TODO : Compress images.
-                val image = File(File(activity.filesDir, "images"), "capture.jpg")
-                val imageData = if (image.exists()) {
-                    val array = image.inputStream().buffered().readBytes()
-                    Base64.encodeBase64String(array)
-                } else {
-                    null
-                }
+                val imageData = makeBase64(imageUri)
+
                 body = NewRecipeDTO(
                     title = title,
                     description = description,
@@ -73,6 +70,19 @@ class RealRecipeApi(
             }
         } catch (problem: Throwable) {
             problem.printStackTrace()
+        }
+    }
+
+    private fun makeBase64(uri: Uri?) : String? {
+        if (uri == null)
+            return null
+
+        val file = uri.toFile()
+        return if (file.exists()) {
+            val array = file.inputStream().buffered().readBytes()
+            Base64.encodeBase64String(array)
+        } else {
+            null
         }
     }
 }

@@ -60,6 +60,7 @@ fun NewRecipe(
                     vegetarian = recipe.vegetarian,
                     warm = recipe.warm,
                     hasAllergens = recipe.hasAllergens,
+                    imageUri = imageUri,
                 )
                 onBack()
             }
