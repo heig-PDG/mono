@@ -1,6 +1,7 @@
 package tupperdate.api
 
 import android.net.Uri
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
@@ -8,12 +9,18 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.io.File
 
-interface ImagePickerApi {
-    fun pick()
-    val current: Flow<Uri?>
+enum class ImageType {
+    Profile,
+    Recipe
 }
 
-class ActualImagePickerApi(activity: AppCompatActivity) : ImagePickerApi {
+interface ImagePickerApi {
+    fun pick(type: ImageType)
+    val currentRecipe: Flow<Uri?>
+    val currentProfile: Flow<Uri?>
+}
+
+class ActualImagePickerApi(private val activity: AppCompatActivity) : ImagePickerApi {
     private val authority = "me.tupperdate.provider"
 
     private val path = File(activity.filesDir, "images").apply { mkdirs() }
@@ -24,21 +31,41 @@ class ActualImagePickerApi(activity: AppCompatActivity) : ImagePickerApi {
         file
     )
 
-    private val uriFlow = MutableStateFlow<Uri?>(null)
+    private val uri2 = FileProvider.getUriForFile(
+        activity.applicationContext,
+        authority,
+        File(path, "profile.jpg")
+    )
 
-    override val current: Flow<Uri?>
-        get() = uriFlow
+    private val uriRecipeFlow = MutableStateFlow<Uri?>(null)
+    private val uriProfileFlow = MutableStateFlow<Uri?>(null)
 
-    private val registration = activity.registerForActivityResult(
-        ActivityResultContracts.TakePicture()
-    ) { success ->
-        if (success) {
-            uriFlow.value = uri
+    override val currentRecipe: Flow<Uri?>
+        get() = uriRecipeFlow
+
+    override val currentProfile: Flow<Uri?>
+        get() = uriProfileFlow
+
+    private fun register(flow: MutableStateFlow<Uri?>, uri: Uri) : ActivityResultLauncher<Uri?> {
+        return activity.registerForActivityResult(
+            ActivityResultContracts.TakePicture()
+        ) { success ->
+            if (success) {
+                flow.value = uri
+            }
         }
     }
 
-    override fun pick() {
-        uriFlow.value = null
-        registration.launch(uri)
+    override fun pick(type: ImageType) {
+        when (type) {
+            ImageType.Profile -> {
+                uriProfileFlow.value = null
+                register(uriProfileFlow, uri2).launch(uri2)
+            }
+            ImageType.Recipe -> {
+                uriRecipeFlow.value = null
+                register(uriRecipeFlow, uri).launch(uri)
+            }
+        }
     }
 }

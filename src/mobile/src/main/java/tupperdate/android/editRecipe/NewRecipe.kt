@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import dev.chrisbanes.accompanist.coil.CoilImageConstants
 import kotlinx.coroutines.launch
 import tupperdate.api.ImagePickerApi
+import tupperdate.api.ImageType
 import tupperdate.api.RecipeApi
 
 @Composable
@@ -22,7 +23,7 @@ fun NewRecipe(
     val scope = LifecycleOwnerAmbient.current.lifecycleScope
 
     val placeholder = "https://via.placeholder.com/450"
-    val imageUri = remember { imagePickerApi.current }.collectAsState(initial = null).value
+    val imageUri = remember { imagePickerApi.currentRecipe }.collectAsState(initial = null).value
 
     val heroImage = if (imageUri == null) {
         // TODO: Remove this, we do not want to invalidate the cache just because we added an image...
@@ -63,7 +64,7 @@ fun NewRecipe(
                 onBack()
             }
         },
-        onEdit = { imagePickerApi.pick() },
+        onEdit = { imagePickerApi.pick(ImageType.Recipe) },
         modifier = modifier,
     )
 }
