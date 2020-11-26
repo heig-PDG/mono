@@ -25,7 +25,7 @@ fun Route.usersPut(store: Firestore) = put("{userId}") {
     val doc = store.collection("users").document(authUserId)
     val dto = call.receive<MyUserDTO>()
     // TODO: Fix default image
-    val user = dto.toUser(doc.id, "", "https://thispersondoesnotexist.com/image")
+    val user = dto.toUser(doc.id, "https://thispersondoesnotexist.com/image")
 
     doc.set(user).await()
     call.respond(HttpStatusCode.OK)

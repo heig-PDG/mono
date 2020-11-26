@@ -22,16 +22,15 @@ import tupperdate.web.util.await
 fun Route.recipesPut(store: Firestore) {
     put("{recipeId}/like") {
         val recipeId = call.parameters["recipeId"] ?: statusException(HttpStatusCode.BadRequest)
-        val recipeDoc = store.collection("recipes").document(recipeId)
-        val time = recipeDoc.get().await().toObject(Recipe::class.java)?.timestamp ?: statusException(HttpStatusCode.NotFound)
+        val recipe = store.collection("recipes").document(recipeId).get().await().toObject(Recipe::class.java) ?: statusException(HttpStatusCode.NotFound)
 
         var userId1 = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
-        var userId2 = recipeDoc.parent.parent?.id ?: statusException(HttpStatusCode.Conflict)
+        var userId2 = recipe.userId ?: statusException(HttpStatusCode.NotFound)
 
         val userDoc = store.collection("users").document(userId1)
 
         // A user can't like his own recipe
-        if (userId1 == userId2) statusException(HttpStatusCode.Forbidden)
+       // if (userId1 == userId2) statusException(HttpStatusCode.Forbidden)
 
         // Order userId1 and userId2 in alphanumerical order (1 is inferior to 2)
         var callerIsUser1 = true
@@ -61,9 +60,10 @@ fun Route.recipesPut(store: Firestore) {
         )
 
         // set recipe as seen
-        userDoc.set("lastSeenRecipe" to time)
+        val time = recipe.timestamp ?: statusException(HttpStatusCode.NotFound)
+        userDoc.update("lastSeenRecipe", time)
 
-        call.respond(HttpStatusCode.NotImplemented)
+        call.respond(HttpStatusCode.OK)
     }
 
     put("{recipeId}/dislike") {
@@ -74,9 +74,9 @@ fun Route.recipesPut(store: Firestore) {
         val recipeDoc = store.collection("recipes").document(recipeId)
         val time = recipeDoc.get().await().toObject(Recipe::class.java)?.timestamp ?: statusException(HttpStatusCode.NotFound)
 
-        userDoc.set("lastSeenRecipe" to time)
+        userDoc.update("lastSeenRecipe", time)
 
-        call.respond(HttpStatusCode.NotImplemented)
+        call.respond(HttpStatusCode.OK)
     }
 }
 

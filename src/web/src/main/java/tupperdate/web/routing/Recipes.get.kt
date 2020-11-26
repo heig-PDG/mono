@@ -28,7 +28,7 @@ fun Route.recipesGet(store: Firestore) = get {
     val lastSeenRecipe = store.collection("users").document(uid).get().await().get("lastSeenRecipe") ?: 0
 
     // TODO: Filter user own recipes
-    val retrieved = store.collection("recipes").whereGreaterThanOrEqualTo("timestamp", lastSeenRecipe)
+    val retrieved = store.collection("recipes").whereGreaterThan("timestamp", lastSeenRecipe)
         .orderBy("timestamp").limit(count).get().await()
 
     val recipes = retrieved.toObjects(Recipe::class.java)
