@@ -35,16 +35,6 @@ class ActualImagePickerApi(private val activity: AppCompatActivity) : ImagePicke
     override val currentProfile: Flow<Uri?>
         get() = profile.flow
 
-    private fun register(flow: MutableStateFlow<Uri?>, uri: Uri): ActivityResultLauncher<Uri?> {
-        return activity.registerForActivityResult(
-            ActivityResultContracts.TakePicture()
-        ) { success ->
-            if (success) {
-                flow.value = uri
-            }
-        }
-    }
-
     override fun pick(imageType: ImageType) {
         val type = imageType.toType()
         type.flow.value = null
@@ -56,7 +46,7 @@ class ActualImagePickerApi(private val activity: AppCompatActivity) : ImagePicke
      * images that we support
      */
     inner class Type(
-        fileName: String
+        fileName: String,
     ) {
         internal var uri: Uri = FileProvider.getUriForFile(
             activity.applicationContext,
@@ -67,14 +57,20 @@ class ActualImagePickerApi(private val activity: AppCompatActivity) : ImagePicke
         internal var registration: ActivityResultLauncher<Uri?>
 
         init {
-            registration = register(flow, uri)
+            registration = activity.registerForActivityResult(
+                ActivityResultContracts.TakePicture()
+            ) { success ->
+                if (success) {
+                    flow.value = uri
+                }
+            }
         }
     }
 
     /**
      * Extension method to map an [ImageType] to an internally used [Type]
      */
-    private fun ImageType.toType() : Type {
+    private fun ImageType.toType(): Type {
         return when (this) {
             ImageType.Profile -> profile
             ImageType.Recipe -> recipe
@@ -87,7 +83,7 @@ class ActualImagePickerApi(private val activity: AppCompatActivity) : ImagePicke
  * Extension method used to help us translate images to base64 encoded string, to transmit them
  * on the network
  */
-fun Uri.readFileAsBase64() : String? {
+fun Uri.readFileAsBase64(): String? {
     val file = this.toFile()
     return if (file.exists()) {
         val array = file.inputStream().buffered().readBytes()
