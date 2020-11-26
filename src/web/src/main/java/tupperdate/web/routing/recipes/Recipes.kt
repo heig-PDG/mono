@@ -1,4 +1,4 @@
-package tupperdate.web.routing
+package tupperdate.web.routing.recipes
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.cloud.FirestoreClient

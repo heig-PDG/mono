@@ -1,4 +1,4 @@
-package tupperdate.web.routing
+package tupperdate.web.routing.recipes
 
 import com.google.cloud.firestore.Firestore
 import io.ktor.application.*
