@@ -7,9 +7,9 @@ import androidx.compose.animation.ColorPropKey
 import androidx.compose.animation.animate
 import androidx.compose.animation.core.*
 import androidx.compose.animation.transition
-import androidx.compose.foundation.AmbientTextStyle
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.height
+import androidx.compose.material.AmbientTextStyle
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -18,7 +18,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.layout.boundsInParent
-import androidx.compose.ui.onGloballyPositioned
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.ui.tooling.preview.Preview
 import tupperdate.android.ui.Flamingo700

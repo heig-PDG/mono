@@ -1,16 +1,13 @@
 package tupperdate.android.onboarding
 
-import androidx.compose.foundation.ProvideTextStyle
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.AmbientEmphasisLevels
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.ProvideEmphasis
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -40,8 +37,8 @@ private enum class LocalError {
 }
 
 @Composable
-private fun getErrorString(error: LocalError) : String {
-    return when(error) {
+private fun getErrorString(error: LocalError): String {
+    return when (error) {
         LocalError.Internal -> stringResource(R.string.onboarding_error_internal)
         LocalError.InvalidNumber -> stringResource(R.string.onboarding_requestCode_error_invalid_number)
     }
@@ -137,7 +134,7 @@ private fun Onboarding(
                 .fillMaxWidth()
         )
 
-        ProvideEmphasis(emphasis = AmbientEmphasisLevels.current.disabled) {
+        Providers(AmbientContentAlpha provides ContentAlpha.disabled) {
             Text(
                 text = stringResource(R.string.onboarding_bottom_text),
                 style = TupperdateTypography.body2,
@@ -163,18 +160,16 @@ private fun ViewPhoneInput(
     error: LocalError?,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
+    Column(modifier) {
         OutlinedTextField(
             value = phone,
             onValueChange = onValueChange,
             label = { Text(stringResource(R.string.onboarding_phone_label)) },
             placeholder = { Text(stringResource(R.string.onboarding_phone_placeholder)) },
-            keyboardType = KeyboardType.Phone,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             isErrorValue = error != null,
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
-
         error?.let {
             Text(
                 text = getErrorString(it),
