@@ -6,7 +6,6 @@ import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.cloud.FirestoreClient
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
@@ -75,7 +74,7 @@ fun main() {
             authenticate {
                 accounts(FirebaseAuth.getInstance(firebase))
                 recipes(firebase)
-                users(FirestoreClient.getFirestore(firebase))
+                users(firebase)
             }
         }
     }

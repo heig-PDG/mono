@@ -10,6 +10,7 @@ import kotlin.random.Random
 @OptIn(ExperimentalCoroutinesApi::class)
 object MockAuthenticationApi : AuthenticationApi {
     private val localConnected = MutableStateFlow(false)
+    private val localUid = MutableStateFlow<String?>(null)
 
     override suspend fun requestCode(
         number: String,
@@ -20,6 +21,7 @@ object MockAuthenticationApi : AuthenticationApi {
         return when (number) {
             "144" -> {
                 localConnected.value = true
+                localUid.value = "my_uid"
                 AuthenticationApi.RequestCodeResult.LoggedIn
             }
             "123" -> AuthenticationApi.RequestCodeResult.RequiresVerification
@@ -34,6 +36,7 @@ object MockAuthenticationApi : AuthenticationApi {
         return when (code) {
             "0000" -> {
                 localConnected.value = true
+                localUid.value = "my_uid"
                 AuthenticationApi.VerificationResult.LoggedIn
             }
             "666" -> AuthenticationApi.VerificationResult.InternalError
@@ -45,7 +48,7 @@ object MockAuthenticationApi : AuthenticationApi {
         get() = localConnected
 
     override val uid: Flow<String?>
-        get() = flowOf(null)
+        get() = localUid
 
     override val auth: Flow<AuthenticationApi.AuthInfo?>
         get() = flowOf(null)

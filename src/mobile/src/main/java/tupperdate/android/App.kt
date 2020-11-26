@@ -143,6 +143,7 @@ private fun LoggedIn(
         is LoggedInDestination.Profile ->
             Profile(
                 userApi = api.users,
+                imagePicker = api.images,
                 profile = profile ?: api.users.emptyProfile,
                 onCloseClick = action.back,
                 onSignOutClick = {},

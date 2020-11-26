@@ -1,5 +1,6 @@
 package tupperdate.api
 
+import android.net.Uri
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.flow.Flow
@@ -28,5 +29,6 @@ interface RecipeApi {
         vegetarian: Boolean,
         warm: Boolean,
         hasAllergens: Boolean,
+        imageUri: Uri?,
     )
 }
