@@ -1,4 +1,4 @@
-package tupperdate.web.routing
+package tupperdate.web.routing.users
 
 import com.google.cloud.firestore.Firestore
 import com.google.firebase.FirebaseApp
