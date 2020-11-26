@@ -15,7 +15,7 @@ enum class ImageType {
 }
 
 interface ImagePickerApi {
-    fun pick(type: ImageType)
+    fun pick(imageType: ImageType)
     val currentRecipe: Flow<Uri?>
     val currentProfile: Flow<Uri?>
 }
@@ -24,26 +24,14 @@ class ActualImagePickerApi(private val activity: AppCompatActivity) : ImagePicke
     private val authority = "me.tupperdate.provider"
     private val directory = File(activity.filesDir, "images").apply { mkdirs() }
 
-    private val recipe = initType("recipe.jpg")
-    private val profile = initType("profile.jpg")
+    private val recipe = Type("recipe.jpg")
+    private val profile = Type("profile.jpg")
 
     override val currentRecipe: Flow<Uri?>
         get() = recipe.flow
 
     override val currentProfile: Flow<Uri?>
         get() = profile.flow
-
-    private fun initType(fileName: String): Type {
-        val uri = FileProvider.getUriForFile(
-            activity.applicationContext,
-            authority,
-            File(directory, fileName),
-        )
-        val flow = MutableStateFlow<Uri?>(null)
-        val registration = register(flow, uri)
-
-        return Type(uri, flow, registration)
-    }
 
     private fun register(flow: MutableStateFlow<Uri?>, uri: Uri): ActivityResultLauncher<Uri?> {
         return activity.registerForActivityResult(
@@ -61,12 +49,29 @@ class ActualImagePickerApi(private val activity: AppCompatActivity) : ImagePicke
         type.registration.launch(type.uri)
     }
 
-    data class Type(
-        val uri: Uri,
-        val flow: MutableStateFlow<Uri?>,
-        val registration: ActivityResultLauncher<Uri?>,
-    )
+    /**
+     * This class is used to represent different fields that we need for each type of
+     * images that we support
+     */
+    inner class Type(
+        fileName: String
+    ) {
+        internal var uri: Uri = FileProvider.getUriForFile(
+            activity.applicationContext,
+            authority,
+            File(directory, fileName),
+        )
+        internal var flow: MutableStateFlow<Uri?> = MutableStateFlow(null)
+        internal var registration: ActivityResultLauncher<Uri?>
 
+        init {
+            registration = register(flow, uri)
+        }
+    }
+
+    /**
+     * Extension method to map an [ImageType] to an internally used [Type]
+     */
     private fun ImageType.toType() : Type {
         return when (this) {
             ImageType.Profile -> profile
