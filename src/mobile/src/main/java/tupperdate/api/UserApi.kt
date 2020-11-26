@@ -1,5 +1,6 @@
 package tupperdate.api
 
+import android.net.Uri
 import kotlinx.coroutines.flow.Flow
 
 interface UserApi {
@@ -30,5 +31,5 @@ interface UserApi {
     /**
      * A method that will allow us to update our [Profile]
      */
-    suspend fun putProfile(name: String)
+    suspend fun putProfile(name: String, imageUri: Uri?)
 }
