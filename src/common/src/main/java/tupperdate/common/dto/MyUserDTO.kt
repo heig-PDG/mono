@@ -6,4 +6,4 @@ import kotlinx.serialization.Serializable
 data class MyUserDTO(
     val displayName: String,
     val imageBase64: String?,
-    )
+)

@@ -52,7 +52,7 @@ class RealUserApi(
 
             // Send to server
             client.put<UserDTO>("/users/$currentUid") {
-                body = MyUserDTO(name)
+                body = MyUserDTO(name, null)
             }
         } catch (t: Throwable) {
             Log.d("UserDebug", t.message.toString())
