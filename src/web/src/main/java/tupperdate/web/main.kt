@@ -75,7 +75,7 @@ fun main() {
             authenticate {
                 accounts(FirebaseAuth.getInstance(firebase))
                 recipes(firebase)
-                users(FirestoreClient.getFirestore(firebase))
+                users(firebase)
             }
         }
     }
