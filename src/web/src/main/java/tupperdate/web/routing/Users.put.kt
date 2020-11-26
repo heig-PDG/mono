@@ -34,7 +34,7 @@ fun Route.usersPut(firebase: FirebaseApp) = put("{userId}") {
     val dto = call.receive<MyUserDTO>()
     val id = UUID.randomUUID().toString()
     val bytes = dto.imageBase64?.let { Base64.decodeBase64(it) }
-    var pict = "https://thispersondoesnotexist.com/image"
+    var pict : String? = null
 
     if (bytes != null) {
         val fileName = "$id.jpg"

@@ -1,5 +1,6 @@
 package tupperdate.android.profile
 
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
@@ -41,8 +42,11 @@ fun Profile(
     val initName = profile.displayName ?: ""
     val (name, setName) = remember(profile) { mutableStateOf(initName) }
 
-    val profilePic = profile.profileImageUrl ?: "https://via.placeholder.com/150"
     val newProfilePic by remember { imagePicker.currentProfile }.collectAsState(initial = null)
+
+    val profilePic = newProfilePic
+        ?: Uri.parse(profile.profileImageUrl)
+        ?: Uri.parse("https://via.placeholder.com/150")
 
     Profile(
         name = name,
@@ -62,7 +66,7 @@ fun Profile(
 @Composable
 private fun Profile(
     name: String,
-    imageUrl: String,
+    imageUrl: Uri,
     onNameChange: (String) -> Unit,
     onCloseClick: () -> Unit,
     onEditPictureClick: () -> Unit,
@@ -166,7 +170,7 @@ private fun ProfilePreview() {
     TupperdateTheme {
         Profile(
             name = name,
-            imageUrl = "https://www.thispersondoesnotexist.com/image",
+            imageUrl = Uri.parse("https://www.thispersondoesnotexist.com/image"),
             onNameChange = setName,
             onCloseClick = {},
             onEditPictureClick = {},

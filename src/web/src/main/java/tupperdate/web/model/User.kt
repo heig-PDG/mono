@@ -9,7 +9,7 @@ data class User(
     val picture: String? = null,
 )
 
-fun MyUserDTO.toUser(id: String, picture: String): User {
+fun MyUserDTO.toUser(id: String, picture: String?): User {
     return User(
         id = id,
         displayName = this.displayName,
@@ -18,10 +18,9 @@ fun MyUserDTO.toUser(id: String, picture: String): User {
 }
 
 fun User.toUserDTO(): UserDTO {
-    // TODO: Fix default value problem
     return UserDTO(
         id = requireNotNull(this.id),
-        displayName = this.displayName ?: "",
-        picture = this.picture ?: "",
+        displayName = this.displayName,
+        picture = this.picture,
     )
 }
