@@ -10,18 +10,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import java.io.File
 
 enum class ImageType {
-    Profile {
-        override fun getFileName(): String {
-            return "profile.jpg"
-        }
-    },
-    Recipe {
-        override fun getFileName(): String {
-            return "recipe.jpg"
-        }
-    };
-
-    abstract fun getFileName(): String
+    Profile,
+    Recipe;
 }
 
 interface ImagePickerApi {
@@ -32,32 +22,30 @@ interface ImagePickerApi {
 
 class ActualImagePickerApi(private val activity: AppCompatActivity) : ImagePickerApi {
     private val authority = "me.tupperdate.provider"
+    private val directory = File(activity.filesDir, "images").apply { mkdirs() }
 
-    private val path = File(activity.filesDir, "images").apply { mkdirs() }
-
-    private val uriRecipeFlow = MutableStateFlow<Uri?>(null)
-    private val uriProfileFlow = MutableStateFlow<Uri?>(null)
-
-    private fun uri(type: ImageType) : Uri = FileProvider.getUriForFile(
-        activity.applicationContext,
-        authority,
-        File(path, type.getFileName())
-    )
-
-    private fun getFlow(type: ImageType) : MutableStateFlow<Uri?> {
-        return when (type) {
-            ImageType.Profile -> uriProfileFlow
-            ImageType.Recipe -> uriRecipeFlow
-        }
-    }
+    private val recipe = initType("recipe.jpg")
+    private val profile = initType("profile.jpg")
 
     override val currentRecipe: Flow<Uri?>
-        get() = uriRecipeFlow
+        get() = recipe.flow
 
     override val currentProfile: Flow<Uri?>
-        get() = uriProfileFlow
+        get() = profile.flow
 
-    private fun register(flow: MutableStateFlow<Uri?>, uri: Uri) : ActivityResultLauncher<Uri?> {
+    private fun initType(fileName: String): Type {
+        val uri = FileProvider.getUriForFile(
+            activity.applicationContext,
+            authority,
+            File(directory, fileName),
+        )
+        val flow = MutableStateFlow<Uri?>(null)
+        val registration = register(flow, uri)
+
+        return Type(uri, flow, registration)
+    }
+
+    private fun register(flow: MutableStateFlow<Uri?>, uri: Uri): ActivityResultLauncher<Uri?> {
         return activity.registerForActivityResult(
             ActivityResultContracts.TakePicture()
         ) { success ->
@@ -67,11 +55,23 @@ class ActualImagePickerApi(private val activity: AppCompatActivity) : ImagePicke
         }
     }
 
-    override fun pick(type: ImageType) {
-        val uri = uri(type)
-        val flow = getFlow(type)
-
-        flow.value = null
-        register(flow, uri).launch(uri)
+    override fun pick(imageType: ImageType) {
+        val type = imageType.toType()
+        type.flow.value = null
+        type.registration.launch(type.uri)
     }
+
+    data class Type(
+        val uri: Uri,
+        val flow: MutableStateFlow<Uri?>,
+        val registration: ActivityResultLauncher<Uri?>,
+    )
+
+    private fun ImageType.toType() : Type {
+        return when (this) {
+            ImageType.Profile -> profile
+            ImageType.Recipe -> recipe
+        }
+    }
+
 }
