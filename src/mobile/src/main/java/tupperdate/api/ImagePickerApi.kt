@@ -10,8 +10,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import java.io.File
 
 enum class ImageType {
-    Profile,
-    Recipe
+    Profile {
+        override fun getFileName(): String {
+            return "profile.jpg"
+        }
+    },
+    Recipe {
+        override fun getFileName(): String {
+            return "recipe.jpg"
+        }
+    };
+
+    abstract fun getFileName(): String
 }
 
 interface ImagePickerApi {
@@ -24,21 +34,22 @@ class ActualImagePickerApi(private val activity: AppCompatActivity) : ImagePicke
     private val authority = "me.tupperdate.provider"
 
     private val path = File(activity.filesDir, "images").apply { mkdirs() }
-    private val file = File(path, "capture.jpg")
-    private val uri = FileProvider.getUriForFile(
-        activity.applicationContext,
-        authority,
-        file
-    )
-
-    private val uri2 = FileProvider.getUriForFile(
-        activity.applicationContext,
-        authority,
-        File(path, "profile.jpg")
-    )
 
     private val uriRecipeFlow = MutableStateFlow<Uri?>(null)
     private val uriProfileFlow = MutableStateFlow<Uri?>(null)
+
+    private fun uri(type: ImageType) : Uri = FileProvider.getUriForFile(
+        activity.applicationContext,
+        authority,
+        File(path, type.getFileName())
+    )
+
+    private fun getFlow(type: ImageType) : MutableStateFlow<Uri?> {
+        return when (type) {
+            ImageType.Profile -> uriProfileFlow
+            ImageType.Recipe -> uriRecipeFlow
+        }
+    }
 
     override val currentRecipe: Flow<Uri?>
         get() = uriRecipeFlow
@@ -57,15 +68,10 @@ class ActualImagePickerApi(private val activity: AppCompatActivity) : ImagePicke
     }
 
     override fun pick(type: ImageType) {
-        when (type) {
-            ImageType.Profile -> {
-                uriProfileFlow.value = null
-                register(uriProfileFlow, uri2).launch(uri2)
-            }
-            ImageType.Recipe -> {
-                uriRecipeFlow.value = null
-                register(uriRecipeFlow, uri).launch(uri)
-            }
-        }
+        val uri = uri(type)
+        val flow = getFlow(type)
+
+        flow.value = null
+        register(flow, uri).launch(uri)
     }
 }
