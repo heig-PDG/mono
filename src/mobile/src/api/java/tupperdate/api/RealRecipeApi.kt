@@ -1,5 +1,6 @@
 package tupperdate.api
 
+import android.content.ContentResolver
 import android.net.Uri
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -14,6 +15,7 @@ import tupperdate.common.dto.RecipeDTO
 
 class RealRecipeApi(
     private val client: HttpClient,
+    private val contentResolver: ContentResolver,
 ) : RecipeApi {
 
     override fun like(recipe: RecipeApi.Recipe) {
@@ -59,7 +61,7 @@ class RealRecipeApi(
                         hasAllergens = hasAllergens,
                         warm = warm,
                     ),
-                    imageBase64 = imageUri?.readFileAsBase64(),
+                    imageBase64 = imageUri?.readFileAsBase64(contentResolver),
                 )
             }
         } catch (problem: Throwable) {
