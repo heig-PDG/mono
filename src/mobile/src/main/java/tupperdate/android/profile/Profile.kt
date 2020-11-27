@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -99,33 +100,28 @@ private fun Profile(
             }
         }
 
-        Row(
-            Modifier.padding(top = 40.dp, bottom = 37.dp)
-                .align(Alignment.CenterHorizontally)
+        Box(modifier = Modifier
+            .padding(top = 40.dp, bottom = 37.dp)
+            .align(Alignment.CenterHorizontally)
         ) {
-            Column(
-                horizontalAlignment = (Alignment.CenterHorizontally),
-                verticalArrangement = (Arrangement.spacedBy((-36).dp))
-            ) {
-                ProfilePicture(
-                    image = imageUrl,
-                    highlighted = false,
-                    modifier = Modifier.size(96.dp)
-                )
-                Button(
-                    onClick = onEditPictureClick,
-                    colors = ButtonConstants.defaultButtonColors(
-                        contentColor = Color.White,
-                        backgroundColor = Color.Transparent
-                    ),
-                    elevation = ButtonConstants.defaultElevation(0.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.profile_editpic),
-                        style = MaterialTheme.typography.overline
+            ProfilePicture(
+                image = imageUrl,
+                highlighted = false,
+                modifier = Modifier
+                    .size(96.dp)
+                    .clip(CircleShape)
+                    .clickable(
+                        onClick = onEditPictureClick,
                     )
-                }
-            }
+            )
+            Text(
+                text = stringResource(R.string.profile_editpic),
+                style = MaterialTheme.typography.overline,
+                color = Color.White,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 8.dp), // Depart from Figma prototype. 13dp is too much
+            )
         }
 
         OutlinedTextField(
