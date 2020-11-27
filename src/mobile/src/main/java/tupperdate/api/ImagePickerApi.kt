@@ -1,11 +1,11 @@
 package tupperdate.api
 
+import android.content.ContentResolver
 import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import androidx.core.net.toFile
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.apache.commons.codec.binary.Base64
@@ -83,12 +83,8 @@ class ActualImagePickerApi(private val activity: AppCompatActivity) : ImagePicke
  * Extension method used to help us translate images to base64 encoded string, to transmit them
  * on the network
  */
-fun Uri.readFileAsBase64(): String? {
-    val file = this.toFile()
-    return if (file.exists()) {
-        val array = file.inputStream().buffered().readBytes()
-        Base64.encodeBase64String(array)
-    } else {
-        null
-    }
-}
+fun Uri.readFileAsBase64(contentResolver: ContentResolver): String? =
+    contentResolver.openInputStream(this)
+        ?.buffered()
+        ?.readBytes()
+        ?.let(Base64::encodeBase64String)
