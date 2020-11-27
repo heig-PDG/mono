@@ -22,42 +22,37 @@ import tupperdate.web.util.await
 fun Route.recipesPut(store: Firestore) {
     put("{recipeId}/like") {
         val recipeId = call.parameters["recipeId"] ?: statusException(HttpStatusCode.BadRequest)
-        val recipe = store.collection("recipes").document(recipeId).get().await().toObject(Recipe::class.java) ?: statusException(HttpStatusCode.NotFound)
+        val recipe = store.collection("recipes").document(recipeId).get().await()
+            .toObject(Recipe::class.java) ?: statusException(HttpStatusCode.NotFound)
 
-        var userId1 = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
-        var userId2 = recipe.userId ?: statusException(HttpStatusCode.NotFound)
+        val callerId = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+        var userId = recipe.userId ?: statusException(HttpStatusCode.NotFound)
 
-        val userDoc = store.collection("users").document(userId1)
+        val userDoc = store.collection("users").document(callerId)
 
         // A user can't like his own recipe
-       // if (userId1 == userId2) statusException(HttpStatusCode.Forbidden)
+        if (callerId == userId) statusException(HttpStatusCode.Forbidden)
 
-        // Order userId1 and userId2 in alphanumerical order (1 is inferior to 2)
-        var callerIsUser1 = true
-        if (userId1 > userId2) {
-            callerIsUser1 = false
-            userId1 = userId2.also { userId2 = userId1 }
-        }
+        fun smallerId() = if (callerId < userId) callerId else userId
+        fun greaterId() = if (callerId < userId) userId else callerId
+        fun smallerIdLiked() = if (callerId < userId) recipeId else null
+        fun greaterIdLiked() = if (callerId < userId) null else recipeId
 
-        val chatDoc = store.collection("chats").document(userId1 + "_" + userId2)
+        val chatDoc = store.collection("chats").document(smallerId() + "_" + greaterId())
+
+        //TODO: Firestore transaction
 
         // Create or update chatObject
-        //TODO: Firestore transaction
-        var chat = chatDoc.get().await().toObject(Chat::class.java)
-            ?: Chat(
-                id = chatDoc.id,
-                userId1 = userId1,
-                userId2 = userId2,
-            )
-        chatDoc.set(chat, SetOptions.merge())
-
-        // set recipe as liked
-        chatDoc.update(
-            mapOf(
-                "user1LikedRecipes" to FieldValue.arrayUnion(if (callerIsUser1) recipeId else null),
-                "user2LikedRecipes" to FieldValue.arrayUnion(if (!callerIsUser1) recipeId else null),
-            )
+        val chat = Chat(id = chatDoc.id, userId1 = smallerId(), userId2 = greaterId())
+        val likesToAdd = mapOf(
+            "user1LikedRecipes" to FieldValue.arrayUnion(smallerIdLiked()),
+            "user2LikedRecipes" to FieldValue.arrayUnion(greaterIdLiked()),
         )
+
+        // Set unchanging chat fields (if they don't already exist)
+        chatDoc.set(chat, SetOptions.merge())
+        // Append recipe likes to array
+        chatDoc.update(likesToAdd)
 
         // set recipe as seen
         val time = recipe.timestamp ?: statusException(HttpStatusCode.NotFound)
@@ -72,7 +67,10 @@ fun Route.recipesPut(store: Firestore) {
         var uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
         val userDoc = store.collection("users").document(uid)
         val recipeDoc = store.collection("recipes").document(recipeId)
-        val time = recipeDoc.get().await().toObject(Recipe::class.java)?.timestamp ?: statusException(HttpStatusCode.NotFound)
+        val time =
+            recipeDoc.get().await().toObject(Recipe::class.java)?.timestamp ?: statusException(
+                HttpStatusCode.NotFound
+            )
 
         userDoc.update("lastSeenRecipe", time)
 
