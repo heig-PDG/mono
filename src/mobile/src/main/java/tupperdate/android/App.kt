@@ -1,3 +1,4 @@
+package tupperdate.android
 
 import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.runtime.Composable
@@ -7,10 +8,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import tupperdate.android.LoggedInAction
-import tupperdate.android.LoggedInDestination
-import tupperdate.android.LoggedOutAction
-import tupperdate.android.LoggedOutDestination
 import tupperdate.android.editRecipe.NewRecipe
 import tupperdate.android.editRecipe.ViewRecipe
 import tupperdate.android.home.Home
