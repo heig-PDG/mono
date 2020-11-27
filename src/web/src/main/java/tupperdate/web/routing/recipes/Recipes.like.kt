@@ -26,7 +26,7 @@ fun Route.recipesPut(store: Firestore) {
             .toObject(Recipe::class.java) ?: statusException(HttpStatusCode.NotFound)
 
         val callerId = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
-        var userId = recipe.userId ?: statusException(HttpStatusCode.NotFound)
+        val userId = recipe.userId ?: statusException(HttpStatusCode.NotFound)
 
         val userDoc = store.collection("users").document(callerId)
 
@@ -62,18 +62,14 @@ fun Route.recipesPut(store: Firestore) {
     }
 
     put("{recipeId}/dislike") {
-
         val recipeId = call.parameters["recipeId"] ?: statusException(HttpStatusCode.BadRequest)
-        var uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+        val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+
         val userDoc = store.collection("users").document(uid)
         val recipeDoc = store.collection("recipes").document(recipeId)
-        val time =
-            recipeDoc.get().await().toObject(Recipe::class.java)?.timestamp ?: statusException(
-                HttpStatusCode.NotFound
-            )
 
+        val time = recipeDoc.get().await().toObject(Recipe::class.java)?.timestamp ?: statusException(HttpStatusCode.NotFound)
         userDoc.update("lastSeenRecipe", time)
-
         call.respond(HttpStatusCode.OK)
     }
 }
