@@ -111,7 +111,6 @@ private fun Profile(
                     .size(96.dp)
                     .clip(CircleShape)
                     .clickable(
-                        enabled = true,
                         onClick = onEditPictureClick,
                     )
             )
