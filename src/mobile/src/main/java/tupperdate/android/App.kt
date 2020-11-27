@@ -103,7 +103,6 @@ fun TupperdateApp(
  * @param api the [Api] to manage data.
  * @param action the [LoggedInAction] available to the app.
  * @param destination the [LoggedInDestination] that we are currently on.
- * @param user the [AuthenticationApi.Profile] of the currently logged in user.
  */
 @Composable
 private fun LoggedIn(
