@@ -45,9 +45,10 @@ fun Profile(
 
     val newProfilePic by remember { imagePicker.currentProfile }.collectAsState(initial = null)
 
+    val profileImage = profile.profileImageUrl ?: "https://via.placeholder.com/150"
+
     val profilePic = newProfilePic
-        ?: Uri.parse(profile.profileImageUrl)
-        ?: Uri.parse("https://via.placeholder.com/150")
+        ?: Uri.parse(profileImage)
 
     Profile(
         name = name,
