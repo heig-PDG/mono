@@ -1,6 +1,7 @@
 package tupperdate.android.editRecipe
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,9 +21,10 @@ import androidx.compose.ui.util.fastMaxBy
 import androidx.ui.tooling.preview.Preview
 import tupperdate.android.editRecipe.BackdropSection.Content
 import tupperdate.android.editRecipe.BackdropSection.Hero
+import kotlin.RequiresOptIn.Level.ERROR
 import kotlin.math.max
 
-@RequiresOptIn("This layout is not fully working yet.", level = RequiresOptIn.Level.ERROR)
+@RequiresOptIn("This layout is not fully working yet.", level = ERROR)
 annotation class ExperimentalBackdropHero
 
 /**
@@ -63,12 +65,11 @@ fun BackdropHero(
         val contentCoerced = constraints.enforce(contentConstraints)
         val contentPlaceables = subcompose(Content, content).fastMap { it.measure(contentCoerced) }
         val contentWidth = contentPlaceables.fastMaxBy { it.width }?.width ?: errorNoContent()
-        val contentHeight = contentPlaceables.fastMaxBy { it.height }?.height ?: errorNoContent()
 
         // Layout the contents.
         layout(
             width = max(heroWidth, contentWidth),
-            height = heroHeight + contentHeight - overlap.toIntPx(),
+            height = constraints.maxHeight,
         ) {
             heroPlaceables.fastForEach { it.placeRelative(0, 0) }
             contentPlaceables.fastForEach { it.placeRelative(0, heroHeight - overlap.toIntPx()) }
@@ -96,6 +97,7 @@ private fun BackdropHeroPreview() {
         hero = {
             Spacer(
                 Modifier
+                    .border(4.dp, Color.White)
                     .background(Color.Green)
                     .fillMaxHeight()
             )
@@ -103,7 +105,8 @@ private fun BackdropHeroPreview() {
         content = {
             Spacer(
                 Modifier
-                    .clip(RoundedCornerShape(topLeft = 16.dp, topRight = 16.dp))
+                    .clip(RoundedCornerShape(topLeft = 48.dp, topRight = 48.dp))
+                    .border(4.dp, Color.Yellow)
                     .background(Color.Red)
                     .fillMaxHeight()
             )
