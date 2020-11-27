@@ -99,30 +99,28 @@ private fun Profile(
             }
         }
 
-        Row(
-            Modifier.padding(top = 40.dp, bottom = 37.dp)
-                .align(Alignment.CenterHorizontally)
+        Box(modifier = Modifier
+            .padding(top = 40.dp, bottom = 37.dp)
+            .align(Alignment.CenterHorizontally)
         ) {
-            Box {
-                ProfilePicture(
-                    image = imageUrl,
-                    highlighted = false,
-                    modifier = Modifier.size(96.dp)
+            ProfilePicture(
+                image = imageUrl,
+                highlighted = false,
+                modifier = Modifier.size(96.dp)
+            )
+            Button(
+                onClick = onEditPictureClick,
+                colors = ButtonConstants.defaultButtonColors(
+                    contentColor = Color.White,
+                    backgroundColor = Color.Transparent
+                ),
+                elevation = ButtonConstants.defaultElevation(0.dp),
+                modifier = Modifier.align(Alignment.BottomCenter),
+            ) {
+                Text(
+                    text = stringResource(R.string.profile_editpic),
+                    style = MaterialTheme.typography.overline
                 )
-                Button(
-                    onClick = onEditPictureClick,
-                    colors = ButtonConstants.defaultButtonColors(
-                        contentColor = Color.White,
-                        backgroundColor = Color.Transparent
-                    ),
-                    elevation = ButtonConstants.defaultElevation(0.dp),
-                    modifier = Modifier.align(Alignment.BottomCenter),
-                ) {
-                    Text(
-                        text = stringResource(R.string.profile_editpic),
-                        style = MaterialTheme.typography.overline
-                    )
-                }
             }
         }
 
