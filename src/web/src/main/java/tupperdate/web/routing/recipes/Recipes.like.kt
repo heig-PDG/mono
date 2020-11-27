@@ -10,6 +10,7 @@ import io.ktor.routing.*
 import tupperdate.web.auth.firebaseAuthPrincipal
 import tupperdate.web.exceptions.statusException
 import tupperdate.web.model.Chat
+import tupperdate.web.model.NewChat
 import tupperdate.web.model.Recipe
 import tupperdate.web.util.await
 
@@ -31,28 +32,20 @@ fun Route.recipesPut(store: Firestore) {
         val userDoc = store.collection("users").document(callerId)
 
         // A user can't like his own recipe
-        if (callerId == userId) statusException(HttpStatusCode.Forbidden)
+        //if (callerId == userId) statusException(HttpStatusCode.Forbidden)
 
         fun smallerId() = minOf(callerId, userId)
         fun greaterId() = maxOf(callerId, userId)
-        fun smallerIdLiked() = if (callerId < userId) recipeId else null
-        fun greaterIdLiked() = if (callerId < userId) null else recipeId
+        fun callerLike() = if (callerId < userId) "user1LikedRecipes" else "user2LikedRecipes"
 
         val chatDoc = store.collection("chats").document(smallerId() + "_" + greaterId())
 
-        //TODO: Firestore transaction
-
-        // Create or update chatObject
-        val chat = Chat(id = chatDoc.id, userId1 = smallerId(), userId2 = greaterId())
-        val likesToAdd = mapOf(
-            "user1LikedRecipes" to FieldValue.arrayUnion(smallerIdLiked()),
-            "user2LikedRecipes" to FieldValue.arrayUnion(greaterIdLiked()),
-        )
-
-        // Set unchanging chat fields (if they don't already exist)
+        // TODO: Firestore transaction
+        // Set base data but don't touch likes arrays
+        val chat = NewChat(id = chatDoc.id, userId1 = smallerId(), userId2 = greaterId())
         chatDoc.set(chat, SetOptions.merge())
-        // Append recipe likes to array
-        chatDoc.update(likesToAdd)
+        // Append recipe likes to correct array
+        chatDoc.update(mapOf(callerLike() to FieldValue.arrayUnion(recipeId)))
 
         // set recipe as seen
         val time = recipe.timestamp ?: statusException(HttpStatusCode.NotFound)
@@ -70,6 +63,7 @@ fun Route.recipesPut(store: Firestore) {
 
         val time = recipeDoc.get().await().toObject(Recipe::class.java)?.timestamp ?: statusException(HttpStatusCode.NotFound)
         userDoc.update("lastSeenRecipe", time)
+
         call.respond(HttpStatusCode.OK)
     }
 }
