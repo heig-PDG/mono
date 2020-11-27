@@ -1,17 +1,13 @@
+package tupperdate.android
+
 import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
-import androidx.compose.ui.platform.LifecycleOwnerAmbient
-import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import tupperdate.android.LoggedInAction
-import tupperdate.android.LoggedInDestination
-import tupperdate.android.LoggedOutAction
-import tupperdate.android.LoggedOutDestination
 import tupperdate.android.editRecipe.NewRecipe
 import tupperdate.android.editRecipe.ViewRecipe
 import tupperdate.android.home.Home
@@ -22,7 +18,6 @@ import tupperdate.android.testing.AuthenticationTesting
 import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.utils.Navigator
 import tupperdate.api.Api
-import tupperdate.api.AuthenticationApi
 import tupperdate.api.UserApi
 
 /**
@@ -46,8 +41,8 @@ private sealed class UiState {
 }
 
 /**
- * Transforms a [Flow] of [AuthenticationApi.Profile] into a [UiState] that can be consumed to
- * display the appropriate UI.
+ * Transforms a [Flow] of [String], representing the [UserApi.Profile]'s uid, into a [UiState] that
+ * can be consumed to display the appropriate UI.
  */
 @Composable
 private fun Flow<String?>.collectAsState(): UiState =
@@ -85,11 +80,6 @@ fun TupperdateApp(
         }
 
         is UiState.LoggedIn -> {
-            val scope = LifecycleOwnerAmbient.current.lifecycleScope
-            scope.launch {
-                api.users.updateProfile()
-            }
-
             // The user is currently logged in. Start at the Home.
             val nav = rememberSavedInstanceState(saver = Navigator.saver(backDispatcher)) {
                 Navigator<LoggedInDestination>(
@@ -109,7 +99,6 @@ fun TupperdateApp(
  * @param api the [Api] to manage data.
  * @param action the [LoggedInAction] available to the app.
  * @param destination the [LoggedInDestination] that we are currently on.
- * @param user the [AuthenticationApi.Profile] of the currently logged in user.
  */
 @Composable
 private fun LoggedIn(
@@ -117,6 +106,8 @@ private fun LoggedIn(
     action: LoggedInAction,
     destination: LoggedInDestination,
 ) {
+    LaunchedEffect(true) { api.users.updateProfile() }
+
     val profile = remember { api.users.profile }.collectAsState(initial = null).value
 
     when (destination) {
