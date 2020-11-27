@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -106,22 +107,22 @@ private fun Profile(
             ProfilePicture(
                 image = imageUrl,
                 highlighted = false,
-                modifier = Modifier.size(96.dp)
+                modifier = Modifier
+                    .size(96.dp)
+                    .clip(CircleShape)
+                    .clickable(
+                        enabled = true,
+                        onClick = onEditPictureClick,
+                    )
             )
-            Button(
-                onClick = onEditPictureClick,
-                colors = ButtonConstants.defaultButtonColors(
-                    contentColor = Color.White,
-                    backgroundColor = Color.Transparent
-                ),
-                elevation = ButtonConstants.defaultElevation(0.dp),
-                modifier = Modifier.align(Alignment.BottomCenter),
-            ) {
-                Text(
-                    text = stringResource(R.string.profile_editpic),
-                    style = MaterialTheme.typography.overline
-                )
-            }
+            Text(
+                text = stringResource(R.string.profile_editpic),
+                style = MaterialTheme.typography.overline,
+                color = Color.White,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 8.dp), // Depart from Figma prototype. 13dp is too much
+            )
         }
 
         OutlinedTextField(
