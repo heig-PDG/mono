@@ -1,13 +1,12 @@
+
 import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
-import androidx.compose.ui.platform.LifecycleOwnerAmbient
-import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import tupperdate.android.LoggedInAction
 import tupperdate.android.LoggedInDestination
 import tupperdate.android.LoggedOutAction
@@ -85,11 +84,6 @@ fun TupperdateApp(
         }
 
         is UiState.LoggedIn -> {
-            val scope = LifecycleOwnerAmbient.current.lifecycleScope
-            scope.launch {
-                api.users.updateProfile()
-            }
-
             // The user is currently logged in. Start at the Home.
             val nav = rememberSavedInstanceState(saver = Navigator.saver(backDispatcher)) {
                 Navigator<LoggedInDestination>(
@@ -117,6 +111,8 @@ private fun LoggedIn(
     action: LoggedInAction,
     destination: LoggedInDestination,
 ) {
+    LaunchedEffect(true) { api.users.updateProfile() }
+
     val profile = remember { api.users.profile }.collectAsState(initial = null).value
 
     when (destination) {
