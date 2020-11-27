@@ -7,3 +7,9 @@ data class Chat (
     val user1LikedRecipes : List<String>? = null,
     val user2LikedRecipes : List<String>? = null,
 )
+
+data class NewChat (
+    val id: String? = null,
+    val userId1 : String? = null,
+    val userId2 : String? = null,
+)
