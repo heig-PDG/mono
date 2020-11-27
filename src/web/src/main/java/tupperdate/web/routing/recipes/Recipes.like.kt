@@ -33,8 +33,8 @@ fun Route.recipesPut(store: Firestore) {
         // A user can't like his own recipe
         if (callerId == userId) statusException(HttpStatusCode.Forbidden)
 
-        fun smallerId() = if (callerId < userId) callerId else userId
-        fun greaterId() = if (callerId < userId) userId else callerId
+        fun smallerId() = minOf(callerId, userId)
+        fun greaterId() = maxOf(callerId, userId)
         fun smallerIdLiked() = if (callerId < userId) recipeId else null
         fun greaterIdLiked() = if (callerId < userId) null else recipeId
 
