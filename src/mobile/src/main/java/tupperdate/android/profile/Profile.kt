@@ -103,10 +103,7 @@ private fun Profile(
             Modifier.padding(top = 40.dp, bottom = 37.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
-            Column(
-                horizontalAlignment = (Alignment.CenterHorizontally),
-                verticalArrangement = (Arrangement.spacedBy((-36).dp))
-            ) {
+            Box {
                 ProfilePicture(
                     image = imageUrl,
                     highlighted = false,
@@ -118,7 +115,8 @@ private fun Profile(
                         contentColor = Color.White,
                         backgroundColor = Color.Transparent
                     ),
-                    elevation = ButtonConstants.defaultElevation(0.dp)
+                    elevation = ButtonConstants.defaultElevation(0.dp),
+                    modifier = Modifier.align(Alignment.BottomCenter),
                 ) {
                     Text(
                         text = stringResource(R.string.profile_editpic),
