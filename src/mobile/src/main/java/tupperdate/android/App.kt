@@ -21,7 +21,6 @@ import tupperdate.android.testing.AuthenticationTesting
 import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.utils.Navigator
 import tupperdate.api.Api
-import tupperdate.api.AuthenticationApi
 import tupperdate.api.UserApi
 
 /**
@@ -45,8 +44,8 @@ private sealed class UiState {
 }
 
 /**
- * Transforms a [Flow] of [AuthenticationApi.Profile] into a [UiState] that can be consumed to
- * display the appropriate UI.
+ * Transforms a [Flow] of [String], representing the [UserApi.Profile]'s uid, into a [UiState] that
+ * can be consumed to display the appropriate UI.
  */
 @Composable
 private fun Flow<String?>.collectAsState(): UiState =
