@@ -1,4 +1,4 @@
-package tupperdate.android.appbars
+package tupperdate.android.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,7 +36,7 @@ import tupperdate.android.ui.TupperdateTypography
  * @param modifier the [Modifier] for this composable
  */
 @Composable
-fun TupperdateTopBar(
+fun TopBar(
     onChatClick: () -> Unit,
     onProfileClick: () -> Unit,
     onTitleClick: () -> Unit,
