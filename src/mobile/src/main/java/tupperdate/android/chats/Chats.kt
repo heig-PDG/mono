@@ -1,14 +1,17 @@
 package tupperdate.android.chats
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.material.AmbientContentAlpha
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.MaterialTheme.typography
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
 import tupperdate.android.ui.TupperdateTheme
@@ -60,17 +63,16 @@ private fun Conversation(
         )
 
         // TODO update this properly
-        /*
         val emphasis = if (highlighted) ContentAlpha.high
         else ContentAlpha.medium
         Providers(AmbientContentAlpha provides emphasis) {
             Column {
-                Text(title, maxLines = 1, style = typography.subtitle1, overflow = Ellipsis)
+                Text(title, maxLines = 1, style = typography.subtitle1, overflow = TextOverflow.Ellipsis)
                 Providers(AmbientContentAlpha provides ContentAlpha.medium) {
-                    Text(subtitle, maxLines = 1, style = typography.subtitle2, overflow = Ellipsis)
+                    Text(subtitle, maxLines = 1, style = typography.subtitle2, overflow = TextOverflow.Ellipsis)
                 }
             }
-        }*/
+        }
     }
 }
 

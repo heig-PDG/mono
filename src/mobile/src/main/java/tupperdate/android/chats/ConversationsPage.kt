@@ -1,6 +1,6 @@
 package tupperdate.android.chats
 
-import androidx.compose.foundation.Text
+import androidx.compose.material.Text
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.material.MaterialTheme
@@ -9,10 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
-import tupperdate.android.appbars.ConversationsTopBar
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.api.RecipeApi
 import tupperdate.android.R
+import tupperdate.android.appbars.TupperdateTopBar
 import tupperdate.android.ui.components.ProfilePicture
 
 @Composable
@@ -24,8 +24,10 @@ fun ConversationsPage(
     modifier: Modifier = Modifier
 ) {
     Column(Modifier.fillMaxSize().padding(16.dp)) {
-        ConversationsTopBar(
-            onRecipeClick = onRecipeClick,
+        //TODO update TupperdateTopBar and fix the padding problem
+        TupperdateTopBar(
+            onChatClick = onRecipeClick,
+            onTitleClick = {},
             onProfileClick = onProfileClick,
             modifier = Modifier.fillMaxWidth()
         )

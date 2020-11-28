@@ -36,11 +36,6 @@ class LoggedOutAction(private val navigator: Navigator<LoggedOutDestination>) {
 // DESTINATIONS AVAILABLE WHEN THE USER IS LOGGED IN
 
 sealed class LoggedInDestination : Parcelable {
-    @Parcelize
-    object OneConversation: LoggedInDestination()
-
-    @Parcelize
-    object ConversationsPage: LoggedInDestination()
 
     @Parcelize
     object Profile : LoggedInDestination()
@@ -59,13 +54,6 @@ sealed class LoggedInDestination : Parcelable {
 }
 
 class LoggedInAction(private val navigator: Navigator<LoggedInDestination>) {
-    val oneConversation:()->Unit={
-        navigator.navigate(LoggedInDestination.OneConversation)
-    }
-
-    val chats: ()->Unit={
-        navigator.navigate(LoggedInDestination.ConversationsPage)
-    }
 
     val newRecipe: () -> Unit = {
         navigator.navigate(LoggedInDestination.NewRecipe)

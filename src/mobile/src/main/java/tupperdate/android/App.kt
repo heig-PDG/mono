@@ -10,8 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import tupperdate.android.chats.ConversationsPage
-import tupperdate.android.chats.OneConversation
 import tupperdate.android.editRecipe.NewRecipe
 import tupperdate.android.editRecipe.ViewRecipe
 import tupperdate.android.home.Home
@@ -149,22 +147,8 @@ private fun LoggedIn(
                 onCloseClick = action.back,
                 onSignOutClick = {},
             )
-        is LoggedInDestination.ConversationsPage -> ConversationsPage(
-            onRecipeClick = action.home,
-            onProfileClick = action.profile,
-            recipes = listOf(/*TODO fill this parameter*/),
-            conversations = listOf(/*TODO fill this parameter*/)
-        )
         is LoggedInDestination.AuthenticationTesting ->
             AuthenticationTesting(api)
-        is LoggedInDestination.OneConversation -> OneConversation(
-            msgList = listOf(),
-            onReturnClick = action.back,
-            imageOther = "",
-            nameOther = "",
-            otherOnlineStatus = "online",
-            onSendClick = {}
-        )
     }
 }
 
