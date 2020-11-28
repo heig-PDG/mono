@@ -1,5 +1,6 @@
 package tupperdate.api
 
+import android.net.Uri
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -43,7 +44,8 @@ object MockRecipeApi : RecipeApi {
         description: String,
         vegetarian: Boolean,
         warm: Boolean,
-        hasAllergens: Boolean
+        hasAllergens: Boolean,
+        imageUri: Uri?,
     ) {
     }
 }

@@ -6,7 +6,6 @@ import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.cloud.FirestoreClient
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
@@ -16,9 +15,9 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import tupperdate.web.auth.firebase
 import tupperdate.web.exceptions.registerException
-import tupperdate.web.routing.accounts
-import tupperdate.web.routing.recipes
-import tupperdate.web.routing.users
+import tupperdate.web.routing.accounts.accounts
+import tupperdate.web.routing.recipes.recipes
+import tupperdate.web.routing.users.users
 
 private const val DefaultPort = 1234
 private const val DefaultPortEnvVariable = "PORT"
@@ -75,7 +74,7 @@ fun main() {
             authenticate {
                 accounts(FirebaseAuth.getInstance(firebase))
                 recipes(firebase)
-                users(FirestoreClient.getFirestore(firebase))
+                users(firebase)
             }
         }
     }

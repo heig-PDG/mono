@@ -1,5 +1,6 @@
 package tupperdate.api
 
+import android.net.Uri
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -12,10 +13,10 @@ object MockUserApi : UserApi {
     override suspend fun updateProfile() {
     }
 
-    override suspend fun putProfile(name: String) {
+    override suspend fun putProfile(name: String, imageUri: Uri?) {
         mutableProfile.value = UserApi.Profile(
             name,
-            "https://www.thispersondoesnotexist.com/image"
+            imageUri.toString(),
         )
     }
 

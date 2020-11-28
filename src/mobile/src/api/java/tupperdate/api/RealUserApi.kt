@@ -1,5 +1,7 @@
 package tupperdate.api
 
+import android.content.ContentResolver
+import android.net.Uri
 import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -23,6 +25,7 @@ private fun UserDTO.toProfile(): UserApi.Profile {
 class RealUserApi(
     private val client: HttpClient,
     private val uid: Flow<String?>,
+    private val contentResolver: ContentResolver,
 ) : UserApi {
     private val mutableProfile: MutableStateFlow<UserApi.Profile?> = MutableStateFlow(null)
 
@@ -39,7 +42,7 @@ class RealUserApi(
         }
     }
 
-    override suspend fun putProfile(name: String) {
+    override suspend fun putProfile(name: String, imageUri: Uri?) {
         val currentUid = uid.filterNotNull().first()
         val oldProfile = mutableProfile.value
 
@@ -52,7 +55,10 @@ class RealUserApi(
 
             // Send to server
             client.put<UserDTO>("/users/$currentUid") {
-                body = MyUserDTO(name)
+                body = MyUserDTO(
+                    displayName = name,
+                    imageBase64 = imageUri?.readFileAsBase64(contentResolver),
+                )
             }
         } catch (t: Throwable) {
             Log.d("UserDebug", t.message.toString())
