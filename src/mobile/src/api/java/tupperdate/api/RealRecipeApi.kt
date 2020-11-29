@@ -19,10 +19,14 @@ class RealRecipeApi(
     private val activity: AppCompatActivity,
 ) : RecipeApi {
 
-    override fun like(recipe: RecipeApi.Recipe) {
+    override suspend fun like(recipe: RecipeApi.Recipe) {
+        val endpoint="like/"+recipe.recipeId
+        client.put<Unit>(endpoint)
     }
 
-    override fun dislike(recipe: RecipeApi.Recipe) {
+    override suspend fun dislike(recipe: RecipeApi.Recipe) {
+        val endpoint="dislike/"+recipe.recipeId
+        client.put<Unit>(endpoint)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
