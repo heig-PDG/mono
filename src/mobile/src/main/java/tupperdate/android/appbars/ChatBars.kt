@@ -26,35 +26,33 @@ fun ChatTopBar(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
             .preferredHeight(TopBarHeight)
             .background(Color.Smurf100)
+            .padding(top = 9.dp, bottom = 11.dp, start = 16.dp, end = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            Modifier.fillMaxWidth()
-                .padding(top = 9.dp, bottom = 11.dp, start = 16.dp, end = 16.dp)
-                .background(Color.Transparent),
-            verticalAlignment = Alignment.CenterVertically
+        IconButton(
+            modifier = Modifier.padding(end = 6.dp)
+                .height(18.dp),
+            onClick = onReturnClick
         ) {
-            IconButton(
-                modifier = Modifier.padding(end = 6.dp)
-                    .height(18.dp),
-                onClick = onReturnClick
-            ) {
-                Icon(asset = vectorResource(id = R.drawable.ic_back_arrow))
-            }
-            ProfilePicture(
-                modifier = Modifier.padding(end = 6.dp),
-                image = imageOther,
-                highlighted = false
+            Icon(asset = vectorResource(id = R.drawable.ic_back_arrow))
+        }
+        ProfilePicture(
+            modifier = Modifier.padding(end = 6.dp),
+            image = imageOther,
+            highlighted = false
+        )
+        Column {
+            Text(
+                text = nameOther,
+                style = MaterialTheme.typography.subtitle1
             )
-            Column {
-                Text(text = nameOther, style = MaterialTheme.typography.subtitle1)
-                Text(
-                    text = otherOnline,
-                    style = MaterialTheme.typography.subtitle2
-                )
-            }
+            Text(
+                text = otherOnline,
+                style = MaterialTheme.typography.subtitle2
+            )
         }
     }
 }
