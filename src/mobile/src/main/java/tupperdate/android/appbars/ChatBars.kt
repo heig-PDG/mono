@@ -1,6 +1,6 @@
 package tupperdate.android.appbars
 
-import androidx.compose.foundation.Text
+import androidx.compose.material.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -21,7 +21,7 @@ import tupperdate.android.ui.components.ProfilePicture
 fun ChatTopBar(
     onReturnClick: () -> Unit,
     imageOther: Any,
-    nameOther:String,
+    nameOther: String,
     otherOnline: String,
     modifier: Modifier = Modifier,
 ) {
@@ -30,32 +30,39 @@ fun ChatTopBar(
             .preferredHeight(TopBarHeight)
             .background(Color.Smurf100)
     ) {
-        Row(Modifier.fillMaxWidth()
-            .padding(top=9.dp, bottom = 11.dp, start = 16.dp, end = 16.dp)
-            .background(Color.Transparent),
-        verticalAlignment = Alignment.CenterVertically){
-            IconButton(modifier = Modifier.padding(end=6.dp)
-                .height(18.dp), onClick = onReturnClick) {
+        Row(
+            Modifier.fillMaxWidth()
+                .padding(top = 9.dp, bottom = 11.dp, start = 16.dp, end = 16.dp)
+                .background(Color.Transparent),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(
+                modifier = Modifier.padding(end = 6.dp)
+                    .height(18.dp),
+                onClick = onReturnClick
+            ) {
                 Icon(asset = vectorResource(id = R.drawable.ic_back_arrow))
             }
             ProfilePicture(
-                modifier = Modifier.padding(end=6.dp),
+                modifier = Modifier.padding(end = 6.dp),
                 image = imageOther,
                 highlighted = false
             )
             Column {
                 Text(text = nameOther, style = MaterialTheme.typography.subtitle1)
-                Text(text = otherOnline,
-                    style = MaterialTheme.typography.subtitle2)
+                Text(
+                    text = otherOnline,
+                    style = MaterialTheme.typography.subtitle2
+                )
             }
         }
     }
 }
 
 @Composable
-fun bottomBar(
-    onSendClick:()->Unit,
-    modifier: Modifier=Modifier
+fun BottomBar(
+    onSendClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(modifier.fillMaxWidth().background(Color.Smurf100)) {
         Row(
