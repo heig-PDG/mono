@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextOverflow.Ellipsis
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
 import tupperdate.android.ui.TupperdateTheme
@@ -52,7 +52,7 @@ private fun Conversation(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier.clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier.clickable(onClick = onClick).padding(vertical = 8.dp),
         Arrangement.spacedBy(16.dp),
         Alignment.CenterVertically
     ) {
@@ -62,13 +62,14 @@ private fun Conversation(
             Modifier.size(56.dp)
         )
 
+        // TODO update this properly
         val emphasis = if (highlighted) ContentAlpha.high
         else ContentAlpha.medium
         Providers(AmbientContentAlpha provides emphasis) {
             Column {
-                Text(title, maxLines = 1, style = typography.subtitle1, overflow = Ellipsis)
+                Text(title, maxLines = 1, style = typography.subtitle1, overflow = TextOverflow.Ellipsis)
                 Providers(AmbientContentAlpha provides ContentAlpha.medium) {
-                    Text(subtitle, maxLines = 1, style = typography.subtitle2, overflow = Ellipsis)
+                    Text(subtitle, maxLines = 1, style = typography.subtitle2, overflow = TextOverflow.Ellipsis)
                 }
             }
         }

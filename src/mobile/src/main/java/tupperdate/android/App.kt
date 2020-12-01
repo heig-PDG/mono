@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import tupperdate.android.editRecipe.NewRecipe
 import tupperdate.android.editRecipe.ViewRecipe
 import tupperdate.android.home.Home
@@ -19,6 +20,7 @@ import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.utils.Navigator
 import tupperdate.api.Api
 import tupperdate.api.UserApi
+
 
 /**
  * A sealed class representing the different states that the user interface can be in.
@@ -131,6 +133,7 @@ private fun LoggedIn(
             onTitleClick = action.authenticationTesting,
             onRecipeDetailsClick = action.viewRecipe,
         )
+
         is LoggedInDestination.Profile ->
             Profile(
                 userApi = api.users,
@@ -139,7 +142,6 @@ private fun LoggedIn(
                 onCloseClick = action.back,
                 onSignOutClick = {},
             )
-
         is LoggedInDestination.AuthenticationTesting ->
             AuthenticationTesting(api)
     }
