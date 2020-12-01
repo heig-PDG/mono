@@ -36,6 +36,7 @@ class LoggedOutAction(private val navigator: Navigator<LoggedOutDestination>) {
 // DESTINATIONS AVAILABLE WHEN THE USER IS LOGGED IN
 
 sealed class LoggedInDestination : Parcelable {
+
     @Parcelize
     object Profile : LoggedInDestination()
 
