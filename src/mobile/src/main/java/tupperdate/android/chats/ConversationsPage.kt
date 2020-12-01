@@ -24,8 +24,8 @@ fun ConversationsPage(
     modifier: Modifier = Modifier
 ) {
     Column(Modifier.fillMaxSize().padding(16.dp)) {
+        //TODO update TupperdateTopBar and fix the padding problem
         TupperdateTopBar(
-            //TODO modify the TupperdateTopBar
             onChatClick = onRecipeClick,
             onTitleClick = {},
             onProfileClick = onProfileClick,

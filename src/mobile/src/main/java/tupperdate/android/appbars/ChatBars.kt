@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
@@ -64,10 +65,13 @@ fun BottomBar(
                 .background(Color.Transparent),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            OutlinedTextField(modifier = Modifier.padding(end = 10.dp)
-                .height(24.dp),
+            OutlinedTextField(
+                modifier = Modifier.padding(end = 10.dp)
+                    .height(24.dp),
                 value = "",
-                onValueChange = {})
+                onValueChange = {},
+                placeholder = {stringArrayResource(id = R.string.chat_message_placeholder)}
+            )
             IconButton(onClick = onSendClick) {
                 Icon(asset = vectorResource(id = R.drawable.ic_chat_send))
             }
