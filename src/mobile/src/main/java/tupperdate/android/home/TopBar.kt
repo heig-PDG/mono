@@ -1,5 +1,8 @@
 package tupperdate.android.home
 
+import androidx.compose.foundation.AmbientIndication
+import androidx.compose.foundation.Indication
+import androidx.compose.foundation.InteractionState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -9,10 +12,7 @@ import androidx.compose.material.AmbientContentColor
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -24,22 +24,28 @@ import androidx.compose.ui.text.annotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
+import tupperdate.android.home.TopBarDestination.*
 import tupperdate.android.ui.Flamingo500
 import tupperdate.android.ui.Smurf500
 import tupperdate.android.ui.TupperdateTypography
 
+enum class TopBarDestination {
+    Chats,
+    Recipes,
+    Profile,
+}
+
 /**
  * A bar that is displayed for navigation.
  *
- * @param onChatClick callback called when the chat destination is clicked
- * @param onProfileClick callback called when the profile destination is clicked
+ * @param destination the currently selected [TopBarDestination]
+ * @param onDestinationClick when a [TopBarDestination] is selected
  * @param modifier the [Modifier] for this composable
  */
 @Composable
 fun TopBar(
-    onChatClick: () -> Unit,
-    onProfileClick: () -> Unit,
-    onTitleClick: () -> Unit,
+    destination: TopBarDestination,
+    onDestinationClick: (TopBarDestination) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -50,7 +56,7 @@ fun TopBar(
         Alignment.CenterVertically,
     ) {
         Providers(AmbientContentColor provides TopBarIconColor) {
-            IconButton(onClick = onChatClick) {
+            IconButton(onClick = { onDestinationClick(Chats) }) {
                 // TODO change icon when notified
                 Icon(vectorResource(R.drawable.ic_home_messages))
             }
@@ -58,13 +64,18 @@ fun TopBar(
             Text(
                 text = Title,
                 style = TupperdateTypography.h6,
-                modifier = Modifier.multiClick(
-                    triggerAmount = 5,
-                    action = onTitleClick,
-                )
+                modifier = Modifier
+                    .multiClickable(
+                        period = 2500, // ms
+                        onClick = {
+                            if (it == 5)
+                                onDestinationClick(Recipes)
+                        },
+                        indication = null,
+                    )
             )
 
-            IconButton(onClick = onProfileClick) {
+            IconButton(onClick = { onDestinationClick(Profile) }) {
                 Icon(vectorResource(R.drawable.ic_home_accounts))
             }
         }
@@ -84,11 +95,25 @@ private val TopBarHeight = 54.dp
 private val TopBarPadding = 8.dp
 private val TopBarIconColor = Color.Black.copy(alpha = .6f) // TODO : Move to color palette.
 
-private fun Modifier.multiClick(triggerAmount: Int, action: () -> Unit) = composed {
-    val (count, setCount) = remember { mutableStateOf(0) }
-    if (count < triggerAmount) {
-        this then clickable(onClick = { setCount(count + 1) })
-    } else {
-        this then clickable(onClick = action)
-    }
+@Composable
+private fun Modifier.multiClickable(
+    period: Long,
+    interactionState: InteractionState = remember { InteractionState() },
+    indication: Indication? = AmbientIndication.current(),
+    onClick: (Int) -> Unit,
+) = composed {
+
+    val (clicks, setClicks) = remember { mutableStateOf(emptyList<Long>()) }
+
+    this then clickable(
+        onClick = {
+            val now = System.currentTimeMillis()
+            val count = clicks.indexOfLast { it < now - period }
+            val updated = clicks.drop(count + 1) + now
+            setClicks(updated)
+            onClick(updated.size)
+        },
+        interactionState = interactionState,
+        indication = indication,
+    )
 }

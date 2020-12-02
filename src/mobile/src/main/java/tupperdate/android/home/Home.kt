@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
+import tupperdate.android.home.TopBarDestination.*
 import tupperdate.android.ui.layout.SwipeStack
 import tupperdate.android.ui.layout.rememberSwipeStackState
 import tupperdate.api.RecipeApi
@@ -32,9 +33,14 @@ fun Home(
     Scaffold(
         topBar = {
             TopBar(
-                onChatClick = onChatClick,
-                onProfileClick = onProfileClick,
-                onTitleClick = onTitleClick,
+                destination = Recipes,
+                onDestinationClick = { dest ->
+                    when (dest) {
+                        Chats -> onChatClick()
+                        Recipes -> onTitleClick()
+                        Profile -> onProfileClick()
+                    }
+                },
                 modifier = Modifier.fillMaxWidth()
             )
         },
