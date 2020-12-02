@@ -1,15 +1,15 @@
 package tupperdate.android.profile
 
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,11 +25,14 @@ import tupperdate.android.R
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.components.ProfilePicture
 import tupperdate.android.ui.material.BrandedButton
+import tupperdate.api.ImagePickerApi
+import tupperdate.api.ImageType
 import tupperdate.api.UserApi
 
 @Composable
 fun Profile(
     userApi: UserApi,
+    imagePicker: ImagePickerApi,
     profile: UserApi.Profile,
     onCloseClick: () -> Unit,
     onSignOutClick: () -> Unit,
@@ -40,16 +43,21 @@ fun Profile(
     val initName = profile.displayName ?: ""
     val (name, setName) = remember(profile) { mutableStateOf(initName) }
 
-    val profilePic = profile.profileImageUrl ?: "https://via.placeholder.com/150"
+    val newProfilePic by remember { imagePicker.currentProfile }.collectAsState(initial = null)
+
+    val profileImage = profile.profileImageUrl ?: "https://via.placeholder.com/150"
+
+    val profilePic = newProfilePic
+        ?: Uri.parse(profileImage)
 
     Profile(
         name = name,
         imageUrl = profilePic,
         onNameChange = setName,
         onCloseClick = onCloseClick,
-        onEditClick = {},
+        onEditPictureClick = { imagePicker.pick(ImageType.Profile) },
         onSaveClick = {
-            scope.launch { userApi.putProfile(name) }
+            scope.launch { userApi.putProfile(name, newProfilePic) }
             onCloseClick()
         },
         onSignOutClick = onSignOutClick,
@@ -60,10 +68,10 @@ fun Profile(
 @Composable
 private fun Profile(
     name: String,
-    imageUrl: String,
+    imageUrl: Uri,
     onNameChange: (String) -> Unit,
     onCloseClick: () -> Unit,
-    onEditClick: () -> Unit,
+    onEditPictureClick: () -> Unit,
     onSaveClick: () -> Unit,
     onSignOutClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -93,33 +101,28 @@ private fun Profile(
             }
         }
 
-        Row(
-            Modifier.padding(top = 40.dp, bottom = 37.dp)
-                .align(Alignment.CenterHorizontally)
+        Box(modifier = Modifier
+            .padding(top = 40.dp, bottom = 37.dp)
+            .align(Alignment.CenterHorizontally)
         ) {
-            Column(
-                horizontalAlignment = (Alignment.CenterHorizontally),
-                verticalArrangement = (Arrangement.spacedBy((-36).dp))
-            ) {
-                ProfilePicture(
-                    image = imageUrl,
-                    highlighted = false,
-                    modifier = Modifier.size(96.dp)
-                )
-                Button(
-                    onClick = onEditClick,
-                    colors = ButtonConstants.defaultButtonColors(
-                        contentColor = Color.White,
-                        backgroundColor = Color.Transparent
-                    ),
-                    elevation = ButtonConstants.defaultElevation(0.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.profile_editpic),
-                        style = MaterialTheme.typography.overline
+            ProfilePicture(
+                image = imageUrl,
+                highlighted = false,
+                modifier = Modifier
+                    .size(96.dp)
+                    .clip(CircleShape)
+                    .clickable(
+                        onClick = onEditPictureClick,
                     )
-                }
-            }
+            )
+            Text(
+                text = stringResource(R.string.profile_editpic),
+                style = MaterialTheme.typography.overline,
+                color = Color.White,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 8.dp), // Depart from Figma prototype. 13dp is too much
+            )
         }
 
         OutlinedTextField(
@@ -164,10 +167,10 @@ private fun ProfilePreview() {
     TupperdateTheme {
         Profile(
             name = name,
-            imageUrl = "https://www.thispersondoesnotexist.com/image",
+            imageUrl = Uri.parse("https://www.thispersondoesnotexist.com/image"),
             onNameChange = setName,
             onCloseClick = {},
-            onEditClick = {},
+            onEditPictureClick = {},
             onSaveClick = {},
             onSignOutClick = {},
         )

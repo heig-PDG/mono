@@ -48,11 +48,25 @@ private fun Conversation(
     subtitle: String,
     highlighted: Boolean,
     image: Any,
-    onClick: () -> Unit,
+    onClick:() -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier.clickable(onClick = onClick).padding(vertical = 8.dp),
+        modifier.clickable(
+            onClick = {
+                OneConversation(
+                    msgList = listOf(
+                        Message("Do you dream of Scorchers ?", true),
+                        Message("Only when I missed hunting one", true)
+                    ),
+                    onReturnClick = {},
+                    imageOther = image,
+                    nameOther = title,
+                    otherOnlineStatus = "online",
+                    onSendClick = {}
+                )
+            }
+        ).padding(vertical = 8.dp),
         Arrangement.spacedBy(16.dp),
         Alignment.CenterVertically
     ) {
@@ -62,45 +76,25 @@ private fun Conversation(
             Modifier.size(56.dp)
         )
 
-        // TODO update this properly
-
         val emphasis = if (highlighted) ContentAlpha.high
         else ContentAlpha.medium
         Providers(AmbientContentAlpha provides emphasis) {
             Column {
-                Text(title, maxLines = 1, style = typography.subtitle1, overflow = TextOverflow.Ellipsis)
+                Text(
+                    title,
+                    maxLines = 1,
+                    style = typography.subtitle1,
+                    overflow = TextOverflow.Ellipsis
+                )
                 Providers(AmbientContentAlpha provides ContentAlpha.medium) {
-                    Text(subtitle, maxLines = 1, style = typography.subtitle2, overflow = TextOverflow.Ellipsis)
+                    Text(
+                        subtitle,
+                        maxLines = 1,
+                        style = typography.subtitle2,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun ConversationPreviewHighlighted() {
-    TupperdateTheme {
-        Conversation(
-            title = "Mario",
-            subtitle = "Hey Luigi you forgot your pipe in my garden during our last party",
-            highlighted = true,
-            image = "https://thispersondoesnotexist.com/image",
-            onClick = {},
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun ConversationPreviewNormal() {
-    TupperdateTheme {
-        Conversation(
-            title = "Luigi",
-            subtitle = "Damn that's right sorry bro I'll pick it up today today",
-            highlighted = false,
-            image = "https://thispersondoesnotexist.com/image",
-            onClick = {},
-        )
     }
 }

@@ -6,6 +6,7 @@ import tupperdate.common.dto.RecipeDTO
 
 data class Recipe(
     val id: String? = null,
+    val userId: String? = null,
     val title: String? = null,
     val description: String? = null,
     val timestamp: Long? = null,
@@ -13,9 +14,10 @@ data class Recipe(
     val attributes: Map<String, Boolean>? = null,
 )
 
-fun NewRecipeDTO.toRecipe(id: String, picture: String): Recipe {
+fun NewRecipeDTO.toRecipe(id: String, userId: String, picture: String): Recipe {
     return Recipe(
         id = id,
+        userId = userId,
         title = this.title,
         description = this.description,
         timestamp = System.currentTimeMillis() / 1000,

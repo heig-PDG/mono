@@ -1,4 +1,4 @@
-package tupperdate.web.routing
+package tupperdate.web.routing.users
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.cloud.FirestoreClient
@@ -9,34 +9,32 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import org.apache.commons.codec.binary.Base64
-import tupperdate.common.dto.NewRecipeDTO
-import tupperdate.common.dto.RecipeDTO
+import tupperdate.common.dto.MyUserDTO
 import tupperdate.web.auth.firebaseAuthPrincipal
 import tupperdate.web.exceptions.statusException
-import tupperdate.web.model.toRecipe
-import tupperdate.web.model.toRecipeDTO
+import tupperdate.web.model.toUser
 import tupperdate.web.util.await
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
- * Posts a [NewRecipeDTO] to the database, and returns the built [RecipeDTO].
+ * Puts a new [MyUserDTO] to the database.
  *
  * @param firebase the [FirebaseApp] instance that is used.
  */
-fun Route.recipesPost(firebase: FirebaseApp) = post {
-
+fun Route.usersPut(firebase: FirebaseApp) = put("{userId}") {
     val store = FirestoreClient.getFirestore(firebase)
     val bucket = StorageClient.getInstance(firebase).bucket()
 
-    val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
-    val doc = store.collection("users").document(uid).collection("recipes").document()
+    val pathUserId = call.parameters["userId"] ?: statusException(HttpStatusCode.BadRequest)
+    val authUserId = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+    if (authUserId != pathUserId) throw statusException(HttpStatusCode.Forbidden)
 
-    val dto = call.receive<NewRecipeDTO>()
+    val doc = store.collection("users").document(authUserId)
+    val dto = call.receive<MyUserDTO>()
     val id = UUID.randomUUID().toString()
     val bytes = dto.imageBase64?.let { Base64.decodeBase64(it) }
-    // TODO : Don't add pictures for new recipes that don't provide any.
-    var pict = "https://thispersondoesnotexist.com/image"
+    var pict : String? = null
 
     if (bytes != null) {
         val fileName = "$id.jpg"
@@ -45,13 +43,13 @@ fun Route.recipesPost(firebase: FirebaseApp) = post {
             bytes.inputStream(),
             ContentType.Image.JPEG.contentType,
         )
+        // TODO: Find alternative to timeout
         val url = blob.signUrl(365, TimeUnit.DAYS)
         pict = url.toString()
     }
 
-    val recipe = dto.toRecipe(doc.id, pict)
+    val user = dto.toUser(doc.id, pict)
 
-    doc.set(recipe).await()
-
-    call.respond(recipe.toRecipeDTO())
+    doc.set(user).await()
+    call.respond(HttpStatusCode.OK)
 }

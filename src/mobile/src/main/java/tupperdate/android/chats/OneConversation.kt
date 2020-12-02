@@ -106,7 +106,7 @@ private fun DisplayMessage(
 private fun OneConversationPreview() {
     val msgList = listOf(
         Message("Do you dream of Scorchers ?", true),
-        Message("Only when I missed hunting one", true)
+        Message("Only when I missed hunting one", false)
     )
     TupperdateTheme {
         OneConversation(

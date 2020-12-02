@@ -23,7 +23,7 @@ fun ConversationsPage(
     conversations: List<Conversation>,
     modifier: Modifier = Modifier
 ) {
-    Column(Modifier.fillMaxSize().padding(16.dp)) {
+    Column(modifier.fillMaxSize().padding(16.dp)) {
         //TODO update TupperdateTopBar and fix the padding problem
         TupperdateTopBar(
             onChatClick = onRecipeClick,
@@ -37,7 +37,7 @@ fun ConversationsPage(
                 style = MaterialTheme.typography.overline
             )
         }
-        Matches(recipes = recipes, modifier)
+        Matches(recipes = recipes)
         Row(Modifier.padding(top = 16.dp, bottom = 24.dp)) {
             Text(
                 text = stringResource(id = R.string.chat_conversations),
