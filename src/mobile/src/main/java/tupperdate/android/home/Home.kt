@@ -2,14 +2,20 @@ package tupperdate.android.home
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
+import tupperdate.android.home.feed.Feed
+import tupperdate.api.Api
 
 @Composable
 fun Home(
+    api: Api,
+    onReturnClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val (currentSection, setCurrentSection) = savedInstanceState { HomeSections.Feed }
 
@@ -22,19 +28,22 @@ fun Home(
         )
     }
     ) { innerPadding ->
+        val innerModifier = Modifier.padding(innerPadding)
+
         Crossfade(current = currentSection) { section ->
             when (section) {
-                HomeSections.Feed -> Feed()
+                HomeSections.Feed -> Feed(
+                    recipeApi = api.recipe,
+                    onReturnClick = onReturnClick,
+                    onRecipeClick = {},
+                    onRecipeDetailsClick = {},
+                    modifier = innerModifier,
+                )
                 HomeSections.MessageList -> MessageList()
                 HomeSections.Profile -> Profile()
             }
         }
     }
-}
-
-@Composable
-fun Feed() {
-    Text("Feed")
 }
 
 @Composable

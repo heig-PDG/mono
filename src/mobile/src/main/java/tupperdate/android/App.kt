@@ -134,7 +134,10 @@ private fun LoggedIn(
             onRecipeDetailsClick = action.viewRecipe,
         )
         */
-        is LoggedInDestination.Home -> Home()
+        is LoggedInDestination.Home -> Home(
+            api = api,
+            onReturnClick = action.back,
+        )
 
         is LoggedInDestination.Profile ->
             Profile(
