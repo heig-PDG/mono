@@ -11,7 +11,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import tupperdate.android.home.TupperdateTopBar
 import tupperdate.android.ui.layout.SwipeStack
 import tupperdate.android.ui.layout.rememberSwipeStackState
 import tupperdate.api.RecipeApi
@@ -20,24 +19,13 @@ import tupperdate.api.RecipeApi
 @Composable
 fun Feed(
     recipeApi: RecipeApi,
-    onChatClick: () -> Unit,
-    onProfileClick: () -> Unit,
     onReturnClick: () -> Unit,
     onRecipeClick: () -> Unit,
     onRecipeDetailsClick: (RecipeApi.Recipe) -> Unit,
-    onTitleClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val recipes by remember { recipeApi.stack() }.collectAsState(emptyList())
     Scaffold(
-        topBar = {
-            TupperdateTopBar(
-                onChatClick = onChatClick,
-                onProfileClick = onProfileClick,
-                onTitleClick = onTitleClick,
-                modifier = Modifier.fillMaxWidth()
-            )
-        },
         bodyContent = { paddingValues ->
             SwipeStack(
                 recipes,
