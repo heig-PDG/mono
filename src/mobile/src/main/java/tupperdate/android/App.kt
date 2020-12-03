@@ -137,6 +137,7 @@ private fun LoggedIn(
         is LoggedInDestination.Home -> Home(
             api = api,
             onReturnClick = action.back,
+            profile = profile ?: api.users.emptyProfile,
         )
 
         is LoggedInDestination.Profile ->

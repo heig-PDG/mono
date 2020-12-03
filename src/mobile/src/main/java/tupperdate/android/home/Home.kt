@@ -9,12 +9,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import tupperdate.android.home.feed.Feed
+import tupperdate.android.home.profile.Profile
 import tupperdate.api.Api
+import tupperdate.api.UserApi
 
 @Composable
 fun Home(
     api: Api,
     onReturnClick: () -> Unit,
+    profile: UserApi.Profile,
     modifier: Modifier = Modifier,
 ) {
     val (currentSection, setCurrentSection) = savedInstanceState { HomeSections.Feed }
@@ -40,7 +43,14 @@ fun Home(
                     modifier = innerModifier,
                 )
                 HomeSections.MessageList -> MessageList()
-                HomeSections.Profile -> Profile()
+                HomeSections.Profile -> Profile(
+                    userApi = api.users,
+                    imagePicker = api.images,
+                    profile = profile,
+                    onCloseClick = { setCurrentSection(HomeSections.Feed) },
+                    onSignOutClick = {},
+                    modifier = modifier,
+                )
             }
         }
     }
@@ -49,11 +59,6 @@ fun Home(
 @Composable
 fun MessageList() {
     Text("Message List")
-}
-
-@Composable
-fun Profile() {
-    Text("Profile")
 }
 
 private enum class HomeSections(
