@@ -4,7 +4,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -25,14 +24,14 @@ fun Home(
 
     Scaffold(topBar = {
         TupperdateTopBar(
-            onChatClick = { setCurrentSection(HomeSections.MessageList) },
+            onChatClick = { setCurrentSection(HomeSections.Conversations) },
             onProfileClick = { setCurrentSection(HomeSections.Profile) },
             onTitleClick = { setCurrentSection(HomeSections.Feed) },
             modifier = Modifier.fillMaxWidth(),
         )
     }
     ) { innerPadding ->
-        val innerModifier = Modifier.padding(innerPadding)
+        val innerModifier = modifier.padding(innerPadding)
 
         Crossfade(current = currentSection) { section ->
             when (section) {
@@ -43,28 +42,29 @@ fun Home(
                     onRecipeDetailsClick = {},
                     modifier = innerModifier,
                 )
-                HomeSections.MessageList -> MessageList()
+                HomeSections.Conversations -> ConversationsPage(
+                    onRecipeClick = {},
+                    onProfileClick = {},
+                    recipes = listOf(),
+                    conversations = listOf(),
+                    modifier = innerModifier,
+                )
                 HomeSections.Profile -> Profile(
                     userApi = api.users,
                     imagePicker = api.images,
                     profile = profile ?: api.users.emptyProfile,
                     onCloseClick = { setCurrentSection(HomeSections.Feed) },
                     onSignOutClick = {},
-                    modifier = modifier,
+                    modifier = innerModifier,
                 )
             }
         }
     }
 }
 
-@Composable
-fun MessageList() {
-    Text("Message List")
-}
-
 private enum class HomeSections(
 ) {
-    MessageList,
+    Conversations,
     Feed,
     Profile,
 }

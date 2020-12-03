@@ -1,6 +1,9 @@
 package tupperdate.android.home
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -20,29 +23,24 @@ fun ConversationsPage(
     onProfileClick: () -> Unit,
     recipes: List<RecipeApi.Recipe>,
     conversations: List<Conversation>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier.fillMaxSize().padding(16.dp)) {
-        //TODO update TupperdateTopBar and fix the padding problem
-        TupperdateTopBar(
-            onChatClick = onRecipeClick,
-            onTitleClick = {},
-            onProfileClick = onProfileClick,
-            modifier = Modifier.fillMaxWidth()
+
+        Text(
+            text = stringResource(id = R.string.chat_matches_list),
+            style = MaterialTheme.typography.overline,
+            modifier = Modifier.padding(top = 26.dp, bottom = 16.dp)
         )
-        Row(Modifier.padding(top = 26.dp, bottom = 16.dp)) {
-            Text(
-                text = stringResource(id = R.string.chat_matches_list),
-                style = MaterialTheme.typography.overline
-            )
-        }
+
         Matches(recipes = recipes)
-        Row(Modifier.padding(top = 16.dp, bottom = 24.dp)) {
-            Text(
-                text = stringResource(id = R.string.chat_conversations),
-                style = MaterialTheme.typography.overline
-            )
-        }
+
+        Text(
+            text = stringResource(id = R.string.chat_conversations),
+            style = MaterialTheme.typography.overline,
+            modifier = Modifier.padding(top = 26.dp, bottom = 16.dp)
+        )
+
         Chats(conversations = conversations, onConversationClick = {})
     }
 }
@@ -50,7 +48,7 @@ fun ConversationsPage(
 @Composable
 private fun Matches(
     recipes: List<RecipeApi.Recipe>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     LazyRowFor(items = recipes) {
         RecipeImage(imageUrl = it.pictureUrl, modifier)
@@ -60,7 +58,7 @@ private fun Matches(
 @Composable
 private fun RecipeImage(
     imageUrl: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     ProfilePicture(
         modifier = modifier.size(56.dp),
@@ -72,14 +70,14 @@ private fun RecipeImage(
 @Preview
 @Composable
 fun ConversationsPagePreview() {
-    var recipes = listOf(
+    val recipes = listOf(
         RecipeApi.Recipe(
             title = "Lobster",
             description = "From Santa Monica",
             pictureUrl = "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg"
         )
     )
-    var conv = listOf(
+    val conv = listOf(
         Conversation(
             id = "12e",
             title = "Aloy",
