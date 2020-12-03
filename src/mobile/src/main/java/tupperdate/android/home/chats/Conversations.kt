@@ -1,4 +1,4 @@
-package tupperdate.android.home
+package tupperdate.android.home.chats
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +18,7 @@ import tupperdate.android.ui.components.ProfilePicture
 import tupperdate.api.RecipeApi
 
 @Composable
-fun ConversationsPage(
+fun Conversations(
     onRecipeClick: () -> Unit,
     onProfileClick: () -> Unit,
     recipes: List<RecipeApi.Recipe>,
@@ -101,7 +101,7 @@ fun ConversationsPagePreview() {
         ),
     )
     TupperdateTheme {
-        ConversationsPage(
+        Conversations(
             onRecipeClick = {},
             onProfileClick = {},
             recipes = recipes,

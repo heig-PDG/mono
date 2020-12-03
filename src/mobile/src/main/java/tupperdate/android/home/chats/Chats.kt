@@ -1,4 +1,4 @@
-package tupperdate.android.home
+package tupperdate.android.home.chats
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

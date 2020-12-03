@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
+import tupperdate.android.home.chats.Conversations
 import tupperdate.android.home.feed.Feed
 import tupperdate.android.home.profile.Profile
 import tupperdate.api.Api
@@ -42,7 +43,7 @@ fun Home(
                     onRecipeDetailsClick = {},
                     modifier = innerModifier,
                 )
-                HomeSections.Conversations -> ConversationsPage(
+                HomeSections.Conversations -> Conversations(
                     onRecipeClick = {},
                     onProfileClick = {},
                     recipes = listOf(),
