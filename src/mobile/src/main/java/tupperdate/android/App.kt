@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.map
 import tupperdate.android.editRecipe.NewRecipe
 import tupperdate.android.editRecipe.ViewRecipe
 import tupperdate.android.home.Home
-import tupperdate.android.home.profile.Profile
 import tupperdate.android.onboarding.Onboarding
 import tupperdate.android.onboardingConfirmation.OnboardingConfirmation
 import tupperdate.android.testing.AuthenticationTesting
@@ -137,14 +136,6 @@ private fun LoggedIn(
             onReturnClick = action.back,
         )
 
-        is LoggedInDestination.Profile ->
-            Profile(
-                userApi = api.users,
-                imagePicker = api.images,
-                profile = api.users.emptyProfile,
-                onCloseClick = action.back,
-                onSignOutClick = {},
-            )
         is LoggedInDestination.AuthenticationTesting ->
             AuthenticationTesting(api)
     }
