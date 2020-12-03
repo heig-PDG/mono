@@ -8,13 +8,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import tupperdate.android.editRecipe.NewRecipe
 import tupperdate.android.editRecipe.ViewRecipe
 import tupperdate.android.home.Home
+import tupperdate.android.home.profile.Profile
 import tupperdate.android.onboarding.Onboarding
 import tupperdate.android.onboardingConfirmation.OnboardingConfirmation
-import tupperdate.android.profile.Profile
 import tupperdate.android.testing.AuthenticationTesting
 import tupperdate.android.ui.BrandingPreview
 import tupperdate.android.utils.Navigator
@@ -123,6 +122,7 @@ private fun LoggedIn(
             recipe = destination.recipe,
             onBack = action.back,
         )
+        /*
         is LoggedInDestination.Home -> Home(
             recipeApi = api.recipe,
             // TODO add behaviours on these buttons
@@ -133,6 +133,8 @@ private fun LoggedIn(
             onTitleClick = action.authenticationTesting,
             onRecipeDetailsClick = action.viewRecipe,
         )
+        */
+        is LoggedInDestination.Home -> Home()
 
         is LoggedInDestination.Profile ->
             Profile(

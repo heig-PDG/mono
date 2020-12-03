@@ -1,14 +1,17 @@
 package tupperdate.android.home
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
@@ -16,6 +19,47 @@ import tupperdate.android.appbars.TupperdateTopBar
 import tupperdate.android.ui.layout.SwipeStack
 import tupperdate.android.ui.layout.rememberSwipeStackState
 import tupperdate.api.RecipeApi
+
+@Composable
+fun Home(
+) {
+    val (currentSection, setCurrentSection) = savedInstanceState { HomeSections.Feed }
+
+    Scaffold(topBar = {
+        TupperdateTopBar(
+            onChatClick = {},
+            onProfileClick = {},
+            onTitleClick = {}
+        )
+    }
+    ) { innerPadding ->
+        Crossfade(current = currentSection) { section ->
+            when(section) {
+                HomeSections.Feed -> Feed()
+                HomeSections.MessageList -> MessageList()
+                HomeSections.Profile -> Profile()
+            }
+
+        }
+
+    }
+
+}
+
+@Composable
+fun Feed() {
+    Text("Feed")
+}
+
+@Composable
+fun MessageList() {
+    Text("Message List")
+}
+
+@Composable
+fun Profile() {
+    Text("Profile")
+}
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -68,6 +112,13 @@ fun Home(
         },
         modifier = modifier,
     )
+}
+
+private enum class HomeSections(
+) {
+    MessageList,
+    Feed,
+    Profile,
 }
 
 @Preview

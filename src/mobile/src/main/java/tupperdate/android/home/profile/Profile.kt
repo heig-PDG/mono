@@ -1,4 +1,4 @@
-package tupperdate.android.profile
+package tupperdate.android.home.profile
 
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
