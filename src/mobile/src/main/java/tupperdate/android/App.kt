@@ -109,8 +109,6 @@ private fun LoggedIn(
 ) {
     LaunchedEffect(true) { api.users.updateProfile() }
 
-    val profile = remember { api.users.profile }.collectAsState(initial = null).value
-
     when (destination) {
         is LoggedInDestination.NewRecipe -> NewRecipe(
             recipeApi = api.recipe,
@@ -137,14 +135,13 @@ private fun LoggedIn(
         is LoggedInDestination.Home -> Home(
             api = api,
             onReturnClick = action.back,
-            profile = profile ?: api.users.emptyProfile,
         )
 
         is LoggedInDestination.Profile ->
             Profile(
                 userApi = api.users,
                 imagePicker = api.images,
-                profile = profile ?: api.users.emptyProfile,
+                profile = api.users.emptyProfile,
                 onCloseClick = action.back,
                 onSignOutClick = {},
             )

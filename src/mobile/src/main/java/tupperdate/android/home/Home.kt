@@ -6,20 +6,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import tupperdate.android.home.feed.Feed
 import tupperdate.android.home.profile.Profile
 import tupperdate.api.Api
-import tupperdate.api.UserApi
 
 @Composable
 fun Home(
     api: Api,
     onReturnClick: () -> Unit,
-    profile: UserApi.Profile,
     modifier: Modifier = Modifier,
 ) {
+    val profile = remember { api.users.profile }.collectAsState(initial = null).value
     val (currentSection, setCurrentSection) = savedInstanceState { HomeSections.Feed }
 
     Scaffold(topBar = {
@@ -46,7 +47,7 @@ fun Home(
                 HomeSections.Profile -> Profile(
                     userApi = api.users,
                     imagePicker = api.images,
-                    profile = profile,
+                    profile = profile ?: api.users.emptyProfile,
                     onCloseClick = { setCurrentSection(HomeSections.Feed) },
                     onSignOutClick = {},
                     modifier = modifier,
