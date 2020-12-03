@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -25,34 +24,27 @@ fun Feed(
     modifier: Modifier = Modifier,
 ) {
     val recipes by remember { recipeApi.stack() }.collectAsState(emptyList())
-    Scaffold(
-        bodyContent = { paddingValues ->
-            SwipeStack(
-                recipes,
-                Modifier
-                    .padding(paddingValues)
-                    .padding(16.dp),
-                // For the moment, reject all swipes.
-                swipeStackState = rememberSwipeStackState(confirmStateChange = { false })
-            ) { recipe ->
-                RecipeCard(
-                    recipe = recipe,
-                    onInfoClick = { onRecipeDetailsClick(recipe) },
-                    Modifier.fillMaxSize()
-                )
-            }
-        },
-        bottomBar = {
-            RecipeActions(
-                onLikeClick = { /* TODO */ },
-                onDislikeClick = { /* TODO */ },
-                onBackClick = onReturnClick,
-                onNewRecipeClick = onRecipeClick,
-                Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            )
-        },
-        modifier = modifier,
+
+    SwipeStack(
+        recipes,
+        Modifier.padding(16.dp),
+        // For the moment, reject all swipes.
+        swipeStackState = rememberSwipeStackState(confirmStateChange = { false })
+    ) { recipe ->
+        RecipeCard(
+            recipe = recipe,
+            onInfoClick = { onRecipeDetailsClick(recipe) },
+            Modifier.fillMaxSize()
+        )
+    }
+
+    RecipeActions(
+        onLikeClick = { /* TODO */ },
+        onDislikeClick = { /* TODO */ },
+        onBackClick = onReturnClick,
+        onNewRecipeClick = onRecipeClick,
+        Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
     )
 }
