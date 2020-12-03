@@ -1,19 +1,18 @@
-package tupperdate.android.chats
+package tupperdate.android.home
 
-import androidx.compose.material.Text
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
-import tupperdate.android.ui.TupperdateTheme
-import tupperdate.api.RecipeApi
 import tupperdate.android.R
-import tupperdate.android.home.TupperdateTopBar
+import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.components.ProfilePicture
+import tupperdate.api.RecipeApi
 
 @Composable
 fun ConversationsPage(
