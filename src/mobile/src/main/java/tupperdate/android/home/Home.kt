@@ -27,14 +27,15 @@ fun Home(
 
     Scaffold(topBar = {
         TupperdateTopBar(
-            onChatClick = {},
-            onProfileClick = {},
-            onTitleClick = {}
+            onChatClick = { setCurrentSection(HomeSections.MessageList) },
+            onProfileClick = { setCurrentSection(HomeSections.Profile) },
+            onTitleClick = { setCurrentSection(HomeSections.Feed) },
+            modifier = Modifier.fillMaxWidth(),
         )
     }
     ) { innerPadding ->
         Crossfade(current = currentSection) { section ->
-            when(section) {
+            when (section) {
                 HomeSections.Feed -> Feed()
                 HomeSections.MessageList -> MessageList()
                 HomeSections.Profile -> Profile()
