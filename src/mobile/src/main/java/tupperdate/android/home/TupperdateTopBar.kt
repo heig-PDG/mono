@@ -1,4 +1,4 @@
-package tupperdate.android.appbars
+package tupperdate.android.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

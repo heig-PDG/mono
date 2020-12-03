@@ -12,7 +12,7 @@ import androidx.ui.tooling.preview.Preview
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.api.RecipeApi
 import tupperdate.android.R
-import tupperdate.android.appbars.TupperdateTopBar
+import tupperdate.android.home.TupperdateTopBar
 import tupperdate.android.ui.components.ProfilePicture
 
 @Composable
