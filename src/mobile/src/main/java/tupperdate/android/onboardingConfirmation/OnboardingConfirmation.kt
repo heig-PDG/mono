@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -19,7 +20,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
 import tupperdate.android.R
-import tupperdate.android.appbars.onlyReturnTopBar
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.TupperdateTypography
 import tupperdate.android.ui.material.BrandedButton
@@ -166,6 +166,20 @@ private fun CodeInput(
             color = MaterialTheme.colors.error,
         )
     }
+}
+
+@Composable
+private fun onlyReturnTopBar(onReturnClick: () -> Unit,) {
+    TopAppBar(
+        title = {},
+        navigationIcon = {
+            IconButton(onClick = onReturnClick) {
+                Icon(vectorResource(id = R.drawable.ic_back_arrow))
+            }
+        },
+        backgroundColor = MaterialTheme.colors.surface,
+        elevation = 0.dp,
+    )
 }
 
 @Preview(showBackground = true)
