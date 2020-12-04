@@ -36,7 +36,7 @@ import tupperdate.api.Api
 @Composable
 fun Home(
     api: Api,
-    onReturnClick: () -> Unit,
+    onBack: () -> Unit,
     onDevClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -57,7 +57,7 @@ fun Home(
             when (section) {
                 HomeSections.Feed -> Feed(
                     recipeApi = api.recipe,
-                    onReturnClick = onReturnClick,
+                    onBack = onBack,
                     onRecipeClick = {},
                     onRecipeDetailsClick = {},
                     modifier = innerModifier,

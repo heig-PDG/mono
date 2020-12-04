@@ -121,7 +121,7 @@ private fun LoggedIn(
         )
         is LoggedInDestination.Home -> Home(
             api = api,
-            onReturnClick = action.back,
+            onBack = action.back,
             onDevClick = action.authenticationTesting,
         )
         is LoggedInDestination.AuthenticationTesting ->
@@ -150,7 +150,7 @@ private fun LoggedOut(
         )
         LoggedOutDestination.OnboardingConfirmation -> OnboardingConfirmation(
             auth = api.authentication,
-            onReturnClick = action.back,
+            onBack = action.back,
         )
     }
 }

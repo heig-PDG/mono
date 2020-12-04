@@ -51,7 +51,7 @@ private fun getErrorMsg(state: State): String? {
 @Composable
 fun OnboardingConfirmation(
     auth: AuthenticationApi,
-    onReturnClick: () -> Unit,
+    onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scope = LifecycleOwnerAmbient.current.lifecycleScope
@@ -80,7 +80,7 @@ fun OnboardingConfirmation(
                 }
             }
         },
-        onReturnClick = onReturnClick,
+        onBack = onBack,
         isErrorValue = isError(state),
         errorMsg = getErrorMsg(state),
         modifier = modifier,
@@ -93,13 +93,13 @@ private fun OnboardingConfirmation(
     onCodeChanged: (String) -> Unit,
     buttonText: String,
     onButtonClick: () -> Unit,
-    onReturnClick: () -> Unit,
+    onBack: () -> Unit,
     isErrorValue: Boolean,
     errorMsg: String?,
     modifier: Modifier = Modifier,
 ) {
 
-    onlyReturnTopBar(onReturnClick)
+    onlyReturnTopBar(onBack)
 
     Column(
         modifier.padding(top = 102.dp, bottom = 42.dp, start = 16.dp, end = 16.dp)
@@ -169,11 +169,11 @@ private fun CodeInput(
 }
 
 @Composable
-private fun onlyReturnTopBar(onReturnClick: () -> Unit,) {
+private fun onlyReturnTopBar(onBack: () -> Unit,) {
     TopAppBar(
         title = {},
         navigationIcon = {
-            IconButton(onClick = onReturnClick) {
+            IconButton(onClick = onBack) {
                 Icon(vectorResource(id = R.drawable.ic_back_arrow))
             }
         },
@@ -192,7 +192,7 @@ private fun OnboardingConfirmationPreview() {
             onCodeChanged = setCode,
             buttonText = "Button text",
             onButtonClick = {},
-            onReturnClick = {},
+            onBack = {},
             isErrorValue = false,
             errorMsg = null,
             modifier = Modifier.background(Color.White)
@@ -212,7 +212,7 @@ private fun OnboardingConfirmationErrorPreview() {
             onCodeChanged = setCode,
             buttonText = "Button text",
             onButtonClick = {},
-            onReturnClick = {},
+            onBack = {},
             isErrorValue = true,
             errorMsg = "This is a fictive error message",
             modifier = Modifier.background(Color.White)

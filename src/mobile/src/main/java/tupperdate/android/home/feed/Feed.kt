@@ -17,7 +17,7 @@ import tupperdate.api.RecipeApi
 @Composable
 fun Feed(
     recipeApi: RecipeApi,
-    onReturnClick: () -> Unit,
+    onBack: () -> Unit,
     onRecipeClick: () -> Unit,
     onRecipeDetailsClick: (RecipeApi.Recipe) -> Unit,
     modifier: Modifier = Modifier,
@@ -44,7 +44,7 @@ fun Feed(
         RecipeActions(
             onLikeClick = { /* TODO */ },
             onDislikeClick = { /* TODO */ },
-            onBackClick = onReturnClick,
+            onBackClick = onBack,
             onNewRecipeClick = onRecipeClick,
             modifier = Modifier.fillMaxWidth(),
         )
