@@ -1,4 +1,4 @@
-package tupperdate.android.data.auth
+package tupperdate.android.data.legacy.auth
 
 import io.ktor.client.features.auth.*
 import io.ktor.client.request.*
@@ -6,7 +6,7 @@ import io.ktor.http.*
 import io.ktor.http.auth.*
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import tupperdate.android.data.RealAuthenticationApi
+import tupperdate.android.data.legacy.RealAuthenticationApi
 
 /**
  * Registers the [RealAuthenticationApi] as a provider for all the authenticated requests. No HTTP

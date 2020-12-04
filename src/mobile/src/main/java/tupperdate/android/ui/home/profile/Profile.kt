@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tupperdate.android.R
-import tupperdate.android.data.api.ImagePickerApi
-import tupperdate.android.data.api.ImageType
-import tupperdate.android.data.api.UserApi
+import tupperdate.android.data.legacy.api.ImagePickerApi
+import tupperdate.android.data.legacy.api.ImageType
+import tupperdate.android.data.legacy.api.UserApi
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.components.ProfilePicture
 import tupperdate.android.ui.theme.material.BrandedButton

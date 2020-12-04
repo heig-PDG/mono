@@ -1,4 +1,4 @@
-package tupperdate.android.data
+package tupperdate.android.data.features.recipe
 
 import androidx.compose.runtime.Immutable
 import androidx.room.ColumnInfo

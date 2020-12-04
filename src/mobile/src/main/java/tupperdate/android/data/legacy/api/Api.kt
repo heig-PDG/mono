@@ -1,4 +1,4 @@
-package tupperdate.android.data.api
+package tupperdate.android.data.legacy.api
 
 interface Api {
     val authentication: AuthenticationApi

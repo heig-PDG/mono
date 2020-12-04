@@ -1,4 +1,4 @@
-package tupperdate.android.data.room.recipe
+package tupperdate.android.data.features.recipe.room
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import tupperdate.android.data.Recipe
+import tupperdate.android.data.features.recipe.Recipe
 
 @Dao
 abstract class RecipeDao {

@@ -1,4 +1,4 @@
-package tupperdate.android.data
+package tupperdate.android.data.features.recipe
 
 import com.dropbox.android.external.store4.Fetcher
 import com.dropbox.android.external.store4.FetcherResult

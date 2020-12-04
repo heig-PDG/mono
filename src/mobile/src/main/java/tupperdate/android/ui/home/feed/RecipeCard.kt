@@ -12,8 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.coil.CoilImage
 import tupperdate.android.R
-import tupperdate.android.data.Recipe
-import tupperdate.android.data.api.RecipeApi
+import tupperdate.android.data.features.recipe.Recipe
+import tupperdate.android.data.legacy.api.RecipeApi
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.modifier.shade
 

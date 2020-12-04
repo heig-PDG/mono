@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import tupperdate.android.R
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.components.ProfilePicture
-import tupperdate.android.data.api.RecipeApi
+import tupperdate.android.data.legacy.api.RecipeApi
 
 @Composable
 fun Conversations(

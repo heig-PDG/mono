@@ -31,7 +31,7 @@ import tupperdate.android.ui.theme.Flamingo500
 import tupperdate.android.ui.theme.InactiveIcons
 import tupperdate.android.ui.theme.Smurf500
 import tupperdate.android.ui.theme.TupperdateTypography
-import tupperdate.android.data.api.Api
+import tupperdate.android.data.legacy.api.Api
 
 @Composable
 fun Home(

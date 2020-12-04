@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tupperdate.android.R
-import tupperdate.android.data.api.AuthenticationApi
+import tupperdate.android.data.legacy.api.AuthenticationApi
 import tupperdate.android.ui.onboarding.ConfirmationState.*
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.TupperdateTypography

@@ -2,8 +2,8 @@ package tupperdate.android.data.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import tupperdate.android.data.Recipe
-import tupperdate.android.data.room.recipe.RecipeDao
+import tupperdate.android.data.features.recipe.Recipe
+import tupperdate.android.data.features.recipe.room.RecipeDao
 
 @Database(
     entities = [

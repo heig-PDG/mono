@@ -1,20 +1,19 @@
-package tupperdate.android.ui.home
+package tupperdate.android.ui.home.feed
 
 import androidx.lifecycle.ViewModel
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.StoreRequest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
-import tupperdate.android.data.Graph
-import tupperdate.android.data.Recipe
+import tupperdate.android.data.features.recipe.Recipe
 
 /**
- * A [ViewModel] for the home screen.
+ * A [ViewModel] for the feed screen.
  *
  * @param recipeStackStore the [Store] that can be used to fetch the recipes in the stack.
  */
-class HomeViewModel(
-    recipeStackStore: Store<Unit, List<Recipe>> = Graph.recipeStackStore,
+class FeedViewModel(
+    recipeStackStore: Store<Unit, List<Recipe>>,
 ) : ViewModel() {
 
     private val stack = recipeStackStore

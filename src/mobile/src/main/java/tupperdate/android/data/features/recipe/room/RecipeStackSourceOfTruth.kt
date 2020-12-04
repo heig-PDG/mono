@@ -1,8 +1,8 @@
-package tupperdate.android.data.room.recipe
+package tupperdate.android.data.features.recipe.room
 
 import com.dropbox.android.external.store4.SourceOfTruth
 import kotlinx.coroutines.flow.Flow
-import tupperdate.android.data.Recipe
+import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.common.dto.RecipeDTO
 
 /**

@@ -8,9 +8,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.viewModel
-import tupperdate.android.data.Recipe
-import tupperdate.android.ui.home.HomeViewModel
+import org.koin.androidx.compose.getViewModel
+import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.ui.theme.layout.SwipeStack
 import tupperdate.android.ui.theme.layout.rememberSwipeStackState
 
@@ -20,7 +19,7 @@ fun Feed(
     onOpenRecipeClick: (Recipe) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val viewModel = viewModel<HomeViewModel>()
+    val viewModel = getViewModel<FeedViewModel>()
     val recipes by viewModel.stack().collectAsState(emptyList())
 
     Feed(
