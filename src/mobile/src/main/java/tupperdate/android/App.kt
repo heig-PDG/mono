@@ -119,24 +119,11 @@ private fun LoggedIn(
             recipe = destination.recipe,
             onBack = action.back,
         )
-        /*
-        is LoggedInDestination.Home -> Home(
-            recipeApi = api.recipe,
-            // TODO add behaviours on these buttons
-            onChatClick = {},
-            onProfileClick = action.profile,
-            onRecipeClick = action.newRecipe,
-            onReturnClick = {},
-            onTitleClick = action.authenticationTesting,
-            onRecipeDetailsClick = action.viewRecipe,
-        )
-        */
         is LoggedInDestination.Home -> Home(
             api = api,
             onReturnClick = action.back,
             onDevClick = action.authenticationTesting,
         )
-
         is LoggedInDestination.AuthenticationTesting ->
             AuthenticationTesting(api)
     }
