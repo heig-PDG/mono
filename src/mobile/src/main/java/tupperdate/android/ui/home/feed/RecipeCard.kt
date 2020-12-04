@@ -12,9 +12,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.coil.CoilImage
 import tupperdate.android.R
+import tupperdate.android.data.Recipe
+import tupperdate.android.data.api.RecipeApi
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.modifier.shade
-import tupperdate.android.data.api.RecipeApi
 
 
 /**
@@ -26,14 +27,14 @@ import tupperdate.android.data.api.RecipeApi
  */
 @Composable
 fun RecipeCard(
-    recipe: RecipeApi.Recipe,
+    recipe: Recipe,
     onInfoClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     RecipeCard(
         title = recipe.title,
         subtitle = recipe.description,
-        imageUrl = recipe.pictureUrl,
+        imageUrl = recipe.picture,
         onInfoClick = onInfoClick,
         modifier = modifier,
     )

@@ -56,10 +56,8 @@ fun Home(
         Crossfade(current = currentSection) { section ->
             when (section) {
                 HomeSections.Feed -> Feed(
-                    recipeApi = api.recipe,
                     onBack = onBack,
-                    onRecipeClick = {},
-                    onRecipeDetailsClick = {},
+                    onOpenRecipeClick = {},
                     modifier = innerModifier,
                 )
                 HomeSections.Conversations -> Conversations(
