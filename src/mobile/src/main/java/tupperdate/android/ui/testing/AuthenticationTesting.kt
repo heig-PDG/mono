@@ -1,11 +1,11 @@
 package tupperdate.android.ui.testing
 
 import android.widget.Toast
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
