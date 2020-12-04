@@ -12,7 +12,7 @@ import tupperdate.android.ui.editRecipe.NewRecipe
 import tupperdate.android.ui.editRecipe.ViewRecipe
 import tupperdate.android.ui.home.Home
 import tupperdate.android.ui.onboarding.Onboarding
-import tupperdate.android.ui.onboardingConfirmation.OnboardingConfirmation
+import tupperdate.android.ui.onboarding.OnboardingConfirmation
 import tupperdate.android.ui.testing.AuthenticationTesting
 import tupperdate.android.ui.utils.Navigator
 import tupperdate.android.data.api.Api

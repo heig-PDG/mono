@@ -1,4 +1,4 @@
-package tupperdate.android.ui.onboardingConfirmation
+package tupperdate.android.ui.onboarding
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,18 +20,20 @@ import androidx.lifecycle.lifecycleScope
 import androidx.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
 import tupperdate.android.R
+import tupperdate.android.data.api.AuthenticationApi
+import tupperdate.android.ui.onboarding.ConfirmationState.*
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.TupperdateTypography
 import tupperdate.android.ui.theme.material.BrandedButton
-import tupperdate.android.data.api.AuthenticationApi
 
-private sealed class State
-private object WaitingForInput : State()
-private object Pending : State()
-private object VerificationError : State()
-private object InternalError : State()
+private enum class ConfirmationState {
+    WaitingForInput,
+    Pending,
+    VerificationError,
+    InternalError,
+}
 
-private fun isError(state: State): Boolean {
+private fun isError(state: ConfirmationState): Boolean {
     return when (state) {
         VerificationError -> true
         InternalError -> true
@@ -40,7 +42,7 @@ private fun isError(state: State): Boolean {
 }
 
 @Composable
-private fun getErrorMsg(state: State): String? {
+private fun getErrorMsg(state: ConfirmationState): String? {
     return when (state) {
         VerificationError -> stringResource(R.string.onboardingConfirmation_verification_error)
         InternalError -> stringResource(R.string.onboarding_error_internal)
@@ -57,7 +59,7 @@ fun OnboardingConfirmation(
     val scope = LifecycleOwnerAmbient.current.lifecycleScope
 
     val (code, setCode) = remember { mutableStateOf("") }
-    val (state, setState) = remember { mutableStateOf<State>(WaitingForInput) }
+    val (state, setState) = remember { mutableStateOf(WaitingForInput) }
 
     OnboardingConfirmation(
         code = code,
@@ -169,7 +171,7 @@ private fun CodeInput(
 }
 
 @Composable
-private fun onlyReturnTopBar(onBack: () -> Unit,) {
+private fun onlyReturnTopBar(onBack: () -> Unit) {
     TopAppBar(
         title = {},
         navigationIcon = {
