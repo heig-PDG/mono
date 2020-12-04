@@ -28,6 +28,7 @@ import tupperdate.android.home.chats.Conversations
 import tupperdate.android.home.feed.Feed
 import tupperdate.android.home.profile.Profile
 import tupperdate.android.ui.Flamingo500
+import tupperdate.android.ui.InactiveIcons
 import tupperdate.android.ui.Smurf500
 import tupperdate.android.ui.TupperdateTypography
 import tupperdate.api.Api
@@ -118,7 +119,7 @@ private fun IconItem(
     onSelected: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val color = if (selected) Color.Smurf500 else TopBarIconColor
+    val color = if (selected) Color.Smurf500 else Color.InactiveIcons
 
     Providers(AmbientContentColor provides color) {
         Icon(
@@ -146,7 +147,7 @@ private fun FeedItem(
             modifier = modifier.selectable(selected = selected, onClick = onSelected),
         )
     } else {
-        Providers(AmbientContentColor provides TopBarIconColor) {
+        Providers(AmbientContentColor provides Color.InactiveIcons) {
             Icon(
                 vectorResource(R.drawable.ic_home_cards),
                 modifier.selectable(selected = selected, onClick = onSelected),
@@ -161,4 +162,3 @@ private enum class HomeSections {
     Profile,
 }
 
-private val TopBarIconColor = Color.Black.copy(alpha = .6f) // TODO : Move to color palette.
