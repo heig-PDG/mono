@@ -18,6 +18,7 @@ import tupperdate.api.Api
 fun Home(
     api: Api,
     onReturnClick: () -> Unit,
+    onDevClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val profile = remember { api.users.profile }.collectAsState(initial = null).value
@@ -56,6 +57,7 @@ fun Home(
                     profile = profile ?: api.users.emptyProfile,
                     onCloseClick = { setCurrentSection(HomeSections.Feed) },
                     onSignOutClick = {},
+                    onDevClick = onDevClick,
                     modifier = innerModifier,
                 )
             }

@@ -11,11 +11,8 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
@@ -58,10 +55,7 @@ fun TupperdateTopBar(
             Text(
                 text = Title,
                 style = TupperdateTypography.h6,
-                modifier = Modifier.multiClick(
-                    triggerAmount = 5,
-                    action = onTitleClick,
-                )
+                modifier = Modifier.clickable(onClick = onTitleClick)
             )
 
             IconButton(onClick = onProfileClick) {
@@ -84,11 +78,3 @@ private val TopBarHeight = 54.dp
 private val TopBarPadding = 8.dp
 private val TopBarIconColor = Color.Black.copy(alpha = .6f) // TODO : Move to color palette.
 
-private fun Modifier.multiClick(triggerAmount: Int, action: () -> Unit) = composed {
-    val (count, setCount) = remember { mutableStateOf(0) }
-    if (count < triggerAmount) {
-        this then clickable(onClick = { setCount(count + 1) })
-    } else {
-        this then clickable(onClick = action)
-    }
-}
