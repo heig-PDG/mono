@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -19,7 +20,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
 import tupperdate.android.R
-import tupperdate.android.appbars.onlyReturnTopBar
 import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.TupperdateTypography
 import tupperdate.android.ui.material.BrandedButton
@@ -51,7 +51,7 @@ private fun getErrorMsg(state: State): String? {
 @Composable
 fun OnboardingConfirmation(
     auth: AuthenticationApi,
-    onReturnClick: () -> Unit,
+    onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scope = LifecycleOwnerAmbient.current.lifecycleScope
@@ -80,7 +80,7 @@ fun OnboardingConfirmation(
                 }
             }
         },
-        onReturnClick = onReturnClick,
+        onBack = onBack,
         isErrorValue = isError(state),
         errorMsg = getErrorMsg(state),
         modifier = modifier,
@@ -93,13 +93,13 @@ private fun OnboardingConfirmation(
     onCodeChanged: (String) -> Unit,
     buttonText: String,
     onButtonClick: () -> Unit,
-    onReturnClick: () -> Unit,
+    onBack: () -> Unit,
     isErrorValue: Boolean,
     errorMsg: String?,
     modifier: Modifier = Modifier,
 ) {
 
-    onlyReturnTopBar(onReturnClick)
+    onlyReturnTopBar(onBack)
 
     Column(
         modifier.padding(top = 102.dp, bottom = 42.dp, start = 16.dp, end = 16.dp)
@@ -168,6 +168,20 @@ private fun CodeInput(
     }
 }
 
+@Composable
+private fun onlyReturnTopBar(onBack: () -> Unit,) {
+    TopAppBar(
+        title = {},
+        navigationIcon = {
+            IconButton(onClick = onBack) {
+                Icon(vectorResource(id = R.drawable.ic_back_arrow))
+            }
+        },
+        backgroundColor = MaterialTheme.colors.surface,
+        elevation = 0.dp,
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun OnboardingConfirmationPreview() {
@@ -178,7 +192,7 @@ private fun OnboardingConfirmationPreview() {
             onCodeChanged = setCode,
             buttonText = "Button text",
             onButtonClick = {},
-            onReturnClick = {},
+            onBack = {},
             isErrorValue = false,
             errorMsg = null,
             modifier = Modifier.background(Color.White)
@@ -198,7 +212,7 @@ private fun OnboardingConfirmationErrorPreview() {
             onCodeChanged = setCode,
             buttonText = "Button text",
             onButtonClick = {},
-            onReturnClick = {},
+            onBack = {},
             isErrorValue = true,
             errorMsg = "This is a fictive error message",
             modifier = Modifier.background(Color.White)

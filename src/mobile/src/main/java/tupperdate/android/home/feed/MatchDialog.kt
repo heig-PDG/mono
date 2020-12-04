@@ -1,4 +1,4 @@
-package tupperdate.android.home
+package tupperdate.android.home.feed
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
