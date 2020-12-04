@@ -1,4 +1,4 @@
-package tupperdate.android.ui.editRecipe
+package tupperdate.android.ui.home.recipe
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

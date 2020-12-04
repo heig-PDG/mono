@@ -1,4 +1,4 @@
-package tupperdate.android.ui.editRecipe
+package tupperdate.android.ui.home.recipe
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState

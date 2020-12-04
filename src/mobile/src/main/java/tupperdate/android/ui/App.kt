@@ -8,8 +8,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import tupperdate.android.ui.editRecipe.NewRecipe
-import tupperdate.android.ui.editRecipe.ViewRecipe
+import tupperdate.android.ui.home.recipe.NewRecipe
+import tupperdate.android.ui.home.recipe.ViewRecipe
 import tupperdate.android.ui.home.Home
 import tupperdate.android.ui.onboarding.Onboarding
 import tupperdate.android.ui.onboarding.OnboardingConfirmation
