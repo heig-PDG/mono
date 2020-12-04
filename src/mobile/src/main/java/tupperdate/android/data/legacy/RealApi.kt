@@ -15,6 +15,7 @@ import tupperdate.android.data.legacy.api.ActualImagePickerApi
 import tupperdate.android.data.legacy.api.Api
 import tupperdate.android.data.legacy.auth.firebase
 
+@ObsoleteTupperdateApi
 class RealApi(activity: AppCompatActivity) : Api {
 
     override val authentication = RealAuthenticationApi(activity, FirebaseAuth.getInstance())

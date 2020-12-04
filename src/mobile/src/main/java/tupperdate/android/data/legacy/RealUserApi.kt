@@ -17,6 +17,7 @@ import tupperdate.common.dto.UserDTO
 /**
  * Extension method that will transform a [UserDTO] to a [UserApi.Profile]
  */
+@ObsoleteTupperdateApi
 private fun UserDTO.toProfile(): UserApi.Profile {
     return UserApi.Profile(
         displayName = this.displayName,
@@ -24,6 +25,7 @@ private fun UserDTO.toProfile(): UserApi.Profile {
     )
 }
 
+@ObsoleteTupperdateApi
 class RealUserApi(
     private val client: HttpClient,
     private val uid: Flow<String?>,

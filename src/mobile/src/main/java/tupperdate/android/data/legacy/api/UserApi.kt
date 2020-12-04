@@ -2,7 +2,9 @@ package tupperdate.android.data.legacy.api
 
 import android.net.Uri
 import kotlinx.coroutines.flow.Flow
+import tupperdate.android.data.legacy.ObsoleteTupperdateApi
 
+@ObsoleteTupperdateApi
 interface UserApi {
     /**
      * A data class representing a user profile in the application.

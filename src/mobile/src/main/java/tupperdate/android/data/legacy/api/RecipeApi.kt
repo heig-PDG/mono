@@ -4,7 +4,9 @@ import android.net.Uri
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.flow.Flow
+import tupperdate.android.data.legacy.ObsoleteTupperdateApi
 
+@ObsoleteTupperdateApi
 interface RecipeApi {
 
     @Parcelize

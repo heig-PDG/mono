@@ -11,6 +11,7 @@ import tupperdate.android.data.legacy.api.readFileAsBase64
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.common.dto.RecipeAttributesDTO
 
+@ObsoleteTupperdateApi
 class RealRecipeApi(
     private val client: HttpClient,
     private val contentResolver: ContentResolver,

@@ -9,19 +9,23 @@ import androidx.core.content.FileProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.apache.commons.codec.binary.Base64
+import tupperdate.android.data.legacy.ObsoleteTupperdateApi
 import java.io.File
 
+@ObsoleteTupperdateApi
 enum class ImageType {
     Profile,
     Recipe;
 }
 
+@ObsoleteTupperdateApi
 interface ImagePickerApi {
     fun pick(imageType: ImageType)
     val currentRecipe: Flow<Uri?>
     val currentProfile: Flow<Uri?>
 }
 
+@ObsoleteTupperdateApi
 class ActualImagePickerApi(private val activity: AppCompatActivity) : ImagePickerApi {
     private val authority = "me.tupperdate.provider"
     private val directory = File(activity.filesDir, "images").apply { mkdirs() }
@@ -83,6 +87,7 @@ class ActualImagePickerApi(private val activity: AppCompatActivity) : ImagePicke
  * Extension method used to help us translate images to base64 encoded string, to transmit them
  * on the network
  */
+@ObsoleteTupperdateApi
 fun Uri.readFileAsBase64(contentResolver: ContentResolver): String? =
     contentResolver.openInputStream(this)
         ?.buffered()

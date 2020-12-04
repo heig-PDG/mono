@@ -1,7 +1,9 @@
 package tupperdate.android.data.legacy.api
 
 import kotlinx.coroutines.flow.Flow
+import tupperdate.android.data.legacy.ObsoleteTupperdateApi
 
+@ObsoleteTupperdateApi
 interface AuthenticationApi {
 
     enum class RequestCodeResult {

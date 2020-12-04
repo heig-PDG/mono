@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+@ObsoleteTupperdateApi
 @OptIn(ExperimentalCoroutinesApi::class)
 class RealAuthenticationApi(
     private val activity: AppCompatActivity,

@@ -6,16 +6,19 @@ import io.ktor.http.*
 import io.ktor.http.auth.*
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import tupperdate.android.data.legacy.ObsoleteTupperdateApi
 import tupperdate.android.data.legacy.RealAuthenticationApi
 
 /**
  * Registers the [RealAuthenticationApi] as a provider for all the authenticated requests. No HTTP
  * request will be sent before a user is properly authenticated via the [api].
  */
+@ObsoleteTupperdateApi
 fun Auth.firebase(api: RealAuthenticationApi) {
     providers += FirebaseAuthProvider(api)
 }
 
+@ObsoleteTupperdateApi
 private class FirebaseAuthProvider(
     private val api: RealAuthenticationApi
 ) : AuthProvider {
