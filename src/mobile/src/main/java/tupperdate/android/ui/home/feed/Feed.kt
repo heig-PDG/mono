@@ -21,7 +21,7 @@ fun Feed(
     modifier: Modifier = Modifier,
 ) {
     val viewModel = viewModel<HomeViewModel>()
-    val recipes by viewModel.recipes().collectAsState(emptyList())
+    val recipes by viewModel.stack().collectAsState(emptyList())
 
     Feed(
         recipes = recipes,

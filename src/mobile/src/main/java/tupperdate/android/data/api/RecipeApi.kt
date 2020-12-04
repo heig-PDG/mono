@@ -17,8 +17,6 @@ interface RecipeApi {
     fun like(recipe: Recipe)
     fun dislike(recipe: Recipe)
 
-    fun stack(): Flow<List<Recipe>>
-
     val backStackEnabled: Flow<Boolean>
 
     fun back()

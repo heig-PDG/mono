@@ -5,6 +5,12 @@ import kotlinx.coroutines.flow.Flow
 import tupperdate.android.data.Recipe
 import tupperdate.common.dto.RecipeDTO
 
+/**
+ * An implementation of a [SourceOfTruth] that can manage individual recipes, with their unique
+ * keys.
+ *
+ * @param dao the [RecipeDao] that is accessed by this [SourceOfTruth].
+ */
 class RecipeSourceOfTruth(
     private val dao: RecipeDao,
 ) : SourceOfTruth<String, RecipeDTO, Recipe> {
