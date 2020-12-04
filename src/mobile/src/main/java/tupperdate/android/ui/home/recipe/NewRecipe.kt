@@ -5,7 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LifecycleOwnerAmbient
+import androidx.compose.ui.platform.AmbientLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import dev.chrisbanes.accompanist.coil.CoilImageConstants
 import kotlinx.coroutines.launch
@@ -20,7 +20,7 @@ fun NewRecipe(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val scope = LifecycleOwnerAmbient.current.lifecycleScope
+    val scope = AmbientLifecycleOwner.current.lifecycleScope
 
     val placeholder = "https://via.placeholder.com/450"
     val imageUri = remember { imagePickerApi.currentRecipe }.collectAsState(initial = null).value

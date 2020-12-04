@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LifecycleOwnerAmbient
+import androidx.compose.ui.platform.AmbientLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
@@ -30,7 +30,7 @@ fun ViewRecipe(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val scope = LifecycleOwnerAmbient.current.lifecycleScope
+    val scope = AmbientLifecycleOwner.current.lifecycleScope
     RecipeDetail(
         heroImage = recipe.pictureUrl,
         header = {

@@ -19,17 +19,17 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.DensityAmbient
-import androidx.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.AmbientDensity
+import androidx.compose.ui.tooling.preview.Preview
 import tupperdate.android.ui.theme.Flamingo700
 import tupperdate.android.ui.theme.Flamingo800
 import tupperdate.android.ui.theme.Smurf700
 import tupperdate.android.ui.theme.Smurf800
 
-private val FirstColor = ColorPropKey()
-private val SecondColor = ColorPropKey()
-private val ThirdColor = ColorPropKey()
-private val FourthColor = ColorPropKey()
+private val FirstColor = ColorPropKey(label = "A")
+private val SecondColor = ColorPropKey(label = "B")
+private val ThirdColor = ColorPropKey(label = "C")
+private val FourthColor = ColorPropKey(label = "D")
 
 private enum class BrandedTitleTextState {
     Start,
@@ -108,8 +108,8 @@ fun BrandedTitleText(
 
     // Text styling.
     val textStyle = AmbientTextStyle.current
-    val sizeFloat = with(DensityAmbient.current) { textStyle.fontSize.toPx() }
-    val sizeDp = with(DensityAmbient.current) { textStyle.fontSize.toDp() }
+    val sizeFloat = with(AmbientDensity.current) { textStyle.fontSize.toPx() }
+    val sizeDp = with(AmbientDensity.current) { textStyle.fontSize.toDp() }
 
     // Paint preparation.
     val typeface = remember { Typeface.create(Typeface.DEFAULT, Typeface.BOLD) }

@@ -15,20 +15,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LifecycleOwnerAmbient
+import androidx.compose.ui.platform.AmbientLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
-import androidx.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
 import tupperdate.android.R
-import tupperdate.android.ui.theme.TupperdateTheme
-import tupperdate.android.ui.theme.components.ProfilePicture
-import tupperdate.android.ui.theme.material.BrandedButton
 import tupperdate.android.data.api.ImagePickerApi
 import tupperdate.android.data.api.ImageType
 import tupperdate.android.data.api.UserApi
+import tupperdate.android.ui.theme.TupperdateTheme
+import tupperdate.android.ui.theme.components.ProfilePicture
+import tupperdate.android.ui.theme.material.BrandedButton
 
 @Composable
 fun Profile(
@@ -40,7 +40,7 @@ fun Profile(
     onDevClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val scope = LifecycleOwnerAmbient.current.lifecycleScope
+    val scope = AmbientLifecycleOwner.current.lifecycleScope
 
     val initName = profile.displayName ?: ""
     val (name, setName) = remember(profile) { mutableStateOf(initName) }
@@ -102,7 +102,7 @@ private fun Profile(
                     .size(32.dp)
             ) {
                 Icon(
-                    asset = vectorResource(R.drawable.ic_home_dislike_recipe),
+                    imageVector = vectorResource(R.drawable.ic_home_dislike_recipe),
                     tint = Color.Black,
                     modifier = Modifier.size(12.dp)
                 )

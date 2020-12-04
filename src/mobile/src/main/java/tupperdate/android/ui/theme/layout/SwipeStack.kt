@@ -19,10 +19,10 @@ import androidx.compose.ui.drawLayer
 import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.WithConstraints
-import androidx.compose.ui.platform.AnimationClockAmbient
+import androidx.compose.ui.platform.AmbientAnimationClock
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.ui.tooling.preview.Preview
 import kotlin.math.PI
 import kotlin.math.min
 import kotlin.math.sin
@@ -113,7 +113,7 @@ fun rememberSwipeStackState(
     initialValue: SwipeStackValue = SwipeStackValue.NotSwiped,
     confirmStateChange: (SwipeStackValue) -> Boolean = { true },
 ): SwipeStackState {
-    val clock = AnimationClockAmbient.current.asDisposableClock()
+    val clock = AmbientAnimationClock.current.asDisposableClock()
     // TODO : Remember this across configuration changes, with rememberSavedInstanceState.
     return remember {
         SwipeStackState(initialValue, clock, confirmStateChange)

@@ -36,10 +36,10 @@ import tupperdate.android.ui.theme.Smurf800
 import java.util.*
 
 
-private val FirstColor = ColorPropKey()
-private val SecondColor = ColorPropKey()
-private val ThirdColor = ColorPropKey()
-private val FourthColor = ColorPropKey()
+private val FirstColor = ColorPropKey(label = "A")
+private val SecondColor = ColorPropKey(label = "B")
+private val ThirdColor = ColorPropKey(label = "C")
+private val FourthColor = ColorPropKey(label = "D")
 
 private enum class State {
     Start,

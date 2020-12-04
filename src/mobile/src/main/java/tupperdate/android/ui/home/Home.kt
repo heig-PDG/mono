@@ -17,7 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.VectorAsset
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.annotatedString
@@ -114,7 +114,7 @@ private fun TupperdateTopBar(
 
 @Composable
 private fun IconItem(
-    asset: VectorAsset,
+    asset: ImageVector,
     selected: Boolean,
     onSelected: () -> Unit,
     modifier: Modifier = Modifier,
