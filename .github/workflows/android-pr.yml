@@ -6,6 +6,9 @@ jobs:
   build:
     name: Build mobile client
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
 
     steps:
       - name: Checkout code
