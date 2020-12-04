@@ -1,4 +1,4 @@
-package tupperdate.api
+package tupperdate.data
 
 import android.content.ContentResolver
 import android.net.Uri
@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import tupperdate.api.UserApi
+import tupperdate.api.readFileAsBase64
 import tupperdate.common.dto.MyUserDTO
 import tupperdate.common.dto.UserDTO
 

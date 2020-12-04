@@ -1,4 +1,4 @@
-package tupperdate.api
+package tupperdate.data
 
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseException
@@ -8,6 +8,7 @@ import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
+import tupperdate.api.AuthenticationApi
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume

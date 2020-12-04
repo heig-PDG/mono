@@ -1,4 +1,4 @@
-package tupperdate.api
+package tupperdate.data
 
 import android.content.ContentResolver
 import android.net.Uri
@@ -8,7 +8,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import tupperdate.api.dto.asRecipe
+import tupperdate.api.RecipeApi
+import tupperdate.api.readFileAsBase64
+import tupperdate.data.dto.asRecipe
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.common.dto.RecipeAttributesDTO
 import tupperdate.common.dto.RecipeDTO

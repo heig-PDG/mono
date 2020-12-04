@@ -1,4 +1,4 @@
-package tupperdate.api
+package tupperdate.data
 
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -8,7 +8,9 @@ import io.ktor.client.features.auth.*
 import io.ktor.client.features.json.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import tupperdate.api.auth.firebase
+import tupperdate.api.ActualImagePickerApi
+import tupperdate.api.Api
+import tupperdate.data.auth.firebase
 
 class RealApi(activity: AppCompatActivity) : Api {
 

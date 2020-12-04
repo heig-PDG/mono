@@ -8,17 +8,6 @@ jobs:
   build:
     name: Build mobile client
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        variant: [ mock, api ]
-        include:
-        - variant: mock
-          gradle_task: assembleMock
-
-        - variant: api
-          gradle_task: assembleApi
-
     defaults:
       run:
         working-directory: src
@@ -39,32 +28,18 @@ jobs:
           SIGNING_PROPERTIES_PROD: ${{ secrets.SIGNING_PROPERTIES_PROD }}
 
       - name: Build app
-        run: ./gradlew ${{ matrix.gradle_task }}
+        run: ./gradlew assemble
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: apk-${{ matrix.variant }}
-          path: src/mobile/build/outputs/apk/${{ matrix.variant }}/debug/
+          name: apk
+          path: src/mobile/build/outputs/apk/debug/
 
   test:
     name: Test mobile client
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        variant: [ mock, api ]
-        include:
-        - variant: mock
-          gradle_task: testMockDebugUnitTest
-
-        - variant: api
-          gradle_task: testApiDebugUnitTest
-
-    defaults:
-      run:
-        working-directory: src
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -81,22 +56,18 @@ jobs:
           SIGNING_PROPERTIES_PROD: ${{ secrets.SIGNING_PROPERTIES_PROD }}
 
       - name: Build app
-        run: ./gradlew ${{ matrix.gradle_task }}
+        run: ./gradlew testDebugUnitTest
 
   deploy:
     name: Deploy
     needs: [ build, test ]
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        variant: [ mock, api ]
-
     steps:
       - name: Download Artifact
         uses: actions/download-artifact@v2
         with:
-          name: apk-${{ matrix.variant }}
+          name: apk
           path: .
 
 
@@ -104,10 +75,9 @@ jobs:
         run: |
           export VERSION_CODE=$(cat output-metadata.json | jq '.elements[0].versionCode')
           export VERSION_NAME=$(cat output-metadata.json | jq '.elements[0].versionName')
-          export VARIANT_NAME=$(cat output-metadata.json | jq '.variantName')
 
           curl -X POST \
             --form-string chat_id=${{ secrets.DEPLOY_TELEGRAM_GROUP }} \
-            --form-string caption="✅ New apk for Tupperdate $VERSION_NAME ($VERSION_CODE) - $VARIANT_NAME" \
-            -F document=@mobile-${{ matrix.variant }}-debug.apk \
+            --form-string caption="✅ New apk for Tupperdate $VERSION_NAME ($VERSION_CODE)" \
+            -F document=@mobile-debug.apk \
             https://api.telegram.org/bot${{ secrets.DEPLOY_TELEGRAM_TOKEN }}/sendDocument
