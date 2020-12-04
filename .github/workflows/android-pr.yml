@@ -6,17 +6,6 @@ jobs:
   build:
     name: Build mobile client
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        variant: [ mock, api ]
-        include:
-        - variant: mock
-          gradle_task: assembleMock
-
-        - variant: api
-          gradle_task: assembleApi
-
     defaults:
       run:
         working-directory: src
@@ -38,22 +27,11 @@ jobs:
           echo "alias.password=123456" >> ./mobile/signing.properties.prod
 
       - name: Build app
-        run: ./gradlew ${{ matrix.gradle_task }}
+        run: ./gradlew assemble
 
   test:
     name: Test mobile client
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        variant: [ mock, api ]
-        include:
-        - variant: mock
-          gradle_task: testMockDebugUnitTest
-
-        - variant: api
-          gradle_task: testApiDebugUnitTest
-
     defaults:
       run:
         working-directory: src
@@ -75,4 +53,4 @@ jobs:
           echo "alias.password=123456" >> ./mobile/signing.properties.prod
 
       - name: Build app
-        run: ./gradlew ${{ matrix.gradle_task }}
+        run: ./gradlew test

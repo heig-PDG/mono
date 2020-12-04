@@ -1,4 +1,4 @@
-package tupperdate.api.dto
+package tupperdate.data.dto
 
 import tupperdate.api.RecipeApi
 import tupperdate.common.dto.RecipeDTO
