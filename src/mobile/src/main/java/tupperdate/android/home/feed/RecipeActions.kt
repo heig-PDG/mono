@@ -1,4 +1,4 @@
-package tupperdate.android.home
+package tupperdate.android.home.feed
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

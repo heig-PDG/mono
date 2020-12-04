@@ -38,9 +38,6 @@ class LoggedOutAction(private val navigator: Navigator<LoggedOutDestination>) {
 sealed class LoggedInDestination : Parcelable {
 
     @Parcelize
-    object Profile : LoggedInDestination()
-
-    @Parcelize
     object NewRecipe : LoggedInDestination()
 
     @Parcelize
@@ -69,10 +66,6 @@ class LoggedInAction(private val navigator: Navigator<LoggedInDestination>) {
 
     val back: () -> Unit = {
         navigator.back()
-    }
-
-    val profile: () -> Unit = {
-        navigator.navigate(LoggedInDestination.Profile)
     }
 
     val authenticationTesting: () -> Unit = {
