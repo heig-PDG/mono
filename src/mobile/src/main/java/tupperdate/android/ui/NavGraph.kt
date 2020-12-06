@@ -3,7 +3,7 @@ package tupperdate.android.ui
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import tupperdate.android.ui.utils.Navigator
-import tupperdate.android.data.api.RecipeApi
+import tupperdate.android.data.legacy.api.RecipeApi
 
 // DESTINATIONS AVAILABLE WHEN THE USER IS LOGGED OUT
 

@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import tupperdate.android.R
 import tupperdate.android.ui.theme.DislikeButton
 import tupperdate.android.ui.theme.LikeButton
-import tupperdate.android.data.api.RecipeApi
+import tupperdate.android.data.legacy.api.RecipeApi
 
 @Composable
 fun ViewRecipe(

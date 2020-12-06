@@ -1,10 +1,12 @@
-package tupperdate.android.data.api
+package tupperdate.android.data.legacy.api
 
 import android.net.Uri
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.flow.Flow
+import tupperdate.android.data.legacy.ObsoleteTupperdateApi
 
+@ObsoleteTupperdateApi
 interface RecipeApi {
 
     @Parcelize
@@ -16,8 +18,6 @@ interface RecipeApi {
 
     fun like(recipe: Recipe)
     fun dislike(recipe: Recipe)
-
-    fun stack(): Flow<List<Recipe>>
 
     val backStackEnabled: Flow<Boolean>
 

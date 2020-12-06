@@ -9,9 +9,9 @@ import androidx.compose.ui.platform.AmbientLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import dev.chrisbanes.accompanist.coil.CoilImageConstants
 import kotlinx.coroutines.launch
-import tupperdate.android.data.api.ImagePickerApi
-import tupperdate.android.data.api.ImageType
-import tupperdate.android.data.api.RecipeApi
+import tupperdate.android.data.legacy.api.ImagePickerApi
+import tupperdate.android.data.legacy.api.ImageType
+import tupperdate.android.data.legacy.api.RecipeApi
 
 @Composable
 fun NewRecipe(

@@ -12,7 +12,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AmbientLifecycleOwner
-import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -25,7 +24,7 @@ import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.TupperdateTypography
 import tupperdate.android.ui.theme.material.BrandedButton
 import tupperdate.android.ui.theme.material.BrandedTitleText
-import tupperdate.android.data.api.AuthenticationApi
+import tupperdate.android.data.legacy.api.AuthenticationApi
 
 private sealed class State
 private data class Error(val error: LocalError) : State()

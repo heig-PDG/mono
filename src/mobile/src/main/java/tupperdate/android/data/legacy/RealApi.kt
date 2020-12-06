@@ -1,4 +1,4 @@
-package tupperdate.android.data
+package tupperdate.android.data.legacy
 
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -8,10 +8,14 @@ import io.ktor.client.features.auth.*
 import io.ktor.client.features.json.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import tupperdate.android.data.api.ActualImagePickerApi
-import tupperdate.android.data.api.Api
-import tupperdate.android.data.auth.firebase
+import tupperdate.android.data.legacy.RealAuthenticationApi
+import tupperdate.android.data.legacy.RealRecipeApi
+import tupperdate.android.data.legacy.RealUserApi
+import tupperdate.android.data.legacy.api.ActualImagePickerApi
+import tupperdate.android.data.legacy.api.Api
+import tupperdate.android.data.legacy.auth.firebase
 
+@ObsoleteTupperdateApi
 class RealApi(activity: AppCompatActivity) : Api {
 
     override val authentication = RealAuthenticationApi(activity, FirebaseAuth.getInstance())

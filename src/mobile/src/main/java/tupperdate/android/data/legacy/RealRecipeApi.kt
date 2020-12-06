@@ -1,20 +1,17 @@
-package tupperdate.android.data
+package tupperdate.android.data.legacy
 
 import android.content.ContentResolver
 import android.net.Uri
 import io.ktor.client.*
 import io.ktor.client.request.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import tupperdate.android.data.api.RecipeApi
-import tupperdate.android.data.api.readFileAsBase64
-import tupperdate.android.data.dto.asRecipe
+import tupperdate.android.data.legacy.api.RecipeApi
+import tupperdate.android.data.legacy.api.readFileAsBase64
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.common.dto.RecipeAttributesDTO
-import tupperdate.common.dto.RecipeDTO
 
+@ObsoleteTupperdateApi
 class RealRecipeApi(
     private val client: HttpClient,
     private val contentResolver: ContentResolver,
@@ -24,17 +21,6 @@ class RealRecipeApi(
     }
 
     override fun dislike(recipe: RecipeApi.Recipe) {
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun stack(): Flow<List<RecipeApi.Recipe>> {
-        // TODO : Invalidate requests with server-sent notifications.
-        return flow {
-            val recipes = client.get<List<RecipeDTO>>("/recipes") {
-                parameter("count", 4)
-            }
-            emit(recipes.map(RecipeDTO::asRecipe))
-        }
     }
 
     override val backStackEnabled: Flow<Boolean>

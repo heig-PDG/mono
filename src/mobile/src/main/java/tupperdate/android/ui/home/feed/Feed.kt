@@ -5,25 +5,41 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.koin.androidx.compose.getViewModel
+import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.ui.theme.layout.SwipeStack
 import tupperdate.android.ui.theme.layout.rememberSwipeStackState
-import tupperdate.android.data.api.RecipeApi
+
+@Composable
+fun Feed(
+    onBack: () -> Unit,
+    onOpenRecipeClick: (Recipe) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val viewModel = getViewModel<FeedViewModel>()
+    val recipes by viewModel.stack().collectAsState(emptyList())
+
+    Feed(
+        recipes = recipes,
+        onBack = onBack,
+        onRecipeClick = { /* TODO */ },
+        onRecipeDetailsClick = onOpenRecipeClick,
+        modifier = modifier
+    )
+}
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Feed(
-    recipeApi: RecipeApi,
+    recipes: List<Recipe>,
     onBack: () -> Unit,
     onRecipeClick: () -> Unit,
-    onRecipeDetailsClick: (RecipeApi.Recipe) -> Unit,
+    onRecipeDetailsClick: (Recipe) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val recipes by remember { recipeApi.stack() }.collectAsState(emptyList())
-
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Bottom),
         modifier = modifier.padding(16.dp)
@@ -49,5 +65,4 @@ fun Feed(
             modifier = Modifier.fillMaxWidth(),
         )
     }
-
 }

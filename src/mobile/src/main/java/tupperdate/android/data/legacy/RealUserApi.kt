@@ -1,4 +1,4 @@
-package tupperdate.android.data
+package tupperdate.android.data.legacy
 
 import android.content.ContentResolver
 import android.net.Uri
@@ -9,14 +9,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import tupperdate.android.data.api.UserApi
-import tupperdate.android.data.api.readFileAsBase64
+import tupperdate.android.data.legacy.api.UserApi
+import tupperdate.android.data.legacy.api.readFileAsBase64
 import tupperdate.common.dto.MyUserDTO
 import tupperdate.common.dto.UserDTO
 
 /**
  * Extension method that will transform a [UserDTO] to a [UserApi.Profile]
  */
+@ObsoleteTupperdateApi
 private fun UserDTO.toProfile(): UserApi.Profile {
     return UserApi.Profile(
         displayName = this.displayName,
@@ -24,6 +25,7 @@ private fun UserDTO.toProfile(): UserApi.Profile {
     )
 }
 
+@ObsoleteTupperdateApi
 class RealUserApi(
     private val client: HttpClient,
     private val uid: Flow<String?>,

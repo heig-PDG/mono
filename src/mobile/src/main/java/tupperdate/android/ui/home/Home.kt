@@ -31,7 +31,7 @@ import tupperdate.android.ui.theme.Flamingo500
 import tupperdate.android.ui.theme.InactiveIcons
 import tupperdate.android.ui.theme.Smurf500
 import tupperdate.android.ui.theme.TupperdateTypography
-import tupperdate.android.data.api.Api
+import tupperdate.android.data.legacy.api.Api
 
 @Composable
 fun Home(
@@ -56,10 +56,8 @@ fun Home(
         Crossfade(current = currentSection) { section ->
             when (section) {
                 HomeSections.Feed -> Feed(
-                    recipeApi = api.recipe,
                     onBack = onBack,
-                    onRecipeClick = {},
-                    onRecipeDetailsClick = {},
+                    onOpenRecipeClick = {},
                     modifier = innerModifier,
                 )
                 HomeSections.Conversations -> Conversations(
