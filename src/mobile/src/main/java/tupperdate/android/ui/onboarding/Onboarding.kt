@@ -11,13 +11,14 @@ import androidx.compose.runtime.Providers
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.AmbientLifecycleOwner
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
-import androidx.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
 import tupperdate.android.R
 import tupperdate.android.ui.theme.TupperdateTheme
@@ -50,7 +51,7 @@ fun Onboarding(
     verificationScreen: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val scope = LifecycleOwnerAmbient.current.lifecycleScope
+    val scope = AmbientLifecycleOwner.current.lifecycleScope
 
     val (phone, setPhone) = remember { mutableStateOf("") }
     val (state, setState) = remember { mutableStateOf<State>(WaitingForInput) }

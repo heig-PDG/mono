@@ -9,9 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ClipboardManagerAmbient
-import androidx.compose.ui.platform.ContextAmbient
-import androidx.compose.ui.platform.LifecycleOwnerAmbient
+import androidx.compose.ui.platform.*
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -26,7 +24,7 @@ fun AuthenticationTesting(
     api: Api,
     modifier: Modifier = Modifier,
 ) {
-    val scope = LifecycleOwnerAmbient.current.lifecycleScope
+    val scope = AmbientLifecycleOwner.current.lifecycleScope
 
     val (phone, setPhone) = remember { mutableStateOf("") }
     val (verification, setVerification) = remember { mutableStateOf("") }
@@ -125,8 +123,8 @@ private fun JWTToken(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
-        val clipboard = ClipboardManagerAmbient.current
-        val context = ContextAmbient.current
+        val clipboard = AmbientClipboardManager.current
+        val context = AmbientContext.current
         Button(onClick = {
             clipboard.setText(AnnotatedString(token))
             Toast.makeText(context, "JWT token in clipboard", Toast.LENGTH_SHORT).show()

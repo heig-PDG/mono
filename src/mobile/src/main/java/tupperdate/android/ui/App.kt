@@ -8,17 +8,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import tupperdate.android.data.api.Api
+import tupperdate.android.data.api.UserApi
+import tupperdate.android.ui.home.Home
 import tupperdate.android.ui.home.recipe.NewRecipe
 import tupperdate.android.ui.home.recipe.ViewRecipe
-import tupperdate.android.ui.home.Home
 import tupperdate.android.ui.onboarding.Onboarding
 import tupperdate.android.ui.onboarding.OnboardingConfirmation
 import tupperdate.android.ui.testing.AuthenticationTesting
-import tupperdate.android.ui.utils.Navigator
-import tupperdate.android.data.api.Api
-import tupperdate.android.data.api.UserApi
 import tupperdate.android.ui.theme.BrandingPreview
-
+import tupperdate.android.ui.utils.Navigator
 
 /**
  * A sealed class representing the different states that the user interface can be in.

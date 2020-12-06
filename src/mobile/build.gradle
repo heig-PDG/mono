@@ -11,12 +11,15 @@ def gitCommitDate = { ->
             commandLine 'git', 'log', '-1', '--format=%ci'
             standardOutput = stdout
         }
-        return date.substring(0, 10).replace('-', '.') + "-" + date.substring(11,16)
+        return date.substring(0, 10).replace('-', '.') + "-" + date.substring(11, 16)
     } catch (Exception e) {
         return new Date().format('yyyy.MM.dd-HH:mm')
     }
+}
 
-
+kapt {
+    correctErrorTypes = true
+    useBuildCache = true
 }
 
 android {
@@ -31,6 +34,15 @@ android {
         versionName gitCommitDate()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        "room.incremental"     : "true",
+                        "room.expandProjection": "true"
+                ]
+            }
+        }
     }
 
     packagingOptions {
@@ -48,8 +60,8 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion "1.4.10"
-        kotlinCompilerExtensionVersion "1.0.0-alpha07"
+        kotlinCompilerVersion "1.4.20"
+        kotlinCompilerExtensionVersion "1.0.0-alpha08"
     }
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
@@ -111,14 +123,14 @@ dependencies {
     implementation project(":common")
 
     // Kotlin dependencies.
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.0"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.2"
 
     // AndroidX and Jetpack
-    implementation "androidx.activity:activity-ktx:1.2.0-beta01"
-    implementation "androidx.fragment:fragment-ktx:1.3.0-beta01"
-    implementation "androidx.browser:browser:1.2.0"
+    implementation "androidx.activity:activity-ktx:1.2.0-beta02"
+    implementation "androidx.fragment:fragment-ktx:1.3.0-beta02"
+    implementation "androidx.browser:browser:1.3.0"
     implementation "com.google.android.material:material:1.2.1"
 
     // Room
@@ -135,18 +147,17 @@ dependencies {
     implementation "com.google.firebase:firebase-firestore"
 
     // Client-side Ktor dependencies.
-    implementation "io.ktor:ktor-client-cio:1.4.0"
-    implementation "io.ktor:ktor-client-auth:1.4.0"
-    implementation "io.ktor:ktor-client-json:1.4.0"
-    implementation "io.ktor:ktor-client-serialization:1.4.0"
+    implementation "io.ktor:ktor-client-cio:1.4.3"
+    implementation "io.ktor:ktor-client-auth:1.4.3"
+    implementation "io.ktor:ktor-client-json:1.4.3"
+    implementation "io.ktor:ktor-client-serialization:1.4.3"
 
     // Jetpack Compose
-    implementation "androidx.compose.animation:animation:1.0.0-alpha07"
-    implementation "androidx.compose.ui:ui:1.0.0-alpha07"
-    implementation "androidx.compose.material:material:1.0.0-alpha07"
-
-    implementation "androidx.ui:ui-tooling:1.0.0-alpha07"
+    implementation "androidx.compose.animation:animation:1.0.0-alpha08"
+    implementation "androidx.compose.ui:ui:1.0.0-alpha08"
+    implementation "androidx.compose.ui:ui-tooling:1.0.0-alpha08"
+    implementation "androidx.compose.material:material:1.0.0-alpha08"
 
     // Jetpack Compose + Coil
-    implementation "dev.chrisbanes.accompanist:accompanist-coil:0.3.3.1"
+    implementation "dev.chrisbanes.accompanist:accompanist-coil:0.4.0"
 }
