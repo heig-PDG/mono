@@ -34,15 +34,19 @@ private fun getDatabase(): String = requireNotNull(System.getenv(DefaultGoogleDa
  */
 private fun getStorage(): String = requireNotNull(System.getenv(DefaultGoogleBucketName)) {
     "Missing \$$DefaultGoogleBucketName environment variable."
+}.apply {
+    if (this != "tupperdate-developement.appspot.com") {
+        throw RuntimeException("Wrong bucket name ($this)")
+    }
 }
 
 /**
  * Builds the [FirebaseOptions] object from the environment variables and returns it.
  */
 private fun getOptions(): FirebaseOptions = FirebaseOptions.builder()
+    .setStorageBucket(getStorage())
     .setCredentials(getServiceAccount())
     .setDatabaseUrl(getDatabase())
-    .setStorageBucket(getStorage())
     .build()
 
 /**
