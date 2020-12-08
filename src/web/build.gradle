@@ -19,6 +19,10 @@ dependencies {
     implementation "io.ktor:ktor-server-netty:1.4.3"
     implementation "io.ktor:ktor-auth:1.4.3"
     implementation "io.ktor:ktor-serialization:1.4.3"
+    testImplementation "io.ktor:ktor-server-test-host:1.4.3"
+
+    // JUnit
+    testImplementation "org.junit.jupiter:junit-jupiter:5.7.0"
 
 
     // SL4J

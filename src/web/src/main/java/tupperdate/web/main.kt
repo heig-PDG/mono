@@ -2,9 +2,7 @@
 
 package tupperdate.web
 
-import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
-import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseAuth
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -18,66 +16,42 @@ import tupperdate.web.exceptions.registerException
 import tupperdate.web.routing.accounts.accounts
 import tupperdate.web.routing.recipes.recipes
 import tupperdate.web.routing.users.users
-
-private const val DefaultPort = 1234
-private const val DefaultPortEnvVariable = "PORT"
-private const val DefaultGoogleServiceAccountEnvVariable = "GOOGLE_SERVICE_ACCOUNT"
-private const val DefaultGoogleDatabaseName = "GOOGLE_DATABASE_NAME"
-private const val DefaultGoogleBucketName = "GOOGLE_BUCKET_NAME"
-
-/**
- * Retrieves the service account from the environment variables and returns the associated
- * [GoogleCredentials]. If no credential could be built, and exception will be thrown.
- */
-private fun retrieveServiceAccount(): GoogleCredentials {
-    return requireNotNull(
-        System.getenv(DefaultGoogleServiceAccountEnvVariable)
-            .byteInputStream()
-            .let(GoogleCredentials::fromStream)
-    ) { "Missing \$$DefaultGoogleServiceAccountEnvVariable environment variable." }
-}
+import tupperdate.web.util.*
 
 @JvmName("main")
 fun main() {
-    val port = System.getenv(DefaultPortEnvVariable)?.toIntOrNull() ?: DefaultPort
-    val database = requireNotNull(System.getenv(DefaultGoogleDatabaseName)) {
-        "Missing \$$DefaultGoogleDatabaseName environment variable."
-    }
-    val storage = requireNotNull(System.getenv(DefaultGoogleBucketName)) {
-        "Missing \$$DefaultGoogleBucketName environment variable."
-    }
-
-    val options = FirebaseOptions.builder()
-        .setCredentials(retrieveServiceAccount())
-        .setDatabaseUrl(database)
-        .setStorageBucket(storage)
-        .build()
+    // Retrieve the port
+    val port = getPort()
 
     // Initialise FirebaseApp
-    val firebase = FirebaseApp.initializeApp(options)
+    val firebase = initialiseApp()
 
     val server = embeddedServer(Netty, port = port) {
-        install(Authentication) {
-            firebase(FirebaseAuth.getInstance(firebase))
-        }
-        install(DefaultHeaders)
-        install(CallLogging)
-        install(ContentNegotiation) {
-            json()
-        }
-
-        install(StatusPages) {
-            registerException()
-        }
-
-        install(Routing) {
-            authenticate {
-                accounts(FirebaseAuth.getInstance(firebase))
-                recipes(firebase)
-                users(firebase)
-            }
-        }
+        installServer(firebase)
     }
 
     server.start(wait = true)
+}
+
+fun Application.installServer(firebase: FirebaseApp) {
+    install(Authentication) {
+        firebase(FirebaseAuth.getInstance(firebase))
+    }
+    install(DefaultHeaders)
+    install(CallLogging)
+    install(ContentNegotiation) {
+        json()
+    }
+
+    install(StatusPages) {
+        registerException()
+    }
+
+    install(Routing) {
+        authenticate {
+            accounts(FirebaseAuth.getInstance(firebase))
+            recipes(firebase)
+            users(firebase)
+        }
+    }
 }
