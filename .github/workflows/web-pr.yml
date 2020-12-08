@@ -32,3 +32,9 @@ jobs:
           GOOGLE_DATABASE_NAME: ${{ secrets.FIREBASE_GOOGLE_DATABASE_NAME }}
           GOOGLE_BUCKET_NAME: ${{ secrets.FIREBASE_GOOGLE_BUCKET_NAME }}
         run: ./gradlew :web:test
+
+      - name: Upload tests report
+        uses: actions/upload-artifact@v2
+        with:
+          name: report
+          path: src/web/build/reports/tests/test/
