@@ -37,7 +37,8 @@ fun ChatTopBar(
             Icon(asset = vectorResource(id = R.drawable.ic_back_arrow))
         }
         ProfilePicture(
-            modifier = Modifier.padding(end = 6.dp),
+            modifier = Modifier.padding(end = 6.dp)
+                .size(56.dp),
             image = imageOther,
             highlighted = false
         )

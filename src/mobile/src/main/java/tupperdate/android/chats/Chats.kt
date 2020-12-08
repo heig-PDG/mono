@@ -13,8 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.ui.tooling.preview.Preview
-import tupperdate.android.ui.TupperdateTheme
 import tupperdate.android.ui.components.ProfilePicture
 
 data class Conversation(
@@ -53,19 +51,7 @@ private fun Conversation(
 ) {
     Row(
         modifier.clickable(
-            onClick = {
-                OneConversation(
-                    msgList = listOf(
-                        Message("Do you dream of Scorchers ?", true),
-                        Message("Only when I missed hunting one", true)
-                    ),
-                    onReturnClick = {},
-                    imageOther = image,
-                    nameOther = title,
-                    otherOnlineStatus = "online",
-                    onSendClick = {}
-                )
-            }
+            onClick = onClick
         ).padding(vertical = 8.dp),
         Arrangement.spacedBy(16.dp),
         Alignment.CenterVertically
