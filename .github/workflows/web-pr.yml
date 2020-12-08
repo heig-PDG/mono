@@ -19,6 +19,13 @@ jobs:
         with:
           java-version: 11
 
+      - name: Load secret files
+        run: |
+          echo "keystore.file=pr.jks" >> ./mobile/signing.properties.prod
+          echo "keystore.password=123456" >> ./mobile/signing.properties.prod
+          echo "alias.name=pr" >> ./mobile/signing.properties.prod
+          echo "alias.password=123456" >> ./mobile/signing.properties.prod
+
       - name: Run tests
         env:
           GOOGLE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_GOOGLE_SERVICE_ACCOUNT }}
