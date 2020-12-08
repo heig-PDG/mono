@@ -11,7 +11,7 @@ An Android and web application to match and meet people based on meals, recipes 
 
 | Name                                   |                                  |
 |----------------------------------------|----------------------------------|
-| Matthieu Burguburu 					 | matthieu.burguburu@heig-vd.ch    |
+| Matthieu Burguburu 🚀 					 | matthieu.burguburu@heig-vd.ch    |
 | David Dupraz                           | david.dupraz@heig-vd.ch          |
 | Alexandre Piveteau 				     | alexandre.piveteau@heig-vd.ch    |
 | Guy-Laurent Subri                      | guy-laurent.subri@heig-vd.ch     |
