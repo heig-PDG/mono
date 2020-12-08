@@ -53,4 +53,4 @@ jobs:
           echo "alias.password=123456" >> ./mobile/signing.properties.prod
 
       - name: Build app
-        run: ./gradlew test
+        run: ./gradlew :mobile:test
