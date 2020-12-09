@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
@@ -61,31 +62,30 @@ fun ChatTopBar(
 @Composable
 fun ChatBottomBar(
     onSendClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    Row(modifier.fillMaxWidth().background(Color.Smurf100)) {
-        Row(
-            Modifier.fillMaxWidth()
-                .padding(
-                    horizontal = 16.dp,
-                    vertical = 10.dp
-                )
-                .background(Color.Transparent),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            OutlinedTextField(
-                modifier = Modifier.padding(end = 10.dp)
-                    .height(24.dp),
-                value = "",
-                onValueChange = {},
-                placeholder = { stringArrayResource(id = R.string.chat_message_placeholder) }
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Color.Smurf100)
+            .padding(
+                horizontal = 16.dp,
+                vertical = 10.dp,
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        OutlinedTextField(
+            modifier = Modifier.padding(end = 10.dp)
+                .height(24.dp).weight(1f),
+            value = "",
+            onValueChange = {},
+            placeholder = { stringResource(id = R.string.chat_message_placeholder) }
+        )
+        IconButton(onClick = onSendClick) {
+            Icon(
+                imageVector = vectorResource(id = R.drawable.ic_chat_send),
+                tint = Color.Black
             )
-            IconButton(onClick = onSendClick) {
-                Icon(
-                    imageVector = vectorResource(id = R.drawable.ic_chat_send),
-                    tint = Color.Black
-                )
-            }
         }
     }
 }
