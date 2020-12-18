@@ -109,12 +109,10 @@ private fun LoggedIn(
 
     when (destination) {
         is LoggedInDestination.NewRecipe -> NewRecipe(
-            recipeApi = api.recipe,
             imagePickerApi = api.images,
             onBack = action.back,
         )
         is LoggedInDestination.ViewRecipe -> ViewRecipe(
-            recipeApi = api.recipe,
             recipe = destination.recipe,
             onBack = action.back,
         )

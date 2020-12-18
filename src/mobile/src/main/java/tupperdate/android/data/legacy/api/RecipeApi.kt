@@ -16,13 +16,6 @@ interface RecipeApi {
         val pictureUrl: String,
     ): Parcelable
 
-    fun like(recipe: Recipe)
-    fun dislike(recipe: Recipe)
-
-    val backStackEnabled: Flow<Boolean>
-
-    fun back()
-
     suspend fun create(
         title: String,
         description: String,

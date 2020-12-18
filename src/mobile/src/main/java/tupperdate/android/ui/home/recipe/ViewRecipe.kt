@@ -5,29 +5,27 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.AmbientLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
 import tupperdate.android.R
+import tupperdate.android.data.legacy.api.RecipeApi
 import tupperdate.android.ui.theme.DislikeButton
 import tupperdate.android.ui.theme.LikeButton
-import tupperdate.android.data.legacy.api.RecipeApi
 
 @Composable
 fun ViewRecipe(
-    recipeApi: RecipeApi,
     recipe: RecipeApi.Recipe,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val scope = AmbientLifecycleOwner.current.lifecycleScope
     RecipeDetail(
         heroImage = recipe.pictureUrl,
         header = {
@@ -43,16 +41,10 @@ fun ViewRecipe(
             )
             ViewRecipeButtons(
                 onSkip = {
-                    scope.launch {
-                        recipeApi.dislike(recipe)
-                        onBack()
-                    }
+                    onBack()
                 },
                 onLike = {
-                    scope.launch {
-                        recipeApi.like(recipe)
-                        onBack()
-                    }
+                    onBack()
                 },
             )
         },
