@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AmbientLifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import dev.chrisbanes.accompanist.coil.CoilImageConstants
+import dev.chrisbanes.accompanist.coil.CoilImageDefaults
 import kotlinx.coroutines.launch
 import tupperdate.android.data.legacy.api.ImagePickerApi
 import tupperdate.android.data.legacy.api.ImageType
@@ -28,7 +28,7 @@ fun NewRecipe(
     val heroImage = if (imageUri == null) {
         // TODO: Remove this, we do not want to invalidate the cache just because we added an image...
         //       or maybe we do
-        CoilImageConstants.defaultImageLoader().memoryCache.clear()
+        CoilImageDefaults.defaultImageLoader().memoryCache.clear()
         placeholder
     } else {
         imageUri
