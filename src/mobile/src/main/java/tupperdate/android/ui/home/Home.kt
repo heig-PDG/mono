@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.annotatedString
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
@@ -133,7 +133,7 @@ private fun FeedItem(
     onSelected: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val title = annotatedString {
+    val title = buildAnnotatedString {
         withStyle(SpanStyle(color = Color.Flamingo500)) { append("tupper ") }
         withStyle(SpanStyle(color = Color.Smurf500)) { append("• date") }
     }

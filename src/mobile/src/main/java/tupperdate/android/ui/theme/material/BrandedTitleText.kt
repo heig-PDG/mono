@@ -5,7 +5,10 @@ import android.graphics.PorterDuffXfermode
 import android.graphics.Typeface
 import androidx.compose.animation.ColorPropKey
 import androidx.compose.animation.animate
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.transitionDefinition
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.transition
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.height
@@ -50,24 +53,20 @@ private val Transition = transitionDefinition<BrandedTitleTextState> {
         this[FourthColor] = Color.Flamingo800
     }
     transition {
-        FirstColor using repeatable(
+        FirstColor using infiniteRepeatable(
             animation = tween(3 * 1000),
-            iterations = AnimationConstants.Infinite,
             repeatMode = RepeatMode.Reverse,
         )
-        SecondColor using repeatable(
+        SecondColor using infiniteRepeatable(
             animation = tween(4 * 1000),
-            iterations = AnimationConstants.Infinite,
             repeatMode = RepeatMode.Reverse,
         )
-        ThirdColor using repeatable(
+        ThirdColor using infiniteRepeatable(
             animation = tween(3 * 1000),
-            iterations = AnimationConstants.Infinite,
             repeatMode = RepeatMode.Reverse,
         )
-        FourthColor using repeatable(
+        FourthColor using infiniteRepeatable(
             animation = tween(5 * 1000),
-            iterations = AnimationConstants.Infinite,
             repeatMode = RepeatMode.Reverse,
         )
     }

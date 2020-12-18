@@ -2,9 +2,8 @@ package tupperdate.android.ui.theme.material
 
 import androidx.compose.animation.ColorPropKey
 import androidx.compose.animation.animate
-import androidx.compose.animation.core.AnimationConstants.Infinite
 import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.repeatable
+import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.transitionDefinition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.transition
@@ -13,15 +12,15 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonConstants
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.LinearGradient
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.boundsInParent
@@ -60,24 +59,20 @@ private val Transition = transitionDefinition<State> {
         this[FourthColor] = Color.Flamingo800
     }
     transition {
-        FirstColor using repeatable(
+        FirstColor using infiniteRepeatable(
             animation = tween(3 * 1000),
-            iterations = Infinite,
             repeatMode = RepeatMode.Reverse,
         )
-        SecondColor using repeatable(
+        SecondColor using infiniteRepeatable(
             animation = tween(4 * 1000),
-            iterations = Infinite,
             repeatMode = RepeatMode.Reverse,
         )
-        ThirdColor using repeatable(
+        ThirdColor using infiniteRepeatable(
             animation = tween(3 * 1000),
-            iterations = Infinite,
             repeatMode = RepeatMode.Reverse,
         )
-        FourthColor using repeatable(
+        FourthColor using infiniteRepeatable(
             animation = tween(5 * 1000),
-            iterations = Infinite,
             repeatMode = RepeatMode.Reverse,
         )
     }
@@ -107,16 +102,14 @@ fun BrandedButton(
         definition = Transition, initState = State.Start,
         toState = State.End
     )
-    val brush = LinearGradient(
+    val brush = Brush.linearGradient(
         0.0f to values[FirstColor],
         0.2f to values[SecondColor],
         0.5f to values[ThirdColor],
         0.85f to values[FourthColor],
         // Animated bounds changes.
-        startX = animate(bounds.left * 2),
-        startY = animate(bounds.top * 2),
-        endX = animate(bounds.right * 2),
-        endY = animate(bounds.bottom * 2),
+        start = Offset(animate(bounds.left * 2), animate(bounds.top * 2)),
+        end = Offset(animate(bounds.right * 2), animate(bounds.bottom * 2)),
         tileMode = TileMode.Mirror,
     )
     val stroke = BorderStroke(
@@ -125,7 +118,7 @@ fun BrandedButton(
     )
     Button(
         onClick = onClick,
-        colors = ButtonConstants.defaultButtonColors(
+        colors = ButtonDefaults.buttonColors(
             contentColor = Color.Black,
             backgroundColor = Color.White,
         ),

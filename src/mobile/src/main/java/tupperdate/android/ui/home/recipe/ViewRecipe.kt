@@ -5,10 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonConstants
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -100,7 +97,7 @@ private fun ViewRecipeButtons(
             onClick = onSkip,
             modifier = modifier.weight(1f, fill = true).preferredHeight(56.dp),
             shape = RoundedCornerShape(8.dp),
-            colors = ButtonConstants.defaultButtonColors(
+            colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color.DislikeButton,
                 contentColor = Color.White,
             )
@@ -111,7 +108,7 @@ private fun ViewRecipeButtons(
             onClick = onLike,
             modifier = modifier.weight(1f, fill = true).preferredHeight(56.dp),
             shape = RoundedCornerShape(8.dp),
-            colors = ButtonConstants.defaultButtonColors(
+            colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color.LikeButton,
                 contentColor = Color.White,
             )

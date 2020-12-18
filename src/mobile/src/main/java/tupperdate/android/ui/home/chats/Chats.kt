@@ -2,6 +2,7 @@ package tupperdate.android.ui.home.chats
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.material.AmbientContentAlpha
 import androidx.compose.material.ContentAlpha
@@ -31,14 +32,16 @@ fun Chats(
     onConversationClick: (Conversation) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumnFor(conversations, modifier) {
-        Conversation(
-            title = it.title,
-            subtitle = it.subtitle,
-            highlighted = it.highlighted,
-            image = it.image,
-            onClick = { onConversationClick(it) }
-        )
+    LazyColumn(modifier) {
+        items(conversations) {
+            Conversation(
+                title = it.title,
+                subtitle = it.subtitle,
+                highlighted = it.highlighted,
+                image = it.image,
+                onClick = { onConversationClick(it) }
+            )
+        }
     }
 }
 
