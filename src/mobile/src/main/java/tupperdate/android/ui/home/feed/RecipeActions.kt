@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonConstants
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -68,11 +68,11 @@ private fun IconButton(
         onClick = onClick,
         shape = CircleShape,
         modifier = modifier,
-        colors = ButtonConstants.defaultButtonColors(
+        colors = ButtonDefaults.buttonColors(
             backgroundColor = backgroundColor,
             contentColor = contentColor
         ),
-        contentPadding = ButtonConstants.DefaultTextContentPadding,
+        contentPadding = ButtonDefaults.TextButtonContentPadding,
     ) {
         Icon(icon)
     }
