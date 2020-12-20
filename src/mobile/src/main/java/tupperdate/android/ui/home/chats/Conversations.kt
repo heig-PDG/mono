@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -50,8 +51,10 @@ private fun Matches(
     recipes: List<RecipeApi.Recipe>,
     modifier: Modifier = Modifier,
 ) {
-    LazyRowFor(items = recipes) {
-        RecipeImage(imageUrl = it.pictureUrl, modifier)
+    LazyRow(modifier) {
+        items(recipes) {
+            RecipeImage(imageUrl = it.pictureUrl, modifier)
+        }
     }
 }
 

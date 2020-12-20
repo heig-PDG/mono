@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.drawLayer
 import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.platform.AmbientAnimationClock
 import androidx.compose.ui.tooling.preview.Preview
@@ -174,7 +175,7 @@ fun <T> SwipeStack(
                     val angle = if (index == 0) swipeStackState.angle() else 0f
                     Box(
                         Modifier
-                            .drawLayer(translationX = offset, rotationZ = angle)
+                            .graphicsLayer(translationX = offset, rotationZ = angle)
                             .offset(y = paddingOffset)
                     ) {
                         content(item)
