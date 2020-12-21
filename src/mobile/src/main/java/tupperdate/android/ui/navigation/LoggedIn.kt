@@ -3,10 +3,7 @@ package tupperdate.android.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.navArgument
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.*
 import tupperdate.android.data.legacy.api.Api
 import tupperdate.android.data.legacy.api.RecipeApi
 import tupperdate.android.ui.home.Home
@@ -36,12 +33,14 @@ fun LoggedIn(
             NewRecipe(
                 recipeApi = api.recipe,
                 imagePickerApi = api.images,
-                onBack = { /*TODO*/ },
+                onBack = { navController.navigateUp() },
             )
         }
         composable(
             LoggedInDestination.VIEW_RECIPE,
-            arguments = listOf(navArgument("recipe") { type = NavType.ParcelableType(RecipeApi.Recipe::class.java) }),
+            arguments = listOf(navArgument("recipe") {
+                type = NavType.ParcelableType(RecipeApi.Recipe::class.java)
+            }),
             // TODO: pass recipe's identifier instead of parcelize
         ) {
             it.arguments?.getParcelable<RecipeApi.Recipe?>("recipe")?.let { recipe ->
@@ -55,7 +54,8 @@ fun LoggedIn(
         composable(LoggedInDestination.HOME) {
             Home(
                 api = api,
-                onBack = { /*TODO*/ },
+                onNewRecipeClick = { navController.navigate(LoggedInDestination.NEW_RECIPE) },
+                onBack = { navController.navigateUp() },
                 onDevClick = { /*TODO*/ },
             )
         }
