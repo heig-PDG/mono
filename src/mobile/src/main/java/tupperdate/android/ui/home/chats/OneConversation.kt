@@ -1,11 +1,11 @@
 package tupperdate.android.ui.home.chats
 
-import androidx.compose.material.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -67,7 +67,7 @@ private fun DisplayMessage(
         modifier = modifier.background(Color.Transparent)
             .fillMaxWidth(1f)
             .padding(top = 16.dp),
-        horizontalArrangement = (if (message.iSend) Arrangement.Start else Arrangement.End)
+        horizontalArrangement = (if (message.iSend) Arrangement.End else Arrangement.Start)
     ) {
         Box(
             modifier = Modifier.fillMaxWidth(0.75f)
