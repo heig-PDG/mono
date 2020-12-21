@@ -7,6 +7,8 @@ buildscript {
         classpath "com.android.tools.build:gradle:7.0.0-alpha03"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.21"
         classpath "org.jetbrains.kotlinx:atomicfu-gradle-plugin:0.14.3"
+
+        classpath "org.jetbrains.kotlinx:atomicfu-gradle-plugin:0.14.3"
         classpath "org.jetbrains.kotlin:kotlin-serialization:1.4.21"
         classpath "com.google.gms:google-services:4.3.4"
     }
