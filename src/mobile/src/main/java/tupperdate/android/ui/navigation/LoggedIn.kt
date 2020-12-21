@@ -42,6 +42,7 @@ fun LoggedIn(
         composable(
             LoggedInDestination.VIEW_RECIPE,
             arguments = listOf(navArgument("recipe") { type = NavType.ParcelableType(RecipeApi.Recipe::class.java) }),
+            // TODO: pass recipe's identifier instead of parcelize
         ) {
             it.arguments?.getParcelable<RecipeApi.Recipe?>("recipe")?.let { recipe ->
                 ViewRecipe(

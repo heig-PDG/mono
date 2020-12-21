@@ -49,7 +49,6 @@ private fun Flow<String?>.collectAsState(): UiState =
 @Composable
 fun TupperdateApp(
     api: Api,
-    backDispatcher: OnBackPressedDispatcher,
 ) {
     val loggedIn = remember { api.authentication.uid }
     when (loggedIn.collectAsState()) {
