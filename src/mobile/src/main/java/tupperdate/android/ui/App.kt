@@ -13,10 +13,8 @@ import tupperdate.android.data.legacy.api.UserApi
 import tupperdate.android.ui.home.Home
 import tupperdate.android.ui.home.recipe.NewRecipe
 import tupperdate.android.ui.home.recipe.ViewRecipe
-import tupperdate.android.ui.onboarding.Onboarding
-import tupperdate.android.ui.onboarding.OnboardingConfirmation
+import tupperdate.android.ui.navigation.LoggedOut
 import tupperdate.android.ui.testing.AuthenticationTesting
-import tupperdate.android.ui.theme.BrandingPreview
 import tupperdate.android.ui.utils.Navigator
 
 /**
@@ -68,14 +66,7 @@ fun TupperdateApp(
 
         UiState.LoggedOut -> {
             // The user is currently logged out. Start at the Onboarding start.
-            val nav = rememberSavedInstanceState(saver = Navigator.saver(backDispatcher)) {
-                Navigator<LoggedOutDestination>(
-                    LoggedOutDestination.Onboarding,
-                    backDispatcher
-                )
-            }
-            val act = remember(nav) { LoggedOutAction(nav) }
-            LoggedOut(api, act, nav.current)
+            LoggedOut(api = api)
         }
 
         is UiState.LoggedIn -> {
@@ -125,31 +116,5 @@ private fun LoggedIn(
         )
         is LoggedInDestination.AuthenticationTesting ->
             AuthenticationTesting(api)
-    }
-}
-
-/**
- * The composable that manages the onboarding flow of the app.
- *
- * @param api the [Api] to manage data.
- * @param action the [LoggedOutAction] available to navigate.
- * @param destination the [LoggedOutDestination] that we are currently on.
- */
-@Composable
-private fun LoggedOut(
-    api: Api,
-    action: LoggedOutAction,
-    destination: LoggedOutDestination,
-) {
-    when (destination) {
-        LoggedOutDestination.BrandingPreview -> BrandingPreview()
-        LoggedOutDestination.Onboarding -> Onboarding(
-            auth = api.authentication,
-            verificationScreen = action.viewConfirmation,
-        )
-        LoggedOutDestination.OnboardingConfirmation -> OnboardingConfirmation(
-            auth = api.authentication,
-            onBack = action.back,
-        )
     }
 }
