@@ -15,6 +15,8 @@ private object LoggedInDestination {
     const val NEW_RECIPE = "newRecipe"
     const val VIEW_RECIPE = "viewRecipe/{recipe}"
     const val FEED = "feed"
+    const val PROFILE = "profile"
+    const val CONVERSATIONS = "conversations"
 }
 
 /**
@@ -52,6 +54,15 @@ fun LoggedIn(
                 )
             }
         }
+        composable(LoggedInDestination.CONVERSATIONS) {
+            Home(
+                api = api,
+                onNewRecipeClick = { navController.navigate(LoggedInDestination.NEW_RECIPE) },
+                onBack = { navController.navigateUp() },
+                onDevClick = { /*TODO*/ },
+                startingSection = HomeSections.Conversations,
+            )
+        }
         composable(LoggedInDestination.FEED) {
             Home(
                 api = api,
@@ -61,9 +72,24 @@ fun LoggedIn(
                 startingSection = HomeSections.Feed,
             )
         }
+        composable(LoggedInDestination.PROFILE) {
+            Home(
+                api = api,
+                onNewRecipeClick = { navController.navigate(LoggedInDestination.NEW_RECIPE) },
+                onBack = { navController.navigateUp() },
+                onDevClick = { /*TODO*/ },
+                startingSection = HomeSections.Profile,
+            )
+        }
     }
 
     /*
+enum class HomeSections {
+    Conversations,
+    Feed,
+    Profile,
+}
+
 when (destination) {
     is LoggedInDestination.NewRecipe -> NewRecipe(
         recipeApi = api.recipe,
