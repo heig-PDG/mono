@@ -7,13 +7,14 @@ import androidx.navigation.compose.*
 import tupperdate.android.data.legacy.api.Api
 import tupperdate.android.data.legacy.api.RecipeApi
 import tupperdate.android.ui.home.Home
+import tupperdate.android.ui.home.HomeSections
 import tupperdate.android.ui.home.recipe.NewRecipe
 import tupperdate.android.ui.home.recipe.ViewRecipe
 
 private object LoggedInDestination {
     const val NEW_RECIPE = "newRecipe"
     const val VIEW_RECIPE = "viewRecipe/{recipe}"
-    const val HOME = "home"
+    const val FEED = "feed"
 }
 
 /**
@@ -28,7 +29,7 @@ fun LoggedIn(
     LaunchedEffect(true) { api.users.updateProfile() }
 
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = LoggedInDestination.HOME) {
+    NavHost(navController = navController, startDestination = LoggedInDestination.FEED) {
         composable(LoggedInDestination.NEW_RECIPE) {
             NewRecipe(
                 recipeApi = api.recipe,
@@ -51,12 +52,13 @@ fun LoggedIn(
                 )
             }
         }
-        composable(LoggedInDestination.HOME) {
+        composable(LoggedInDestination.FEED) {
             Home(
                 api = api,
                 onNewRecipeClick = { navController.navigate(LoggedInDestination.NEW_RECIPE) },
                 onBack = { navController.navigateUp() },
                 onDevClick = { /*TODO*/ },
+                startingSection = HomeSections.Feed,
             )
         }
     }
