@@ -12,6 +12,9 @@ import tupperdate.android.ui.home.recipe.NewRecipe
 import tupperdate.android.ui.home.recipe.ViewRecipe
 import tupperdate.android.ui.testing.AuthenticationTesting
 
+/**
+ * Available destinations when the user is logged in
+ */
 private object LoggedInDestination {
     const val NEW_RECIPE = "newRecipe"
     const val VIEW_RECIPE = "viewRecipe/{recipe}"
@@ -46,15 +49,15 @@ fun LoggedIn(
         composable(
             LoggedInDestination.VIEW_RECIPE,
             arguments = listOf(navArgument("recipe") {
+                // TODO: pass recipe's identifier instead of parcelize
                 type = NavType.ParcelableType(RecipeApi.Recipe::class.java)
             }),
-            // TODO: pass recipe's identifier instead of parcelize
         ) {
             it.arguments?.getParcelable<RecipeApi.Recipe?>("recipe")?.let { recipe ->
                 ViewRecipe(
                     recipeApi = api.recipe,
                     recipe = recipe,
-                    onBack = { /*TODO*/ },
+                    onBack = { navController.navigateUp() },
                 )
             }
         }

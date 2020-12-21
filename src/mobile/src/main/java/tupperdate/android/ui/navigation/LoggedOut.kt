@@ -9,6 +9,9 @@ import tupperdate.android.data.legacy.api.Api
 import tupperdate.android.ui.onboarding.Onboarding
 import tupperdate.android.ui.onboarding.OnboardingConfirmation
 
+/**
+ * Available destinations when the user is logged out
+ */
 private object LoggedOutDestination {
     const val ONBOARDING = "onboarding"
     const val CONFIRMATION = "confirmation"
@@ -34,7 +37,7 @@ fun LoggedOut(
         composable(LoggedOutDestination.CONFIRMATION) {
             OnboardingConfirmation(
                 auth = api.authentication,
-                onBack = {}
+                onBack = { navController.navigateUp() }
             )
         }
     }
