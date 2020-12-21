@@ -15,8 +15,9 @@ import tupperdate.android.ui.theme.layout.rememberSwipeStackState
 
 @Composable
 fun Feed(
-    onBack: () -> Unit,
+    onNewRecipeClick: () -> Unit,
     onOpenRecipeClick: (Recipe) -> Unit,
+    onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val viewModel = getViewModel<FeedViewModel>()
@@ -24,9 +25,9 @@ fun Feed(
 
     Feed(
         recipes = recipes,
-        onBack = onBack,
-        onRecipeClick = { /* TODO */ },
+        onNewRecipeClick = onNewRecipeClick,
         onRecipeDetailsClick = onOpenRecipeClick,
+        onBack = onBack,
         modifier = modifier
     )
 }
@@ -35,9 +36,9 @@ fun Feed(
 @Composable
 fun Feed(
     recipes: List<Recipe>,
-    onBack: () -> Unit,
-    onRecipeClick: () -> Unit,
+    onNewRecipeClick: () -> Unit,
     onRecipeDetailsClick: (Recipe) -> Unit,
+    onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -61,7 +62,7 @@ fun Feed(
             onLikeClick = { /* TODO */ },
             onDislikeClick = { /* TODO */ },
             onBackClick = onBack,
-            onNewRecipeClick = onRecipeClick,
+            onNewRecipeClick = onNewRecipeClick,
             modifier = Modifier.fillMaxWidth(),
         )
     }
