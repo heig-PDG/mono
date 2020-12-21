@@ -40,9 +40,10 @@ fun Home(
     onDevClick: () -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    startingSection: HomeSections = HomeSections.Feed,
 ) {
     val profile = remember { api.users.profile }.collectAsState(initial = null).value
-    val (currentSection, setCurrentSection) = savedInstanceState { HomeSections.Feed }
+    val (currentSection, setCurrentSection) = savedInstanceState { startingSection }
 
     Scaffold(topBar = {
         TupperdateTopBar(
@@ -156,7 +157,7 @@ private fun FeedItem(
     }
 }
 
-private enum class HomeSections {
+enum class HomeSections {
     Conversations,
     Feed,
     Profile,
