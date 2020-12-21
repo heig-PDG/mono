@@ -10,6 +10,7 @@ import tupperdate.android.ui.home.Home
 import tupperdate.android.ui.home.HomeSections
 import tupperdate.android.ui.home.recipe.NewRecipe
 import tupperdate.android.ui.home.recipe.ViewRecipe
+import tupperdate.android.ui.testing.AuthenticationTesting
 
 private object LoggedInDestination {
     const val NEW_RECIPE = "newRecipe"
@@ -17,6 +18,9 @@ private object LoggedInDestination {
     const val FEED = "feed"
     const val PROFILE = "profile"
     const val CONVERSATIONS = "conversations"
+
+    // Testing
+    const val AUTH_TESTING = "authenticationTesting"
 }
 
 /**
@@ -59,7 +63,7 @@ fun LoggedIn(
                 api = api,
                 onNewRecipeClick = { navController.navigate(LoggedInDestination.NEW_RECIPE) },
                 onBack = { navController.navigateUp() },
-                onDevClick = { /*TODO*/ },
+                onDevClick = { navController.navigate(LoggedInDestination.AUTH_TESTING) },
                 startingSection = HomeSections.Conversations,
             )
         }
@@ -68,7 +72,7 @@ fun LoggedIn(
                 api = api,
                 onNewRecipeClick = { navController.navigate(LoggedInDestination.NEW_RECIPE) },
                 onBack = { navController.navigateUp() },
-                onDevClick = { /*TODO*/ },
+                onDevClick = { navController.navigate(LoggedInDestination.AUTH_TESTING) },
                 startingSection = HomeSections.Feed,
             )
         }
@@ -77,38 +81,13 @@ fun LoggedIn(
                 api = api,
                 onNewRecipeClick = { navController.navigate(LoggedInDestination.NEW_RECIPE) },
                 onBack = { navController.navigateUp() },
-                onDevClick = { /*TODO*/ },
+                onDevClick = { navController.navigate(LoggedInDestination.AUTH_TESTING) },
                 startingSection = HomeSections.Profile,
             )
         }
+        // Testing
+        composable(LoggedInDestination.AUTH_TESTING) {
+            AuthenticationTesting(api = api)
+        }
     }
-
-    /*
-enum class HomeSections {
-    Conversations,
-    Feed,
-    Profile,
-}
-
-when (destination) {
-    is LoggedInDestination.NewRecipe -> NewRecipe(
-        recipeApi = api.recipe,
-        imagePickerApi = api.images,
-        onBack = action.back,
-    )
-    is LoggedInDestination.ViewRecipe -> ViewRecipe(
-        recipeApi = api.recipe,
-        recipe = destination.recipe,
-        onBack = action.back,
-    )
-    is LoggedInDestination.Home -> Home(
-        api = api,
-        onBack = action.back,
-        onDevClick = action.authenticationTesting,
-    )
-    is LoggedInDestination.AuthenticationTesting ->
-        AuthenticationTesting(api)
-}
-
-     */
 }
