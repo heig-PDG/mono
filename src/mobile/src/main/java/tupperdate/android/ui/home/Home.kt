@@ -24,6 +24,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
+import tupperdate.android.data.legacy.api.Api
 import tupperdate.android.ui.home.chats.Conversations
 import tupperdate.android.ui.home.feed.Feed
 import tupperdate.android.ui.home.profile.Profile
@@ -31,17 +32,18 @@ import tupperdate.android.ui.theme.Flamingo500
 import tupperdate.android.ui.theme.InactiveIcons
 import tupperdate.android.ui.theme.Smurf500
 import tupperdate.android.ui.theme.TupperdateTypography
-import tupperdate.android.data.legacy.api.Api
 
 @Composable
 fun Home(
     api: Api,
-    onBack: () -> Unit,
+    onNewRecipeClick: () -> Unit,
     onDevClick: () -> Unit,
+    onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    startingSection: HomeSections = HomeSections.Feed,
 ) {
     val profile = remember { api.users.profile }.collectAsState(initial = null).value
-    val (currentSection, setCurrentSection) = savedInstanceState { HomeSections.Feed }
+    val (currentSection, setCurrentSection) = savedInstanceState { startingSection }
 
     Scaffold(topBar = {
         TupperdateTopBar(
@@ -56,8 +58,9 @@ fun Home(
         Crossfade(current = currentSection) { section ->
             when (section) {
                 HomeSections.Feed -> Feed(
-                    onBack = onBack,
+                    onNewRecipeClick = onNewRecipeClick,
                     onOpenRecipeClick = {},
+                    onBack = onBack,
                     modifier = innerModifier,
                 )
                 HomeSections.Conversations -> Conversations(
@@ -154,7 +157,7 @@ private fun FeedItem(
     }
 }
 
-private enum class HomeSections {
+enum class HomeSections {
     Conversations,
     Feed,
     Profile,

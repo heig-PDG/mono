@@ -31,3 +31,5 @@ val Color.Companion.grey6 get()=Color(0,0,0,6)
 val Color.Companion.grey3 get()=Color(0,0,0,3)
 
 val Color.Companion.InactiveIcons get() = Black.copy(alpha = .6F)
+
+val Color.Companion.GreyBackgroundMessage get() = Color(233, 233, 233)
