@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="profile_title">Your profile</string>
+    <string name="profile_title_capital">YOUR PROFILE</string>
     <string name="profile_name">Display Name</string>
     <string name="profile_email">EMAIL</string>
     <string name="profile_name_placeholder">Your first name</string>
@@ -9,4 +10,6 @@
     <string name="profile_save">SAVE</string>
     <string name="profile_sign_out">SIGN OUT</string>
     <string name="profile_location">LOCATION</string>
+    <string name="profile_tupps">YOUR TUPPS</string>
+    <string name="profile_new_recipe">+ NEW</string>
 </resources>
