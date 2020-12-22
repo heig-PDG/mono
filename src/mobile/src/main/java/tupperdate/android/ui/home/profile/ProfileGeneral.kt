@@ -13,18 +13,20 @@ import tupperdate.android.R
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.TupperdateTypography
 import tupperdate.android.ui.theme.components.ProfilePicture
+import tupperdate.android.ui.theme.grey3
+import tupperdate.android.ui.theme.grey6
 
 @Composable
 fun ProfileGeneral(
     name: String,
     email: String,
     image: Any,
-    onEditClick: ()-> Unit,
-    modifier: Modifier=Modifier
-){
+    onEditClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     //TODO add an appbar
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
-        Text(text = "YOUR PROFILE", style =MaterialTheme.typography.overline)
+        Text(text = "YOUR PROFILE", style = MaterialTheme.typography.overline)
         ProfileRecap(name = name, email = email, image = image, onEditClick = onEditClick)
     }
 }
@@ -34,12 +36,14 @@ private fun ProfileRecap(
     name: String,
     email: String,
     image: Any,
-    onEditClick: ()-> Unit,
-    modifier: Modifier=Modifier
-){
+    onEditClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(
-        modifier=modifier.fillMaxWidth().padding(end = 3.dp, top = 16.dp, bottom = 16.dp).height(56.dp),
-    verticalAlignment = Alignment.CenterVertically){
+        modifier = modifier.fillMaxWidth().padding(end = 3.dp, top = 16.dp, bottom = 16.dp)
+            .height(56.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         ProfilePicture(
             image = image,
             highlighted = false,
@@ -47,17 +51,17 @@ private fun ProfileRecap(
         )
 
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-            Text(text = name, style =MaterialTheme.typography.subtitle1)
-            Text(text = email, style =MaterialTheme.typography.subtitle2)
+            Text(text = name, style = MaterialTheme.typography.subtitle1, color = Color.grey6)
+            Text(text = email, style = MaterialTheme.typography.subtitle2, color = Color.grey3)
         }
         Spacer(modifier = Modifier.weight(1f, true))
-        IconButton(onClick = onEditClick,
-        modifier = Modifier.height(19.dp)
+        IconButton(
+            onClick = onEditClick,
+            modifier = Modifier.height(19.dp)
         ) {
             Icon(
-                imageVector = vectorResource(id = R.drawable.ic_editrecipe_edit), contentColorFor(
-                    color = Color.
-                )
+                imageVector = vectorResource(id = R.drawable.ic_editrecipe_edit),
+                tint = Color.grey6
             )
         }
     }
@@ -65,10 +69,10 @@ private fun ProfileRecap(
 
 @Preview
 @Composable
-fun ProfileGeneralPreview(){
+fun ProfileGeneralPreview() {
     TupperdateTheme {
         ProfileGeneral(name = "Aloy", email = "chieftain@banuk",
-        image = "https://pbs.twimg.com/profile_images/1257192502916001794/f1RW6Ogf_400x400.jpg",
-        onEditClick = {})
+            image = "https://pbs.twimg.com/profile_images/1257192502916001794/f1RW6Ogf_400x400.jpg",
+            onEditClick = {})
     }
 }
