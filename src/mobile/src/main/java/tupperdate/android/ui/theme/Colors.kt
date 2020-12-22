@@ -27,8 +27,6 @@ val Color.Companion.DislikeButton get() = Color(252, 90, 100)
 val Color.Companion.LikeButton get() = Color(142, 200, 255)
 val Color.Companion.RecipeAddButton get() = Color(223, 189, 157)
 
-val Color.Companion.grey6 get()=Color(0,0,0,6)
-val Color.Companion.grey3 get()=Color(0,0,0,3)
 
 val Color.Companion.InactiveIcons get() = Black.copy(alpha = .6F)
 

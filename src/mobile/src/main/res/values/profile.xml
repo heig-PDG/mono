@@ -8,4 +8,5 @@
     <string name="profile_editpic">EDIT</string>
     <string name="profile_save">SAVE</string>
     <string name="profile_sign_out">SIGN OUT</string>
+    <string name="profile_location">LOCATION</string>
 </resources>
