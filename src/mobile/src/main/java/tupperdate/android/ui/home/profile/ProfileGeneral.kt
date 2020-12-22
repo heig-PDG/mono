@@ -56,7 +56,8 @@ fun ProfileGeneral(
         )
         Row(
             modifier = Modifier.fillMaxWidth(1f)
-                .padding(top = 16.dp)
+                .padding(top = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             BrandedButton(
                 value = stringResource(id = R.string.profile_new_recipe), onClick = onNewRecipeClick,
