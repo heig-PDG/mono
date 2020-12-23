@@ -41,7 +41,6 @@ fun LoggedIn(
     NavHost(navController = navController, startDestination = LoggedInDestination.FEED) {
         composable(LoggedInDestination.NEW_RECIPE) {
             NewRecipe(
-                recipeApi = api.recipe,
                 imagePickerApi = api.images,
                 onBack = { navController.navigateUp() },
             )

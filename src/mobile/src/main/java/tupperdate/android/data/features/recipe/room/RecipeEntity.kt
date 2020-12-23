@@ -4,10 +4,12 @@ import androidx.compose.runtime.Immutable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import tupperdate.android.data.InternalDataApi
 import tupperdate.android.data.features.recipe.Recipe
 
 @Entity(tableName = "recipes")
 @Immutable
+@InternalDataApi
 data class RecipeEntity(
     @PrimaryKey
     @ColumnInfo(name = "id") val identifier: String,
@@ -17,6 +19,7 @@ data class RecipeEntity(
     @ColumnInfo(name = "picture") val picture: String,
 )
 
+@InternalDataApi
 fun RecipeEntity.toRecipe(): Recipe {
     return Recipe(
         identifier = this.identifier,

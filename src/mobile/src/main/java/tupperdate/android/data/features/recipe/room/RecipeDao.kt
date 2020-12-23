@@ -6,8 +6,10 @@ import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
+import tupperdate.android.data.InternalDataApi
 
 @Dao
+@InternalDataApi
 abstract class RecipeDao {
 
     // TODO : Make sure we have not voted on the retrieved recipes.

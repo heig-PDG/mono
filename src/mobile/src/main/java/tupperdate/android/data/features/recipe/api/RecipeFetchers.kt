@@ -1,13 +1,15 @@
-package tupperdate.android.data.features.recipe
+package tupperdate.android.data.features.recipe.api
 
 import com.dropbox.android.external.store4.Fetcher
 import com.dropbox.android.external.store4.FetcherResult
 import io.ktor.client.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.flow.flowOf
+import tupperdate.android.data.InternalDataApi
 import tupperdate.common.dto.RecipeDTO
 
-object RecipeFetcher {
+@InternalDataApi
+object RecipeFetchers {
 
     private const val RecipesFetchCount = 4
 
