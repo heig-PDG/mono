@@ -33,14 +33,6 @@ private enum class ConfirmationState {
     InternalError,
 }
 
-private fun isError(state: ConfirmationState): Boolean {
-    return when (state) {
-        VerificationError -> true
-        InternalError -> true
-        else -> false
-    }
-}
-
 @Composable
 private fun getErrorMsg(state: ConfirmationState): String? {
     return when (state) {
@@ -83,8 +75,7 @@ fun OnboardingConfirmation(
             }
         },
         onBack = onBack,
-        isErrorValue = isError(state),
-        errorMsg = getErrorMsg(state),
+        error = getErrorMsg(state),
         modifier = modifier,
     )
 }
@@ -96,12 +87,16 @@ private fun OnboardingConfirmation(
     buttonText: String,
     onButtonClick: () -> Unit,
     onBack: () -> Unit,
-    isErrorValue: Boolean,
-    errorMsg: String?,
+    error: String?,
     modifier: Modifier = Modifier,
 ) {
 
-    onlyReturnTopBar(onBack)
+    TopAppBar(
+        title = {},
+        navigationIcon = { IconButton(onBack) { Icon(vectorResource(R.drawable.ic_back_arrow)) } },
+        backgroundColor = MaterialTheme.colors.surface,
+        elevation = 0.dp,
+    )
 
     Column(
         modifier.padding(top = 102.dp, bottom = 42.dp, start = 16.dp, end = 16.dp)
@@ -117,12 +112,22 @@ private fun OnboardingConfirmation(
             modifier = Modifier.padding(bottom = 38.dp)
         )
 
-        CodeInput(
-            code = code,
-            onCodeChanged = onCodeChanged,
-            isErrorValue = isErrorValue,
-            errorMsg = errorMsg,
+        OutlinedTextField(
+            value = code,
+            label = { Text(stringResource(R.string.onboardingConfirmation_code_label)) },
+            onValueChange = onCodeChanged,
+            placeholder = { Text(stringResource(R.string.onboardingConfirmation_code_placeholder)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            isErrorValue = error != null,
+            modifier = Modifier.fillMaxWidth(),
         )
+
+        error?.let {
+            Text(
+                text = it,
+                color = MaterialTheme.colors.error,
+            )
+        }
 
         Spacer(modifier = Modifier.weight(1f, true))
 
@@ -144,81 +149,34 @@ private fun OnboardingConfirmation(
     }
 }
 
+@Preview(showBackground = true)
 @Composable
-private fun CodeInput(
-    code: String,
-    onCodeChanged: ((String)) -> Unit,
-    isErrorValue: Boolean,
-    errorMsg: String?,
-    modifier: Modifier = Modifier,
-) {
-    OutlinedTextField(
-        value = code,
-        label = { Text(stringResource(R.string.onboardingConfirmation_code_label)) },
-        onValueChange = onCodeChanged,
-        placeholder = { Text(stringResource(R.string.onboardingConfirmation_code_placeholder)) },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        isErrorValue = isErrorValue,
-        modifier = modifier.fillMaxWidth(),
-    )
-
-    errorMsg?.let {
-        Text(
-            text = it,
-            color = MaterialTheme.colors.error,
-        )
-    }
-}
-
-@Composable
-private fun onlyReturnTopBar(onBack: () -> Unit) {
-    TopAppBar(
-        title = {},
-        navigationIcon = {
-            IconButton(onClick = onBack) {
-                Icon(vectorResource(id = R.drawable.ic_back_arrow))
-            }
-        },
-        backgroundColor = MaterialTheme.colors.surface,
-        elevation = 0.dp,
+private fun OnboardingConfirmationPreview() = TupperdateTheme {
+    val (code, setCode) = remember { mutableStateOf("") }
+    OnboardingConfirmation(
+        code = code,
+        onCodeChanged = setCode,
+        buttonText = "Button text",
+        onButtonClick = {},
+        onBack = {},
+        error = null,
+        modifier = Modifier.background(Color.White)
+            .fillMaxSize()
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun OnboardingConfirmationPreview() {
+private fun OnboardingConfirmationErrorPreview() = TupperdateTheme {
     val (code, setCode) = remember { mutableStateOf("") }
-    TupperdateTheme {
-        OnboardingConfirmation(
-            code = code,
-            onCodeChanged = setCode,
-            buttonText = "Button text",
-            onButtonClick = {},
-            onBack = {},
-            isErrorValue = false,
-            errorMsg = null,
-            modifier = Modifier.background(Color.White)
-                .fillMaxSize()
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun OnboardingConfirmationErrorPreview() {
-    val (code, setCode) = remember { mutableStateOf("") }
-
-    TupperdateTheme {
-        OnboardingConfirmation(
-            code = code,
-            onCodeChanged = setCode,
-            buttonText = "Button text",
-            onButtonClick = {},
-            onBack = {},
-            isErrorValue = true,
-            errorMsg = "This is a fictive error message",
-            modifier = Modifier.background(Color.White)
-                .fillMaxSize()
-        )
-    }
+    OnboardingConfirmation(
+        code = code,
+        onCodeChanged = setCode,
+        buttonText = "Button text",
+        onButtonClick = {},
+        onBack = {},
+        error = "This is a fictive error message",
+        modifier = Modifier.background(Color.White)
+            .fillMaxSize()
+    )
 }

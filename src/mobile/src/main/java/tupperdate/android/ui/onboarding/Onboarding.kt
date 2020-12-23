@@ -6,30 +6,38 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AmbientLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import tupperdate.android.R
-import tupperdate.android.ui.theme.TupperdateTheme
+import tupperdate.android.data.legacy.api.AuthenticationApi
 import tupperdate.android.ui.theme.TupperdateTypography
 import tupperdate.android.ui.theme.material.BrandedButton
 import tupperdate.android.ui.theme.material.BrandedTitleText
-import tupperdate.android.data.legacy.api.AuthenticationApi
 
 private sealed class State
 private data class Error(val error: LocalError) : State()
 private object Pending : State()
 private object WaitingForInput : State()
+
+@OptIn(ExperimentalCoroutinesApi::class)
+@Composable
+private fun StateFlow<OnboardingViewModel.ButtonLabel>.collectAsString(): String {
+    when (collectAsState().value) {
+        OnboardingViewModel.ButtonLabel.GetStarted -> TODO()
+        OnboardingViewModel.ButtonLabel.Loading -> TODO()
+        OnboardingViewModel.ButtonLabel.Verifying -> TODO()
+        OnboardingViewModel.ButtonLabel.LetsGo -> TODO()
+    }
+}
 
 private enum class LocalError {
     Internal,
@@ -105,19 +113,14 @@ private fun Onboarding(
         modifier.padding(top = 72.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
     ) {
         ProvideTextStyle(TupperdateTypography.h4) {
-            Text(
-                text = stringResource(R.string.onboarding_welcome)
-            )
+            Text(stringResource(R.string.onboarding_welcome))
             BrandedTitleText(
-                text = stringResource(R.string.onboarding_welcome_name),
-                modifier = Modifier.padding(bottom = 16.dp)
+                stringResource(R.string.onboarding_welcome_name),
+                Modifier.padding(bottom = 16.dp)
             )
         }
 
-        Text(
-            text = stringResource(R.string.onboarding_presentation),
-            modifier = Modifier.padding(bottom = 32.dp)
-        )
+        Text(stringResource(R.string.onboarding_presentation), Modifier.padding(bottom = 32.dp))
 
         ViewPhoneInput(
             phone = phone,
@@ -125,7 +128,7 @@ private fun Onboarding(
             error = error,
         )
 
-        Spacer(modifier = Modifier.weight(1f, true))
+        Spacer(Modifier.weight(1f, true))
 
         BrandedButton(
             value = buttonText,
@@ -176,65 +179,5 @@ private fun ViewPhoneInput(
                 color = MaterialTheme.colors.error,
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun OnboardingPreview() {
-    // Use a real device to launch the preview.
-    // TODO : Use a stateless preview.
-    // val owner = LifecycleOwnerAmbient.current
-    // val api = remember { owner.api() }
-    // TupperdateTheme {
-    //     Onboarding(
-    //         api.authentication,
-    //         {},
-    //         {},
-    //         Modifier.background(Color.White)
-    //             .fillMaxSize()
-    //     )
-    // }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun ViewPhoneInputNormalPreview() {
-    val (phone, setPhone) = remember { mutableStateOf("") }
-
-    TupperdateTheme {
-        ViewPhoneInput(
-            phone = phone,
-            onValueChange = setPhone,
-            error = null,
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun ViewPhoneInputNormalInvalidNumber() {
-    val (phone, setPhone) = remember { mutableStateOf("") }
-
-    TupperdateTheme {
-        ViewPhoneInput(
-            phone = phone,
-            onValueChange = setPhone,
-            error = LocalError.InvalidNumber,
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun ViewPhoneInputNormalInternalError() {
-    val (phone, setPhone) = remember { mutableStateOf("") }
-
-    TupperdateTheme {
-        ViewPhoneInput(
-            phone = phone,
-            onValueChange = setPhone,
-            error = LocalError.Internal,
-        )
     }
 }
