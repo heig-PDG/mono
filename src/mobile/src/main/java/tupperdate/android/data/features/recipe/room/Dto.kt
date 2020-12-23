@@ -6,8 +6,8 @@ import tupperdate.common.dto.RecipeDTO
 /**
  * Transforms a [RecipeDTO] to a [Recipe], so it can be stored locally.
  */
-fun RecipeDTO.asRecipe(): Recipe {
-    return Recipe(
+fun RecipeDTO.asRecipeEntity(): RecipeEntity {
+    return RecipeEntity(
         identifier = this.id,
         title = this.title,
         description = this.description,

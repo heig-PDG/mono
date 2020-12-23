@@ -2,6 +2,7 @@ package tupperdate.android.data.features.recipe.room
 
 import com.dropbox.android.external.store4.SourceOfTruth
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.common.dto.RecipeDTO
 
@@ -24,10 +25,10 @@ class RecipeStackSourceOfTruth(
     }
 
     override fun reader(key: Unit): Flow<List<Recipe>?> {
-        return dao.findAll()
+        return dao.findAll().map { it.map(RecipeEntity::toRecipe) }
     }
 
     override suspend fun write(key: Unit, value: List<RecipeDTO>) {
-        dao.insertAll(value.map(RecipeDTO::asRecipe))
+        dao.insertAll(value.map(RecipeDTO::asRecipeEntity))
     }
 }
