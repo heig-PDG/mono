@@ -18,10 +18,14 @@ import tupperdate.android.data.room.TupperdateDatabase
 val KoinRecipeModule = module {
     // DAOs.
     single { get<TupperdateDatabase>().recipes() }
+    single { get<TupperdateDatabase>().newRecipes() }
 
     // SourceOfTruth
     factory { RecipeSourceOfTruth(get()) }
     factory { RecipeStackSourceOfTruth(get()) }
+
+    // Pushers.
+    single { NewRecipePusher(get(), get()) }
 
     // Stores.
     factory {
