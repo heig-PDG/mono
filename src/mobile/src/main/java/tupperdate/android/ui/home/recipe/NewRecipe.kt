@@ -5,22 +5,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientLifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import dev.chrisbanes.accompanist.coil.CoilImageDefaults
-import kotlinx.coroutines.launch
+import org.koin.androidx.compose.getViewModel
 import tupperdate.android.data.legacy.api.ImagePickerApi
 import tupperdate.android.data.legacy.api.ImageType
-import tupperdate.android.data.legacy.api.RecipeApi
 
 @Composable
 fun NewRecipe(
-    recipeApi: RecipeApi,
     imagePickerApi: ImagePickerApi,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val scope = AmbientLifecycleOwner.current.lifecycleScope
+    val viewModel = getViewModel<NewRecipeViewModel>()
 
     val placeholder = "https://via.placeholder.com/450"
     val imageUri = remember { imagePickerApi.currentRecipe }.collectAsState(initial = null).value
@@ -51,19 +47,18 @@ fun NewRecipe(
         recipe = recipe,
         onRecipeChange = setRecipe,
         onDeleteClick = { onBack() },
-        // TODO : Actually put more data in the API.
         onSaveClick = {
-            scope.launch {
-                recipeApi.create(
+            viewModel.onSubmit(
+                tupperdate.android.data.features.recipe.NewRecipe(
                     title = recipe.title,
                     description = recipe.description,
-                    vegetarian = recipe.vegetarian,
-                    warm = recipe.warm,
+                    isVegan = recipe.vegetarian,
+                    isWarm = recipe.warm,
                     hasAllergens = recipe.hasAllergens,
-                    imageUri = imageUri,
-                )
-                onBack()
-            }
+                    picture = null, // TODO : Handle images.
+                ), imageUri
+            )
+            onBack()
         },
         onEdit = { imagePickerApi.pick(ImageType.Recipe) },
         modifier = modifier,
