@@ -3,7 +3,7 @@ package tupperdate.web.routing.recipes
 import com.google.cloud.firestore.Firestore
 import io.ktor.application.*
 import io.ktor.http.*
-import io.ktor.http.HttpStatusCode.Companion.InternalServerError
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.response.*
 import io.ktor.routing.*
 import tupperdate.common.dto.RecipeDTO
@@ -27,7 +27,7 @@ private fun Route.some(store: Firestore) = get("/{identifier}") {
     val id = call.parameters["identifier"] ?: statusException(HttpStatusCode.BadRequest)
 
     val document = store.collection("recipes").document(id).get().await()
-    val recipe = document.toObject(Recipe::class.java) ?: statusException(InternalServerError)
+    val recipe = document.toObject(Recipe::class.java) ?: statusException(NotFound)
     call.respond(recipe.toRecipeDTO())
 }
 
