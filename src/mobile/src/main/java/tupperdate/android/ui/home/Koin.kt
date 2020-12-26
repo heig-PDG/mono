@@ -8,6 +8,6 @@ import tupperdate.android.ui.home.recipe.ViewRecipeViewModel
 
 val KoinHomeModule = module {
     viewModel { FeedViewModel(get()) }
-    viewModel { NewRecipeViewModel(get(), get()) }
+    viewModel { NewRecipeViewModel(get(), get(), get()) }
     viewModel { (recipeId: String) -> ViewRecipeViewModel(get(), recipeId) }
 }

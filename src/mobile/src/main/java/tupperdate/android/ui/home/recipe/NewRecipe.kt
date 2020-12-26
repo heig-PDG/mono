@@ -1,34 +1,19 @@
 package tupperdate.android.ui.home.recipe
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import android.net.Uri
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import dev.chrisbanes.accompanist.coil.CoilImageDefaults
 import org.koin.androidx.compose.getViewModel
-import tupperdate.android.data.legacy.api.ImagePickerApi
-import tupperdate.android.data.legacy.api.ImageType
 
 @Composable
 fun NewRecipe(
-    imagePickerApi: ImagePickerApi,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val viewModel = getViewModel<NewRecipeViewModel>()
 
-    val placeholder = "https://via.placeholder.com/450"
-    val imageUri = remember { imagePickerApi.currentRecipe }.collectAsState(initial = null).value
-
-    val heroImage = if (imageUri == null) {
-        // TODO: Remove this, we do not want to invalidate the cache just because we added an image...
-        //       or maybe we do
-        CoilImageDefaults.defaultImageLoader().memoryCache.clear()
-        placeholder
-    } else {
-        imageUri
-    }
+    val defaultImage = remember { Uri.parse("https://via.placeholder.com/450") }
+    val heroImage by viewModel.picture().collectAsState(defaultImage)
 
     val (recipe, setRecipe) = remember {
         mutableStateOf(
@@ -56,11 +41,11 @@ fun NewRecipe(
                     isWarm = recipe.warm,
                     hasAllergens = recipe.hasAllergens,
                     picture = null, // TODO : Handle images.
-                ), imageUri
+                )
             )
             onBack()
         },
-        onEdit = { imagePickerApi.pick(ImageType.Recipe) },
+        onEdit = viewModel::onPick,
         modifier = modifier,
     )
 }
