@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import io.ktor.client.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.Dispatchers
@@ -63,14 +64,14 @@ class NewRecipeWorker(
          */
         @InternalDataApi
         fun inputData(recipe: NewRecipe): Data {
-            return Data.Builder()
-                .putString(RecipeTitle, recipe.title)
-                .putString(RecipeDescription, recipe.description)
-                .putBoolean(RecipeIsVegetarian, recipe.isVegan)
-                .putBoolean(RecipeIsWarm, recipe.isWarm)
-                .putBoolean(RecipeHasAllergens, recipe.hasAllergens)
-                .putString(RecipeImageBase64, recipe.picture)
-                .build()
+            return workDataOf(
+                RecipeTitle to recipe.title,
+                RecipeDescription to recipe.description,
+                RecipeIsVegetarian to recipe.isVegan,
+                RecipeIsWarm to recipe.isWarm,
+                RecipeHasAllergens to recipe.hasAllergens,
+                RecipeImageBase64 to recipe.picture,
+            )
         }
     }
 }

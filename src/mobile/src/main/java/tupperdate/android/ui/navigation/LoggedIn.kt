@@ -2,10 +2,9 @@ package tupperdate.android.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.navigation.NavType
+import androidx.navigation.NavType.StringType
 import androidx.navigation.compose.*
 import tupperdate.android.data.legacy.api.Api
-import tupperdate.android.data.legacy.api.RecipeApi
 import tupperdate.android.ui.home.Home
 import tupperdate.android.ui.home.HomeSections
 import tupperdate.android.ui.home.recipe.NewRecipe
@@ -24,6 +23,10 @@ private object LoggedInDestination {
 
     // Testing
     const val AUTH_TESTING = "authenticationTesting"
+
+    fun viewRecipe(identifier: String): String {
+        return "viewRecipe/$identifier"
+    }
 }
 
 /**
@@ -47,15 +50,11 @@ fun LoggedIn(
         }
         composable(
             LoggedInDestination.VIEW_RECIPE,
-            arguments = listOf(navArgument("recipe") {
-                // TODO: pass recipe's identifier instead of parcelize
-                type = NavType.ParcelableType(RecipeApi.Recipe::class.java)
-            }),
+            arguments = listOf(navArgument("recipe") { type = StringType }),
         ) {
-            it.arguments?.getParcelable<RecipeApi.Recipe?>("recipe")?.let { recipe ->
+            it.arguments?.getString("recipe")?.let { recipe ->
                 ViewRecipe(
-                    recipeApi = api.recipe,
-                    recipe = recipe,
+                    identifier = recipe,
                     onBack = { navController.navigateUp() },
                 )
             }
@@ -64,6 +63,9 @@ fun LoggedIn(
             Home(
                 api = api,
                 onNewRecipeClick = { navController.navigate(LoggedInDestination.NEW_RECIPE) },
+                onRecipeDetailsClick = {
+                    navController.navigate(LoggedInDestination.viewRecipe(it.identifier))
+                },
                 onBack = { navController.navigateUp() },
                 onDevClick = { navController.navigate(LoggedInDestination.AUTH_TESTING) },
                 startingSection = HomeSections.Conversations,
@@ -73,6 +75,9 @@ fun LoggedIn(
             Home(
                 api = api,
                 onNewRecipeClick = { navController.navigate(LoggedInDestination.NEW_RECIPE) },
+                onRecipeDetailsClick = {
+                    navController.navigate(LoggedInDestination.viewRecipe(it.identifier))
+                },
                 onBack = { navController.navigateUp() },
                 onDevClick = { navController.navigate(LoggedInDestination.AUTH_TESTING) },
                 startingSection = HomeSections.Feed,
@@ -82,6 +87,9 @@ fun LoggedIn(
             Home(
                 api = api,
                 onNewRecipeClick = { navController.navigate(LoggedInDestination.NEW_RECIPE) },
+                onRecipeDetailsClick = {
+                    navController.navigate(LoggedInDestination.viewRecipe(it.identifier))
+                },
                 onBack = { navController.navigateUp() },
                 onDevClick = { navController.navigate(LoggedInDestination.AUTH_TESTING) },
                 startingSection = HomeSections.Profile,
