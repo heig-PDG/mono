@@ -8,6 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import org.koin.core.context.startKoin
 import org.koin.dsl.binds
 import tupperdate.android.data.KoinDataApiModule
+import tupperdate.android.data.features.picker.KoinPickerModule
 import tupperdate.android.data.features.recipe.KoinRecipeModule
 import tupperdate.android.ui.home.KoinHomeModule
 
@@ -38,8 +39,9 @@ fun MainActivity.injectAllTheThings() = startKoin {
 
     // Data modules.
     modules(KoinDataApiModule)
-    
+
     modules(KoinRecipeModule)
+    modules(KoinPickerModule)
 
     // Application modules.
     modules(KoinHomeModule)

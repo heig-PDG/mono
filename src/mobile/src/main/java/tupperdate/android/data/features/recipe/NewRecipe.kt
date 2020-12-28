@@ -1,9 +1,11 @@
 package tupperdate.android.data.features.recipe
 
+import android.net.Uri
+
 data class NewRecipe(
     val title: String,
     val description: String,
-    val picture: String?, // base64 encoded.
+    val picture: Uri?,
 
     // Recipe attributes.
     val isVegan: Boolean,
