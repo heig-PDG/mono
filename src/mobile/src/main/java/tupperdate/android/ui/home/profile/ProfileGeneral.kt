@@ -66,7 +66,8 @@ fun ProfileGeneral(
             )
             LazyRow() {
                 items(userRecipes) {
-                    DisplayRecipeCard(recipe = it)
+                    DisplayRecipeCard(recipe = it,
+                    modifier=Modifier.padding(end=16.dp))
                 }
             }
         }
@@ -80,8 +81,7 @@ private fun DisplayRecipeCard(
 ) {
     Card(
         modifier = modifier.height(RecipeCardHeight.dp)
-            .width(RecipeCardWidth.dp)
-            .padding(end = 16.dp),
+            .width(RecipeCardWidth.dp),
         shape = RoundedCornerShape(5.dp)
     ) {
         Box {
