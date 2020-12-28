@@ -1,6 +1,5 @@
 package tupperdate.android.ui.home.profile
 
-import androidx.compose.foundation.ScrollableRow
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,12 +15,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.coil.CoilImage
 import tupperdate.android.R
-import tupperdate.android.data.legacy.api.RecipeApi
+import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.components.ProfilePicture
 import tupperdate.android.ui.theme.material.BrandedButton
 import tupperdate.android.ui.theme.modifier.shade
-import java.util.List.of
 
 @Composable
 fun ProfileGeneral(
@@ -29,7 +27,7 @@ fun ProfileGeneral(
     email: String,
     image: Any,
     location: String,
-    userRecipes: List<RecipeApi.Recipe>,
+    userRecipes: List<Recipe>,
     onEditClick: () -> Unit,
     onLocationChange: (String) -> Unit,
     onNewRecipeClick: () -> Unit,
@@ -61,8 +59,8 @@ fun ProfileGeneral(
         ) {
             BrandedButton(
                 value = stringResource(id = R.string.profile_new_recipe), onClick = onNewRecipeClick,
-                modifier = Modifier.width((recipeCardWidth * 0.8).dp)
-                    .height((recipeCardHeight * 0.8).dp)
+                modifier = Modifier.width((RecipeCardWidth * 0.8).dp)
+                    .height((RecipeCardHeight * 0.8).dp)
                     .padding(end = 16.dp),
                 shape = RoundedCornerShape(5.dp)
             )
@@ -77,17 +75,18 @@ fun ProfileGeneral(
 
 @Composable
 private fun DisplayRecipeCard(
-    recipe: RecipeApi.Recipe
+    recipe: Recipe,
+    modifier: Modifier=Modifier
 ) {
     Card(
-        modifier = Modifier.height(recipeCardHeight.dp)
-            .width(recipeCardWidth.dp)
+        modifier = modifier.height(RecipeCardHeight.dp)
+            .width(RecipeCardWidth.dp)
             .padding(end = 16.dp),
         shape = RoundedCornerShape(5.dp)
     ) {
         Box {
             CoilImage(
-                data = recipe.pictureUrl,
+                data = recipe.picture,
                 modifier = Modifier.shade().fillMaxSize(),
                 fadeIn = true,
                 contentScale = ContentScale.Crop,
@@ -145,26 +144,34 @@ private fun ProfileRecap(
 @Composable
 fun ProfileGeneralPreview() {
     val reList = listOf(
-        RecipeApi.Recipe(
+        Recipe(
             "Red lobster",
-            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg",
-            "In the Santa Monica way"
-        ),
-        RecipeApi.Recipe(
             "Red lobster",
-            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg",
-            "In the Santa Monica way"
+            "In the Santa Monica way",
+            2077,
+            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg"
         ),
-        RecipeApi.Recipe(
+        Recipe(
             "Red lobster",
-            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg",
-            "In the Santa Monica way"
-        ),
-        RecipeApi.Recipe(
             "Red lobster",
-            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg",
-            "In the Santa Monica way"
+            "In the Santa Monica way",
+            2077,
+            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg"
         ),
+        Recipe(
+            "Red lobster",
+            "Red lobster",
+            "In the Santa Monica way",
+            2077,
+            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg"
+        ),
+        Recipe(
+            "Red lobster",
+            "Red lobster",
+            "In the Santa Monica way",
+            2077,
+            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg"
+        )
     )
     TupperdateTheme {
         ProfileGeneral(name = "Aloy", email = "chieftain@banuk",
@@ -177,5 +184,5 @@ fun ProfileGeneralPreview() {
     }
 }
 
-private const val recipeCardWidth = 120
-private const val recipeCardHeight = 160
+private const val RecipeCardWidth = 120
+private const val RecipeCardHeight = 160
