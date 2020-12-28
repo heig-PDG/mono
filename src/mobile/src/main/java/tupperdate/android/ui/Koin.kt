@@ -7,9 +7,9 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.context.startKoin
 import org.koin.dsl.binds
+import tupperdate.android.data.KoinDataApiModule
+import tupperdate.android.data.features.picker.KoinPickerModule
 import tupperdate.android.data.features.recipe.KoinRecipeModule
-import tupperdate.android.data.ktor.KoinKtorModule
-import tupperdate.android.data.room.KoinRoomModule
 import tupperdate.android.ui.home.KoinHomeModule
 
 /**
@@ -23,6 +23,7 @@ fun MainActivity.koin() = org.koin.dsl.module {
         AppCompatActivity::class,
         ComponentActivity::class,
     )
+    single { this@koin.application }
 
     // CoroutineScope injection.
     single<CoroutineScope> { get<AppCompatActivity>().lifecycleScope }
@@ -37,9 +38,10 @@ fun MainActivity.injectAllTheThings() = startKoin {
     modules(koin())
 
     // Data modules.
-    modules(KoinKtorModule)
-    modules(KoinRoomModule)
+    modules(KoinDataApiModule)
+
     modules(KoinRecipeModule)
+    modules(KoinPickerModule)
 
     // Application modules.
     modules(KoinHomeModule)
