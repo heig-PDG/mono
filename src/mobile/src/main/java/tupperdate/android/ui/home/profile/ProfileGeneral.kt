@@ -33,7 +33,7 @@ fun ProfileGeneral(
     onNewRecipeClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    //TODO add the new appbar done by G-L for the new navigation
+
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
         Text(
             text = stringResource(id = R.string.profile_title_capital),
