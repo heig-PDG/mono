@@ -129,7 +129,7 @@ private fun ProfileRecap(
 
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
             Text(text = name, style = MaterialTheme.typography.subtitle1)
-            Text(text = email, style = MaterialTheme.typography.subtitle2)
+            Text(text = email, style = TupperdateTypography.subtitle2, color = Color(0f, 0f, 0f, 0.3f))
         }
         Spacer(modifier = Modifier.weight(1f, true))
         IconButton(
