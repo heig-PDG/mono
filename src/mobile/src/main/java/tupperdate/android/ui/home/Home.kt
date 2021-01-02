@@ -78,6 +78,7 @@ fun Home(
                     profile = profile ?: api.users.emptyProfile,
                     onCloseClick = { setCurrentSection(HomeSections.Feed) },
                     onSignOutClick = {},
+                    onDevClick = onDevClick,
                     modifier = innerModifier,
                 )
             }
@@ -98,18 +99,18 @@ private fun TupperdateTopBar(
         IconItem(
             asset = vectorResource(R.drawable.ic_home_messages),
             selected = currentSection == HomeSections.Conversations,
-            onSelected = { onSectionSelected(HomeSections.Conversations) }
+            onSelected = { onSectionSelected(HomeSections.Conversations) },
         )
 
         FeedItem(
             selected = currentSection == HomeSections.Feed,
-            onSelected = { onSectionSelected(HomeSections.Feed) }
+            onSelected = { onSectionSelected(HomeSections.Feed) },
         )
 
         IconItem(
             asset = vectorResource(R.drawable.ic_home_accounts),
             selected = currentSection == HomeSections.Profile,
-            onSelected = { onSectionSelected(HomeSections.Profile) }
+            onSelected = { onSectionSelected(HomeSections.Profile) },
         )
     }
 }

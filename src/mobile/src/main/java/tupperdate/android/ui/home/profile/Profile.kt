@@ -1,24 +1,26 @@
 package tupperdate.android.ui.home.profile
 
+import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.AmbientLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import dev.chrisbanes.accompanist.coil.CoilImage
 import tupperdate.android.R
 import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.data.legacy.api.ImagePickerApi
 import tupperdate.android.data.legacy.api.UserApi
-import tupperdate.android.ui.theme.ProfileEmail
 import tupperdate.android.ui.theme.ProfileName
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.TupperdateTypography
@@ -33,11 +35,20 @@ fun Profile(
     profile: UserApi.Profile,
     onCloseClick: () -> Unit,
     onSignOutClick: () -> Unit,
+    onDevClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val scope = AmbientLifecycleOwner.current.lifecycleScope
+
+    val initName = profile.displayName ?: ""
+    val (name, setName) = remember(profile) { mutableStateOf(initName) }
+
+    val newProfilePic by remember { imagePicker.currentProfile }.collectAsState(initial = null)
+    val profileImage = profile.profileImageUrl ?: "https://via.placeholder.com/150"
+    val profilePic = newProfilePic ?: Uri.parse(profileImage)
+
     Profile(
-        name = "",
-        email = "",
+        name = name,
         profilePicture = "",
         location = "",
         userRecipes = listOf(),
@@ -52,7 +63,6 @@ fun Profile(
 @Composable
 private fun Profile(
     name: String,
-    email: String,
     profilePicture: Any,
     location: String,
     userRecipes: List<Recipe>,
@@ -67,7 +77,7 @@ private fun Profile(
             text = stringResource(R.string.profile_title_capital),
             style = TupperdateTypography.overline
         )
-        ProfileRecap(name = name, email = email, image = profilePicture, onEditClick = onEditClick)
+        ProfileRecap(name = name, image = profilePicture, onEditClick = onEditClick)
         OutlinedTextField(
             value = location,
             onValueChange = onLocationChange,
@@ -144,7 +154,6 @@ private fun DisplayRecipeCard(
 @Composable
 private fun ProfileRecap(
     name: String,
-    email: String,
     image: Any,
     onEditClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -164,7 +173,6 @@ private fun ProfileRecap(
 
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
             Text(text = name, style = TupperdateTypography.subtitle1, color = Color.ProfileName)
-            Text(text = email, style = TupperdateTypography.subtitle2, color = Color.ProfileEmail)
         }
         Spacer(modifier = Modifier.weight(1f, true))
         IconButton(
@@ -212,7 +220,7 @@ fun ProfileGeneralPreview() {
         )
     )
     TupperdateTheme {
-        Profile(name = "Aloy", email = "chieftain@banuk",
+        Profile(name = "Aloy",
             profilePicture = "https://pbs.twimg.com/profile_images/1257192502916001794/f1RW6Ogf_400x400.jpg",
             location = "Song's Edge",
             userRecipes = reList,
