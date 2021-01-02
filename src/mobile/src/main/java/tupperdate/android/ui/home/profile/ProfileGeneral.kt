@@ -50,7 +50,7 @@ fun ProfileGeneral(
         )
         Text(
             text = stringResource(id = R.string.profile_tupps),
-            style = MaterialTheme.typography.overline
+            style = TupperdateTypography.overline
         )
         LazyRow(
             modifier = Modifier.fillMaxWidth(1f)
