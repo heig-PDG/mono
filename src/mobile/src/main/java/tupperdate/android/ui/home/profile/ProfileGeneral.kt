@@ -52,23 +52,26 @@ fun ProfileGeneral(
             text = stringResource(id = R.string.profile_tupps),
             style = MaterialTheme.typography.overline
         )
-        Row(
+        LazyRow(
             modifier = Modifier.fillMaxWidth(1f)
                 .padding(top = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            BrandedButton(
-                value = stringResource(id = R.string.profile_new_recipe), onClick = onNewRecipeClick,
-                modifier = Modifier.width((RecipeCardWidth * 0.8).dp)
-                    .height((RecipeCardHeight * 0.8).dp)
-                    .padding(end = 16.dp),
-                shape = RoundedCornerShape(5.dp)
-            )
-            LazyRow() {
-                items(userRecipes) {
-                    DisplayRecipeCard(recipe = it,
-                    modifier=Modifier.padding(end=16.dp))
-                }
+            item {
+                BrandedButton(
+                    value = stringResource(id = R.string.profile_new_recipe),
+                    onClick = onNewRecipeClick,
+                    modifier = Modifier.width(RecipeCardWidth)
+                        .height(RecipeCardHeight)
+                        .padding(end = 16.dp),
+                    shape = RoundedCornerShape(5.dp)
+                )
+            }
+            items(userRecipes) {
+                DisplayRecipeCard(
+                    recipe = it,
+                    modifier = Modifier.padding(end = 16.dp)
+                )
             }
         }
     }
@@ -77,11 +80,11 @@ fun ProfileGeneral(
 @Composable
 private fun DisplayRecipeCard(
     recipe: Recipe,
-    modifier: Modifier=Modifier
+    modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.height(RecipeCardHeight.dp)
-            .width(RecipeCardWidth.dp),
+        modifier = modifier.height(RecipeCardHeight)
+            .width(RecipeCardWidth),
         shape = RoundedCornerShape(5.dp)
     ) {
         Box {
@@ -180,9 +183,9 @@ fun ProfileGeneralPreview() {
             userRecipes = reList,
             onEditClick = {},
             onLocationChange = {},
-        onNewRecipeClick = {})
+            onNewRecipeClick = {})
     }
 }
 
-private const val RecipeCardWidth = 120
-private const val RecipeCardHeight = 160
+private val RecipeCardWidth = 120.dp
+private val RecipeCardHeight = 160.dp
