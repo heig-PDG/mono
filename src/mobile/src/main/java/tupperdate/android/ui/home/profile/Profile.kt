@@ -113,7 +113,7 @@ private fun Profile(
                 .fillMaxWidth()
                 .padding(top = 4.dp, bottom = 24.dp),
             label = { Text(stringResource(R.string.profile_location)) },
-            placeholder = { location },
+            placeholder = { Text(stringResource(R.string.profile_location_placeholder)) },
         )
         Text(
             text = stringResource(R.string.profile_tupps),
@@ -229,7 +229,7 @@ private fun ProfileRecap(
 
             IconButton(
                 onClick = onEditClick,
-                modifier = Modifier.height(19.dp)
+                modifier = Modifier.height(18.dp)
             ) {
                 Icon(imageVector = vectorResource(R.drawable.ic_editrecipe_edit))
             }

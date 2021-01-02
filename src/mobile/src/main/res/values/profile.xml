@@ -10,6 +10,7 @@
     <string name="profile_save">SAVE</string>
     <string name="profile_sign_out">SIGN OUT</string>
     <string name="profile_location">LOCATION</string>
+    <string name="profile_location_placeholder">HEIG-VD, Yverdon-les-bains</string>
     <string name="profile_tupps">YOUR TUPPS</string>
     <string name="profile_new_recipe">+ NEW</string>
 </resources>
