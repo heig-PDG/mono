@@ -37,7 +37,7 @@ fun ProfileGeneral(
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
         Text(
             text = stringResource(id = R.string.profile_title_capital),
-            style = MaterialTheme.typography.overline
+            style = TupperdateTypography.overline
         )
         ProfileRecap(name = name, email = email, image = image, onEditClick = onEditClick)
         OutlinedTextField(
