@@ -39,9 +39,6 @@ fun Profile(
     userApi: UserApi,
     imagePicker: ImagePickerApi,
     profile: UserApi.Profile,
-    onCloseClick: () -> Unit,
-    onSignOutClick: () -> Unit,
-    onDevClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scope = AmbientLifecycleOwner.current.lifecycleScope

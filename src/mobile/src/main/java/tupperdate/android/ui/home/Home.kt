@@ -76,9 +76,6 @@ fun Home(
                     userApi = api.users,
                     imagePicker = api.images,
                     profile = profile ?: api.users.emptyProfile,
-                    onCloseClick = { setCurrentSection(HomeSections.Feed) },
-                    onSignOutClick = {},
-                    onDevClick = onDevClick,
                     modifier = innerModifier,
                 )
             }
