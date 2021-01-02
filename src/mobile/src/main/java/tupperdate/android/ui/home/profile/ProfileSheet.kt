@@ -37,7 +37,6 @@ fun ProfileSheet(
     profile: UserApi.Profile,
     onCloseClick: () -> Unit,
     onSignOutClick: () -> Unit,
-    onDevClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scope = AmbientLifecycleOwner.current.lifecycleScope
@@ -60,7 +59,6 @@ fun ProfileSheet(
             onCloseClick()
         },
         onSignOutClick = onSignOutClick,
-        onDevClick = onDevClick,
         modifier = modifier,
     )
 }
@@ -74,7 +72,6 @@ private fun ProfileSheet(
     onEditPictureClick: () -> Unit,
     onSaveClick: () -> Unit,
     onSignOutClick: () -> Unit,
-    onDevClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ScrollableColumn(modifier.fillMaxSize().padding(16.dp)) {
@@ -86,10 +83,6 @@ private fun ProfileSheet(
             Text(
                 text = stringResource(R.string.profile_title),
                 style = MaterialTheme.typography.h6,
-                modifier = Modifier.multiClick(
-                    triggerAmount = 5,
-                    action = onDevClick,
-                )
             )
             IconButton(
                 onClick = onCloseClick,
@@ -165,15 +158,6 @@ private fun ProfileSheet(
     }
 }
 
-private fun Modifier.multiClick(triggerAmount: Int, action: () -> Unit) = composed {
-    val (count, setCount) = remember { mutableStateOf(0) }
-    if (count < triggerAmount) {
-        this then clickable(onClick = { setCount(count + 1) })
-    } else {
-        this then clickable(onClick = action)
-    }
-}
-
 @Preview
 @Composable
 private fun ProfilePreview() {
@@ -187,7 +171,6 @@ private fun ProfilePreview() {
             onEditPictureClick = {},
             onSaveClick = {},
             onSignOutClick = {},
-            onDevClick = {},
         )
     }
 }
