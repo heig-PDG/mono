@@ -210,7 +210,12 @@ private fun ProfileRecap(
             OutlinedTextField(
                 value = name,
                 onValueChange = onNameChange,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                trailingIcon = {
+                    IconButton(onClick = onSaveClick) {
+                        Icon(imageVector = vectorResource(R.drawable.ic_content_save))
+                    }
+                },
+                modifier = Modifier.padding(horizontal = 16.dp).weight(1f),
             )
         } else {
             Text(
@@ -219,17 +224,13 @@ private fun ProfileRecap(
                 color = Color.ProfileName,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
-        }
 
-        Spacer(modifier = Modifier.weight(1f, true))
+            Spacer(modifier = Modifier.weight(1f, true))
 
-        IconButton(
-            onClick = if (editing) onSaveClick else onEditClick,
-            modifier = Modifier.height(19.dp)
-        ) {
-            if (editing) {
-                Icon(imageVector = vectorResource(R.drawable.ic_content_save))
-            } else {
+            IconButton(
+                onClick = onEditClick,
+                modifier = Modifier.height(19.dp)
+            ) {
                 Icon(imageVector = vectorResource(R.drawable.ic_editrecipe_edit))
             }
         }
