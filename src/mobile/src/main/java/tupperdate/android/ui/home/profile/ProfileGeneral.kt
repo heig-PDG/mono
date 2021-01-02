@@ -17,6 +17,7 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 import tupperdate.android.R
 import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.ui.theme.TupperdateTheme
+import tupperdate.android.ui.theme.TupperdateTypography
 import tupperdate.android.ui.theme.components.ProfilePicture
 import tupperdate.android.ui.theme.material.BrandedButton
 import tupperdate.android.ui.theme.modifier.shade
