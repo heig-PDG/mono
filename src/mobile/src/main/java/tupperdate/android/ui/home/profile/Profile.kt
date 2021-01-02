@@ -43,6 +43,9 @@ fun Profile(
     onDevClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    // TODO: Use new API
+    // TODO: Add support for new tupps
+    // TODO: Add location to profiles
     val scope = AmbientLifecycleOwner.current.lifecycleScope
 
     val initName = profile.displayName ?: ""
@@ -60,7 +63,7 @@ fun Profile(
         name = name,
         phone = phone,
         profilePicture = profilePic,
-        location = "", // TODO: add location to profile
+        location = "",
         userRecipes = listOf(),
         editing = editing,
         onEditClick = {
