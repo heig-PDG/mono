@@ -25,7 +25,7 @@ import tupperdate.android.ui.theme.material.BrandedButton
 import tupperdate.android.ui.theme.modifier.shade
 
 @Composable
-fun ProfileGeneral(
+fun Profile(
     name: String,
     email: String,
     image: Any,
@@ -39,32 +39,35 @@ fun ProfileGeneral(
 
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
         Text(
-            text = stringResource(id = R.string.profile_title_capital),
+            text = stringResource(R.string.profile_title_capital),
             style = TupperdateTypography.overline
         )
         ProfileRecap(name = name, email = email, image = image, onEditClick = onEditClick)
         OutlinedTextField(
             value = location,
             onValueChange = onLocationChange,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(top = 4.dp, bottom = 24.dp),
             label = { Text(stringResource(R.string.profile_location)) },
             placeholder = { location }
         )
         Text(
-            text = stringResource(id = R.string.profile_tupps),
+            text = stringResource(R.string.profile_tupps),
             style = TupperdateTypography.overline
         )
         LazyRow(
-            modifier = Modifier.fillMaxWidth(1f)
+            modifier = Modifier
+                .fillMaxWidth(1f)
                 .padding(top = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             item {
                 BrandedButton(
-                    value = stringResource(id = R.string.profile_new_recipe),
+                    value = stringResource(R.string.profile_new_recipe),
                     onClick = onNewRecipeClick,
-                    modifier = Modifier.width(RecipeCardWidth)
+                    modifier = Modifier
+                        .width(RecipeCardWidth)
                         .height(RecipeCardHeight)
                         .padding(end = 16.dp),
                     shape = RoundedCornerShape(5.dp)
@@ -86,7 +89,8 @@ private fun DisplayRecipeCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.height(RecipeCardHeight)
+        modifier = modifier
+            .height(RecipeCardHeight)
             .width(RecipeCardWidth),
         shape = RoundedCornerShape(5.dp)
     ) {
@@ -98,7 +102,8 @@ private fun DisplayRecipeCard(
                 contentScale = ContentScale.Crop,
             )
             Row(
-                modifier = Modifier.align(Alignment.BottomStart)
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
                     .padding(16.dp)
             ) {
                 Text(
@@ -120,7 +125,9 @@ private fun ProfileRecap(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.fillMaxWidth().padding(end = 3.dp, top = 16.dp, bottom = 16.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(end = 3.dp, top = 16.dp, bottom = 16.dp)
             .height(56.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -140,7 +147,7 @@ private fun ProfileRecap(
             modifier = Modifier.height(19.dp)
         ) {
             Icon(
-                imageVector = vectorResource(id = R.drawable.ic_editrecipe_edit),
+                imageVector = vectorResource(R.drawable.ic_editrecipe_edit),
             )
         }
     }
@@ -180,7 +187,7 @@ fun ProfileGeneralPreview() {
         )
     )
     TupperdateTheme {
-        ProfileGeneral(name = "Aloy", email = "chieftain@banuk",
+        Profile(name = "Aloy", email = "chieftain@banuk",
             image = "https://pbs.twimg.com/profile_images/1257192502916001794/f1RW6Ogf_400x400.jpg",
             location = "Song's Edge",
             userRecipes = reList,
