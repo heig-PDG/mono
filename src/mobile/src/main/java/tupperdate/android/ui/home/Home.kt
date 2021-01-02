@@ -22,15 +22,13 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
 import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.data.legacy.api.Api
-import tupperdate.android.ui.TupperdateApp
 import tupperdate.android.ui.home.chats.Conversations
 import tupperdate.android.ui.home.feed.Feed
-import tupperdate.android.ui.home.profile.Profile
+import tupperdate.android.ui.home.profile.ProfileSheet
 import tupperdate.android.ui.theme.*
 
 @Composable
@@ -71,7 +69,7 @@ fun Home(
                     conversations = listOf(),
                     modifier = innerModifier,
                 )
-                HomeSections.Profile -> Profile(
+                HomeSections.Profile -> ProfileSheet(
                     userApi = api.users,
                     imagePicker = api.images,
                     profile = profile ?: api.users.emptyProfile,

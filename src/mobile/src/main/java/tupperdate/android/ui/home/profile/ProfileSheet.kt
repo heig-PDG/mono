@@ -31,7 +31,7 @@ import tupperdate.android.ui.theme.components.ProfilePicture
 import tupperdate.android.ui.theme.material.BrandedButton
 
 @Composable
-fun Profile(
+fun ProfileSheet(
     userApi: UserApi,
     imagePicker: ImagePickerApi,
     profile: UserApi.Profile,
@@ -46,13 +46,10 @@ fun Profile(
     val (name, setName) = remember(profile) { mutableStateOf(initName) }
 
     val newProfilePic by remember { imagePicker.currentProfile }.collectAsState(initial = null)
-
     val profileImage = profile.profileImageUrl ?: "https://via.placeholder.com/150"
+    val profilePic = newProfilePic ?: Uri.parse(profileImage)
 
-    val profilePic = newProfilePic
-        ?: Uri.parse(profileImage)
-
-    Profile(
+    ProfileSheet(
         name = name,
         imageUrl = profilePic,
         onNameChange = setName,
@@ -69,7 +66,7 @@ fun Profile(
 }
 
 @Composable
-private fun Profile(
+private fun ProfileSheet(
     name: String,
     imageUrl: Uri,
     onNameChange: (String) -> Unit,
@@ -182,7 +179,7 @@ private fun Modifier.multiClick(triggerAmount: Int, action: () -> Unit) = compos
 private fun ProfilePreview() {
     val (name, setName) = remember { mutableStateOf("Thor") }
     TupperdateTheme {
-        Profile(
+        ProfileSheet(
             name = name,
             imageUrl = Uri.parse("https://www.thispersondoesnotexist.com/image"),
             onNameChange = setName,
