@@ -28,8 +28,11 @@ import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.data.legacy.api.Api
 import tupperdate.android.ui.home.chats.Conversations
 import tupperdate.android.ui.home.feed.Feed
-import tupperdate.android.ui.home.profile.ProfileSheet
-import tupperdate.android.ui.theme.*
+import tupperdate.android.ui.home.profile.Profile
+import tupperdate.android.ui.theme.Flamingo500
+import tupperdate.android.ui.theme.InactiveIcons
+import tupperdate.android.ui.theme.Smurf500
+import tupperdate.android.ui.theme.TupperdateTypography
 
 @Composable
 fun Home(
@@ -69,13 +72,12 @@ fun Home(
                     conversations = listOf(),
                     modifier = innerModifier,
                 )
-                HomeSections.Profile -> ProfileSheet(
+                HomeSections.Profile -> Profile(
                     userApi = api.users,
                     imagePicker = api.images,
                     profile = profile ?: api.users.emptyProfile,
                     onCloseClick = { setCurrentSection(HomeSections.Feed) },
                     onSignOutClick = {},
-                    onDevClick = onDevClick,
                     modifier = innerModifier,
                 )
             }

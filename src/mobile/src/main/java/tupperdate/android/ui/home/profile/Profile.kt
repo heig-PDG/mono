@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.coil.CoilImage
 import tupperdate.android.R
 import tupperdate.android.data.features.recipe.Recipe
+import tupperdate.android.data.legacy.api.ImagePickerApi
+import tupperdate.android.data.legacy.api.UserApi
 import tupperdate.android.ui.theme.ProfileEmail
 import tupperdate.android.ui.theme.ProfileName
 import tupperdate.android.ui.theme.TupperdateTheme
@@ -26,9 +28,32 @@ import tupperdate.android.ui.theme.modifier.shade
 
 @Composable
 fun Profile(
+    userApi: UserApi,
+    imagePicker: ImagePickerApi,
+    profile: UserApi.Profile,
+    onCloseClick: () -> Unit,
+    onSignOutClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Profile(
+        name = "",
+        email = "",
+        profilePicture = "",
+        location = "",
+        userRecipes = listOf(),
+        onEditClick = {},
+        onLocationChange = {},
+        onNewRecipeClick = {},
+        modifier = modifier,
+    )
+}
+
+
+@Composable
+private fun Profile(
     name: String,
     email: String,
-    image: Any,
+    profilePicture: Any,
     location: String,
     userRecipes: List<Recipe>,
     onEditClick: () -> Unit,
@@ -42,7 +67,7 @@ fun Profile(
             text = stringResource(R.string.profile_title_capital),
             style = TupperdateTypography.overline
         )
-        ProfileRecap(name = name, email = email, image = image, onEditClick = onEditClick)
+        ProfileRecap(name = name, email = email, image = profilePicture, onEditClick = onEditClick)
         OutlinedTextField(
             value = location,
             onValueChange = onLocationChange,
@@ -50,7 +75,7 @@ fun Profile(
                 .fillMaxWidth()
                 .padding(top = 4.dp, bottom = 24.dp),
             label = { Text(stringResource(R.string.profile_location)) },
-            placeholder = { location }
+            placeholder = { location },
         )
         Text(
             text = stringResource(R.string.profile_tupps),
@@ -188,7 +213,7 @@ fun ProfileGeneralPreview() {
     )
     TupperdateTheme {
         Profile(name = "Aloy", email = "chieftain@banuk",
-            image = "https://pbs.twimg.com/profile_images/1257192502916001794/f1RW6Ogf_400x400.jpg",
+            profilePicture = "https://pbs.twimg.com/profile_images/1257192502916001794/f1RW6Ogf_400x400.jpg",
             location = "Song's Edge",
             userRecipes = reList,
             onEditClick = {},
