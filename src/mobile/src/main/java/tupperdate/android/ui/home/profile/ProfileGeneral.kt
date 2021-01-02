@@ -100,7 +100,7 @@ private fun DisplayRecipeCard(
             ) {
                 Text(
                     text = recipe.title,
-                    style = MaterialTheme.typography.caption,
+                    style = TupperdateTypography.caption,
                     color = Color.White
                 )
             }
