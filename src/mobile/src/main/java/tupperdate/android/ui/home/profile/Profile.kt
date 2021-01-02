@@ -32,6 +32,7 @@ import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.TupperdateTypography
 import tupperdate.android.ui.theme.components.ProfilePicture
 import tupperdate.android.ui.theme.material.BrandedButton
+import tupperdate.android.ui.theme.modifier.multiClick
 import tupperdate.android.ui.theme.modifier.shade
 
 @Composable
@@ -39,6 +40,7 @@ fun Profile(
     userApi: UserApi,
     imagePicker: ImagePickerApi,
     profile: UserApi.Profile,
+    onDevClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scope = AmbientLifecycleOwner.current.lifecycleScope
@@ -75,6 +77,7 @@ fun Profile(
         },
         onLocationChange = {},
         onNewRecipeClick = {},
+        onDevClick = onDevClick,
         modifier = modifier,
     )
 }
@@ -94,13 +97,15 @@ private fun Profile(
     onPictureClick: () -> Unit,
     onLocationChange: (String) -> Unit,
     onNewRecipeClick: () -> Unit,
+    onDevClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
         Text(
             text = stringResource(R.string.profile_title_capital),
-            style = TupperdateTypography.overline
+            style = TupperdateTypography.overline,
+            modifier = Modifier.multiClick(5, onDevClick)
         )
         ProfileRecap(
             name = name,
@@ -299,6 +304,7 @@ fun ProfilePreview() {
             onSaveClick = { setEditing(false) },
             onPictureClick = {},
             onLocationChange = {},
+            onDevClick = {},
             onNewRecipeClick = {})
     }
 }

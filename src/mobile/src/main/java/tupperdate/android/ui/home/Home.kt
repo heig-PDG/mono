@@ -76,6 +76,7 @@ fun Home(
                     userApi = api.users,
                     imagePicker = api.images,
                     profile = profile ?: api.users.emptyProfile,
+                    onDevClick = onDevClick,
                     modifier = innerModifier,
                 )
             }
