@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.coil.CoilImage
 import tupperdate.android.R
 import tupperdate.android.data.features.recipe.Recipe
+import tupperdate.android.ui.theme.ProfileEmail
+import tupperdate.android.ui.theme.ProfileName
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.TupperdateTypography
 import tupperdate.android.ui.theme.components.ProfilePicture
@@ -129,8 +131,8 @@ private fun ProfileRecap(
         )
 
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-            Text(text = name, style = TupperdateTypography.subtitle1, color = Color(0f, 0f, 0f, 0.6f))
-            Text(text = email, style = TupperdateTypography.subtitle2, color = Color(0f, 0f, 0f, 0.3f))
+            Text(text = name, style = TupperdateTypography.subtitle1, color = Color.ProfileName)
+            Text(text = email, style = TupperdateTypography.subtitle2, color = Color.ProfileEmail)
         }
         Spacer(modifier = Modifier.weight(1f, true))
         IconButton(
