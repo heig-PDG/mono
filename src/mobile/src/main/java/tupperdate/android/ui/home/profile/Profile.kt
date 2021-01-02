@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import dev.chrisbanes.accompanist.coil.CoilImage
+import kotlinx.coroutines.launch
 import tupperdate.android.R
 import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.data.legacy.api.ImagePickerApi
@@ -60,7 +61,7 @@ fun Profile(
         name = name,
         phone = phone,
         profilePicture = profilePic,
-        location = "",
+        location = "", // TODO: add location to profile
         userRecipes = listOf(),
         editing = editing,
         onEditClick = {
@@ -68,10 +69,12 @@ fun Profile(
         },
         onNameChange = setName,
         onSaveClick = {
+            scope.launch { userApi.putProfile(name, profilePic) }
             setEditing(false)
         },
         onPictureClick = {
             imagePicker.pick(ImageType.Profile)
+            scope.launch { userApi.putProfile(name, profilePic) }
         },
         onLocationChange = {},
         onNewRecipeClick = {},
