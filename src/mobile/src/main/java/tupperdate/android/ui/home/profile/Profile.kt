@@ -62,6 +62,7 @@ fun Profile(
         onEditClick = {
             setEditing(true)
         },
+        onNameChange = setName,
         onSaveClick = {
             setEditing(false)
         },
@@ -84,6 +85,7 @@ private fun Profile(
     editing: Boolean,
     onEditClick: () -> Unit,
     onSaveClick: () -> Unit,
+    onNameChange: (String) -> Unit,
     onPictureClick: () -> Unit,
     onLocationChange: (String) -> Unit,
     onNewRecipeClick: () -> Unit,
@@ -100,6 +102,7 @@ private fun Profile(
             image = profilePicture,
             editing = editing,
             onEditClick = onEditClick,
+            onNameChange = onNameChange,
             onSaveClick = onSaveClick,
             onPictureClick = onPictureClick,
         )
@@ -182,6 +185,7 @@ private fun ProfileRecap(
     image: Any,
     editing: Boolean,
     onEditClick: () -> Unit,
+    onNameChange: (String) -> Unit,
     onSaveClick: () -> Unit,
     onPictureClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -190,7 +194,7 @@ private fun ProfileRecap(
         modifier = modifier
             .fillMaxWidth()
             .padding(end = 3.dp, top = 16.dp, bottom = 16.dp)
-            .height(56.dp),
+            .height(72.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         ProfilePicture(
@@ -202,8 +206,19 @@ private fun ProfileRecap(
                 .clickable(onClick = onPictureClick),
         )
 
-        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-            Text(text = name, style = TupperdateTypography.subtitle1, color = Color.ProfileName)
+        if (editing) {
+            OutlinedTextField(
+                value = name,
+                onValueChange = onNameChange,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+        } else {
+            Text(
+                text = name,
+                style = TupperdateTypography.subtitle1,
+                color = Color.ProfileName,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
         }
 
         Spacer(modifier = Modifier.weight(1f, true))
@@ -255,13 +270,17 @@ fun ProfilePreview() {
         )
     )
     TupperdateTheme {
-        Profile(name = "Aloy",
+        val (name, setName) = remember { mutableStateOf("Aloy") }
+        val (editing, setEditing) = remember { mutableStateOf(false) }
+
+        Profile(name = name,
             profilePicture = "https://pbs.twimg.com/profile_images/1257192502916001794/f1RW6Ogf_400x400.jpg",
             location = "Song's Edge",
             userRecipes = reList,
-            editing = false,
-            onEditClick = {},
-            onSaveClick = {},
+            editing = editing,
+            onEditClick = { setEditing(true) },
+            onNameChange = setName,
+            onSaveClick = { setEditing(false) },
             onPictureClick = {},
             onLocationChange = {},
             onNewRecipeClick = {})
