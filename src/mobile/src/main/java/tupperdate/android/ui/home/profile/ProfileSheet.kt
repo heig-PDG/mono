@@ -108,9 +108,7 @@ private fun ProfileSheet(
                 modifier = Modifier
                     .size(96.dp)
                     .clip(CircleShape)
-                    .clickable(
-                        onClick = onEditPictureClick,
-                    )
+                    .clickable(onClick = onEditPictureClick),
             )
             Text(
                 text = stringResource(R.string.profile_editpic),

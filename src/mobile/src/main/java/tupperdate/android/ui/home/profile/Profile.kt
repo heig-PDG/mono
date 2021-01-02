@@ -25,6 +25,7 @@ import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.data.legacy.api.ImagePickerApi
 import tupperdate.android.data.legacy.api.ImageType
 import tupperdate.android.data.legacy.api.UserApi
+import tupperdate.android.ui.theme.ProfileEmail
 import tupperdate.android.ui.theme.ProfileName
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.TupperdateTypography
@@ -47,6 +48,8 @@ fun Profile(
     val initName = profile.displayName ?: ""
     val (name, setName) = remember(profile) { mutableStateOf(initName) }
 
+    val phone = profile.displayName ?: ""
+
     val newProfilePic by remember { imagePicker.currentProfile }.collectAsState(initial = null)
     val profileImage = profile.profileImageUrl ?: "https://via.placeholder.com/150"
     val profilePic = newProfilePic ?: Uri.parse(profileImage)
@@ -55,6 +58,7 @@ fun Profile(
 
     Profile(
         name = name,
+        phone = phone,
         profilePicture = profilePic,
         location = "",
         userRecipes = listOf(),
@@ -79,6 +83,7 @@ fun Profile(
 @Composable
 private fun Profile(
     name: String,
+    phone: String,
     profilePicture: Any,
     location: String,
     userRecipes: List<Recipe>,
@@ -99,6 +104,7 @@ private fun Profile(
         )
         ProfileRecap(
             name = name,
+            phone = phone,
             image = profilePicture,
             editing = editing,
             onEditClick = onEditClick,
@@ -182,6 +188,7 @@ private fun DisplayRecipeCard(
 @Composable
 private fun ProfileRecap(
     name: String,
+    phone: String,
     image: Any,
     editing: Boolean,
     onEditClick: () -> Unit,
@@ -215,15 +222,21 @@ private fun ProfileRecap(
                         Icon(imageVector = vectorResource(R.drawable.ic_content_save))
                     }
                 },
-                modifier = Modifier.padding(horizontal = 16.dp).weight(1f),
+                modifier = Modifier.padding(start = 16.dp).weight(1f),
             )
         } else {
-            Text(
-                text = name,
-                style = TupperdateTypography.subtitle1,
-                color = Color.ProfileName,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                Text(
+                    text = name,
+                    style = TupperdateTypography.subtitle1,
+                    color = Color.ProfileName,
+                )
+                Text(
+                    text = phone,
+                    style = TupperdateTypography.subtitle2,
+                    color = Color.ProfileEmail,
+                )
+            }
 
             Spacer(modifier = Modifier.weight(1f, true))
 
@@ -274,7 +287,9 @@ fun ProfilePreview() {
         val (name, setName) = remember { mutableStateOf("Aloy") }
         val (editing, setEditing) = remember { mutableStateOf(false) }
 
-        Profile(name = name,
+        Profile(
+            name = name,
+            phone = "079 123 55 41",
             profilePicture = "https://pbs.twimg.com/profile_images/1257192502916001794/f1RW6Ogf_400x400.jpg",
             location = "Song's Edge",
             userRecipes = reList,
