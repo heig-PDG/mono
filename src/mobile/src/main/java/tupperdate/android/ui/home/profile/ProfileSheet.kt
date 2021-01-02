@@ -159,7 +159,7 @@ private fun ProfileSheet(
 
 @Preview
 @Composable
-private fun ProfilePreview() {
+private fun ProfileSheetPreview() {
     val (name, setName) = remember { mutableStateOf("Thor") }
     TupperdateTheme {
         ProfileSheet(

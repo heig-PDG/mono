@@ -1,13 +1,16 @@
 package tupperdate.android.ui.home.profile
 
 import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AmbientLifecycleOwner
@@ -20,6 +23,7 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 import tupperdate.android.R
 import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.data.legacy.api.ImagePickerApi
+import tupperdate.android.data.legacy.api.ImageType
 import tupperdate.android.data.legacy.api.UserApi
 import tupperdate.android.ui.theme.ProfileName
 import tupperdate.android.ui.theme.TupperdateTheme
@@ -47,12 +51,23 @@ fun Profile(
     val profileImage = profile.profileImageUrl ?: "https://via.placeholder.com/150"
     val profilePic = newProfilePic ?: Uri.parse(profileImage)
 
+    val (editing, setEditing) = remember { mutableStateOf(false) }
+
     Profile(
         name = name,
-        profilePicture = "",
+        profilePicture = profilePic,
         location = "",
         userRecipes = listOf(),
-        onEditClick = {},
+        editing = editing,
+        onEditClick = {
+            setEditing(true)
+        },
+        onSaveClick = {
+            setEditing(false)
+        },
+        onPictureClick = {
+            imagePicker.pick(ImageType.Profile)
+        },
         onLocationChange = {},
         onNewRecipeClick = {},
         modifier = modifier,
@@ -66,10 +81,13 @@ private fun Profile(
     profilePicture: Any,
     location: String,
     userRecipes: List<Recipe>,
+    editing: Boolean,
     onEditClick: () -> Unit,
+    onSaveClick: () -> Unit,
+    onPictureClick: () -> Unit,
     onLocationChange: (String) -> Unit,
     onNewRecipeClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
 
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
@@ -77,7 +95,14 @@ private fun Profile(
             text = stringResource(R.string.profile_title_capital),
             style = TupperdateTypography.overline
         )
-        ProfileRecap(name = name, image = profilePicture, onEditClick = onEditClick)
+        ProfileRecap(
+            name = name,
+            image = profilePicture,
+            editing = editing,
+            onEditClick = onEditClick,
+            onSaveClick = onSaveClick,
+            onPictureClick = onPictureClick,
+        )
         OutlinedTextField(
             value = location,
             onValueChange = onLocationChange,
@@ -121,7 +146,7 @@ private fun Profile(
 @Composable
 private fun DisplayRecipeCard(
     recipe: Recipe,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier
@@ -155,8 +180,11 @@ private fun DisplayRecipeCard(
 private fun ProfileRecap(
     name: String,
     image: Any,
+    editing: Boolean,
     onEditClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onSaveClick: () -> Unit,
+    onPictureClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
@@ -168,27 +196,34 @@ private fun ProfileRecap(
         ProfilePicture(
             image = image,
             highlighted = false,
-            modifier = Modifier.size(56.dp)
+            modifier = Modifier
+                .size(56.dp)
+                .clip(CircleShape)
+                .clickable(onClick = onPictureClick),
         )
 
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
             Text(text = name, style = TupperdateTypography.subtitle1, color = Color.ProfileName)
         }
+
         Spacer(modifier = Modifier.weight(1f, true))
+
         IconButton(
-            onClick = onEditClick,
+            onClick = if (editing) onSaveClick else onEditClick,
             modifier = Modifier.height(19.dp)
         ) {
-            Icon(
-                imageVector = vectorResource(R.drawable.ic_editrecipe_edit),
-            )
+            if (editing) {
+                Icon(imageVector = vectorResource(R.drawable.ic_content_save))
+            } else {
+                Icon(imageVector = vectorResource(R.drawable.ic_editrecipe_edit))
+            }
         }
     }
 }
 
 @Preview
 @Composable
-fun ProfileGeneralPreview() {
+fun ProfilePreview() {
     val reList = listOf(
         Recipe(
             "Red lobster",
@@ -224,7 +259,10 @@ fun ProfileGeneralPreview() {
             profilePicture = "https://pbs.twimg.com/profile_images/1257192502916001794/f1RW6Ogf_400x400.jpg",
             location = "Song's Edge",
             userRecipes = reList,
+            editing = false,
             onEditClick = {},
+            onSaveClick = {},
+            onPictureClick = {},
             onLocationChange = {},
             onNewRecipeClick = {})
     }
