@@ -30,6 +30,7 @@ class RealApi(activity: AppCompatActivity) : Api {
         }
     }
 
-    override val users  = RealUserApi(http, authentication.uid, activity.contentResolver)
+    override val users =
+        RealUserApi(http, authentication.uid, authentication.phone, activity.contentResolver)
     override val images = ActualImagePickerApi(activity)
 }

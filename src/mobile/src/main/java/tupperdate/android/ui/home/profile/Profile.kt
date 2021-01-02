@@ -48,7 +48,7 @@ fun Profile(
     val initName = profile.displayName ?: ""
     val (name, setName) = remember(profile) { mutableStateOf(initName) }
 
-    val phone = profile.displayName ?: ""
+    val phone = profile.phone
 
     val newProfilePic by remember { imagePicker.currentProfile }.collectAsState(initial = null)
     val profileImage = profile.profileImageUrl ?: "https://via.placeholder.com/150"
