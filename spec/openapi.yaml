@@ -219,7 +219,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ChatItemDTO'
+                  $ref: '#/components/schemas/ConversationDTO'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
           
@@ -408,25 +408,8 @@ components:
           type: string
         content:
           type: string
-          
-    ConversationDTO:
-      properties:
-        userId:
-          type: string
-        displayName:
-          type: string
-        picture:
-          type: string
-        myRecipes:
-          type: array
-          items:
-            $ref: '#/components/schemas/RecipeDTO'
-        theirRecipes:
-          type: array
-          items:
-            $ref: '#/components/schemas/RecipeDTO'
         
-    ChatItemDTO:
+    ConversationDTO:
       properties:
         userId:
           type: string
@@ -438,7 +421,11 @@ components:
           nullable: true
           allOf:
           - $ref: '#/components/schemas/MessageDTO'
-        matchedRecipes:
+        myRecipes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeDTO'
+        theirRecipes:
           type: array
           items:
             $ref: '#/components/schemas/RecipeDTO'
