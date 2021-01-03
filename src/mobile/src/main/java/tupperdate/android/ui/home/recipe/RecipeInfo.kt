@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.ripple.RippleIndication
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.ui.Alignment
@@ -38,7 +38,7 @@ fun RecipeInfoButton(
                 .clickable(
                     onClick = onClick,
                     enabled = enabled,
-                    indication = RippleIndication()
+                    indication = rememberRipple()
                 )
                 .padding(16.dp),
             Arrangement.spacedBy(8.dp),

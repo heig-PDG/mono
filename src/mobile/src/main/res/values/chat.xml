@@ -2,4 +2,5 @@
 <resources>
     <string name="chat_matches_list">START CHATTING</string>
     <string name="chat_conversations">CONVERSATIONS</string>
+    <string name="chat_message_placeholder">Tupp something here</string>
 </resources>

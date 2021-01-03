@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity() {
             TupperdateTheme {
                 TupperdateApp(
                     api = api,
-                    backDispatcher = onBackPressedDispatcher,
                 )
             }
         }

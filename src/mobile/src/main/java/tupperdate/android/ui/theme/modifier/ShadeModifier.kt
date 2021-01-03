@@ -1,7 +1,9 @@
 package tupperdate.android.ui.theme.modifier
 
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.drawWithCache
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.LinearGradient
 import androidx.compose.ui.graphics.TileMode
@@ -12,12 +14,10 @@ import androidx.compose.ui.graphics.TileMode
  * composable are invalidated.
  */
 fun Modifier.shade(): Modifier = this then Modifier.drawWithCache {
-    val gradient = LinearGradient(
+    val gradient = Brush.linearGradient(
         listOf(Color.Transparent, Color.Black.copy(alpha = 0.8f)),
-        startX = size.width / 2,
-        startY = 0f,
-        endX = size.width / 2,
-        endY = size.height,
+        start = Offset(size.width / 2, 0f),
+        end = Offset(size.width / 2, size.height),
         tileMode = TileMode.Clamp,
     )
     onDrawWithContent {

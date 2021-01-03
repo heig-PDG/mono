@@ -155,7 +155,7 @@ private fun Profile(
                 .preferredHeight(56.dp),
             shape = RoundedCornerShape(50),
             border = BorderStroke(2.dp, Color.Black),
-            colors = ButtonConstants.defaultButtonColors(
+            colors = ButtonDefaults.buttonColors(
                 contentColor = Color.Red,
                 backgroundColor = Color.White
             )

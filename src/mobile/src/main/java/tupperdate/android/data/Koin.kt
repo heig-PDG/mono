@@ -1,5 +1,7 @@
-package tupperdate.android.data.ktor
+package tupperdate.android.data
 
+import androidx.room.Room
+import androidx.work.WorkManager
 import com.google.firebase.auth.FirebaseAuth
 import io.ktor.client.*
 import io.ktor.client.features.*
@@ -10,12 +12,10 @@ import io.ktor.http.*
 import org.koin.dsl.module
 import tupperdate.android.data.legacy.RealAuthenticationApi
 import tupperdate.android.data.legacy.auth.firebase
+import tupperdate.android.data.room.TupperdateDatabase
 
-/**
- * A Koin module that prepares the [HttpClient] that will be used to perform requests throughout
- * the application.
- */
-val KoinKtorModule = module {
+@InternalDataApi
+private val KoinKtorModule = module {
     single {
         HttpClient {
             install(Auth) { firebase(RealAuthenticationApi(get(), FirebaseAuth.getInstance())) }
@@ -29,3 +29,22 @@ val KoinKtorModule = module {
         }
     }
 }
+
+@InternalDataApi
+private val KoinWorkManagerModule = module {
+    factory { WorkManager.getInstance(get()) }
+}
+
+@InternalDataApi
+private val KoinRoomModule = module {
+    single {
+        Room.databaseBuilder(get(), TupperdateDatabase::class.java, "db.sqlite")
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+}
+
+// Offer all the required modules.
+
+@OptIn(InternalDataApi::class)
+val KoinDataApiModule = KoinKtorModule + KoinWorkManagerModule + KoinRoomModule
