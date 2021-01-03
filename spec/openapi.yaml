@@ -15,6 +15,9 @@ tags:
 
 - name: recipes
   description: Everything about recipes
+  
+- name: chats
+  description: Everything about chats
 
 security:
   - firebaseAuth: []
@@ -26,7 +29,6 @@ paths:
       tags:
       - accounts
       summary: Logout a user by revoking his refresh token
-      description: ""
       operationId: logoutUser
         
       responses:
@@ -41,7 +43,6 @@ paths:
       tags:
       - users
       summary: Post a new user given an authentication token
-      description: ""
       operationId: postNewUser
       
       parameters:
@@ -76,7 +77,6 @@ paths:
       tags:
       - users
       summary: Get a user by id
-      description: ""
       operationId: getUserById
 
       parameters:
@@ -106,7 +106,6 @@ paths:
       tags:
       - recipes
       summary: Post a recipe as an authenticated user
-      description: ""
       operationId: postRecipe
       
       requestBody:
@@ -133,7 +132,6 @@ paths:
       tags:
       - recipes
       summary: Get a number of unseen recipes
-      description: ""
       operationId: getRecipes
       
       parameters:
@@ -150,7 +148,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RecipeDTO'
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipeDTO'
         '400':
           description: Bad request; if the request parameter isn't a positive integer
         '401':
@@ -161,7 +161,6 @@ paths:
       tags:
       - recipes
       summary: Like a recipe as an authenticated user
-      description: ""
       operationId: likeRecipe
       
       parameters:
@@ -185,7 +184,6 @@ paths:
       tags:
       - recipes
       summary: Dislike a recipe as an authenticated user
-      description: ""
       operationId: dislikeRecipe
       
       parameters:
@@ -203,7 +201,116 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '404':
           description: Not found; if the recipe can't be found
+          
+  # chats
   
+  /chats:
+    get:
+      tags:
+      - chats
+      summary: Get a list of all user chats and matches
+      operationId: getChats
+        
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConversationDTO'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+          
+  /chats/{userId}:
+    get:
+      tags: 
+      - chats
+      summary: Get a specific conversation with a matched user
+      operationId: getConversation
+        
+      parameters:
+      - name: userId
+        in: path
+        description: id of user's conversation to get
+        required: true
+        schema:
+          type: string  
+        
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationDTO'
+        '404':
+          description: Not found; if the requested user hasn't matched with the requesting user
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    
+  /chats/{userId}/messages:
+    get:
+      tags:
+      - chats
+      summary: get a list of all the messages shared with a matched user, ordered by timestamp (descending)
+      operationId: getMessages
+      
+      parameters:
+      - name: userId
+        in: path
+        description: id of user's messages to get
+        required: true
+        schema:
+          type: string  
+          
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageDTO'
+        '404':
+          description: Not found; if the requested user hasn't matched with the requesting user
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+      - chats
+      summary: send a message to a matched user
+      operationId: sendMessage
+      
+      parameters:
+      - name: userId
+        in: path
+        description: id of user to send a message to
+        required: true
+        schema:
+          type: string  
+
+      requestBody:
+        description: content of the message to send
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageContentDTO'
+        
+      responses:
+        '201':
+          description: OK; if the message was successfully sent
+        '400':
+          description: Bad request; if the body didn't contain the expected json data
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Not found; if the requested user hasn't matched with the requesting user
+      
+      
 components:
   securitySchemes:
     firebaseAuth:
@@ -286,3 +393,39 @@ components:
         - timestamp
         - picture
         - attributes
+    
+          
+    MessageContentDTO:
+      properties:
+        content:
+          type: string
+        
+    MessageDTO:
+      properties:
+        senderId:
+          type: string
+        timestamp:
+          type: string
+        content:
+          type: string
+        
+    ConversationDTO:
+      properties:
+        userId:
+          type: string
+        displayName:
+          type: string
+        picture:
+          type: string
+        lastMessage:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/MessageDTO'
+        myRecipes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeDTO'
+        theirRecipes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeDTO'
