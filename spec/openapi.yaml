@@ -29,7 +29,6 @@ paths:
       tags:
       - accounts
       summary: Logout a user by revoking his refresh token
-      description: ""
       operationId: logoutUser
         
       responses:
@@ -44,7 +43,6 @@ paths:
       tags:
       - users
       summary: Post a new user given an authentication token
-      description: ""
       operationId: postNewUser
       
       parameters:
@@ -79,7 +77,6 @@ paths:
       tags:
       - users
       summary: Get a user by id
-      description: ""
       operationId: getUserById
 
       parameters:
@@ -109,7 +106,6 @@ paths:
       tags:
       - recipes
       summary: Post a recipe as an authenticated user
-      description: ""
       operationId: postRecipe
       
       requestBody:
@@ -136,7 +132,6 @@ paths:
       tags:
       - recipes
       summary: Get a number of unseen recipes
-      description: ""
       operationId: getRecipes
       
       parameters:
@@ -166,7 +161,6 @@ paths:
       tags:
       - recipes
       summary: Like a recipe as an authenticated user
-      description: ""
       operationId: likeRecipe
       
       parameters:
@@ -190,7 +184,6 @@ paths:
       tags:
       - recipes
       summary: Dislike a recipe as an authenticated user
-      description: ""
       operationId: dislikeRecipe
       
       parameters:
@@ -216,7 +209,6 @@ paths:
       tags:
       - chats
       summary: Get a list of all user chats and matches
-      description: ""
       operationId: getChats
         
       responses:
@@ -236,7 +228,6 @@ paths:
       tags: 
       - chats
       summary: Get a specific conversation with a matched user
-      description: ""
       operationId: getConversation
         
       parameters:
