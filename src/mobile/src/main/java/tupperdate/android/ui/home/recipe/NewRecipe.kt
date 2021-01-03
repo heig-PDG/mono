@@ -1,38 +1,19 @@
 package tupperdate.android.ui.home.recipe
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import android.net.Uri
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientLifecycleOwner
-import androidx.lifecycle.lifecycleScope
-import dev.chrisbanes.accompanist.coil.CoilImageConstants
-import kotlinx.coroutines.launch
-import tupperdate.android.data.legacy.api.ImagePickerApi
-import tupperdate.android.data.legacy.api.ImageType
-import tupperdate.android.data.legacy.api.RecipeApi
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun NewRecipe(
-    recipeApi: RecipeApi,
-    imagePickerApi: ImagePickerApi,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val scope = AmbientLifecycleOwner.current.lifecycleScope
+    val viewModel = getViewModel<NewRecipeViewModel>()
 
-    val placeholder = "https://via.placeholder.com/450"
-    val imageUri = remember { imagePickerApi.currentRecipe }.collectAsState(initial = null).value
-
-    val heroImage = if (imageUri == null) {
-        // TODO: Remove this, we do not want to invalidate the cache just because we added an image...
-        //       or maybe we do
-        CoilImageConstants.defaultImageLoader().memoryCache.clear()
-        placeholder
-    } else {
-        imageUri
-    }
+    val defaultImage = remember { Uri.parse("https://via.placeholder.com/450") }
+    val heroImage by viewModel.picture().collectAsState(defaultImage)
 
     val (recipe, setRecipe) = remember {
         mutableStateOf(
@@ -51,21 +32,20 @@ fun NewRecipe(
         recipe = recipe,
         onRecipeChange = setRecipe,
         onDeleteClick = { onBack() },
-        // TODO : Actually put more data in the API.
         onSaveClick = {
-            scope.launch {
-                recipeApi.create(
+            viewModel.onSubmit(
+                tupperdate.android.data.features.recipe.NewRecipe(
                     title = recipe.title,
                     description = recipe.description,
-                    vegetarian = recipe.vegetarian,
-                    warm = recipe.warm,
+                    isVegan = recipe.vegetarian,
+                    isWarm = recipe.warm,
                     hasAllergens = recipe.hasAllergens,
-                    imageUri = imageUri,
+                    picture = null, // TODO : Handle images.
                 )
-                onBack()
-            }
+            )
+            onBack()
         },
-        onEdit = { imagePickerApi.pick(ImageType.Recipe) },
+        onEdit = viewModel::onPick,
         modifier = modifier,
     )
 }
