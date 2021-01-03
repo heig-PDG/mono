@@ -54,5 +54,7 @@ interface AuthenticationApi {
 
     val uid: Flow<String?>
 
+    val phone: Flow<String?>
+
     val auth: Flow<AuthInfo?>
 }

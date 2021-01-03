@@ -15,10 +15,11 @@ interface UserApi {
     data class Profile(
         val displayName: String?,
         val profileImageUrl: String?,
+        val phone: String,
     )
 
     val emptyProfile: Profile
-        get() = Profile("", "",)
+        get() = Profile("", "", "")
 
     /**
      * A [Flow] that returns the currently connected user [Profile].
