@@ -18,10 +18,11 @@ import tupperdate.common.dto.UserDTO
  * Extension method that will transform a [UserDTO] to a [UserApi.Profile]
  */
 @ObsoleteTupperdateApi
-private fun UserDTO.toProfile(): UserApi.Profile {
+private fun UserDTO.toProfile(phone: String): UserApi.Profile {
     return UserApi.Profile(
         displayName = this.displayName,
         profileImageUrl = this.picture,
+        phone = phone,
     )
 }
 
@@ -29,6 +30,7 @@ private fun UserDTO.toProfile(): UserApi.Profile {
 class RealUserApi(
     private val client: HttpClient,
     private val uid: Flow<String?>,
+    private val phone: Flow<String?>,
     private val contentResolver: ContentResolver,
 ) : UserApi {
     private val mutableProfile: MutableStateFlow<UserApi.Profile?> = MutableStateFlow(null)
@@ -37,10 +39,11 @@ class RealUserApi(
 
     override suspend fun updateProfile() {
         val currentUid = uid.filterNotNull().first()
+        val currentPhone = phone.filterNotNull().first()
 
         try {
             val userDTO : UserDTO = client.get("/users/$currentUid")
-            mutableProfile.value = userDTO.toProfile()
+            mutableProfile.value = userDTO.toProfile(currentPhone)
         } catch (t: Throwable) {
             Log.d("UserDebug", t.message.toString())
         }
@@ -55,6 +58,7 @@ class RealUserApi(
             mutableProfile.value = UserApi.Profile(
                 name,
                 oldProfile?.profileImageUrl,
+                phone.filterNotNull().first(),
             )
 
             // Send to server

@@ -147,6 +147,9 @@ class RealAuthenticationApi(
 
     override val uid: Flow<String?>
         get() = currentUser(firebaseAuth).map { it?.uid }
+
+    override val phone: Flow<String?>
+        get() = currentUser(firebaseAuth).map { it?.phoneNumber }
 }
 
 /**
