@@ -41,7 +41,7 @@ jobs:
           GOOGLE_BUCKET_NAME: ${{ secrets.FIREBASE_GOOGLE_BUCKET_NAME }}
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
-          sudo firebase emulators:exec --only firestore --project tupperdate-developement 'java -version'
+          sudo firebase emulators:exec --only firestore --project tupperdate-developement 'which java'
 
       - name: Print debug logs
         if: failure()
