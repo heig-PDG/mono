@@ -25,13 +25,16 @@ jobs:
           echo "keystore.password=123456" >> ./mobile/signing.properties.prod
           echo "alias.name=pr" >> ./mobile/signing.properties.prod
           echo "alias.password=123456" >> ./mobile/signing.properties.prod
+          
+      - name: intstall Firebase CLI
+        run: curl -sL https://firebase.tools | bash
 
       - name: Run tests
         env:
           GOOGLE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_GOOGLE_SERVICE_ACCOUNT }}
           GOOGLE_DATABASE_NAME: ${{ secrets.FIREBASE_GOOGLE_DATABASE_NAME }}
           GOOGLE_BUCKET_NAME: ${{ secrets.FIREBASE_GOOGLE_BUCKET_NAME }}
-        run: ./gradlew :web:test
+        run: firebase emulator:exec --only firestore --project tupperdate-developement './gradlew :web:test'
 
       - name: Upload tests report
         uses: actions/upload-artifact@v2
