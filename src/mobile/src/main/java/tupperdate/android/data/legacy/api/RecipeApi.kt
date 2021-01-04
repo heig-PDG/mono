@@ -1,9 +1,7 @@
 package tupperdate.android.data.legacy.api
 
-import android.net.Uri
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import kotlinx.coroutines.flow.Flow
 import tupperdate.android.data.legacy.ObsoleteTupperdateApi
 
 @ObsoleteTupperdateApi
@@ -18,17 +16,4 @@ interface RecipeApi {
 
     fun like(recipe: Recipe)
     fun dislike(recipe: Recipe)
-
-    val backStackEnabled: Flow<Boolean>
-
-    fun back()
-
-    suspend fun create(
-        title: String,
-        description: String,
-        vegetarian: Boolean,
-        warm: Boolean,
-        hasAllergens: Boolean,
-        imageUri: Uri?,
-    )
 }

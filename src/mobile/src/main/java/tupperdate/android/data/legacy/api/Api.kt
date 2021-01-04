@@ -6,6 +6,5 @@ import tupperdate.android.data.legacy.ObsoleteTupperdateApi
 interface Api {
     val authentication: AuthenticationApi
     val users: UserApi
-    val recipe: RecipeApi
     val images: ImagePickerApi
 }

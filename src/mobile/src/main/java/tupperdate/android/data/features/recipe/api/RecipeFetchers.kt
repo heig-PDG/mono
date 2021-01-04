@@ -1,13 +1,13 @@
-package tupperdate.android.data.features.recipe
+package tupperdate.android.data.features.recipe.api
 
 import com.dropbox.android.external.store4.Fetcher
-import com.dropbox.android.external.store4.FetcherResult
 import io.ktor.client.*
 import io.ktor.client.request.*
-import kotlinx.coroutines.flow.flowOf
+import tupperdate.android.data.InternalDataApi
 import tupperdate.common.dto.RecipeDTO
 
-object RecipeFetcher {
+@InternalDataApi
+object RecipeFetchers {
 
     private const val RecipesFetchCount = 4
 
@@ -24,12 +24,11 @@ object RecipeFetcher {
     }
 
     /**
-     * A [Fetcher] that retrieves a single [Recipe] for the currently logged in user.
+     * A [Fetcher] that retrieves a single [RecipeDTO] for the currently logged in user.
      */
     fun singleRecipeFetcher(client: HttpClient): Fetcher<String, RecipeDTO> {
-        return Fetcher.ofResultFlow {
-            // TODO : Implement this.
-            flowOf(FetcherResult.Error.Message("Not implemented yet."))
+        return Fetcher.of {
+            return@of client.get<RecipeDTO>("/recipes/$it")
         }
     }
 }

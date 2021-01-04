@@ -20,10 +20,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.annotatedString
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
+import tupperdate.android.data.features.recipe.Recipe
+import tupperdate.android.data.legacy.api.Api
 import tupperdate.android.ui.home.chats.Conversations
 import tupperdate.android.ui.home.feed.Feed
 import tupperdate.android.ui.home.profile.Profile
@@ -31,17 +33,19 @@ import tupperdate.android.ui.theme.Flamingo500
 import tupperdate.android.ui.theme.InactiveIcons
 import tupperdate.android.ui.theme.Smurf500
 import tupperdate.android.ui.theme.TupperdateTypography
-import tupperdate.android.data.legacy.api.Api
 
 @Composable
 fun Home(
     api: Api,
-    onBack: () -> Unit,
+    onNewRecipeClick: () -> Unit,
+    onRecipeDetailsClick: (Recipe) -> Unit,
     onDevClick: () -> Unit,
+    onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    startingSection: HomeSections = HomeSections.Feed,
 ) {
     val profile = remember { api.users.profile }.collectAsState(initial = null).value
-    val (currentSection, setCurrentSection) = savedInstanceState { HomeSections.Feed }
+    val (currentSection, setCurrentSection) = savedInstanceState { startingSection }
 
     Scaffold(topBar = {
         TupperdateTopBar(
@@ -56,8 +60,9 @@ fun Home(
         Crossfade(current = currentSection) { section ->
             when (section) {
                 HomeSections.Feed -> Feed(
+                    onNewRecipeClick = onNewRecipeClick,
+                    onOpenRecipeClick = onRecipeDetailsClick,
                     onBack = onBack,
-                    onOpenRecipeClick = {},
                     modifier = innerModifier,
                 )
                 HomeSections.Conversations -> Conversations(
@@ -71,8 +76,6 @@ fun Home(
                     userApi = api.users,
                     imagePicker = api.images,
                     profile = profile ?: api.users.emptyProfile,
-                    onCloseClick = { setCurrentSection(HomeSections.Feed) },
-                    onSignOutClick = {},
                     onDevClick = onDevClick,
                     modifier = innerModifier,
                 )
@@ -94,18 +97,18 @@ private fun TupperdateTopBar(
         IconItem(
             asset = vectorResource(R.drawable.ic_home_messages),
             selected = currentSection == HomeSections.Conversations,
-            onSelected = { onSectionSelected(HomeSections.Conversations) }
+            onSelected = { onSectionSelected(HomeSections.Conversations) },
         )
 
         FeedItem(
             selected = currentSection == HomeSections.Feed,
-            onSelected = { onSectionSelected(HomeSections.Feed) }
+            onSelected = { onSectionSelected(HomeSections.Feed) },
         )
 
         IconItem(
             asset = vectorResource(R.drawable.ic_home_accounts),
             selected = currentSection == HomeSections.Profile,
-            onSelected = { onSectionSelected(HomeSections.Profile) }
+            onSelected = { onSectionSelected(HomeSections.Profile) },
         )
     }
 }
@@ -133,7 +136,7 @@ private fun FeedItem(
     onSelected: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val title = annotatedString {
+    val title = buildAnnotatedString {
         withStyle(SpanStyle(color = Color.Flamingo500)) { append("tupper ") }
         withStyle(SpanStyle(color = Color.Smurf500)) { append("• date") }
     }
@@ -154,7 +157,7 @@ private fun FeedItem(
     }
 }
 
-private enum class HomeSections {
+enum class HomeSections {
     Conversations,
     Feed,
     Profile,
