@@ -41,7 +41,9 @@ jobs:
           GOOGLE_BUCKET_NAME: ${{ secrets.FIREBASE_GOOGLE_BUCKET_NAME }}
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
-          sudo firebase emulators:exec --only firestore --project tupperdate-developement 'export PATH=${JAVA_HOME}:$PATH && ./gradlew :web:test'
+          ./.github/scripts/emulator-env.sh' > run.sh
+          chmod +x ./github/scripts/run.sh
+          sudo firebase emulators:exec --only firestore --project tupperdate-developement './github/scripts/run.sh'
 
       - name: Print debug logs
         if: ${{ always() }}
