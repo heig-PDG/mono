@@ -39,6 +39,7 @@ jobs:
           GOOGLE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_GOOGLE_SERVICE_ACCOUNT }}
           GOOGLE_DATABASE_NAME: ${{ secrets.FIREBASE_GOOGLE_DATABASE_NAME }}
           GOOGLE_BUCKET_NAME: ${{ secrets.FIREBASE_GOOGLE_BUCKET_NAME }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: firebase emulators:exec --only firestore --project tupperdate-developement './gradlew :web:test'
 
       - name: Print debug logs
