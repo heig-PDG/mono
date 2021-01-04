@@ -45,7 +45,9 @@ jobs:
           chmod +x ../.github/scripts/emulator-env.sh
           ../.github/scripts/emulator-env.sh > ../.github/scripts/run.sh
           chmod +x ../.github/scripts/run.sh
-          sudo firebase emulators:exec --only firestore --project tupperdate-developement '../.github/scripts/run.sh'
+          cat ../.github/scripts/run.sh
+          echo bash --version
+          sudo firebase emulators:exec --only firestore --project tupperdate-developement 'echo bash --version && bash ../.github/scripts/run.sh'
 
       - name: Print debug logs
         if: ${{ always() }}
