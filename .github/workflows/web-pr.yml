@@ -41,6 +41,7 @@ jobs:
           GOOGLE_BUCKET_NAME: ${{ secrets.FIREBASE_GOOGLE_BUCKET_NAME }}
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
+          echo $GOOGLE_SERVICE_ACCOUNT > ../.github/scripts/google-service-account.json
           chmod +x ../.github/scripts/emulator-env.sh
           ../.github/scripts/emulator-env.sh > ../.github/scripts/run.sh
           chmod +x ../.github/scripts/run.sh
