@@ -41,12 +41,14 @@ jobs:
           GOOGLE_BUCKET_NAME: ${{ secrets.FIREBASE_GOOGLE_BUCKET_NAME }}
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
+          which java
           sudo firebase emulators:exec --only firestore --project tupperdate-developement 'which java'
 
       - name: Print debug logs
-        if: failure()
+        if: ${{ always() }}
         run: |
           java -version
+          which java
           ls -la
           find . -type f -name "fire*-debug.log" | xargs cat
 
