@@ -41,6 +41,12 @@ jobs:
           GOOGLE_BUCKET_NAME: ${{ secrets.FIREBASE_GOOGLE_BUCKET_NAME }}
         run: firebase emulators:exec --only firestore --project tupperdate-developement './gradlew :web:test'
 
+      - name: Print debug logs
+        if: failure()
+        run: |
+          ls -la
+          find . -type f -name "fire*-debug.log" | xargs cat
+
       - name: Upload tests report
         uses: actions/upload-artifact@v2
         if: ${{ always() }}
