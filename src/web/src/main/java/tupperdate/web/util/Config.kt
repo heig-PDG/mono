@@ -14,29 +14,37 @@ private const val DefaultGoogleBucketName = "GOOGLE_BUCKET_NAME"
  * Retrieves the service account from the environment variables and returns the associated
  * [GoogleCredentials]. If no credential could be built, and exception will be thrown.
  */
-private fun getServiceAccount(): GoogleCredentials = requireNotNull(
-        System.getenv(DefaultGoogleServiceAccountEnvVariable)
-            .byteInputStream()
-            .let(GoogleCredentials::fromStream)
+private fun getServiceAccount(): GoogleCredentials {
+    System.err.println("GoogleServiceAccount: " + System.getenv(DefaultGoogleServiceAccountEnvVariable))
+    return requireNotNull(
+            System.getenv(DefaultGoogleServiceAccountEnvVariable)
+                    .byteInputStream()
+                    .let(GoogleCredentials::fromStream)
     ) { "Missing \$$DefaultGoogleServiceAccountEnvVariable environment variable." }
-
+}
 /**
  * Retrieves the database name from the environment variables and returns it. If no database name
  * could be parsed, and exception will be thrown.
  */
-private fun getDatabase(): String = requireNotNull(System.getenv(DefaultGoogleDatabaseName)) {
-    "Missing \$$DefaultGoogleDatabaseName environment variable."
+private fun getDatabase(): String {
+    System.err.println("DefaultGoogleDatabaseName: " + System.getenv(DefaultGoogleDatabaseName))
+    return requireNotNull(System.getenv(DefaultGoogleDatabaseName)) {
+        "Missing \$$DefaultGoogleDatabaseName environment variable."
+    }
 }
 
 /**
  * Retrieves the storage url (aka bucket name) from the environment variables and returns it.
  * If no storage url could be parsed, and exception will be thrown.
  */
-private fun getStorage(): String = requireNotNull(System.getenv(DefaultGoogleBucketName)) {
-    "Missing \$$DefaultGoogleBucketName environment variable."
-}.apply {
-    if (this != "tupperdate-developement.appspot.com") {
-        throw RuntimeException("Wrong bucket name ($this)")
+private fun getStorage(): String {
+    System.err.println("DefaultGoogleBucketName: " + System.getenv(DefaultGoogleBucketName))
+    return requireNotNull(System.getenv(DefaultGoogleBucketName)) {
+        "Missing \$$DefaultGoogleBucketName environment variable."
+    }.apply {
+        if (this != "tupperdate-developement.appspot.com") {
+            throw RuntimeException("Wrong bucket name ($this)")
+        }
     }
 }
 
