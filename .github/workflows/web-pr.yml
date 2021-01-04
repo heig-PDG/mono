@@ -26,8 +26,8 @@ jobs:
           echo "alias.name=pr" >> ./mobile/signing.properties.prod
           echo "alias.password=123456" >> ./mobile/signing.properties.prod
           
-      - name: intstall Firebase CLI
-        run: curl -sL https://firebase.tools | bash
+      - name: install Firebase CLI
+        run: sudo curl -sL https://firebase.tools | bash
 
       - name: Run tests
         env:
