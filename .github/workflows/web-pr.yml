@@ -41,25 +41,19 @@ jobs:
           GOOGLE_BUCKET_NAME: ${{ secrets.FIREBASE_GOOGLE_BUCKET_NAME }}
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
-          echo $GOOGLE_SERVICE_ACCOUNT > ../.github/scripts/google-service-account.json
           chmod +x ../.github/scripts/emulator-env.sh
           ../.github/scripts/emulator-env.sh > ../.github/scripts/run.sh
           chmod +x ../.github/scripts/run.sh
-          cat ../.github/scripts/run.sh
-          echo bash --version
-          sudo firebase emulators:exec --only firestore --project tupperdate-developement 'echo bash --version && bash ../.github/scripts/run.sh'
+          sudo firebase emulators:exec --only firestore --project tupperdate-developement 'bash ../.github/scripts/run.sh'
 
       - name: Print debug logs
-        if: ${{ always() }}
+        if: always()
         run: |
-          java -version
-          which java
-          ls -la
           find . -type f -name "fire*-debug.log" | xargs cat
 
       - name: Upload tests report
         uses: actions/upload-artifact@v2
-        if: ${{ always() }}
+        if: always()
         with:
           name: report
           path: src/web/build/reports/tests/test/
