@@ -78,4 +78,5 @@ private fun Uri.readFileAsBase64(contentResolver: ContentResolver): String? =
     contentResolver.openInputStream(this)
         ?.buffered()
         ?.readBytes()
-        ?.let(Base64::encodeBase64String)
+        ?.let(Base64::encodeBase64)
+        ?.let(::String)
