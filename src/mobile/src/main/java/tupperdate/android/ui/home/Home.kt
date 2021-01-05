@@ -12,8 +12,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,7 +23,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
 import tupperdate.android.data.features.recipe.Recipe
-import tupperdate.android.data.legacy.api.Api
 import tupperdate.android.ui.home.chats.Conversations
 import tupperdate.android.ui.home.feed.Feed
 import tupperdate.android.ui.home.profile.Profile
@@ -36,7 +33,6 @@ import tupperdate.android.ui.theme.TupperdateTypography
 
 @Composable
 fun Home(
-    api: Api,
     onNewRecipeClick: () -> Unit,
     onRecipeDetailsClick: (Recipe) -> Unit,
     onDevClick: () -> Unit,
@@ -44,7 +40,6 @@ fun Home(
     modifier: Modifier = Modifier,
     startingSection: HomeSections = HomeSections.Feed,
 ) {
-    val profile = remember { api.users.profile }.collectAsState(initial = null).value
     val (currentSection, setCurrentSection) = savedInstanceState { startingSection }
 
     Scaffold(topBar = {
@@ -73,9 +68,6 @@ fun Home(
                     modifier = innerModifier,
                 )
                 HomeSections.Profile -> Profile(
-                    userApi = api.users,
-                    imagePicker = api.images,
-                    profile = profile ?: api.users.emptyProfile,
                     onDevClick = onDevClick,
                     modifier = innerModifier,
                 )
