@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
+
       - name: Setup node
         uses: actions/setup-node@v1
         with:
@@ -41,9 +41,7 @@ jobs:
           GOOGLE_BUCKET_NAME: ${{ secrets.FIREBASE_GOOGLE_BUCKET_NAME }}
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
-          chmod +x ../.github/scripts/emulator-env.sh
-          ../.github/scripts/emulator-env.sh > ../.github/scripts/run.sh
-          chmod +x ../.github/scripts/run.sh
+          bash ../.github/scripts/emulator-env.sh
           sudo firebase emulators:exec --only firestore --project tupperdate-developement 'bash ../.github/scripts/run.sh'
 
       - name: Print debug logs
