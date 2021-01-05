@@ -82,6 +82,7 @@ class NewRecipeWorker(
     }
 }
 
+// TODO : Factorize this.
 private fun Uri.readFileAsBase64(contentResolver: ContentResolver): String? =
     contentResolver.openInputStream(this)
         ?.buffered()

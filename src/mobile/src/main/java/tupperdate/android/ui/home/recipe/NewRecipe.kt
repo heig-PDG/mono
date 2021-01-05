@@ -4,13 +4,16 @@ import android.net.Uri
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import org.koin.androidx.compose.getViewModel
+import org.koin.core.parameter.parametersOf
+import tupperdate.android.ui.ambients.AmbientImagePicker
 
 @Composable
 fun NewRecipe(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val viewModel = getViewModel<NewRecipeViewModel>()
+    val picker = AmbientImagePicker.current
+    val viewModel = getViewModel<NewRecipeViewModel> { parametersOf(picker) }
 
     val defaultImage = remember { Uri.parse("https://via.placeholder.com/450") }
     val heroImage by viewModel.picture().collectAsState(defaultImage)

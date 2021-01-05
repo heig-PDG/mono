@@ -1,10 +1,6 @@
-package tupperdate.android.data.legacy.api
+package tupperdate.android.data.features.auth
 
-import kotlinx.coroutines.flow.Flow
-import tupperdate.android.data.legacy.ObsoleteTupperdateApi
-
-@ObsoleteTupperdateApi
-interface AuthenticationApi {
+interface PhoneRegistrationApi {
 
     enum class RequestCodeResult {
         LoggedIn,
@@ -18,10 +14,6 @@ interface AuthenticationApi {
         InvalidVerificationError,
         InternalError,
     }
-
-    data class AuthInfo(
-        val token: String,
-    )
 
     /**
      * Returns a [RequestCodeResult] indicating the status of the phone number verification. Some
@@ -46,15 +38,4 @@ interface AuthenticationApi {
      *         not.
      */
     suspend fun verify(code: String): VerificationResult
-
-    /**
-     * A [Flow] that returns whether the user is currently connected or not.
-     */
-    val connected: Flow<Boolean>
-
-    val uid: Flow<String?>
-
-    val phone: Flow<String?>
-
-    val auth: Flow<AuthInfo?>
 }
