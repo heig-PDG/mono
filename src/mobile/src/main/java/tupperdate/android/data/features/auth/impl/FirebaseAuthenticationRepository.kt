@@ -20,7 +20,7 @@ import tupperdate.android.data.features.picker.ImagePicker
 import tupperdate.common.dto.MyUserDTO
 import tupperdate.common.dto.UserDTO
 
-@InternalDataApi
+@OptIn(InternalDataApi::class)
 class FirebaseAuthenticationRepository(
     private val context: Context,
     private val client: HttpClient,

@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import tupperdate.android.data.features.auth.PhoneRegistrationApi
+import tupperdate.android.data.features.auth.PhoneRegistration
 
 class OnboardingConfirmationViewModel(
-    private val phone: PhoneRegistrationApi,
+    private val phone: PhoneRegistration,
 ) : ViewModel() {
 
     enum class ConfirmationState {
@@ -33,10 +33,10 @@ class OnboardingConfirmationViewModel(
         viewModelScope.launch {
             current.value = ConfirmationState.Pending
             when (phone.verify(input.value)) {
-                PhoneRegistrationApi.VerificationResult.LoggedIn -> Unit
-                PhoneRegistrationApi.VerificationResult.InvalidVerificationError ->
+                PhoneRegistration.VerificationResult.LoggedIn -> Unit
+                PhoneRegistration.VerificationResult.InvalidVerificationError ->
                     current.value = ConfirmationState.VerificationError
-                PhoneRegistrationApi.VerificationResult.InternalError ->
+                PhoneRegistration.VerificationResult.InternalError ->
                     current.value = ConfirmationState.InternalError
             }
         }

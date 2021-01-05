@@ -8,8 +8,6 @@ import tupperdate.android.ui.navigation.LoggedOut
 
 /**
  * The main composable of the app.
- *
- * @param api the [Api] instance to use.
  */
 @Composable
 fun TupperdateApp() {

@@ -7,12 +7,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import tupperdate.android.data.features.auth.PhoneRegistrationApi
+import tupperdate.android.data.features.auth.PhoneRegistration
 import tupperdate.android.ui.onboarding.OnboardingViewModel.State.*
 
 class OnboardingViewModel(
     private val onCheckCode: () -> Unit,
-    private val api: PhoneRegistrationApi,
+    private val api: PhoneRegistration,
 ) : ViewModel() {
 
     sealed class State {
@@ -44,11 +44,11 @@ class OnboardingViewModel(
                 if (current.value == Pending) return@launch
                 current.value = Pending
                 when (api.requestCode(input.value, false)) {
-                    PhoneRegistrationApi.RequestCodeResult.LoggedIn -> Unit
-                    PhoneRegistrationApi.RequestCodeResult.RequiresVerification -> onCheckCode()
-                    PhoneRegistrationApi.RequestCodeResult.InvalidNumberError ->
+                    PhoneRegistration.RequestCodeResult.LoggedIn -> Unit
+                    PhoneRegistration.RequestCodeResult.RequiresVerification -> onCheckCode()
+                    PhoneRegistration.RequestCodeResult.InvalidNumberError ->
                         current.value = Error(LocalError.InvalidNumber)
-                    PhoneRegistrationApi.RequestCodeResult.InternalError ->
+                    PhoneRegistration.RequestCodeResult.InternalError ->
                         current.value = Error(LocalError.Internal)
                 }
             }

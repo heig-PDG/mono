@@ -4,20 +4,20 @@ import android.app.Activity
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import tupperdate.android.data.InternalDataApi
-import tupperdate.android.data.features.auth.PhoneRegistrationApi
-import tupperdate.android.data.features.auth.PhoneRegistrationApi.RequestCodeResult
-import tupperdate.android.data.features.auth.PhoneRegistrationApi.RequestCodeResult.*
-import tupperdate.android.data.features.auth.PhoneRegistrationApi.VerificationResult
+import tupperdate.android.data.RequiresParameterInjection
+import tupperdate.android.data.features.auth.PhoneRegistration
+import tupperdate.android.data.features.auth.PhoneRegistration.RequestCodeResult
+import tupperdate.android.data.features.auth.PhoneRegistration.RequestCodeResult.*
+import tupperdate.android.data.features.auth.PhoneRegistration.VerificationResult
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@InternalDataApi
-class FirebasePhoneRegistrationApi(
+@RequiresParameterInjection
+class FirebasePhoneRegistration(
     private val activity: Activity,
-) : PhoneRegistrationApi {
+) : PhoneRegistration {
 
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
@@ -87,8 +87,8 @@ class FirebasePhoneRegistrationApi(
                 verification: String,
                 token: PhoneAuthProvider.ForceResendingToken,
             ) {
-                this@FirebasePhoneRegistrationApi.verification.value = verification
-                this@FirebasePhoneRegistrationApi.forceToken.value = token
+                this@FirebasePhoneRegistration.verification.value = verification
+                this@FirebasePhoneRegistration.forceToken.value = token
                 resumeOnce {
                     continuation.resume(RequiresVerification)
                 }
@@ -113,7 +113,7 @@ class FirebasePhoneRegistrationApi(
     }
 
     override suspend fun verify(code: String): VerificationResult {
-        val verification = this@FirebasePhoneRegistrationApi.verification.value
+        val verification = this@FirebasePhoneRegistration.verification.value
         return if (verification == null) {
             VerificationResult.InternalError
         } else {

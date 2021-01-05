@@ -2,14 +2,14 @@ package tupperdate.android.ui.onboarding
 
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import tupperdate.android.data.features.auth.PhoneRegistrationApi
+import tupperdate.android.data.features.auth.PhoneRegistration
 
 val KoinModuleUIOnboarding = module {
-    viewModel { (onCheckCode: () -> Unit, phone: PhoneRegistrationApi) ->
+    viewModel { (onCheckCode: () -> Unit, phone: PhoneRegistration) ->
         OnboardingViewModel(
             onCheckCode = onCheckCode,
             api = phone,
         )
     }
-    viewModel { (phone: PhoneRegistrationApi) -> OnboardingConfirmationViewModel(phone) }
+    viewModel { (phone: PhoneRegistration) -> OnboardingConfirmationViewModel(phone) }
 }

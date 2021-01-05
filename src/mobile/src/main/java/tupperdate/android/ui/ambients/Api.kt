@@ -3,13 +3,13 @@ package tupperdate.android.ui.ambients
 import androidx.compose.runtime.ProvidableAmbient
 import androidx.compose.runtime.ambientOf
 import tupperdate.android.data.features.auth.AuthenticationStatus
-import tupperdate.android.data.features.auth.PhoneRegistrationApi
+import tupperdate.android.data.features.auth.PhoneRegistration
 import tupperdate.android.data.features.picker.ImagePicker
 
 /**
- * An ambient that provides a [PhoneRegistrationApi].
+ * An ambient that provides a [PhoneRegistration].
  */
-val AmbientPhoneRegistration: ProvidableAmbient<PhoneRegistrationApi> =
+val AmbientPhoneRegistration: ProvidableAmbient<PhoneRegistration> =
     ambientOf { error("not provided") }
 
 /**

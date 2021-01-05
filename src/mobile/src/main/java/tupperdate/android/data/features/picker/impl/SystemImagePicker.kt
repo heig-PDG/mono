@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
 import tupperdate.android.data.InternalDataApi
+import tupperdate.android.data.RequiresParameterInjection
 import tupperdate.android.data.features.picker.ImagePicker
 import tupperdate.android.data.features.picker.work.RemoveImageWorker
 import java.io.File
@@ -22,8 +23,9 @@ import java.util.concurrent.TimeUnit
  * An implementation of an [ImagePicker] that stores images on the disk for a certain timeout,
  * before they get cleaned up by the OS.
  */
-@InternalDataApi
-class ImagePickerImpl(
+@RequiresParameterInjection
+@OptIn(InternalDataApi::class)
+class SystemImagePicker(
     private val activity: ComponentActivity,
 ) : ImagePicker {
 

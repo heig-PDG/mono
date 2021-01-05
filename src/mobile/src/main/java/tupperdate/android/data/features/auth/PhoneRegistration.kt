@@ -1,6 +1,6 @@
 package tupperdate.android.data.features.auth
 
-interface PhoneRegistrationApi {
+interface PhoneRegistration {
 
     enum class RequestCodeResult {
         LoggedIn,

@@ -7,10 +7,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.setContent
 import org.koin.android.ext.android.get
-import tupperdate.android.data.InternalDataApi
+import tupperdate.android.data.RequiresParameterInjection
 import tupperdate.android.data.features.auth.impl.FirebaseAuthenticationRepository
-import tupperdate.android.data.features.auth.impl.FirebasePhoneRegistrationApi
-import tupperdate.android.data.features.picker.impl.ImagePickerImpl
+import tupperdate.android.data.features.auth.impl.FirebasePhoneRegistration
+import tupperdate.android.data.features.picker.impl.SystemImagePicker
 import tupperdate.android.ui.ambients.AmbientImagePicker
 import tupperdate.android.ui.ambients.AmbientPhoneRegistration
 import tupperdate.android.ui.ambients.AmbientProfile
@@ -18,17 +18,17 @@ import tupperdate.android.ui.theme.TupperdateTheme
 
 class MainActivity : AppCompatActivity() {
 
-    @OptIn(InternalDataApi::class)
+    @OptIn(RequiresParameterInjection::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // TODO : Eventually clean this up and use better names.
-        val phone = FirebasePhoneRegistrationApi(this)
-        val picker = ImagePickerImpl(this)
-        val authApi = FirebaseAuthenticationRepository(get(), get())
+        val auth = FirebaseAuthenticationRepository(get(), get())
+
+        val phone = FirebasePhoneRegistration(this)
+        val picker = SystemImagePicker(this)
 
         setContent {
-            val profile by authApi.status.collectAsState(null)
+            val profile by auth.status.collectAsState(null)
             Providers(
                 // Provide API ambients that require an instance of an Activity to properly work.
                 // This way, we don't have any memory leaks, and avoid duplicate calls to
