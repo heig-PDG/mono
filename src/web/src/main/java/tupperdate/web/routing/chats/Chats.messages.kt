@@ -10,7 +10,5 @@ import tupperdate.web.auth.firebaseAuthPrincipal
 import tupperdate.web.exceptions.statusException
 
 fun Route.getMessages(store: Firestore) = get("/{userId}/messages") {
-    val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
-    
-    call.respond(HttpStatusCode.OK)
+    call.respond(HttpStatusCode.NotImplemented)
 }

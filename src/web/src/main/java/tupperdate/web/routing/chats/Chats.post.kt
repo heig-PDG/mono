@@ -22,7 +22,5 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 fun Route.postMessage(store: Firestore) = post("/{userId}/messages") {
-    val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
-
-    call.respond(HttpStatusCode.OK)
+    call.respond(HttpStatusCode.NotImplemented)
 }
