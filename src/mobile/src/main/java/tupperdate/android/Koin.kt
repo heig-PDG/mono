@@ -6,6 +6,7 @@ import tupperdate.android.data.KoinDataApiModule
 import tupperdate.android.data.features.auth.KoinAuthenticationModule
 import tupperdate.android.data.features.recipe.KoinRecipeModule
 import tupperdate.android.ui.home.KoinHomeModule
+import tupperdate.android.ui.onboarding.KoinModuleUIOnboardingModule
 
 fun Tupperdate.startKoin() = org.koin.core.context.startKoin {
     androidContext(this@startKoin)
@@ -19,4 +20,5 @@ fun Tupperdate.startKoin() = org.koin.core.context.startKoin {
 
     // Application modules.
     modules(KoinHomeModule)
+    modules(KoinModuleUIOnboardingModule)
 }
