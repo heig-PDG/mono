@@ -1,5 +1,6 @@
 package tupperdate.web.routing.chats
 
+import com.google.cloud.firestore.Firestore
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.cloud.FirestoreClient
@@ -20,7 +21,7 @@ import tupperdate.web.util.await
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-fun Route.postMessage(auth: FirebaseAuth) = post {
+fun Route.postMessage(store: Firestore) = post("/{userId}/messages") {
     val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
 
     call.respond(HttpStatusCode.OK)
