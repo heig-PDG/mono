@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.getViewModel
 import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.ui.theme.layout.SwipeStack
+import tupperdate.android.ui.theme.layout.SwipeStackValue.*
 import tupperdate.android.ui.theme.layout.rememberSwipeStackState
 
 @Composable
@@ -25,9 +26,13 @@ fun Feed(
 
     Feed(
         recipes = recipes,
+        onRecipeLiked = viewModel::onLike,
+        onRecipeDisliked = viewModel::onDislike,
+        onRecipePreviousClick = onBack,
+
+        // Interactions
         onNewRecipeClick = onNewRecipeClick,
         onRecipeDetailsClick = onOpenRecipeClick,
-        onBack = onBack,
         modifier = modifier
     )
 }
@@ -36,20 +41,38 @@ fun Feed(
 @Composable
 fun Feed(
     recipes: List<Recipe>,
+    // Interacting with the current recipe.
+    onRecipeLiked: () -> Unit,
+    onRecipeDisliked: () -> Unit,
+    onRecipePreviousClick: () -> Unit,
+    // Reading details or creating new recipes.
     onNewRecipeClick: () -> Unit,
     onRecipeDetailsClick: (Recipe) -> Unit,
-    onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Bottom),
         modifier = modifier.padding(16.dp)
     ) {
+        // TODO (alex) : We should not rely on recomposition. Eventually change SwipeStack API.
+        val state = rememberSwipeStackState()
+        when (state.value) {
+            NotSwiped -> Unit
+            SwipedStart -> {
+                onRecipeDisliked()
+                state.snapTo(NotSwiped)
+            }
+            SwipedEnd -> {
+                onRecipeLiked()
+                state.snapTo(NotSwiped)
+            }
+        }
+
         SwipeStack(
             items = recipes,
             modifier = Modifier.weight(1F),
             // For the moment, reject all swipes.
-            swipeStackState = rememberSwipeStackState(confirmStateChange = { false })
+            swipeStackState = state,
         ) { recipe ->
             RecipeCard(
                 recipe = recipe,
@@ -59,9 +82,9 @@ fun Feed(
         }
 
         RecipeActions(
-            onLikeClick = { /* TODO */ },
-            onDislikeClick = { /* TODO */ },
-            onBackClick = onBack,
+            onLikeClick = state::swipeEnd,
+            onDislikeClick = state::swipeStart,
+            onBackClick = onRecipePreviousClick,
             onNewRecipeClick = onNewRecipeClick,
             modifier = Modifier.fillMaxWidth(),
         )
