@@ -4,7 +4,7 @@ import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import tupperdate.android.data.features.auth.PhoneRegistrationApi
 
-val KoinModuleUIOnboardingModule = module {
+val KoinModuleUIOnboarding = module {
     viewModel { (onCheckCode: () -> Unit, phone: PhoneRegistrationApi) ->
         OnboardingViewModel(
             onCheckCode = onCheckCode,
