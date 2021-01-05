@@ -93,5 +93,5 @@ private fun Uri.readFileAndCompressAsBase64(contentResolver: ContentResolver): S
     val bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(this))
     val array = ByteArrayOutputStream()
     bitmap.compress(Bitmap.CompressFormat.JPEG, CompressFactor, array)
-    return array.toByteArray().let(Base64::encodeBase64String)
+    return String(array.toByteArray().let(Base64::encodeBase64))
 }
