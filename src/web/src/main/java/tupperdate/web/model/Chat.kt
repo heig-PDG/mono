@@ -8,6 +8,14 @@ data class Chat (
     val user2LikedRecipes : List<String>? = null,
 )
 
+data class Conv (
+    val id: String,
+    val myId : String,
+    val theirId : String,
+    val myRecipes : List<String>,
+    val theirRecipes : List<String>,
+)
+
 data class NewChat (
     val id: String? = null,
     val userId1 : String? = null,
