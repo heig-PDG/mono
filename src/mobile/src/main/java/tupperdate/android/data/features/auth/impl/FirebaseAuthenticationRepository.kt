@@ -3,6 +3,7 @@ package tupperdate.android.data.features.auth.impl
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import org.apache.commons.codec.binary.Base64
+import tupperdate.android.BuildConfig
 import tupperdate.android.data.InternalDataApi
 import tupperdate.android.data.features.auth.AuthenticationRepository
 import tupperdate.android.data.features.auth.AuthenticationRepository.ProfileResult
@@ -31,12 +33,15 @@ class FirebaseAuthenticationRepository(
         get() = auth.currentUserFlow.map {
             // TODO : Drastically improve this.
             it?.let { user ->
+                val token = user.getIdToken(false).await().token!!
+                if (BuildConfig.DEBUG) Log.d("Toky", token)
+
                 try {
                     val userDTO: UserDTO = client.get("/users/${user.uid}")
                     return@let AuthenticationStatus.Profile(
                         identifier = user.uid,
                         phoneNumber = user.phoneNumber!!,
-                        token = user.getIdToken(false).await().token!!,
+                        token = token,
                         displayName = userDTO.displayName!!,
                         displayPictureUrl = userDTO.picture,
                     )
@@ -44,7 +49,7 @@ class FirebaseAuthenticationRepository(
                     return@let AuthenticationStatus.NoProfile(
                         identifier = user.uid,
                         phoneNumber = user.phoneNumber!!,
-                        token = user.getIdToken(false).await().token!!, // TODO : Handle bad conn.
+                        token = token, // TODO : Handle bad conn.
                     )
                 }
             } ?: AuthenticationStatus.NoAuthentication
