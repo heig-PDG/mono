@@ -12,17 +12,16 @@ import tupperdate.android.ui.navigation.LoggedOut
 @Composable
 fun TupperdateApp() {
     when (AmbientProfile.current) {
-        null -> {
+        AuthenticationStatus.Unknown, is AuthenticationStatus.LoadingProfile -> {
             /* Still loading. */
         }
-        is AuthenticationStatus.NoAuthentication -> {
+        is AuthenticationStatus.None -> {
             LoggedOut()
         }
-        is AuthenticationStatus.NoProfile -> {
-            // TODO : Display the screen to set the profile.
-            LoggedOut()
+        is AuthenticationStatus.AbsentProfile -> {
+            // Profile selection screen.
         }
-        is AuthenticationStatus.Profile -> {
+        is AuthenticationStatus.CompleteProfile -> {
             LoggedIn()
         }
     }

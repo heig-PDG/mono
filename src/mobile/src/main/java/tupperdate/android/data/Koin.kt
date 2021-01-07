@@ -9,7 +9,7 @@ import io.ktor.client.features.json.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import org.koin.dsl.module
-import tupperdate.android.data.features.auth.impl.firebase
+import tupperdate.android.data.features.auth.firebase.firebase
 import tupperdate.android.data.room.TupperdateDatabase
 
 @InternalDataApi

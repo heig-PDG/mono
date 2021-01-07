@@ -1,4 +1,4 @@
-package tupperdate.android.data.features.auth.impl
+package tupperdate.android.data.features.auth.firebase
 
 import android.content.ContentResolver
 import android.content.Context
@@ -7,14 +7,12 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import io.ktor.client.*
 import io.ktor.client.request.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
 import org.apache.commons.codec.binary.Base64
 import tupperdate.android.BuildConfig
 import tupperdate.android.data.InternalDataApi
+import tupperdate.android.data.dropAfterInstance
 import tupperdate.android.data.features.auth.AuthenticationRepository
 import tupperdate.android.data.features.auth.AuthenticationRepository.ProfileResult
 import tupperdate.android.data.features.auth.AuthenticationStatus
@@ -38,7 +36,7 @@ class FirebaseAuthenticationRepository(
 
                 try {
                     val userDTO: UserDTO = client.get("/users/${user.uid}")
-                    return@let AuthenticationStatus.Profile(
+                    return@let AuthenticationStatus.CompleteProfile(
                         identifier = user.uid,
                         phoneNumber = user.phoneNumber!!,
                         token = token,
@@ -46,14 +44,18 @@ class FirebaseAuthenticationRepository(
                         displayPictureUrl = userDTO.picture,
                     )
                 } catch (t: Throwable) {
-                    return@let AuthenticationStatus.NoProfile(
+                    return@let AuthenticationStatus.AbsentProfile(
                         identifier = user.uid,
-                        phoneNumber = user.phoneNumber!!,
                         token = token, // TODO : Handle bad conn.
                     )
                 }
-            } ?: AuthenticationStatus.NoAuthentication
+            } ?: AuthenticationStatus.None
         }
+            // Only allow upgrades.
+            .dropAfterInstance<AuthenticationStatus, AuthenticationStatus.Identified>()
+            .dropAfterInstance<AuthenticationStatus, AuthenticationStatus.Connected>()
+            .dropAfterInstance<AuthenticationStatus, AuthenticationStatus.Loaded>()
+            .dropAfterInstance<AuthenticationStatus, AuthenticationStatus.Displayable>()
 
     override suspend fun updateProfile(
         displayName: String,
