@@ -14,7 +14,7 @@ import tupperdate.android.data.room.TupperdateDatabase
 
 @InternalDataApi
 private val KoinKtorModule = module {
-    factory {
+    single {
         HttpClient {
             install(Auth) { firebase() }
             install(JsonFeature)

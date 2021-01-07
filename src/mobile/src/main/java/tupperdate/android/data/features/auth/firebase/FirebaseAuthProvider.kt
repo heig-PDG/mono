@@ -35,7 +35,7 @@ private class AuthProvider(
             .map { it.token }
             .filterNotNull()
             .first()
-        request.header(HttpHeaders.Authorization, "Bearer ${token}")
+        request.header(HttpHeaders.Authorization, "Bearer $token")
     }
 
     override fun isApplicable(auth: HttpAuthHeader): Boolean {
