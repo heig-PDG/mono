@@ -11,94 +11,35 @@ import androidx.compose.runtime.Providers
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
 import tupperdate.android.R
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.TupperdateTypography
 import tupperdate.android.ui.theme.material.BrandedButton
 import tupperdate.android.ui.theme.material.BrandedTitleText
-import tupperdate.android.data.legacy.api.AuthenticationApi
-
-private sealed class State
-private data class Error(val error: LocalError) : State()
-private object Pending : State()
-private object WaitingForInput : State()
-
-private enum class LocalError {
-    Internal,
-    InvalidNumber,
-}
 
 @Composable
-private fun getErrorString(error: LocalError): String {
+private fun getErrorString(error: OnboardingViewModel.LocalError): String {
     return when (error) {
-        LocalError.Internal -> stringResource(R.string.onboarding_error_internal)
-        LocalError.InvalidNumber -> stringResource(R.string.onboarding_requestCode_error_invalid_number)
+        OnboardingViewModel.LocalError.Internal -> stringResource(R.string.onboarding_error_internal)
+        OnboardingViewModel.LocalError.InvalidNumber -> stringResource(R.string.onboarding_requestCode_error_invalid_number)
     }
-}
-
-@Composable
-fun Onboarding(
-    auth: AuthenticationApi,
-    verificationScreen: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val scope = AmbientLifecycleOwner.current.lifecycleScope
-
-    val (phone, setPhone) = remember { mutableStateOf("") }
-    val (state, setState) = remember { mutableStateOf<State>(WaitingForInput) }
-
-    Onboarding(
-        phone = phone,
-        onPhoneInputValueChange = {
-            setState(WaitingForInput)
-            setPhone(it)
-        },
-        error = when (state) {
-            is Error -> state.error
-            else -> null
-        },
-        buttonText = when (state) {
-            is Pending -> stringResource(R.string.onboarding_button_loading_text)
-            else -> stringResource(R.string.onboarding_button_text)
-        },
-        onClick = {
-            scope.launch {
-                if (state != Pending) {
-                    setState(Pending)
-                    when (auth.requestCode(phone)) {
-                        AuthenticationApi.RequestCodeResult.LoggedIn -> Unit
-                        AuthenticationApi.RequestCodeResult.RequiresVerification ->
-                            verificationScreen()
-                        AuthenticationApi.RequestCodeResult.InvalidNumberError ->
-                            setState(Error(LocalError.InvalidNumber))
-                        AuthenticationApi.RequestCodeResult.InternalError ->
-                            setState(Error(LocalError.InvalidNumber))
-                    }
-                }
-            }
-        },
-        modifier = modifier,
-    )
 }
 
 /**
  * Stateless onboarding component
  */
 @Composable
-private fun Onboarding(
+fun Onboarding(
     phone: String,
     onPhoneInputValueChange: (String) -> Unit,
     buttonText: String,
     onClick: () -> Unit,
-    error: LocalError?,
+    error: OnboardingViewModel.LocalError?,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -157,7 +98,7 @@ private fun Onboarding(
 private fun ViewPhoneInput(
     phone: String,
     onValueChange: (String) -> Unit,
-    error: LocalError?,
+    error: OnboardingViewModel.LocalError?,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier) {
@@ -177,24 +118,6 @@ private fun ViewPhoneInput(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun OnboardingPreview() {
-    // Use a real device to launch the preview.
-    // TODO : Use a stateless preview.
-    // val owner = LifecycleOwnerAmbient.current
-    // val api = remember { owner.api() }
-    // TupperdateTheme {
-    //     Onboarding(
-    //         api.authentication,
-    //         {},
-    //         {},
-    //         Modifier.background(Color.White)
-    //             .fillMaxSize()
-    //     )
-    // }
 }
 
 @Preview(showBackground = true)
@@ -220,7 +143,7 @@ private fun ViewPhoneInputNormalInvalidNumber() {
         ViewPhoneInput(
             phone = phone,
             onValueChange = setPhone,
-            error = LocalError.InvalidNumber,
+            error = OnboardingViewModel.LocalError.InvalidNumber,
         )
     }
 }
@@ -234,7 +157,7 @@ private fun ViewPhoneInputNormalInternalError() {
         ViewPhoneInput(
             phone = phone,
             onValueChange = setPhone,
-            error = LocalError.Internal,
+            error = OnboardingViewModel.LocalError.Internal,
         )
     }
 }

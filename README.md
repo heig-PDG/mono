@@ -71,3 +71,4 @@ This table represents the total time invested. It will be updated two times a we
 | 2020-12-29 | 112h 43m 49s |
 | 2021-01-01 | 112h 43m 49s |
 | 2021-01-05 | 112h 43m 49s |
+| 2021-01-08 | 112h 43m 49s |

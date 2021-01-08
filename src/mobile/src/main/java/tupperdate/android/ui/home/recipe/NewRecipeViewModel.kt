@@ -1,8 +1,7 @@
 package tupperdate.android.ui.home.recipe
 
-import android.app.Application
 import android.net.Uri
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,10 +12,9 @@ import tupperdate.android.data.features.recipe.NewRecipe
 import tupperdate.android.data.features.recipe.RecipeRepository
 
 class NewRecipeViewModel(
-    application: Application,
-    private val repository: RecipeRepository,
     private val picker: ImagePicker,
-) : AndroidViewModel(application) {
+    private val repository: RecipeRepository,
+) : ViewModel() {
 
     private val uri = MutableStateFlow<Uri?>(null)
     private val picture = uri.filterNotNull()

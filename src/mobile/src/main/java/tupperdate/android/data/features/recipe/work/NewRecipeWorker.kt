@@ -2,6 +2,8 @@ package tupperdate.android.data.features.recipe.work
 
 import android.content.ContentResolver
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.work.CoroutineWorker
 import androidx.work.Data
@@ -19,6 +21,7 @@ import tupperdate.android.data.InternalDataApi
 import tupperdate.android.data.features.recipe.NewRecipe
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.common.dto.RecipeAttributesDTO
+import java.io.ByteArrayOutputStream
 
 @OptIn(KoinApiExtension::class)
 @InternalDataApi
@@ -30,9 +33,9 @@ class NewRecipeWorker(
     private val client: HttpClient by inject()
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-        val base64Image = inputData.getString(RecipeImageBase64)
+        val base64Image = inputData.getString(RecipeImageUri)
             ?.let(Uri::parse)
-            ?.readFileAsBase64(applicationContext.contentResolver)
+            ?.readFileAndCompressAsBase64(applicationContext.contentResolver)
 
         val dto = NewRecipeDTO(
             title = requireNotNull(inputData.getString(RecipeTitle)),
@@ -63,7 +66,7 @@ class NewRecipeWorker(
         private const val RecipeIsVegetarian = "vegetarian"
         private const val RecipeIsWarm = "warm"
         private const val RecipeHasAllergens = "allergens"
-        private const val RecipeImageBase64 = "picture"
+        private const val RecipeImageUri = "picture"
 
         /**
          * Creates the [Data] associated with the creation of a [NewRecipe].
@@ -76,14 +79,19 @@ class NewRecipeWorker(
                 RecipeIsVegetarian to recipe.isVegan,
                 RecipeIsWarm to recipe.isWarm,
                 RecipeHasAllergens to recipe.hasAllergens,
-                RecipeImageBase64 to recipe.picture?.toString(),
+                RecipeImageUri to recipe.picture?.toString(),
             )
         }
     }
 }
 
-private fun Uri.readFileAsBase64(contentResolver: ContentResolver): String? =
-    contentResolver.openInputStream(this)
-        ?.buffered()
-        ?.readBytes()
-        ?.let(Base64::encodeBase64String)
+// This could be adjusted depending on some device configuration. Ranges from 0-100
+private const val CompressFactor = 10
+
+// TODO : Factorize this.
+private fun Uri.readFileAndCompressAsBase64(contentResolver: ContentResolver): String {
+    val bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(this))
+    val array = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.JPEG, CompressFactor, array)
+    return String(array.toByteArray().let(Base64::encodeBase64))
+}
