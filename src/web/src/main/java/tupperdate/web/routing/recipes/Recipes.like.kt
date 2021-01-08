@@ -32,11 +32,11 @@ fun Route.recipesPut(store: Firestore) {
         val userDoc = store.collection("users").document(callerId)
 
         // A user can't like his own recipe
-        //if (callerId == userId) statusException(HttpStatusCode.Forbidden)
+        if (callerId == userId) statusException(HttpStatusCode.Forbidden)
 
         fun smallerId() = minOf(callerId, userId)
         fun greaterId() = maxOf(callerId, userId)
-        fun callerLike() = if (callerId < userId) "user1LikedRecipes" else "user2LikedRecipes"
+        fun callerLike() = if (userId < callerId) "user1Recipes" else "user2Recipes"
 
         val chatDoc = store.collection("chats").document(smallerId() + "_" + greaterId())
 
