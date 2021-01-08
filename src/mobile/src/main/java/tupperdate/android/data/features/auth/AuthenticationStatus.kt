@@ -11,14 +11,6 @@ sealed class AuthenticationStatus {
     }
 
     /**
-     * An interface that's implemented by authentication statuses that can interact with the server,
-     * and have a token that can be used to decorate requests.
-     */
-    interface Connected : Identified {
-        val token: String
-    }
-
-    /**
      * An interface that's implemented by all the authentication statuses that can be displayed on
      * the screen with the profile information.
      */
@@ -59,8 +51,7 @@ sealed class AuthenticationStatus {
      */
     data class AbsentProfile(
         override val identifier: String,
-        override val token: String,
-    ) : AuthenticationStatus(), Loaded, Identified, Connected
+    ) : AuthenticationStatus(), Loaded, Identified
 
     /**
      * The user profile is complete, and they can be displayed.
@@ -68,8 +59,7 @@ sealed class AuthenticationStatus {
     data class CompleteProfile(
         override val identifier: String,
         override val phoneNumber: String,
-        override val token: String,
         override val displayName: String,
         override val displayPictureUrl: String?,
-    ) : AuthenticationStatus(), Loaded, Connected, Displayable
+    ) : AuthenticationStatus(), Loaded, Displayable
 }

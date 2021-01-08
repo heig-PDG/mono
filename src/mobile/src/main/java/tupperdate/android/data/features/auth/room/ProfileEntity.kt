@@ -13,6 +13,4 @@ data class ProfileEntity(
     @ColumnInfo(name = "name") val displayName: String,
     @ColumnInfo(name = "picture") val profilePicture: String?,
     @ColumnInfo(name = "phone") val phone: String,
-    @ColumnInfo(name = "token") val token: String,
-    @ColumnInfo(name = "token_expiry") val tokenExpirySeconds: Long,
 )

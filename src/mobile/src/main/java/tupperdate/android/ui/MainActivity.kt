@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.setContent
 import org.koin.android.ext.android.get
 import tupperdate.android.data.RequiresParameterInjection
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         val picker = SystemImagePicker(this)
 
         setContent {
-            val profile by auth.status.collectAsState(AuthenticationStatus.Unknown)
+            val profile by remember { auth.status }.collectAsState(AuthenticationStatus.Unknown)
             Providers(
                 // Provide API ambients that require an instance of an Activity to properly work.
                 // This way, we don't have any memory leaks, and avoid duplicate calls to

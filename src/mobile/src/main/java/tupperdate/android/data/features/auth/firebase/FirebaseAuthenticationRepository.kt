@@ -3,14 +3,12 @@ package tupperdate.android.data.features.auth.firebase
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import io.ktor.client.*
 import io.ktor.client.request.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.tasks.await
 import org.apache.commons.codec.binary.Base64
-import tupperdate.android.BuildConfig
 import tupperdate.android.data.InternalDataApi
 import tupperdate.android.data.dropAfterInstance
 import tupperdate.android.data.features.auth.AuthenticationRepository
@@ -24,45 +22,51 @@ import tupperdate.common.dto.UserDTO
 class FirebaseAuthenticationRepository(
     private val context: Context,
     private val client: HttpClient,
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance(),
+    auth: FirebaseAuth = FirebaseAuth.getInstance(),
 ) : AuthenticationRepository {
 
-    override val status: Flow<AuthenticationStatus>
-        get() = auth.currentUserFlow.map {
-            // TODO : Drastically improve this.
-            it?.let { user ->
-                val token = user.getIdToken(false).await().token!!
-                if (BuildConfig.DEBUG) Log.d("Toky", token)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val status: Flow<AuthenticationStatus> = auth.currentUserFlow.transformLatest { user ->
 
-                try {
-                    val userDTO: UserDTO = client.get("/users/${user.uid}")
-                    return@let AuthenticationStatus.CompleteProfile(
-                        identifier = user.uid,
-                        phoneNumber = user.phoneNumber!!,
-                        token = token,
-                        displayName = userDTO.displayName!!,
-                        displayPictureUrl = userDTO.picture,
-                    )
-                } catch (t: Throwable) {
-                    return@let AuthenticationStatus.AbsentProfile(
-                        identifier = user.uid,
-                        token = token, // TODO : Handle bad conn.
-                    )
-                }
-            } ?: AuthenticationStatus.None
+        // Handle non-authenticated users.
+        if (user == null) {
+            emit(AuthenticationStatus.None)
+            return@transformLatest
         }
-            // Only allow upgrades.
-            .dropAfterInstance<AuthenticationStatus, AuthenticationStatus.Identified>()
-            .dropAfterInstance<AuthenticationStatus, AuthenticationStatus.Connected>()
-            .dropAfterInstance<AuthenticationStatus, AuthenticationStatus.Loaded>()
-            .dropAfterInstance<AuthenticationStatus, AuthenticationStatus.Displayable>()
+
+        // Start loading the profile information.
+        emit(AuthenticationStatus.LoadingProfile(user.uid))
+
+        // TODO : Eventually handle backoff, retries, etc. Maybe use WorkManager ?
+        try {
+            val userDTO: UserDTO = client.get("/users/${user.uid}")
+            emit(
+                AuthenticationStatus.CompleteProfile(
+                    identifier = user.uid,
+                    phoneNumber = user.phoneNumber!!,
+                    displayName = userDTO.displayName!!,
+                    displayPictureUrl = userDTO.picture,
+                )
+            )
+        } catch (t: Throwable) {
+            emit(
+                AuthenticationStatus.AbsentProfile(
+                    identifier = user.uid,
+                )
+            )
+        }
+    }
+        // Only allow upgrades.
+        .dropAfterInstance<AuthenticationStatus, AuthenticationStatus.Identified>()
+        .dropAfterInstance<AuthenticationStatus, AuthenticationStatus.Loaded>()
+        .dropAfterInstance<AuthenticationStatus, AuthenticationStatus.Displayable>()
 
     override suspend fun updateProfile(
         displayName: String,
         picture: ImagePicker.Handle?
     ): ProfileResult {
 
-        val connected = status.filterIsInstance<AuthenticationStatus.Connected>().first()
+        val connected = status.filterIsInstance<AuthenticationStatus.Identified>().first()
 
         return try {
             // TODO : Reload the internal profile.
