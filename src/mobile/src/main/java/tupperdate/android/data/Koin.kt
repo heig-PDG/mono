@@ -2,7 +2,6 @@ package tupperdate.android.data
 
 import androidx.room.Room
 import androidx.work.WorkManager
-import com.google.firebase.auth.FirebaseAuth
 import io.ktor.client.*
 import io.ktor.client.features.*
 import io.ktor.client.features.auth.*
@@ -10,15 +9,14 @@ import io.ktor.client.features.json.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import org.koin.dsl.module
-import tupperdate.android.data.legacy.RealAuthenticationApi
-import tupperdate.android.data.legacy.auth.firebase
+import tupperdate.android.data.features.auth.impl.firebase
 import tupperdate.android.data.room.TupperdateDatabase
 
 @InternalDataApi
 private val KoinKtorModule = module {
-    single {
+    factory {
         HttpClient {
-            install(Auth) { firebase(RealAuthenticationApi(get(), FirebaseAuth.getInstance())) }
+            install(Auth) { firebase() }
             install(JsonFeature)
             defaultRequest {
                 // TODO : Use HTTPS.

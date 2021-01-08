@@ -10,30 +10,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.AmbientLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
 import tupperdate.android.R
-import tupperdate.android.data.legacy.api.AuthenticationApi
-import tupperdate.android.ui.onboarding.ConfirmationState.*
+import tupperdate.android.ui.onboarding.OnboardingConfirmationViewModel.ConfirmationState
+import tupperdate.android.ui.onboarding.OnboardingConfirmationViewModel.ConfirmationState.*
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.TupperdateTypography
 import tupperdate.android.ui.theme.material.BrandedButton
 
-private enum class ConfirmationState {
-    WaitingForInput,
-    Pending,
-    VerificationError,
-    InternalError,
-}
-
-private fun isError(state: ConfirmationState): Boolean {
+fun isError(state: ConfirmationState): Boolean {
     return when (state) {
         VerificationError -> true
         InternalError -> true
@@ -42,7 +32,7 @@ private fun isError(state: ConfirmationState): Boolean {
 }
 
 @Composable
-private fun getErrorMsg(state: ConfirmationState): String? {
+fun getErrorMsg(state: ConfirmationState): String? {
     return when (state) {
         VerificationError -> stringResource(R.string.onboardingConfirmation_verification_error)
         InternalError -> stringResource(R.string.onboarding_error_internal)
@@ -52,45 +42,6 @@ private fun getErrorMsg(state: ConfirmationState): String? {
 
 @Composable
 fun OnboardingConfirmation(
-    auth: AuthenticationApi,
-    onBack: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val scope = AmbientLifecycleOwner.current.lifecycleScope
-
-    val (code, setCode) = remember { mutableStateOf("") }
-    val (state, setState) = remember { mutableStateOf(WaitingForInput) }
-
-    OnboardingConfirmation(
-        code = code,
-        onCodeChanged = {
-            setCode(it)
-            setState(WaitingForInput)
-        },
-        buttonText = when (state) {
-            Pending -> stringResource(R.string.onboardingConfirmation_button_text_pending)
-            else -> stringResource(R.string.onboardingConfirmation_button_text)
-        },
-        onButtonClick = {
-            scope.launch {
-                setState(Pending)
-                when (auth.verify(code)) {
-                    AuthenticationApi.VerificationResult.LoggedIn -> Unit
-                    AuthenticationApi.VerificationResult.InvalidVerificationError ->
-                        setState(VerificationError)
-                    AuthenticationApi.VerificationResult.InternalError -> setState(InternalError)
-                }
-            }
-        },
-        onBack = onBack,
-        isErrorValue = isError(state),
-        errorMsg = getErrorMsg(state),
-        modifier = modifier,
-    )
-}
-
-@Composable
-private fun OnboardingConfirmation(
     code: String,
     onCodeChanged: (String) -> Unit,
     buttonText: String,

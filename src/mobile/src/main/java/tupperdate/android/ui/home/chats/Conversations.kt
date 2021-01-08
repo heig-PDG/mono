@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,15 +13,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
+import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.components.ProfilePicture
-import tupperdate.android.data.legacy.api.RecipeApi
 
 @Composable
 fun Conversations(
     onRecipeClick: () -> Unit,
     onProfileClick: () -> Unit,
-    recipes: List<RecipeApi.Recipe>,
+    recipes: List<Recipe>,
     conversations: List<Conversation>,
     modifier: Modifier = Modifier,
 ) {
@@ -48,12 +47,12 @@ fun Conversations(
 
 @Composable
 private fun Matches(
-    recipes: List<RecipeApi.Recipe>,
+    recipes: List<Recipe>,
     modifier: Modifier = Modifier,
 ) {
     LazyRow(modifier) {
         items(recipes) {
-            RecipeImage(imageUrl = it.pictureUrl, modifier)
+            RecipeImage(imageUrl = it.picture, modifier)
         }
     }
 }
@@ -74,10 +73,12 @@ private fun RecipeImage(
 @Composable
 fun ConversationsPagePreview() {
     val recipes = listOf(
-        RecipeApi.Recipe(
+        Recipe(
             title = "Lobster",
             description = "From Santa Monica",
-            pictureUrl = "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg"
+            picture = "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg",
+            identifier = "id",
+            timestamp = System.currentTimeMillis(),
         )
     )
     val conv = listOf(

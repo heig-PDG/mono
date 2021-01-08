@@ -4,7 +4,6 @@ import androidx.work.*
 import com.dropbox.android.external.store4.StoreBuilder
 import com.dropbox.android.external.store4.StoreRequest
 import io.ktor.client.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +25,6 @@ class RecipeRepositoryImpl(
     private val database: TupperdateDatabase,
     private val client: HttpClient,
     private val workManager: WorkManager,
-    private val scope: CoroutineScope
 ) : RecipeRepository {
 
     override fun create(recipe: NewRecipe) {
@@ -52,7 +50,7 @@ class RecipeRepositoryImpl(
         val store = StoreBuilder.from(
             RecipeFetchers.singleRecipeFetcher(client),
             RecipeSourceOfTruth(database.recipes()),
-        ).scope(scope).build()
+        ).build()
 
         return store.stream(StoreRequest.cached(id, true))
             .mapNotNull { it.dataOrNull() }
@@ -62,7 +60,7 @@ class RecipeRepositoryImpl(
         val store = StoreBuilder.from(
             RecipeFetchers.allRecipesFetcher(client),
             RecipeStackSourceOfTruth(database.recipes()),
-        ).scope(scope).build()
+        ).build()
 
         return store.stream(StoreRequest.cached(Unit, true))
             .mapNotNull { it.dataOrNull() }
