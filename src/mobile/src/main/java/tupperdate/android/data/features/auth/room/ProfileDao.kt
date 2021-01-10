@@ -2,6 +2,7 @@ package tupperdate.android.data.features.auth.room
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 import tupperdate.android.data.InternalDataApi
@@ -22,6 +23,6 @@ abstract class ProfileDao {
     @Query("DELETE FROM profiles")
     abstract suspend fun deleteAll()
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun save(profile: ProfileEntity)
 }

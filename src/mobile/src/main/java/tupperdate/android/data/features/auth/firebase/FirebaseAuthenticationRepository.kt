@@ -1,25 +1,28 @@
 package tupperdate.android.data.features.auth.firebase
 
 import android.content.Context
+import androidx.work.WorkManager
 import com.google.firebase.auth.FirebaseAuth
 import io.ktor.client.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import tupperdate.android.data.InternalDataApi
+import tupperdate.android.data.SyncRequestBuilder
 import tupperdate.android.data.dropAfterInstance
 import tupperdate.android.data.features.auth.AuthenticationRepository
 import tupperdate.android.data.features.auth.AuthenticationRepository.ProfileResult
 import tupperdate.android.data.features.auth.AuthenticationStatus
+import tupperdate.android.data.features.auth.work.RefreshProfileWorker
+import tupperdate.android.data.features.auth.work.UpdateProfileWorker
 import tupperdate.android.data.features.picker.ImagePicker
-import tupperdate.android.data.readFileAndCompressAsBase64
-import tupperdate.common.dto.MyUserDTO
 import tupperdate.common.dto.UserDTO
 
 @OptIn(InternalDataApi::class)
 class FirebaseAuthenticationRepository(
     private val context: Context,
     private val client: HttpClient,
+    private val work: WorkManager,
     auth: FirebaseAuth = FirebaseAuth.getInstance(),
 ) : AuthenticationRepository {
 
@@ -66,18 +69,24 @@ class FirebaseAuthenticationRepository(
 
         val connected = status.filterIsInstance<AuthenticationStatus.Identified>().first()
 
-        return try {
-            // TODO : Reload the internal profile.
-            // TODO : Use the WorkManager instead.
-            client.put<UserDTO>("/users/${connected.identifier}") {
-                body = MyUserDTO(
-                    displayName = displayName,
-                    imageBase64 = picture?.uri?.readFileAndCompressAsBase64(context.contentResolver),
+        val update = SyncRequestBuilder<UpdateProfileWorker>()
+            .setInputData(
+                UpdateProfileWorker.Data(
+                    uid = connected.identifier,
+                    name = displayName,
+                    picture = picture?.uri?.toString(),
                 )
-            }
-            ProfileResult.Success
-        } catch (t: Throwable) {
-            ProfileResult.BadLogin
-        }
+            )
+            .build()
+        val refresh = SyncRequestBuilder<RefreshProfileWorker>()
+            .build()
+
+        // Update, then refresh data.
+        work.beginWith(update)
+            .then(refresh)
+            .enqueue()
+
+        // Optimistic handling.
+        return ProfileResult.Success
     }
 }

@@ -6,5 +6,5 @@ import tupperdate.android.data.features.auth.firebase.FirebaseAuthenticationRepo
 
 @OptIn(InternalDataApi::class)
 val KoinModuleDataAuthentication = module {
-    single<AuthenticationRepository> { FirebaseAuthenticationRepository(get(), get()) }
+    single<AuthenticationRepository> { FirebaseAuthenticationRepository(get(), get(), get()) }
 }

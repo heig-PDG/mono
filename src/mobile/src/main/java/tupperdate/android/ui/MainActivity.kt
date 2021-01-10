@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val auth = FirebaseAuthenticationRepository(get(), get())
+        val auth = FirebaseAuthenticationRepository(get(), get(), get())
 
         val phone = FirebasePhoneRegistration(this)
         val picker = SystemImagePicker(this)
