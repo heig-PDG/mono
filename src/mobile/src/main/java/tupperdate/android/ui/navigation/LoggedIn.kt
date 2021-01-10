@@ -1,7 +1,6 @@
 package tupperdate.android.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavType.StringType
 import androidx.navigation.compose.*
 import tupperdate.android.ui.home.Home
@@ -29,10 +28,6 @@ private object LoggedInDestination {
  */
 @Composable
 fun LoggedIn() {
-    LaunchedEffect(true) {
-        // api.users.updateProfile()
-    }
-
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = LoggedInDestination.FEED) {
         composable(LoggedInDestination.NEW_RECIPE) {
