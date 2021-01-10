@@ -41,7 +41,7 @@ class RefreshProfileWorker(
                 ProfileFetcher(client),
                 ProfileSourceOfTruth(database.profiles())
             ).build()
-            store.fresh(user.uid to user.phoneNumber!!)
+            store.fresh(user.uid)
             Result.success()
         } catch (throwable: Throwable) {
             throwable.printStackTrace()
