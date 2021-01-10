@@ -49,7 +49,7 @@ class SyncPendingCreationsWorker(
                         warm = creation.warm,
                     )
                 )
-                client.post<RecipeDTO>("/recipes") {
+                client.post<Unit>("/recipes") {
                     body = dto
                 }
                 database.recipes().pendingCreationsDelete(creation.localId)

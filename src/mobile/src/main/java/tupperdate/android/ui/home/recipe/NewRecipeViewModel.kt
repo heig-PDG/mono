@@ -13,6 +13,7 @@ import tupperdate.android.data.features.recipe.RecipeRepository
 
 class NewRecipeViewModel(
     private val picker: ImagePicker,
+    private val onBack: () -> Unit,
     private val repository: RecipeRepository,
 ) : ViewModel() {
 
@@ -35,6 +36,7 @@ class NewRecipeViewModel(
     fun onSubmit(recipe: NewRecipe) {
         viewModelScope.launch {
             repository.create(recipe.copy(picture = uri.value))
+            onBack()
         }
     }
 }
