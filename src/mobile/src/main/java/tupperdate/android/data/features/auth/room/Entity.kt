@@ -14,3 +14,11 @@ data class ProfileEntity(
     @ColumnInfo(name = "picture") val profilePicture: String?,
     @ColumnInfo(name = "phone") val phone: String,
 )
+
+@Entity(tableName = "profilesCreations")
+@InternalDataApi
+data class PendingUpdateEntity(
+    @ColumnInfo(name = "localId") val id: Long = 1,
+    @ColumnInfo(name = "name") val displayName: String,
+    @ColumnInfo(name = "picture") val profilePicture: String?,
+)

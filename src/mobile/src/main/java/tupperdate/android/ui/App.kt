@@ -5,6 +5,7 @@ import tupperdate.android.data.features.auth.AuthenticationStatus
 import tupperdate.android.ui.ambients.AmbientProfile
 import tupperdate.android.ui.navigation.LoggedIn
 import tupperdate.android.ui.navigation.LoggedOut
+import tupperdate.android.ui.onboarding.OnboardingProfile
 
 /**
  * The main composable of the app.
@@ -19,7 +20,7 @@ fun TupperdateApp() {
             LoggedOut()
         }
         is AuthenticationStatus.AbsentProfile -> {
-            // Profile selection screen.
+            OnboardingProfile()
         }
         is AuthenticationStatus.CompleteProfile -> {
             LoggedIn()

@@ -1,20 +1,18 @@
 package tupperdate.android.data.features.auth.firebase
 
-import android.content.ContentResolver
 import android.content.Context
-import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import io.ktor.client.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
-import org.apache.commons.codec.binary.Base64
 import tupperdate.android.data.InternalDataApi
 import tupperdate.android.data.dropAfterInstance
 import tupperdate.android.data.features.auth.AuthenticationRepository
 import tupperdate.android.data.features.auth.AuthenticationRepository.ProfileResult
 import tupperdate.android.data.features.auth.AuthenticationStatus
 import tupperdate.android.data.features.picker.ImagePicker
+import tupperdate.android.data.readFileAndCompressAsBase64
 import tupperdate.common.dto.MyUserDTO
 import tupperdate.common.dto.UserDTO
 
@@ -74,7 +72,7 @@ class FirebaseAuthenticationRepository(
             client.put<UserDTO>("/users/${connected.identifier}") {
                 body = MyUserDTO(
                     displayName = displayName,
-                    imageBase64 = picture?.uri?.readFileAsBase64(context.contentResolver),
+                    imageBase64 = picture?.uri?.readFileAndCompressAsBase64(context.contentResolver),
                 )
             }
             ProfileResult.Success
@@ -83,11 +81,3 @@ class FirebaseAuthenticationRepository(
         }
     }
 }
-
-@InternalDataApi
-private fun Uri.readFileAsBase64(contentResolver: ContentResolver): String? =
-    contentResolver.openInputStream(this)
-        ?.buffered()
-        ?.readBytes()
-        ?.let(Base64::encodeBase64)
-        ?.let(::String)
