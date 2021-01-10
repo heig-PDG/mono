@@ -5,9 +5,9 @@ import androidx.room.RoomDatabase
 import tupperdate.android.data.InternalDataApi
 import tupperdate.android.data.features.auth.room.ProfileDao
 import tupperdate.android.data.features.auth.room.ProfileEntity
-import tupperdate.android.data.features.recipe.room.Dao
 import tupperdate.android.data.features.recipe.room.PendingNewRecipeEntity
 import tupperdate.android.data.features.recipe.room.PendingRateRecipeEntity
+import tupperdate.android.data.features.recipe.room.RecipeDao
 import tupperdate.android.data.features.recipe.room.RecipeEntity
 
 @Database(
@@ -24,5 +24,5 @@ import tupperdate.android.data.features.recipe.room.RecipeEntity
 @InternalDataApi
 abstract class TupperdateDatabase : RoomDatabase() {
     abstract fun profiles(): ProfileDao
-    abstract fun recipes(): Dao
+    abstract fun recipes(): RecipeDao
 }

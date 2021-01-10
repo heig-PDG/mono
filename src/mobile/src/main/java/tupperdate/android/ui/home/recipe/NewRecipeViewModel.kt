@@ -33,6 +33,8 @@ class NewRecipeViewModel(
     }
 
     fun onSubmit(recipe: NewRecipe) {
-        repository.create(recipe.copy(picture = uri.value))
+        viewModelScope.launch {
+            repository.create(recipe.copy(picture = uri.value))
+        }
     }
 }

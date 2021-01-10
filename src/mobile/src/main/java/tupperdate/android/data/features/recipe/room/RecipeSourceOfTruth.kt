@@ -11,11 +11,11 @@ import tupperdate.common.dto.RecipeDTO
  * An implementation of a [SourceOfTruth] that can manage individual recipes, with their unique
  * keys.
  *
- * @param dao the [Dao] that is accessed by this [SourceOfTruth].
+ * @param dao the [RecipeDao] that is accessed by this [SourceOfTruth].
  */
 @InternalDataApi
 class RecipeSourceOfTruth(
-    private val dao: Dao,
+    private val dao: RecipeDao,
 ) : SourceOfTruth<String, RecipeDTO, Recipe> {
 
     override suspend fun delete(key: String) {

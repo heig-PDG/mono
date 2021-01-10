@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.data.features.recipe.RecipeRepository
 
@@ -32,7 +33,9 @@ class FeedViewModel(
      */
     fun onLike() {
         val top = stack.value.firstOrNull() ?: return
-        recipeRepository.like(top.identifier)
+        viewModelScope.launch {
+            recipeRepository.like(top.identifier)
+        }
     }
 
     /**
@@ -40,6 +43,8 @@ class FeedViewModel(
      */
     fun onDislike() {
         val top = stack.value.firstOrNull() ?: return
-        recipeRepository.dislike(top.identifier)
+        viewModelScope.launch {
+            recipeRepository.dislike(top.identifier)
+        }
     }
 }

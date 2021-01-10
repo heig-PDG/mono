@@ -10,7 +10,7 @@ import tupperdate.android.data.InternalDataApi
 
 @Dao
 @InternalDataApi
-abstract class Dao {
+abstract class RecipeDao {
 
     // RECIPES ACCESS
 
@@ -91,6 +91,12 @@ abstract class Dao {
     )
     abstract suspend fun pendingRatingsInsert(id: String, like: Boolean, dislike: Boolean)
 
+    @Query("SELECT * FROM recipesRatings")
+    abstract fun pendingRatings(): Flow<List<PendingRateRecipeEntity>>
+
+    @Query("DELETE FROM recipesRatings WHERE recipesRatings.id = :id")
+    abstract suspend fun pendingRatingsDelete(id: String)
+
     /**
      * Likes a recipe, given its id.
      */
@@ -108,4 +114,15 @@ abstract class Dao {
         pendingRatingsInsert(id, like = false, dislike = true)
         recipesUnstack(id)
     }
+
+    // CREATIONS
+
+    @Query("SELECT * FROM recipesCreations")
+    abstract fun pendingCreations(): Flow<List<PendingNewRecipeEntity>>
+
+    @Insert
+    abstract suspend fun pendingRecipesInsert(dto: PendingNewRecipeEntity)
+
+    @Query("DELETE FROM recipesCreations WHERE recipesCreations.id = :localId")
+    abstract suspend fun pendingCreationsDelete(localId: Long)
 }

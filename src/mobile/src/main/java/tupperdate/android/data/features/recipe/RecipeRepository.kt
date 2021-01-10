@@ -8,10 +8,7 @@ import kotlinx.coroutines.flow.Flow
  */
 interface RecipeRepository {
 
-    /**
-     * Creates a new recipe, provided with a [NewRecipe] instance.
-     */
-    fun create(recipe: NewRecipe)
+    // READING
 
     /**
      * Returns the information of a single [Recipe] in the database.
@@ -24,12 +21,19 @@ interface RecipeRepository {
     fun stack(): Flow<List<Recipe>>
 
     /**
+     * Creates a new recipe, provided with a [NewRecipe] instance.
+     */
+    suspend fun create(recipe: NewRecipe)
+
+    // WRITING
+
+    /**
      * Likes a recipe, based on its id.
      */
-    fun like(id: String)
+    suspend fun like(id: String)
 
     /**
      * Dislikes a recipe, based on its id.
      */
-    fun dislike(id: String)
+    suspend fun dislike(id: String)
 }

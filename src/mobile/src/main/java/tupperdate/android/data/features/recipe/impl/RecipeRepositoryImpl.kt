@@ -13,10 +13,11 @@ import tupperdate.android.data.features.recipe.NewRecipe
 import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.data.features.recipe.RecipeRepository
 import tupperdate.android.data.features.recipe.api.RecipeFetchers
+import tupperdate.android.data.features.recipe.room.PendingNewRecipeEntity
 import tupperdate.android.data.features.recipe.room.RecipeSourceOfTruth
 import tupperdate.android.data.features.recipe.room.RecipeStackSourceOfTruth
-import tupperdate.android.data.features.recipe.work.NewRecipeWorker
-import tupperdate.android.data.features.recipe.work.PutRecipeWorker
+import tupperdate.android.data.features.recipe.work.SyncPendingCreationsWorker
+import tupperdate.android.data.features.recipe.work.SyncPendingVotesWorker
 import tupperdate.android.data.room.TupperdateDatabase
 import java.util.concurrent.TimeUnit
 
@@ -27,25 +28,6 @@ class RecipeRepositoryImpl(
     private val client: HttpClient,
     private val workManager: WorkManager,
 ) : RecipeRepository {
-
-    override fun create(recipe: NewRecipe) {
-
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        val request = OneTimeWorkRequestBuilder<NewRecipeWorker>()
-            .setBackoffCriteria(
-                BackoffPolicy.LINEAR,
-                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
-                TimeUnit.MILLISECONDS,
-            )
-            .setConstraints(constraints)
-            .setInputData(NewRecipeWorker.inputData(recipe))
-            .build()
-
-        workManager.enqueue(request)
-    }
 
     override fun single(id: String): Flow<Recipe> {
         val store = StoreBuilder.from(
@@ -67,41 +49,42 @@ class RecipeRepositoryImpl(
             .mapNotNull { it.dataOrNull() }
     }
 
-    override fun like(id: String) {
+    override suspend fun create(recipe: NewRecipe) {
+        database.recipes().pendingRecipesInsert(PendingNewRecipeEntity(
+            title = recipe.title,
+            description = recipe.description,
+            picture = recipe.picture?.toString(),
+            warm = recipe.isWarm,
+            vegetarian = recipe.isVegan,
+            allergens = recipe.hasAllergens,
+        ))
+        workManager.enqueue(syncRequestBuilder<SyncPendingCreationsWorker>().build())
+    }
 
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
+    override suspend fun like(id: String) {
+        database.recipes().recipesLike(id)
+        workManager.enqueue(syncRequestBuilder<SyncPendingVotesWorker>().build())
+    }
 
-        val request = OneTimeWorkRequestBuilder<PutRecipeWorker>()
+    override suspend fun dislike(id: String) {
+        database.recipes().recipesDislike(id)
+        workManager.enqueue(syncRequestBuilder<SyncPendingVotesWorker>().build())
+    }
+
+    /**
+     * Builds a new sync request job, which is run in the background when the network connectivity
+     * is guaranteed by the OS.
+     */
+    private inline fun <reified W : ListenableWorker> syncRequestBuilder() =
+        OneTimeWorkRequestBuilder<W>()
             .setBackoffCriteria(
                 BackoffPolicy.LINEAR,
                 OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
                 TimeUnit.MILLISECONDS,
             )
-            .setConstraints(constraints)
-            .setInputData(PutRecipeWorker.like(id))
-            .build()
-
-        workManager.enqueue(request)
-    }
-
-    override fun dislike(id: String) {
-
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        val request = OneTimeWorkRequestBuilder<PutRecipeWorker>()
-            .setBackoffCriteria(
-                BackoffPolicy.LINEAR,
-                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
-                TimeUnit.MILLISECONDS,
+            .setConstraints(
+                Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build()
             )
-            .setConstraints(constraints)
-            .setInputData(PutRecipeWorker.dislike(id))
-            .build()
-
-        workManager.enqueue(request)
-    }
 }

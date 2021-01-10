@@ -33,11 +33,11 @@ data class PendingRateRecipeEntity(
 @Entity(tableName = "recipesCreations")
 @InternalDataApi
 data class PendingNewRecipeEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "id") val identifier: String,
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id") val localId: Long = 0,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "description") val description: String,
-    @ColumnInfo(name = "picture") val picture: String,
+    @ColumnInfo(name = "picture") val picture: String?,
     @ColumnInfo(name = "isWarm") val warm: Boolean,
     @ColumnInfo(name = "isVegetarian") val vegetarian: Boolean,
     @ColumnInfo(name = "hasAllergens") val allergens: Boolean,
