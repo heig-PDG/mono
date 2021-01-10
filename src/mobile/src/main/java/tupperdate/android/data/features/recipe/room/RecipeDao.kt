@@ -36,16 +36,51 @@ abstract class RecipeDao {
         WHERE id = :forId
         """
     )
-    abstract fun recipe(forId: String): Flow<RecipeEntity>
+    abstract fun recipe(forId: String): Flow<RecipeEntity?>
 
+    /**
+     * Inserts a single [RecipeEntity], replacing any recipe with the same content locally.
+     *
+     * @see [recipesInsertAll] a variant that handles upserting gracefully.
+     */
     @Insert(onConflict = REPLACE)
-    // TODO : Handle upserting better ? Keep current on NULL.
     abstract suspend fun recipesInsert(entity: RecipeEntity): Long
 
-    // TODO : Handle inStack better.
-    @Insert(onConflict = REPLACE)
-    // TODO : Handle upserting better ? Keep existing on NULL.
-    abstract suspend fun recipesInsertAll(entities: Collection<RecipeEntity>)
+    /**
+     * Similar to [recipe], but does not return a [Flow] with changes over time. You're very
+     * unlikely to use this method.
+     *
+     * It remains here to support the [recipesInsertAll] method.
+     */
+    @Query(
+        """
+        SELECT * FROM recipes
+        WHERE id = :forId
+        """
+    )
+    @Deprecated("Prefer using recipe()")
+    abstract suspend fun recipeOnce(forId: String): RecipeEntity?
+
+    /**
+     * Inserts a [Collection] of [RecipeEntity], respecting client-side likes and dislikes. This
+     * makes sure that swiped cards (which are not in the stack anymore) do not get "added" in the
+     * stack again if the like / dislike has not been synced yet, but some recipes are updated from
+     * the server.
+     */
+    @Transaction
+    open suspend fun recipesInsertAll(entities: Collection<RecipeEntity>) {
+        for (recipe in entities) {
+            // We can't use recipe(recipe.identifier).firstOrNull() because it deadlocks. This is
+            // probably due to coroutine contexts differing between the invocations, resulting in
+            // what looks like two exclusive transactional calls to Room.
+            val existing = recipeOnce(recipe.identifier)
+            if (existing != null) {
+                recipesInsert(recipe.copy(inStack = existing.inStack != false))
+            } else {
+                recipesInsert(recipe)
+            }
+        }
+    }
 
     /**
      * Removes the recipe with the provided identifier from the local cache.

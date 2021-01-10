@@ -27,7 +27,7 @@ class RecipeSourceOfTruth(
     }
 
     override fun reader(key: String): Flow<Recipe?> {
-        return dao.recipe(forId = key).map(RecipeEntity::toRecipe)
+        return dao.recipe(forId = key).map { it?.toRecipe() }
     }
 
     override suspend fun write(key: String, value: RecipeDTO) {
