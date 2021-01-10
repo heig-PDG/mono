@@ -35,7 +35,6 @@ import tupperdate.android.ui.theme.TupperdateTypography
 fun Home(
     onNewRecipeClick: () -> Unit,
     onRecipeDetailsClick: (Recipe) -> Unit,
-    onDevClick: () -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     startingSection: HomeSections = HomeSections.Feed,
@@ -68,7 +67,6 @@ fun Home(
                     modifier = innerModifier,
                 )
                 HomeSections.Profile -> Profile(
-                    onDevClick = onDevClick,
                     modifier = innerModifier,
                 )
             }

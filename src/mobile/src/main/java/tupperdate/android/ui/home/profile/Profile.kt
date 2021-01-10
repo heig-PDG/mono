@@ -30,12 +30,10 @@ import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.TupperdateTypography
 import tupperdate.android.ui.theme.components.ProfilePicture
 import tupperdate.android.ui.theme.material.BrandedButton
-import tupperdate.android.ui.theme.modifier.multiClick
 import tupperdate.android.ui.theme.modifier.shade
 
 @Composable
 fun Profile(
-    onDevClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     // TODO: Use new API
@@ -69,7 +67,6 @@ fun Profile(
         },
         onLocationChange = {},
         onNewRecipeClick = {},
-        onDevClick = onDevClick,
         modifier = modifier,
     )
 }
@@ -89,7 +86,6 @@ private fun Profile(
     onPictureClick: () -> Unit,
     onLocationChange: (String) -> Unit,
     onNewRecipeClick: () -> Unit,
-    onDevClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -97,7 +93,6 @@ private fun Profile(
         Text(
             text = stringResource(R.string.profile_title_capital),
             style = TupperdateTypography.overline,
-            modifier = Modifier.multiClick(5, onDevClick)
         )
         ProfileRecap(
             name = name,
@@ -296,7 +291,6 @@ fun ProfilePreview() {
             onSaveClick = { setEditing(false) },
             onPictureClick = {},
             onLocationChange = {},
-            onDevClick = {},
             onNewRecipeClick = {})
     }
 }

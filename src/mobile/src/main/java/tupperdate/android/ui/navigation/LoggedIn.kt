@@ -53,7 +53,6 @@ fun LoggedIn() {
                     navController.navigate(LoggedInDestination.viewRecipe(it.identifier))
                 },
                 onBack = { navController.navigateUp() },
-                onDevClick = { },
                 startingSection = HomeSections.Conversations,
             )
         }
@@ -64,7 +63,6 @@ fun LoggedIn() {
                     navController.navigate(LoggedInDestination.viewRecipe(it.identifier))
                 },
                 onBack = { navController.navigateUp() },
-                onDevClick = { },
                 startingSection = HomeSections.Feed,
             )
         }
@@ -75,7 +73,6 @@ fun LoggedIn() {
                     navController.navigate(LoggedInDestination.viewRecipe(it.identifier))
                 },
                 onBack = { navController.navigateUp() },
-                onDevClick = { },
                 startingSection = HomeSections.Profile,
             )
         }
