@@ -62,7 +62,6 @@ fun Feed(
         // state.
         val topRecipe = recipes.firstOrNull()
         onCommit(topRecipe) {
-            println("Called with ${topRecipe?.title}")
             if (topRecipe != null && state.isSwiped) state.snapTo(NotSwiped)
         }
 
