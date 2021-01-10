@@ -44,8 +44,9 @@ private fun Route.all(store: Firestore) = get {
     val count = countParam.toIntOrNull() ?: statusException(HttpStatusCode.BadRequest)
 
     // TODO: Transaction
-    val lastSeenRecipe =
-        store.collection("users").document(uid).get().await().get("lastSeenRecipe") ?: 0
+    val lastSeenRecipe = store.collection("users").document(uid)
+        .get().await()
+        .get("lastSeenRecipe") ?: 0
 
     // Filter user own recipes
     val filtered = mutableListOf<DocumentSnapshot>()
