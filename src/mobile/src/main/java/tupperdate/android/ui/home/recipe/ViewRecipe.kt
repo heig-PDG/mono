@@ -35,7 +35,7 @@ fun ViewRecipe(
 
     val title by viewModel.title().collectAsState()
     val picture by viewModel.picture().collectAsState()
-    val description by viewModel.picture().collectAsState()
+    val description by viewModel.description().collectAsState()
 
     RecipeDetail(
         heroImage = picture,
