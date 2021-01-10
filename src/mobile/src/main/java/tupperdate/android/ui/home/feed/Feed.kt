@@ -5,6 +5,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.onCommit
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -54,24 +55,30 @@ fun Feed(
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Bottom),
         modifier = modifier.padding(16.dp)
     ) {
-        // TODO (alex) : We should not rely on recomposition. Eventually change SwipeStack API.
+        // Eventually improve the SwipeStack API to avoid onCommit usages.
         val state = rememberSwipeStackState()
-        when (state.value) {
-            NotSwiped -> Unit
-            SwipedStart -> {
-                onRecipeDisliked()
-                state.snapTo(NotSwiped)
-            }
-            SwipedEnd -> {
-                onRecipeLiked()
-                state.snapTo(NotSwiped)
+
+        // Use the top recipe as a sentinel as to whether we should snap back to the not swiped
+        // state.
+        val topRecipe = recipes.firstOrNull()
+        onCommit(topRecipe) {
+            println("Called with ${topRecipe?.title}")
+            if (topRecipe != null && state.isSwiped) state.snapTo(NotSwiped)
+        }
+
+        // Change state on recomposition.
+        val anchor = state.value
+        onCommit(anchor) {
+            when (anchor) {
+                NotSwiped -> Unit // Ignored.
+                SwipedStart -> onRecipeDisliked()
+                SwipedEnd -> onRecipeLiked()
             }
         }
 
         SwipeStack(
             items = recipes,
             modifier = Modifier.weight(1F),
-            // For the moment, reject all swipes.
             swipeStackState = state,
         ) { recipe ->
             RecipeCard(
