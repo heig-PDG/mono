@@ -1,9 +1,10 @@
 package tupperdate.android.ui.home.feed
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.data.features.recipe.RecipeRepository
 
@@ -13,32 +14,32 @@ import tupperdate.android.data.features.recipe.RecipeRepository
  * @param recipeRepository the [RecipeRepository] that can be used to fetch the recipes in the stack.
  */
 class FeedViewModel(
-    recipeRepository: RecipeRepository
+    private val recipeRepository: RecipeRepository
 ) : ViewModel() {
 
     private val stack = recipeRepository.stack()
-    private val dropped = MutableStateFlow(0)
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     /**
      * Returns a [Flow] of the recipes that should be displayed in the stack.
      */
     fun stack(): Flow<List<Recipe>> {
-        return combine(stack, dropped) { s, count -> s.drop(count) }
+        return stack
     }
 
     /**
      * Callback called when the user presses the like button.
      */
     fun onLike() {
-        // TODO : Actually use the API.
-        dropped.value = dropped.value + 1
+        val top = stack.value.firstOrNull() ?: return
+        recipeRepository.like(top.identifier)
     }
 
     /**
      * Callback called when the user pressed the dislike button.
      */
     fun onDislike() {
-        // TODO : Actually use the API.
-        dropped.value = dropped.value + 1
+        val top = stack.value.firstOrNull() ?: return
+        recipeRepository.dislike(top.identifier)
     }
 }

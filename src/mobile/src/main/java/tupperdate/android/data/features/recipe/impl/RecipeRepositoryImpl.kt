@@ -16,6 +16,7 @@ import tupperdate.android.data.features.recipe.api.RecipeFetchers
 import tupperdate.android.data.features.recipe.room.RecipeSourceOfTruth
 import tupperdate.android.data.features.recipe.room.RecipeStackSourceOfTruth
 import tupperdate.android.data.features.recipe.work.NewRecipeWorker
+import tupperdate.android.data.features.recipe.work.PutRecipeWorker
 import tupperdate.android.data.room.TupperdateDatabase
 import java.util.concurrent.TimeUnit
 
@@ -64,5 +65,43 @@ class RecipeRepositoryImpl(
 
         return store.stream(StoreRequest.cached(Unit, true))
             .mapNotNull { it.dataOrNull() }
+    }
+
+    override fun like(id: String) {
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val request = OneTimeWorkRequestBuilder<PutRecipeWorker>()
+            .setBackoffCriteria(
+                BackoffPolicy.LINEAR,
+                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                TimeUnit.MILLISECONDS,
+            )
+            .setConstraints(constraints)
+            .setInputData(PutRecipeWorker.like(id))
+            .build()
+
+        workManager.enqueue(request)
+    }
+
+    override fun dislike(id: String) {
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val request = OneTimeWorkRequestBuilder<PutRecipeWorker>()
+            .setBackoffCriteria(
+                BackoffPolicy.LINEAR,
+                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                TimeUnit.MILLISECONDS,
+            )
+            .setConstraints(constraints)
+            .setInputData(PutRecipeWorker.dislike(id))
+            .build()
+
+        workManager.enqueue(request)
     }
 }

@@ -11,11 +11,11 @@ import tupperdate.common.dto.RecipeDTO
  * An implementation of a [SourceOfTruth] that can manage groups of recipes (in the recipe stack)
  * and does not require a specific key to be fetched.
  *
- * @param dao the [RecipeDao] that is accessed by this [SourceOfTruth].
+ * @param dao the [Dao] that is accessed by this [SourceOfTruth].
  */
 @InternalDataApi
 class RecipeStackSourceOfTruth(
-    private val dao: RecipeDao,
+    private val dao: Dao,
 ) : SourceOfTruth<Unit, List<RecipeDTO>, List<Recipe>> {
 
     override suspend fun delete(key: Unit) {
@@ -27,10 +27,10 @@ class RecipeStackSourceOfTruth(
     }
 
     override fun reader(key: Unit): Flow<List<Recipe>?> {
-        return dao.findAll().map { it.map(RecipeEntity::toRecipe) }
+        return dao.recipesStack().map { it.map(RecipeEntity::toRecipe) }
     }
 
     override suspend fun write(key: Unit, value: List<RecipeDTO>) {
-        dao.insertAll(value.map(RecipeDTO::asRecipeEntity))
+        dao.recipesInsertAll(value.map { it.asRecipeEntity(inStack = true) })
     }
 }

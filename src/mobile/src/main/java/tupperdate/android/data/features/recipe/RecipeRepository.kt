@@ -22,4 +22,14 @@ interface RecipeRepository {
      * Returns all the [Recipe] that should be displayed in the stack.
      */
     fun stack(): Flow<List<Recipe>>
+
+    /**
+     * Likes a recipe, based on its id.
+     */
+    fun like(id: String)
+
+    /**
+     * Dislikes a recipe, based on its id.
+     */
+    fun dislike(id: String)
 }
