@@ -1,8 +1,10 @@
 package tupperdate.web.model
 
+import io.ktor.http.*
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.common.dto.RecipeAttributesDTO
 import tupperdate.common.dto.RecipeDTO
+import tupperdate.web.exceptions.statusException
 
 data class Recipe(
     val id: String? = null,
@@ -31,7 +33,6 @@ fun NewRecipeDTO.toRecipe(id: String, userId: String, picture: String): Recipe {
 }
 
 fun Recipe.toRecipeDTO(): RecipeDTO {
-    // TODO: fix default values problem
     return RecipeDTO(
         id = requireNotNull(this.id),
         title = this.title ?: "No title",
@@ -39,9 +40,9 @@ fun Recipe.toRecipeDTO(): RecipeDTO {
         timestamp = this.timestamp ?: 0,
         picture = this.picture ?: "https://www.specialtyproduce.com/sppics/691.png",
         attributes = RecipeAttributesDTO(
-            hasAllergens = this.attributes?.get("hasAllergens") ?: true,
-            vegetarian = this.attributes?.get("vegetarian") ?: false,
-            warm = this.attributes?.get("warm") ?: false,
+            hasAllergens = this.attributes?.get("hasAllergens") ?: statusException(HttpStatusCode.InternalServerError),
+            vegetarian = this.attributes["vegetarian"] ?: statusException(HttpStatusCode.InternalServerError),
+            warm = this.attributes["warm"] ?: statusException(HttpStatusCode.InternalServerError),
         )
     )
 }
