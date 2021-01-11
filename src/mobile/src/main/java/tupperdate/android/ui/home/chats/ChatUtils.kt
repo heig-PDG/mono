@@ -1,11 +1,12 @@
 package tupperdate.android.ui.home.chats
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.material.AmbientContentAlpha
-import androidx.compose.material.ContentAlpha
+import androidx.compose.material.ContentAlpha.high
+import androidx.compose.material.ContentAlpha.medium
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -25,62 +26,38 @@ data class Conversation(
 )
 
 @Composable
-fun Chats(
-    conversations: List<Conversation>,
-    onConversationClick: (Conversation) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    LazyColumn(modifier) {
-        items(conversations) {
-            Conversation(
-                title = it.title,
-                subtitle = it.subtitle,
-                highlighted = it.highlighted,
-                image = it.image,
-                onClick = { onConversationClick(it) }
-            )
-        }
-    }
-}
-
-@Composable
-private fun Conversation(
+fun Conversation(
     title: String,
     subtitle: String,
     highlighted: Boolean,
     image: Any,
-    onClick:() -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier.clickable(
-            onClick = onClick
-        ).padding(vertical = 8.dp),
+        modifier,
         Arrangement.spacedBy(16.dp),
-        Alignment.CenterVertically
+        Alignment.CenterVertically,
     ) {
         ProfilePicture(
-            image,
-            highlighted,
-            Modifier.size(56.dp)
+            image = image,
+            highlighted = highlighted,
+            modifier = Modifier.preferredSize(56.dp)
         )
-
-        val emphasis = if (highlighted) ContentAlpha.high
-        else ContentAlpha.medium
-        Providers(AmbientContentAlpha provides emphasis) {
-            Column {
+        Column {
+            val emphasis = if (highlighted) high else medium
+            Providers(AmbientContentAlpha provides emphasis) {
                 Text(
-                    title,
+                    text = title,
                     maxLines = 1,
                     style = typography.subtitle1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
-                Providers(AmbientContentAlpha provides ContentAlpha.medium) {
+                Providers(AmbientContentAlpha provides medium) {
                     Text(
-                        subtitle,
+                        text = subtitle,
                         maxLines = 1,
                         style = typography.subtitle2,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }

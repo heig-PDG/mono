@@ -1,9 +1,8 @@
 package tupperdate.android.ui.home.chats
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -25,36 +24,44 @@ fun Conversations(
     conversations: List<Conversation>,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier.fillMaxSize().padding(16.dp)) {
-
-        Text(
-            text = stringResource(id = R.string.chat_matches_list),
-            style = MaterialTheme.typography.overline,
-            modifier = Modifier.padding(top = 26.dp, bottom = 16.dp)
-        )
-
-        Matches(recipes = recipes)
-
-        Text(
-            text = stringResource(id = R.string.chat_conversations),
-            style = MaterialTheme.typography.overline,
-            modifier = Modifier.padding(top = 26.dp, bottom = 16.dp)
-        )
-
-        Chats(conversations = conversations, onConversationClick = {})
+    LazyColumn(modifier) {
+        item {
+            Header(stringResource(id = R.string.chat_matches_list))
+        }
+        item {
+            LazyRow(
+                contentPadding = PaddingValues(start = 8.dp, end = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                items(recipes) {
+                    RecipeImage(imageUrl = it.picture)
+                }
+            }
+        }
+        item {
+            Header(stringResource(R.string.chat_conversations))
+        }
+        items(conversations) {
+            Conversation(
+                title = it.title,
+                subtitle = it.subtitle,
+                highlighted = it.highlighted,
+                image = it.image,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = {})
+                    .padding(8.dp),
+            )
+        }
     }
 }
 
 @Composable
-private fun Matches(
-    recipes: List<Recipe>,
+private fun Header(
+    title: String,
     modifier: Modifier = Modifier,
 ) {
-    LazyRow(modifier) {
-        items(recipes) {
-            RecipeImage(imageUrl = it.picture, modifier)
-        }
-    }
+    Text(title, modifier.padding(16.dp), style = MaterialTheme.typography.overline)
 }
 
 @Composable
@@ -79,7 +86,21 @@ fun ConversationsPagePreview() {
             picture = "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg",
             identifier = "id",
             timestamp = System.currentTimeMillis(),
-        )
+        ),
+        Recipe(
+            title = "Lobster",
+            description = "From Santa Monica",
+            picture = "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg",
+            identifier = "id",
+            timestamp = System.currentTimeMillis(),
+        ),
+        Recipe(
+            title = "Lobster",
+            description = "From Santa Monica",
+            picture = "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg",
+            identifier = "id",
+            timestamp = System.currentTimeMillis(),
+        ),
     )
     val conv = listOf(
         Conversation(
@@ -109,6 +130,7 @@ fun ConversationsPagePreview() {
             onRecipeClick = {},
             onProfileClick = {},
             recipes = recipes,
-            conversations = conv)
+            conversations = conv
+        )
     }
 }
