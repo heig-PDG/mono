@@ -53,7 +53,7 @@ fun Application.installServer(firebase: FirebaseApp) {
         authenticate {
             accounts(FirebaseAuth.getInstance(firebase))
             recipes(firebase)
-            users(firebase)
+            users(firebase, FirebaseAuth.getInstance(firebase))
             chats(FirestoreClient.getFirestore(firebase))
         }
     }

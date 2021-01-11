@@ -1,6 +1,7 @@
 package tupperdate.web.routing.users
 
 import com.google.cloud.firestore.Firestore
+import com.google.firebase.auth.FirebaseAuth
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
@@ -17,13 +18,15 @@ import tupperdate.web.util.await
  *
  * @param store the [Firestore] instance that is used.
  */
-fun Route.usersGet(store: Firestore) = get("{userId}") {
+fun Route.usersGet(store: Firestore, auth: FirebaseAuth) = get("{userId}") {
     val uid = call.parameters["userId"] ?: statusException(HttpStatusCode.BadRequest)
     val authId = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+    val phone = auth.getUser(uid).phoneNumber
 
-    // TODO: Decide what happens if an authenticated user gets another user
+    if (authId != uid) statusException(HttpStatusCode.Unauthorized)
+
     val user = store.collection("users").document(uid)
         .get().await().toObject(User::class.java) ?: statusException(HttpStatusCode.NotFound)
 
-        call.respond(HttpStatusCode.OK, user.toUserDTO())
+        call.respond(HttpStatusCode.OK, user.toUserDTO(phone = phone))
 }
