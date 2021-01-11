@@ -1,13 +1,13 @@
 package tupperdate.web.routing.users
 
-import com.google.cloud.firestore.Firestore
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.cloud.FirestoreClient
 import io.ktor.routing.*
 
-fun Route.users(firebase: FirebaseApp) {
+fun Route.users(firebase: FirebaseApp, auth: FirebaseAuth) {
     route("/users") {
         usersPut(firebase)
-        usersGet(FirestoreClient.getFirestore(firebase))
+        usersGet(FirestoreClient.getFirestore(firebase), auth)
     }
 }
