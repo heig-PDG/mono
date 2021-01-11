@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.setContent
 import org.koin.android.ext.android.get
 import tupperdate.android.data.RequiresParameterInjection
-import tupperdate.android.data.features.auth.impl.FirebaseAuthenticationRepository
-import tupperdate.android.data.features.auth.impl.FirebasePhoneRegistration
+import tupperdate.android.data.features.auth.AuthenticationStatus
+import tupperdate.android.data.features.auth.firebase.FirebaseAuthenticationRepository
+import tupperdate.android.data.features.auth.firebase.FirebasePhoneRegistration
 import tupperdate.android.data.features.picker.impl.SystemImagePicker
 import tupperdate.android.ui.ambients.AmbientImagePicker
 import tupperdate.android.ui.ambients.AmbientPhoneRegistration
@@ -22,13 +24,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val auth = FirebaseAuthenticationRepository(get(), get())
+        val auth = FirebaseAuthenticationRepository(get(), get(), get())
 
         val phone = FirebasePhoneRegistration(this)
         val picker = SystemImagePicker(this)
 
         setContent {
-            val profile by auth.status.collectAsState(null)
+            val profile by remember { auth.status }.collectAsState(AuthenticationStatus.Unknown)
             Providers(
                 // Provide API ambients that require an instance of an Activity to properly work.
                 // This way, we don't have any memory leaks, and avoid duplicate calls to

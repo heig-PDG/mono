@@ -5,6 +5,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
+import tupperdate.android.data.features.recipe.NewRecipe
 import tupperdate.android.ui.ambients.AmbientImagePicker
 
 @Composable
@@ -13,7 +14,7 @@ fun NewRecipe(
     modifier: Modifier = Modifier,
 ) {
     val picker = AmbientImagePicker.current
-    val viewModel = getViewModel<NewRecipeViewModel> { parametersOf(picker) }
+    val viewModel = getViewModel<NewRecipeViewModel> { parametersOf(picker, onBack) }
 
     val defaultImage = remember { Uri.parse("https://via.placeholder.com/450") }
     val heroImage by viewModel.picture().collectAsState(defaultImage)
@@ -37,7 +38,7 @@ fun NewRecipe(
         onDeleteClick = { onBack() },
         onSaveClick = {
             viewModel.onSubmit(
-                tupperdate.android.data.features.recipe.NewRecipe(
+                NewRecipe(
                     title = recipe.title,
                     description = recipe.description,
                     isVegan = recipe.vegetarian,
@@ -46,7 +47,6 @@ fun NewRecipe(
                     picture = null, // TODO : Handle images.
                 )
             )
-            onBack()
         },
         onEdit = viewModel::onPick,
         modifier = modifier,

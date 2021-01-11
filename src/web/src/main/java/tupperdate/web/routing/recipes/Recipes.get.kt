@@ -1,5 +1,6 @@
 package tupperdate.web.routing.recipes
 
+import com.google.cloud.firestore.DocumentSnapshot
 import com.google.cloud.firestore.Firestore
 import io.ktor.application.*
 import io.ktor.http.*
@@ -14,8 +15,24 @@ import tupperdate.web.model.toRecipeDTO
 import tupperdate.web.util.await
 
 fun Route.recipesGet(store: Firestore) {
+    own(store)
     some(store)
     all(store)
+}
+
+/**
+ * Retrieves a [List] of all the [RecipeDTO] that the authenticated user has posted
+ *
+ * @param store the [Firestore] instance that is used.
+ */
+private fun Route.own(store: Firestore) = get("/own") {
+    // Extract query params.
+    val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+
+    val recipes = store.collection("recipes").whereEqualTo("userId", uid).get().await()
+        .toObjects(Recipe::class.java).map { it.toRecipeDTO() }
+
+    call.respond(recipes)
 }
 
 /**
@@ -43,14 +60,36 @@ private fun Route.all(store: Firestore) = get {
     val count = countParam.toIntOrNull() ?: statusException(HttpStatusCode.BadRequest)
 
     // TODO: Transaction
-    val lastSeenRecipe =
-        store.collection("users").document(uid).get().await().get("lastSeenRecipe") ?: 0
+    val lastSeenRecipe = store.collection("users").document(uid)
+        .get().await()
+        .get("lastSeenRecipe") ?: 0
 
-    // TODO: Filter user own recipes
-    val retrieved = store.collection("recipes").whereGreaterThan("timestamp", lastSeenRecipe)
-        .orderBy("timestamp").limit(count).get().await()
+    // Filter user own recipes
+    val filtered = mutableListOf<DocumentSnapshot>()
 
-    val recipes = retrieved.toObjects(Recipe::class.java)
+    var keepGoing = true
+    var lastSnapshot: DocumentSnapshot? = null
+    while (keepGoing) {
+        val remaining = count - filtered.size
+        val retrieved = when (lastSnapshot) {
+            null -> store.collection("recipes")
+                .whereGreaterThan("timestamp", lastSeenRecipe)
+                .orderBy("timestamp")
+                .limit(remaining)
+                .get().await()
+            else -> store.collection("recipes")
+                .whereGreaterThan("timestamp", lastSeenRecipe)
+                .orderBy("timestamp")
+                .startAfter(lastSnapshot)
+                .limit(remaining)
+                .get().await()
+        }
+        filtered.addAll(retrieved.filter { it["userId"] != uid })
+        lastSnapshot = retrieved.lastOrNull()
+        keepGoing = filtered.size < count && retrieved.size() == count && lastSnapshot != null
+    }
+
+    val recipes = filtered.mapNotNull { it.toObject(Recipe::class.java) }
     val dtos = recipes.map { it.toRecipeDTO() }
 
     call.respond(dtos)
