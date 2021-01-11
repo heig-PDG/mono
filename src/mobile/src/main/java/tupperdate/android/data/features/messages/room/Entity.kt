@@ -2,10 +2,18 @@ package tupperdate.android.data.features.messages.room
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import tupperdate.android.data.InternalDataApi
 import tupperdate.android.data.features.auth.firebase.FirebaseUid
 
+/**
+ * A [ConversationEntity] stores the details of a conversation. This includes the preview message
+ * body (if it actually exists), as well as some meta-data that indicates whether the conversation
+ * was accepted on the device.
+ *
+ * @see ConversationRecipeEntity the recipes associated with a [ConversationEntity].
+ */
 @InternalDataApi
 @Entity(tableName = "conversations")
 data class ConversationEntity(
@@ -18,8 +26,41 @@ data class ConversationEntity(
     @ColumnInfo(name = "accepted") val accepted: Boolean,
 )
 
-// TODO : Store the recipes as well.
+/**
+ * Each [ConversationEntity] comes with a set of [ConversationRecipeEntity]. These recipes are
+ * associated directly with the conversation entity; if it gets deleted, the associated recipes will
+ * get deleted too.
+ *
+ * These recipes can be displayed to the user to indicate what made multiple users match. This will
+ * for instance be the case match bubbles, or at the start of a direct conversation between two
+ * users.
+ *
+ * TODO : Actually store the recipes in the fetchers.
+ */
+@InternalDataApi
+@Entity(
+    primaryKeys = ["userId", "recipeId"],
+    foreignKeys = [ForeignKey(
+        entity = ConversationEntity::class,
+        parentColumns = ["id"],
+        childColumns = ["userId"],
+        onUpdate = ForeignKey.CASCADE,
+        onDelete = ForeignKey.CASCADE,
+    )]
+)
+data class ConversationRecipeEntity(
+    @ColumnInfo(name = "userId") val identifier: String,
+    @ColumnInfo(name = "recipeId") val recipeId: String,
+    @ColumnInfo(name = "recipePic") val recipePicture: String?,
+    @ColumnInfo(name = "recipeName") val recipeName: String,
+)
 
+/**
+ * A [MessageEntity] is exchanged between two participants. It has a sender, a recipient, a body,
+ * was sent at a certain timestamp (issued by the server) and a unique identifier.
+ *
+ * @see PendingMessageEntity for creating new messages
+ */
 @InternalDataApi
 @Entity(tableName = "messages")
 data class MessageEntity(
@@ -31,7 +72,13 @@ data class MessageEntity(
     @ColumnInfo(name = "body") val body: String,
 )
 
-// TODO : Display pending messages without flashing.
+/**
+ * Sent messages are created as [PendingMessageEntity], before being sent via a worker
+ * asynchronously. Because messages are sent in the order of their [identifier], no reordering takes
+ * place in case of intermittent connectivity with the remote server.
+ *
+ * TODO : Display pending messages without flashing.
+ */
 @InternalDataApi
 @Entity(tableName = "messagesCreations")
 data class PendingMessageEntity(

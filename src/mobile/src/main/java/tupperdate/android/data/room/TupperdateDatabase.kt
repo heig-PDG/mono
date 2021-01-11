@@ -5,10 +5,7 @@ import androidx.room.RoomDatabase
 import tupperdate.android.data.InternalDataApi
 import tupperdate.android.data.features.auth.room.ProfileDao
 import tupperdate.android.data.features.auth.room.ProfileEntity
-import tupperdate.android.data.features.messages.room.ConversationEntity
-import tupperdate.android.data.features.messages.room.MessageDao
-import tupperdate.android.data.features.messages.room.MessageEntity
-import tupperdate.android.data.features.messages.room.PendingMessageEntity
+import tupperdate.android.data.features.messages.room.*
 import tupperdate.android.data.features.recipe.room.PendingNewRecipeEntity
 import tupperdate.android.data.features.recipe.room.PendingRateRecipeEntity
 import tupperdate.android.data.features.recipe.room.RecipeDao
@@ -22,6 +19,7 @@ import tupperdate.android.data.features.recipe.room.RecipeEntity
         RecipeEntity::class,
         // Messaging API.
         ConversationEntity::class,
+        ConversationRecipeEntity::class,
         MessageEntity::class,
         // Changes to be sent to the server.
         PendingNewRecipeEntity::class,
