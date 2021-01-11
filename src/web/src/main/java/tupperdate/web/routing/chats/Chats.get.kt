@@ -18,8 +18,8 @@ fun Route.getChats(store: Firestore) = get {
     val smallerId = store.collection("chats").whereEqualTo("userId1", uid).get()
     val greaterId = store.collection("chats").whereEqualTo("userId2", uid).get()
 
-    val chats = smallerId.await().toObjects(Chat::class.java).filter { it.user2Recipes != null } +
-                greaterId.await().toObjects(Chat::class.java).filter { it.user1Recipes != null }
+    val chats = (smallerId.await().toObjects(Chat::class.java) + greaterId.await().toObjects(Chat::class.java))
+        .filter { it.user1Recipes != null && it.user2Recipes != null }
 
     val convs: List<Conv> = chats.map {
         val myId = if (uid == it.userId1) it.userId1 else it.userId2
