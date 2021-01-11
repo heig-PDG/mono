@@ -25,8 +25,7 @@ fun Route.postMessage(store: Firestore) = post("/{userId}/messages") {
     if (chat.user1Recipes == null || chat.user2Recipes == null) {
         statusException(HttpStatusCode.NotFound)
     }
-
-    val newDoc = store.collection("chats/${chatId}/messages").document()
+    val newDoc = store.collection("chats").document(chatId).collection("messages").document()
     val message = Message(
         id = newDoc.id,
         content = content.content,

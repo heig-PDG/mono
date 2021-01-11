@@ -24,7 +24,7 @@ fun Route.getMessages(store: Firestore) = get("/{userId}/messages") {
         statusException(HttpStatusCode.NotFound)
     }
 
-    val messages = store.collection("chats/${chatId}/messages")
+    val messages = store.collection("chats").document(chatId).collection("messages")
         .orderBy("timestamp", Query.Direction.DESCENDING).get().await()
         .toObjects(Message::class.java)
 

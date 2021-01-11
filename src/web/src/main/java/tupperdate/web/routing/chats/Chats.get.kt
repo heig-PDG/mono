@@ -44,7 +44,7 @@ fun Route.getChats(store: Firestore) = get {
             return@map ConversationDTO(
                 userId = conv.theirId,
                 displayName = user.displayName ?: statusException(HttpStatusCode.InternalServerError),
-                picture = user.picture ?: "NO PICTURE FIX ME", // TODO: Fix this shit
+                picture = user.picture ?: "https://thispersondoesnotexist.com/", // TODO: Fix me
                 lastMessage = store.collection("chats").document(conv.id).collection("messages")
                     .orderBy("timestamp", Query.Direction.DESCENDING).limit(1).get().await()
                     .toObjects(Message::class.java).getOrNull(0)?.toMessageDTO(),

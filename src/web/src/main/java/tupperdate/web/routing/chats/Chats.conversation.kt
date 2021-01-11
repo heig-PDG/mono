@@ -43,7 +43,7 @@ fun Route.getConvs(store: Firestore) = get("/{userId}") {
     val convDTO = ConversationDTO(
         userId = userId,
         displayName = user.displayName ?: statusException(HttpStatusCode.InternalServerError),
-        picture = user.picture ?: "NO PICTURE FIX THIS SHIT", // TODO: FIXME
+        picture = user.picture ?: "https://thispersondoesnotexist.com/", // TODO: Fix me
         lastMessage = store.collection("chats/${docId}/messages")
             .orderBy("timestamp", Query.Direction.DESCENDING).limit(1).get().await()
             .toObjects(Message::class.java).getOrNull(0)?.toMessageDTO(),
