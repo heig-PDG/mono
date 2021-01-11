@@ -59,13 +59,8 @@ fun Home(
                     onBack = onBack,
                     modifier = innerModifier,
                 )
-                HomeSections.Conversations -> Conversations(
-                    onRecipeClick = {},
-                    onProfileClick = {},
-                    recipes = listOf(),
-                    conversations = listOf(),
-                    modifier = innerModifier,
-                )
+                HomeSections.Conversations ->
+                    Conversations(modifier = innerModifier)
                 HomeSections.Profile -> Profile(
                     modifier = innerModifier,
                 )

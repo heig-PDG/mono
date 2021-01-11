@@ -17,14 +17,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import tupperdate.android.ui.theme.components.ProfilePicture
 
-data class Conversation(
-    val id: String,
-    val title: String,
-    val subtitle: String,
-    val highlighted: Boolean,
-    val image: Any,
-)
-
 @Composable
 fun Conversation(
     title: String,

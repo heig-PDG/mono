@@ -1,10 +1,13 @@
 package tupperdate.android.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavType.StringType
 import androidx.navigation.compose.*
+import org.koin.androidx.compose.getViewModel
 import tupperdate.android.ui.home.Home
 import tupperdate.android.ui.home.HomeSections
+import tupperdate.android.ui.home.feed.MatchDialog
 import tupperdate.android.ui.home.recipe.NewRecipe
 import tupperdate.android.ui.home.recipe.ViewRecipe
 
@@ -28,6 +31,19 @@ private object LoggedInDestination {
  */
 @Composable
 fun LoggedIn() {
+
+    val viewModel = getViewModel<LoggedInViewModel>()
+    val match = viewModel.match.collectAsState(null).value
+
+    if (match != null) {
+        MatchDialog(
+            myImageUrl = match.myPicture ?: "", // TODO : Handle default images.
+            theirImageUrl = match.theirPicture ?: "", // TODO : Handle default images.
+            onStartChattingClick = { viewModel.onAccept(match) },
+            onDismissRequest = { viewModel.onAccept(match) },
+        )
+    }
+
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = LoggedInDestination.FEED) {
         composable(LoggedInDestination.NEW_RECIPE) {

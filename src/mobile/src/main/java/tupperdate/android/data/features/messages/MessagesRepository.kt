@@ -42,10 +42,15 @@ interface MessagesRepository {
      * Returns a [Flow] of all the [messages] from a conversation with a specific user. These
      * messages will automatically get updated over time, as new data is generated on the server.
      */
-    fun messages(with: FirebaseUid): Flow<List<Message>>
+    fun messages(other: FirebaseUid): Flow<List<Message>>
 
     /**
      * Sends a new [String] message to the user with the given [FirebaseUid].
      */
     suspend fun send(to: FirebaseUid, message: String)
+
+    /**
+     * Accepts the given [Match], and acknowledges it locally.
+     */
+    suspend fun accept(match: Match)
 }
