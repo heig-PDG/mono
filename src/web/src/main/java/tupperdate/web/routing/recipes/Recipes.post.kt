@@ -36,8 +36,8 @@ fun Route.recipesPost(firebase: FirebaseApp) = post {
 
     val id = UUID.randomUUID().toString()
     val bytes = dto.imageBase64?.let { Base64.decodeBase64(it) }
-    // TODO : Don't add pictures for new recipes that don't provide any.
-    var pict = "https://thispersondoesnotexist.com/image"
+
+    var pict: String? = null
 
     if (bytes != null) {
         val fileName = "$id.jpg"

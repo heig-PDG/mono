@@ -157,7 +157,7 @@ private fun DisplayRecipeCard(
     ) {
         Box {
             CoilImage(
-                data = recipe.picture,
+                data = recipe.picture ?: "", // TODO: Fix this default value for missing images
                 modifier = Modifier.shade().fillMaxSize(),
                 fadeIn = true,
                 contentScale = ContentScale.Crop,

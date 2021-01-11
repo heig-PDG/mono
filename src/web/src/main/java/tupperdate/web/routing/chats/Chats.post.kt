@@ -1,26 +1,40 @@
 package tupperdate.web.routing.chats
 
 import com.google.cloud.firestore.Firestore
-import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.cloud.FirestoreClient
-import com.google.firebase.cloud.StorageClient
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import org.apache.commons.codec.binary.Base64
-import tupperdate.common.dto.NewRecipeDTO
-import tupperdate.common.dto.RecipeDTO
+import tupperdate.common.dto.MessageContentDTO
 import tupperdate.web.auth.firebaseAuthPrincipal
 import tupperdate.web.exceptions.statusException
-import tupperdate.web.model.toRecipe
-import tupperdate.web.model.toRecipeDTO
+import tupperdate.web.model.Chat
+import tupperdate.web.model.Message
+import tupperdate.web.model.toMessageDTO
 import tupperdate.web.util.await
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 fun Route.postMessage(store: Firestore) = post("/{userId}/messages") {
-    call.respond(HttpStatusCode.NotImplemented)
+    val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+    val userId = call.parameters["userId"] ?: statusException(HttpStatusCode.BadRequest)
+
+    val content = call.receive<MessageContentDTO>()
+
+    val chatId = minOf(uid, userId) + "_" + maxOf(uid, userId)
+    val chat = store.collection("chats").document(chatId).get().await().toObject(Chat::class.java) ?: statusException(HttpStatusCode.NotFound)
+
+    if (chat.user1Recipes == null || chat.user2Recipes == null) {
+        statusException(HttpStatusCode.NotFound)
+    }
+    val newDoc = store.collection("chats").document(chatId).collection("messages").document()
+    val message = Message(
+        id = newDoc.id,
+        content = content.content,
+        timestamp = System.currentTimeMillis(),
+        fromUser = uid
+    )
+
+    newDoc.set(message).await()
+
+    call.respond(message.toMessageDTO())
 }

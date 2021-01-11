@@ -38,7 +38,7 @@ fun ViewRecipe(
     val description by viewModel.description().collectAsState()
 
     RecipeDetail(
-        heroImage = picture,
+        heroImage = picture ?: "", // TODO: Fix this default value for missing images
         header = {
             Text(
                 text = stringResource(id = R.string.edit_recipe_title),

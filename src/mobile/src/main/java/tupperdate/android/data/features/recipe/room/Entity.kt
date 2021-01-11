@@ -15,7 +15,7 @@ data class RecipeEntity(
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "timestamp") val timestamp: Long,
-    @ColumnInfo(name = "picture") val picture: String,
+    @ColumnInfo(name = "picture") val picture: String?,
     @ColumnInfo(name = "inStack", defaultValue = "NULL") val inStack: Boolean?,
 )
 
