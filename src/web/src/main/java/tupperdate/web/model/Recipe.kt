@@ -36,7 +36,7 @@ fun Recipe.toRecipeDTO(): RecipeDTO {
     return RecipeDTO(
         id = requireNotNull(this.id),
         title = this.title ?: statusException(HttpStatusCode.InternalServerError),
-        description = this.description,
+        description = this.description ?: statusException(HttpStatusCode.InternalServerError),
         timestamp = this.timestamp ?: statusException(HttpStatusCode.InternalServerError),
         picture = this.picture,
         attributes = RecipeAttributesDTO(

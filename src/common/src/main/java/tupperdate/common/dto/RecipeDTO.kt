@@ -15,7 +15,7 @@ import java.util.*
 data class RecipeDTO(
     val id: String,
     val title: String,
-    val description: String?,
+    val description: String,
     @Serializable(with = TimestampSerializer::class)
     val timestamp: Long,
     val picture: String?,

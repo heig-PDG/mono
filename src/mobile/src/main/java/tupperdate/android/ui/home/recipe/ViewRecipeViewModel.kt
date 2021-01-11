@@ -33,6 +33,6 @@ class ViewRecipeViewModel(
 
     fun description(): StateFlow<String> = description
 
-    fun picture(): StateFlow<String> = picture
+    fun picture(): StateFlow<String?> = picture
 
 }
