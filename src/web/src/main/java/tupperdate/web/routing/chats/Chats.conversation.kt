@@ -40,19 +40,19 @@ fun Route.getConvs(store: Firestore) = get("/{userId}") {
         .toObject(User::class.java) ?: statusException(HttpStatusCode.InternalServerError)
     val recipes = store.collection("recipes")
 
-    // TODO: Agree with EVERYONE on what to do where with missing values
     val convDTO = ConversationDTO(
         userId = userId,
-        displayName = user.displayName ?: "No name",
-        picture = user.picture ?: "No picture",
-        lastMessage = store.collection("chats/${docId}/messages")
+        displayName = user.displayName ?: statusException(HttpStatusCode.InternalServerError),
+        picture = user.picture ?: "https://thispersondoesnotexist.com/", // TODO: Fix me
+        lastMessage = store.collection("chats").document(conv.id).collection("messages")
             .orderBy("timestamp", Query.Direction.DESCENDING).limit(1).get().await()
             .toObjects(Message::class.java).getOrNull(0)?.toMessageDTO(),
         myRecipes = conv.myRecipes.map {
-            recipes.document(conv.myId).get().await().toObject(Recipe::class.java) ?: statusException(HttpStatusCode.InternalServerError)
+            recipes.document(it).get().await().toObject(Recipe::class.java)
+                ?: statusException(HttpStatusCode.InternalServerError)
         }.map { it.toRecipeDTO() },
         theirRecipes = conv.theirRecipes.map {
-            recipes.document(conv.theirId).get().await().toObject(Recipe::class.java)
+            recipes.document(it).get().await().toObject(Recipe::class.java)
                 ?: statusException(HttpStatusCode.InternalServerError)
         }.map { it.toRecipeDTO() },
     )

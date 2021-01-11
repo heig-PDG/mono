@@ -52,7 +52,7 @@ fun RecipeCard(
 fun RecipeCard(
     title: String,
     subtitle: String,
-    imageUrl: String,
+    imageUrl: String?,
     onInfoClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -64,7 +64,7 @@ fun RecipeCard(
         Box {
             // Background that fills the card.
             CoilImage(
-                data = imageUrl,
+                data = imageUrl ?: "", // TODO: Fix this default value for missing images
                 Modifier.shade().fillMaxSize(),
                 fadeIn = true,
                 contentScale = ContentScale.Crop,

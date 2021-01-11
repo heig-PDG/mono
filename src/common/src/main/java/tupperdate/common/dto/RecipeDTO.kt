@@ -18,6 +18,6 @@ data class RecipeDTO(
     val description: String,
     @Serializable(with = TimestampSerializer::class)
     val timestamp: Long,
-    val picture: String,
+    val picture: String?,
     val attributes: RecipeAttributesDTO,
 )

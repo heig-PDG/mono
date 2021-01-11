@@ -36,6 +36,7 @@ data class Message (
 fun Message.toMessageDTO() : MessageDTO {
 
     return MessageDTO(
+        id = this.id ?: statusException(HttpStatusCode.InternalServerError),
         senderId = this.fromUser ?: statusException(HttpStatusCode.InternalServerError),
         timestamp = this.timestamp ?: statusException(HttpStatusCode.InternalServerError),
         content = this.content ?: statusException(HttpStatusCode.InternalServerError),
