@@ -36,6 +36,7 @@ fun Route.getChats(store: Firestore) = get {
         )
     }
 
+    // TODO: Agree with EVERYONE on what to do where with missing values
     val conversationDTOS: List<ConversationDTO> = convs.map { conv ->
             val user = store.collection("users").document(conv.theirId).get().await()
                 .toObject(User::class.java) ?: statusException(HttpStatusCode.InternalServerError)
