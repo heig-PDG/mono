@@ -17,9 +17,10 @@ fun MyUserDTO.toUser(id: String, picture: String?): User {
     )
 }
 
-fun User.toUserDTO(): UserDTO {
+fun User.toUserDTO(phone: String): UserDTO {
     return UserDTO(
         id = requireNotNull(this.id),
+        phone = phone,
         displayName = this.displayName,
         picture = this.picture,
     )
