@@ -7,6 +7,7 @@ data class User(
     val id: String? = null,
     val displayName: String? = null,
     val picture: String? = null,
+    val lastSeenRecipe: Int? = null
 )
 
 fun MyUserDTO.toUser(id: String, picture: String?): User {

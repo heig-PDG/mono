@@ -18,8 +18,8 @@ fun Route.getChats(store: Firestore) = get {
     val smallerId = store.collection("chats").whereEqualTo("userId1", uid).get()
     val greaterId = store.collection("chats").whereEqualTo("userId2", uid).get()
 
-    val chats = smallerId.await().toObjects(Chat::class.java).filter { it.userId2 != null } +
-                greaterId.await().toObjects(Chat::class.java).filter { it.userId1 != null }
+    val chats = smallerId.await().toObjects(Chat::class.java).filter { it.user2Recipes != null } +
+                greaterId.await().toObjects(Chat::class.java).filter { it.user1Recipes != null }
 
     val convs: List<Conv> = chats.map {
         val myId = if (uid == it.userId1) it.userId1 else it.userId2
@@ -44,15 +44,16 @@ fun Route.getChats(store: Firestore) = get {
             return@map ConversationDTO(
                 userId = conv.theirId,
                 displayName = user.displayName ?: statusException(HttpStatusCode.InternalServerError),
-                picture = user.picture ?: statusException(HttpStatusCode.InternalServerError),
-                lastMessage = store.collection("chats/${conv.id}/messages")
+                picture = user.picture ?: "NO PICTURE FIX ME", // TODO: Fix this shit
+                lastMessage = store.collection("chats").document(conv.id).collection("messages")
                     .orderBy("timestamp", Query.Direction.DESCENDING).limit(1).get().await()
                     .toObjects(Message::class.java).getOrNull(0)?.toMessageDTO(),
                 myRecipes = conv.myRecipes.map {
-                    recipes.document(conv.myId).get().await().toObject(Recipe::class.java) ?: statusException(HttpStatusCode.InternalServerError)
+                    recipes.document(it).get().await().toObject(Recipe::class.java)
+                        ?: statusException(HttpStatusCode.InternalServerError)
                 }.map { it.toRecipeDTO() },
                 theirRecipes = conv.theirRecipes.map {
-                    recipes.document(conv.theirId).get().await().toObject(Recipe::class.java)
+                    recipes.document(it).get().await().toObject(Recipe::class.java)
                         ?: statusException(HttpStatusCode.InternalServerError)
                 }.map { it.toRecipeDTO() },
             )
