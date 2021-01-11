@@ -11,6 +11,7 @@ import tupperdate.web.auth.firebaseAuthPrincipal
 import tupperdate.web.exceptions.statusException
 import tupperdate.web.model.Chat
 import tupperdate.web.model.Message
+import tupperdate.web.model.toMessageDTO
 import tupperdate.web.util.await
 
 fun Route.postMessage(store: Firestore) = post("/{userId}/messages") {
@@ -35,5 +36,5 @@ fun Route.postMessage(store: Firestore) = post("/{userId}/messages") {
 
     newDoc.set(message).await()
 
-    call.respond(HttpStatusCode.Created)
+    call.respond(message.toMessageDTO())
 }
