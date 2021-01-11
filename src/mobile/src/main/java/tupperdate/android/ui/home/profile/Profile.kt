@@ -46,10 +46,10 @@ fun Profile(
     val editing by viewModel.editing.collectAsState(false)
 
     val profile = AmbientProfile.current
-    val profileName = (profile as? AuthenticationStatus.Profile)?.displayName ?: ""
-    val profileImage = (profile as? AuthenticationStatus.Profile)?.displayPictureUrl
+    val profileName = (profile as? AuthenticationStatus.Displayable)?.displayName ?: ""
+    val profileImage = (profile as? AuthenticationStatus.Displayable)?.displayPictureUrl
         ?: "https://via.placeholder.com/150"
-    val phone = (profile as? AuthenticationStatus.Connected)?.phoneNumber ?: ""
+    val phone = (profile as? AuthenticationStatus.Displayable)?.phoneNumber ?: ""
     val (name, setName) = remember(profile) { mutableStateOf(profileName) }
 
     Profile(

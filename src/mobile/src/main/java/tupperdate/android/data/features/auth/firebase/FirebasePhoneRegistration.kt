@@ -1,4 +1,4 @@
-package tupperdate.android.data.features.auth.impl
+package tupperdate.android.data.features.auth.firebase
 
 import android.app.Activity
 import com.google.firebase.FirebaseException

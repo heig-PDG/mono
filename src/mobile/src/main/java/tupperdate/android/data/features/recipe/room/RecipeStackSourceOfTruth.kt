@@ -27,10 +27,10 @@ class RecipeStackSourceOfTruth(
     }
 
     override fun reader(key: Unit): Flow<List<Recipe>?> {
-        return dao.findAll().map { it.map(RecipeEntity::toRecipe) }
+        return dao.recipesStack().map { it.map(RecipeEntity::toRecipe) }
     }
 
     override suspend fun write(key: Unit, value: List<RecipeDTO>) {
-        dao.insertAll(value.map(RecipeDTO::asRecipeEntity))
+        dao.recipesInsertAll(value.map { it.asRecipeEntity(inStack = true) })
     }
 }
