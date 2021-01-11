@@ -16,6 +16,11 @@ import tupperdate.android.data.features.messages.store.AllConversationFetcher
 import tupperdate.android.data.features.messages.store.AllConversationSourceOfTruth
 import tupperdate.android.data.room.TupperdateDatabase
 
+/**
+ * A [CoroutineWorker] that refreshes all the conversations. Refreshed conversations will be updated
+ * in the local database model, and changes will therefore be reflected directly in any consumer of
+ * the data that is currently displayed.
+ */
 @InternalDataApi
 @OptIn(
     ExperimentalCoroutinesApi::class,
