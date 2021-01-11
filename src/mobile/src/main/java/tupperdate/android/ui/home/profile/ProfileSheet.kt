@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,48 +21,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.get
+import org.koin.core.parameter.parametersOf
 import tupperdate.android.R
-import tupperdate.android.data.legacy.api.ImagePickerApi
-import tupperdate.android.data.legacy.api.ImageType
-import tupperdate.android.data.legacy.api.UserApi
+import tupperdate.android.data.features.auth.AuthenticationRepository
+import tupperdate.android.ui.ambients.AmbientPhoneRegistration
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.components.ProfilePicture
 import tupperdate.android.ui.theme.material.BrandedButton
-
-@Composable
-fun ProfileSheet(
-    userApi: UserApi,
-    imagePicker: ImagePickerApi,
-    profile: UserApi.Profile,
-    onCloseClick: () -> Unit,
-    onSignOutClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val scope = AmbientLifecycleOwner.current.lifecycleScope
-
-    val initName = profile.displayName ?: ""
-    val (name, setName) = remember(profile) { mutableStateOf(initName) }
-
-    val newProfilePic by remember { imagePicker.currentProfile }.collectAsState(initial = null)
-    val profileImage = profile.profileImageUrl ?: "https://via.placeholder.com/150"
-    val profilePic = newProfilePic ?: Uri.parse(profileImage)
-
-    ProfileSheet(
-        name = name,
-        imageUrl = profilePic,
-        onNameChange = setName,
-        onCloseClick = onCloseClick,
-        onEditPictureClick = { imagePicker.pick(ImageType.Profile) },
-        onSaveClick = {
-            scope.launch { userApi.putProfile(name, newProfilePic) }
-            onCloseClick()
-        },
-        onSignOutClick = onSignOutClick,
-        modifier = modifier,
-    )
-}
 
 @Composable
 private fun ProfileSheet(
@@ -98,9 +69,10 @@ private fun ProfileSheet(
             }
         }
 
-        Box(modifier = Modifier
-            .padding(top = 40.dp, bottom = 37.dp)
-            .align(Alignment.CenterHorizontally)
+        Box(
+            modifier = Modifier
+                .padding(top = 40.dp, bottom = 37.dp)
+                .align(Alignment.CenterHorizontally)
         ) {
             ProfilePicture(
                 image = imageUrl,

@@ -1,25 +1,25 @@
-package tupperdate.android.data.legacy
+package tupperdate.android.data.features.auth.impl
 
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Activity
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.SendChannel
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.tasks.await
-import tupperdate.android.data.legacy.api.AuthenticationApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import tupperdate.android.data.RequiresParameterInjection
+import tupperdate.android.data.features.auth.PhoneRegistration
+import tupperdate.android.data.features.auth.PhoneRegistration.RequestCodeResult
+import tupperdate.android.data.features.auth.PhoneRegistration.RequestCodeResult.*
+import tupperdate.android.data.features.auth.PhoneRegistration.VerificationResult
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@ObsoleteTupperdateApi
-@OptIn(ExperimentalCoroutinesApi::class)
-class RealAuthenticationApi(
-    private val activity: AppCompatActivity,
-    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance(),
-) : AuthenticationApi {
+@RequiresParameterInjection
+class FirebasePhoneRegistration(
+    private val activity: Activity,
+) : PhoneRegistration {
+
+    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
     /**
      * The [PhoneAuthProvider.ForceResendingToken] that might be used if the force parameter is
@@ -35,7 +35,7 @@ class RealAuthenticationApi(
     override suspend fun requestCode(
         number: String,
         force: Boolean,
-    ): AuthenticationApi.RequestCodeResult = suspendCoroutine { continuation ->
+    ): RequestCodeResult = suspendCoroutine { continuation ->
 
         val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
@@ -54,11 +54,11 @@ class RealAuthenticationApi(
                     .addOnCompleteListener { result ->
                         if (result.isSuccessful) {
                             resumeOnce {
-                                continuation.resume(AuthenticationApi.RequestCodeResult.LoggedIn)
+                                continuation.resume(LoggedIn)
                             }
                         } else {
                             resumeOnce {
-                                continuation.resume(AuthenticationApi.RequestCodeResult.InternalError)
+                                continuation.resume(InternalError)
                                 result.exception?.printStackTrace()
                             }
                         }
@@ -71,13 +71,13 @@ class RealAuthenticationApi(
                 when (problem) {
                     is FirebaseAuthInvalidCredentialsException -> resumeOnce {
                         continuation.resume(
-                            AuthenticationApi.RequestCodeResult.InvalidNumberError
+                            InvalidNumberError
                         )
                     }
                     else -> resumeOnce {
                         problem.printStackTrace()
                         continuation.resume(
-                            AuthenticationApi.RequestCodeResult.InternalError
+                            InternalError
                         )
                     }
                 }
@@ -87,10 +87,10 @@ class RealAuthenticationApi(
                 verification: String,
                 token: PhoneAuthProvider.ForceResendingToken,
             ) {
-                this@RealAuthenticationApi.verification.value = verification
-                this@RealAuthenticationApi.forceToken.value = token
+                this@FirebasePhoneRegistration.verification.value = verification
+                this@FirebasePhoneRegistration.forceToken.value = token
                 resumeOnce {
-                    continuation.resume(AuthenticationApi.RequestCodeResult.RequiresVerification)
+                    continuation.resume(RequiresVerification)
                 }
             }
         }
@@ -112,10 +112,10 @@ class RealAuthenticationApi(
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
 
-    override suspend fun verify(code: String): AuthenticationApi.VerificationResult {
-        val verification = this@RealAuthenticationApi.verification.value
+    override suspend fun verify(code: String): VerificationResult {
+        val verification = this@FirebasePhoneRegistration.verification.value
         return if (verification == null) {
-            AuthenticationApi.VerificationResult.InternalError
+            VerificationResult.InternalError
         } else {
             suspendCoroutine { continuation ->
                 firebaseAuth.signInWithCredential(
@@ -125,54 +125,12 @@ class RealAuthenticationApi(
                     )
                 ).addOnCompleteListener { result ->
                     if (result.isSuccessful) {
-                        continuation.resume(AuthenticationApi.VerificationResult.LoggedIn)
+                        continuation.resume(VerificationResult.LoggedIn)
                     } else {
-                        continuation.resume(AuthenticationApi.VerificationResult.InvalidVerificationError)
+                        continuation.resume(VerificationResult.InvalidVerificationError)
                     }
                 }
             }
         }
     }
-
-    override val auth: Flow<AuthenticationApi.AuthInfo?>
-        get() = currentUser(firebaseAuth)
-            .map { user ->
-                val token = user?.getIdToken(false)?.await()?.token
-                token?.let { AuthenticationApi.AuthInfo(it) }
-            }
-            .catch { emit(null) }
-
-    override val connected: Flow<Boolean>
-        get() = currentUser(firebaseAuth).map { it != null }
-
-    override val uid: Flow<String?>
-        get() = currentUser(firebaseAuth).map { it?.uid }
-
-    override val phone: Flow<String?>
-        get() = currentUser(firebaseAuth).map { it?.phoneNumber }
-}
-
-/**
- * Returns a [Flow] of the current [FirebaseUser], and emits one on every authentication change.
- *
- * @param auth the [FirebaseAuth] that's used to retrieve the user.
- */
-@OptIn(ExperimentalCoroutinesApi::class)
-private fun currentUser(auth: FirebaseAuth): Flow<FirebaseUser?> {
-    return callbackFlow {
-        val callback = FirebaseAuth.AuthStateListener { auth ->
-            safeOffer(auth.currentUser)
-        }
-        auth.addAuthStateListener(callback)
-        awaitClose { auth.removeAuthStateListener((callback)) }
-    }
-}
-
-/**
- * Safely offers an item in a [SendChannel]. If the [SendChannel] is closed, no exception will be
- * thrown. This might be useful in scenarios where recomposition happens while an operation is
- * being performed.
- */
-fun <T> SendChannel<T>.safeOffer(element: T): Boolean {
-    return kotlin.runCatching { offer(element) }.getOrDefault(false)
 }

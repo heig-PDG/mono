@@ -11,9 +11,9 @@ import tupperdate.android.data.features.recipe.impl.RecipeRepositoryImpl
  * objects related to the "recipes" feature of Tupperdate.
  */
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-val KoinRecipeModule = module {
+val KoinModuleDataRecipe = module {
 
     // Stores.
     @OptIn(InternalDataApi::class)
-    factory<RecipeRepository> { RecipeRepositoryImpl(get(), get(), get(), get()) }
+    factory<RecipeRepository> { RecipeRepositoryImpl(get(), get(), get()) }
 }

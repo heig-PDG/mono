@@ -10,5 +10,4 @@ data class ConversationDTO(
     val lastMessage: MessageDTO?,
     val myRecipes: List<RecipeDTO>,
     val theirRecipes: List<RecipeDTO>,
-
 )

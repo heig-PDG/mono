@@ -11,3 +11,10 @@ import kotlin.RequiresOptIn.Level.ERROR
 @MustBeDocumented
 @RequiresOptIn(level = ERROR)
 annotation class InternalDataApi
+
+/**
+ * An annotation that marks implementations that require to be passed as parameters, rather than
+ * being build directly through the DI framework.
+ */
+@RequiresOptIn(level = ERROR)
+annotation class RequiresParameterInjection

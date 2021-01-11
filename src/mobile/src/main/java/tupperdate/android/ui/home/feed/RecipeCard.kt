@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.coil.CoilImage
 import tupperdate.android.R
 import tupperdate.android.data.features.recipe.Recipe
-import tupperdate.android.data.legacy.api.RecipeApi
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.modifier.shade
 
@@ -21,7 +20,7 @@ import tupperdate.android.ui.theme.modifier.shade
 /**
  * A composable that displays a certain recipe.
  *
- * @param recipe the [RecipeApi.Recipe] data to display.
+ * @param recipe the [Recipe] data to display.
  * @param onInfoClick callback called whenever the info button is clicked.
  * @param modifier the [Modifier] for this composable.
  */
