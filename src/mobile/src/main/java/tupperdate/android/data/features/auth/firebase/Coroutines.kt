@@ -1,4 +1,4 @@
-package tupperdate.android.data.features.auth.impl
+package tupperdate.android.data.features.auth.firebase
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser

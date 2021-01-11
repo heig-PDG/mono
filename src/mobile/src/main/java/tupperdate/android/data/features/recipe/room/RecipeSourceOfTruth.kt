@@ -19,18 +19,19 @@ class RecipeSourceOfTruth(
 ) : SourceOfTruth<String, RecipeDTO, Recipe> {
 
     override suspend fun delete(key: String) {
-        dao.delete(key)
+        dao.recipesDelete(key)
     }
 
     override suspend fun deleteAll() {
-        dao.deleteAll()
+        dao.recipesDeleteAll()
     }
 
     override fun reader(key: String): Flow<Recipe?> {
-        return dao.find(key).map(RecipeEntity::toRecipe)
+        return dao.recipe(forId = key).map { it?.toRecipe() }
     }
 
     override suspend fun write(key: String, value: RecipeDTO) {
-        dao.insert(value.asRecipeEntity())
+        // Let the DAO handle upsertions as required.
+        dao.recipesInsert(value.asRecipeEntity(inStack = null))
     }
 }
