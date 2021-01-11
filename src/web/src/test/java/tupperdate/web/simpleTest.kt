@@ -26,9 +26,12 @@ class SimpleTest {
 
     @Test
     fun testEmulator() {
-        val doc = firestore.collection("emulatorOnlyDeleteMe").document("uniqueId")
+        val doc = firestore.collection("zzz_emulatorTestDontDeleteMe").document("test")
         runBlocking {
-            doc.set(mapOf("displayName" to "Emulatron3000")).await()
+            val value = doc.get().await()
+            assertNotEquals(value["name"], "firestore")
+
+            doc.set(mapOf("emulator" to "Emulatron3000")).await()
             val name = doc.get().await().get("displayName") as String
             assertEquals(name, "Emulatron3000")
         }
