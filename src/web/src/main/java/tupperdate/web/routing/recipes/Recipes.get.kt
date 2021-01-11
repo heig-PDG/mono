@@ -15,8 +15,24 @@ import tupperdate.web.model.toRecipeDTO
 import tupperdate.web.util.await
 
 fun Route.recipesGet(store: Firestore) {
+    own(store)
     some(store)
     all(store)
+}
+
+/**
+ * Retrieves a [List] of all the [RecipeDTO] that the authenticated user has posted
+ *
+ * @param store the [Firestore] instance that is used.
+ */
+private fun Route.own(store: Firestore) = get("/own") {
+    // Extract query params.
+    val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+
+    val recipes = store.collection("recipes").whereEqualTo("userId", uid).get().await()
+        .toObjects(Recipe::class.java).map { it.toRecipeDTO() }
+
+    call.respond(recipes)
 }
 
 /**

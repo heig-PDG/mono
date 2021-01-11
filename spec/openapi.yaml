@@ -155,7 +155,53 @@ paths:
           description: Bad request; if the request parameter isn't a positive integer
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-          
+
+  /recipes/own:
+    get:
+      tags:
+      - recipes
+      summary: Get all recipes for the authenticated user
+      operationId: getOwnRecipes
+      
+      responses:
+        '200':
+          description: OK; if the recipes could be fetched
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipeDTO'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /recipes/{recipeId}:
+    get:
+      tags:
+      - recipes
+      summary: Get a specific recipe
+      operationId: getSomeRecipe
+      
+      parameters:
+      - name: recipeId
+        in: path
+        description: id of the recipe to get
+        required: true
+        schema:
+          type: string
+        
+      responses:
+        '200':
+          description: OK; if the recipe could be fetched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeDTO'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Not found; if the recipe can't be found
+
   /recipes/{recipeId}/like:
     put:
       tags:
