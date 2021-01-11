@@ -29,7 +29,7 @@ fun Route.postMessage(store: Firestore) = post("/{userId}/messages") {
     val message = Message(
         id = newDoc.id,
         content = content.content,
-        timestamp = System.currentTimeMillis() / 1000,
+        timestamp = System.currentTimeMillis(),
         fromUser = uid
     )
 

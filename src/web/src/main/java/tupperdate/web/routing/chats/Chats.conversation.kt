@@ -44,7 +44,7 @@ fun Route.getConvs(store: Firestore) = get("/{userId}") {
         userId = userId,
         displayName = user.displayName ?: statusException(HttpStatusCode.InternalServerError),
         picture = user.picture ?: "https://thispersondoesnotexist.com/", // TODO: Fix me
-        lastMessage = store.collection("chats/${docId}/messages")
+        lastMessage = store.collection("chats").document(conv.id).collection("messages")
             .orderBy("timestamp", Query.Direction.DESCENDING).limit(1).get().await()
             .toObjects(Message::class.java).getOrNull(0)?.toMessageDTO(),
         myRecipes = conv.myRecipes.map {

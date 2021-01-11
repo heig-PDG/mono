@@ -3,6 +3,7 @@ package tupperdate.web.routing.recipes
 import com.google.cloud.firestore.Firestore
 import io.ktor.application.*
 import io.ktor.http.*
+import io.ktor.http.HttpStatusCode.Companion.InternalServerError
 import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -44,7 +45,7 @@ private fun Route.all(store: Firestore) = get {
 
     // TODO: Transaction
     val lastSeenRecipe =
-        store.collection("users").document(uid).get().await().get("lastSeenRecipe") ?: 0
+        store.collection("users").document(uid).get().await().get("lastSeenRecipe") ?: statusException(InternalServerError)
 
     // TODO: Filter user own recipes
     val retrieved = store.collection("recipes").whereGreaterThan("timestamp", lastSeenRecipe)

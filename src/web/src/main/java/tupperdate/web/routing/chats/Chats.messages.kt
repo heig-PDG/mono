@@ -28,13 +28,7 @@ fun Route.getMessages(store: Firestore) = get("/{userId}/messages") {
         .orderBy("timestamp", Query.Direction.DESCENDING).get().await()
         .toObjects(Message::class.java)
 
-    val messageDTOs = messages.map {
-        MessageDTO(
-            senderId = it.fromUser ?: statusException(HttpStatusCode.InternalServerError),
-            timestamp = it.timestamp ?: statusException(HttpStatusCode.InternalServerError),
-            content = it.content ?: statusException(HttpStatusCode.InternalServerError)
-        )
-    }
+    val messageDTOs = messages.map { it.toMessageDTO() }
 
     call.respond(messageDTOs)
 }
