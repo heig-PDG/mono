@@ -32,7 +32,7 @@ class SimpleTest {
             assertNotEquals(value["name"], "firestore")
 
             doc.set(mapOf("emulator" to "Emulatron3000")).await()
-            val name = doc.get().await().get("displayName") as String
+            val name = doc.get().await().get("emulator") as String
             assertEquals(name, "Emulatron3000")
         }
     }
