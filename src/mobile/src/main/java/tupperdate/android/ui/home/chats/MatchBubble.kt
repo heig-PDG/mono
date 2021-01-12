@@ -1,5 +1,6 @@
 package tupperdate.android.ui.home.chats
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -12,11 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.compose.ui.zIndex
 import dev.chrisbanes.accompanist.coil.CoilImage
+import tupperdate.android.R
 import tupperdate.android.ui.theme.PlaceholderProfileImage
 import tupperdate.android.ui.theme.TupperdateTheme
 
@@ -75,6 +78,10 @@ fun Bubble(
     CoilImage(
         data = picture ?: PlaceholderProfileImage,
         contentScale = ContentScale.Crop,
+        fadeIn = true,
+        loading = {
+            Image(imageResource(R.drawable.placeholder_profile))
+        },
         modifier = modifier
             .preferredSize(56.dp)
             .clip(CircleShape)

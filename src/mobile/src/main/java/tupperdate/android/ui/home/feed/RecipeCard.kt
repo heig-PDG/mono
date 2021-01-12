@@ -1,5 +1,6 @@
 package tupperdate.android.ui.home.feed
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -7,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -66,8 +68,11 @@ fun RecipeCard(
             // Background that fills the card.
             CoilImage(
                 data = imageUrl ?: PlaceholderRecipeImage,
-                Modifier.shade().fillMaxSize(),
+                modifier = Modifier.shade().fillMaxSize(),
                 fadeIn = true,
+                loading = {
+                    Image(imageResource(R.drawable.placeholder_recipe))
+                },
                 contentScale = ContentScale.Crop,
             )
             // Recipe information.
