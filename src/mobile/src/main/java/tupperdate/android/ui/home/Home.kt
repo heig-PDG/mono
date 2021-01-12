@@ -1,6 +1,7 @@
 package tupperdate.android.ui.home
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -112,7 +113,7 @@ private fun IconItem(
     onSelected: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val color = if (selected) Color.Smurf500 else Color.InactiveIcons
+    val color = animate(if (selected) Color.Smurf500 else Color.InactiveIcons)
     Providers(AmbientContentColor provides color) {
         IconButton(onSelected, modifier) {
             Icon(asset)
@@ -131,21 +132,23 @@ private fun FeedItem(
     onSelected: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (selected) {
-        Text(
-            text = TupperdateTitle,
-            style = TupperdateTypography.h6,
-            modifier = modifier
-                .clip(RoundedCornerShape(50))
-                .clickable(onClick = onSelected)
-                .padding(horizontal = 12.dp, vertical = 4.dp),
-        )
-    } else {
-        IconItem(
-            asset = vectorResource(R.drawable.ic_home_cards),
-            selected = selected,
-            onSelected = onSelected,
-        )
+    Crossfade(selected) {
+        if (selected) {
+            Text(
+                text = TupperdateTitle,
+                style = TupperdateTypography.h6,
+                modifier = modifier
+                    .clip(RoundedCornerShape(50))
+                    .clickable(onClick = onSelected)
+                    .padding(horizontal = 12.dp, vertical = 4.dp),
+            )
+        } else {
+            IconItem(
+                asset = vectorResource(R.drawable.ic_home_cards),
+                selected = selected,
+                onSelected = onSelected,
+            )
+        }
     }
 }
 
