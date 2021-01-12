@@ -40,7 +40,8 @@ fun MatchBubble(
             Bubble(
                 picture = url,
                 onClick = onClick,
-                modifier = Modifier.padding(start = 8.dp * index)
+                modifier = Modifier.padding(start = 8.dp * index),
+                enabled = true,
             )
         }
     }
@@ -54,14 +55,16 @@ private const val MatchBubbleStackHeight = 3
  * @param picture the individual picture to display in a bubble.
  * @param onClick the callback to call when the bubble is clicked.
  * @param modifier the composable modifier.
+ * @param enabled true if the click listener is enabled.
  *
  * @see MatchBubble a stacked version of a [Bubble]
  */
 @Composable
-private fun Bubble(
-    picture: String?,
+fun Bubble(
+    picture: Any?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = false,
 ) {
     CoilImage(
         data = picture ?: "", // TODO : Handle missing images.
@@ -69,7 +72,7 @@ private fun Bubble(
         modifier = modifier
             .preferredSize(56.dp)
             .clip(CircleShape)
-            .clickable(onClick = onClick)
+            .clickable(onClick = onClick, enabled = enabled)
             .border(8.dp, Color.Black.copy(alpha = 0.2f), CircleShape)
     )
 }

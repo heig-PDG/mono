@@ -1,7 +1,10 @@
 package tupperdate.android.ui.home.chats
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.MaterialTheme
@@ -13,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import tupperdate.android.R
 import tupperdate.android.data.features.messages.Conversation
 import tupperdate.android.data.features.messages.Match
-import tupperdate.android.ui.theme.components.ProfilePicture
 
 @Composable
 fun Conversations(
@@ -47,9 +49,9 @@ fun Conversations(
             // TODO : Sort items by last timestamp in ViewModel.
             Conversation(
                 title = it.previewTitle,
-                subtitle = it.previewBody, // TODO : Implement this.
+                subtitle = it.previewBody,
                 highlighted = false, // TODO : Implement this.
-                image = it.picture ?: "", // TODO : Handle missing default images.
+                image = it.picture,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable(onClick = {})
@@ -65,16 +67,4 @@ private fun Header(
     modifier: Modifier = Modifier,
 ) {
     Text(title, modifier.padding(16.dp), style = MaterialTheme.typography.overline)
-}
-
-@Composable
-private fun RecipeImage(
-    imageUrl: String?,
-    modifier: Modifier = Modifier,
-) {
-    ProfilePicture(
-        modifier = modifier.size(56.dp),
-        image = imageUrl ?: "", // TODO: Fix this default value for missing images
-        highlighted = false
-    )
 }
