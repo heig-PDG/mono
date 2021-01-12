@@ -18,6 +18,7 @@ import tupperdate.android.data.features.auth.firebase.FirebaseUid
 import tupperdate.android.data.features.messages.*
 import tupperdate.android.data.features.messages.room.PendingMessageEntity
 import tupperdate.android.data.features.messages.store.*
+import tupperdate.android.data.features.messages.work.RefreshMessagesWorker
 import tupperdate.android.data.features.messages.work.SendPendingMessagesWorker
 import tupperdate.android.data.room.TupperdateDatabase
 
@@ -181,10 +182,15 @@ class MessagesRepositoryImpl(
                 body = message,
             )
         )
-        manager.enqueue(
-            SyncRequestBuilder<SendPendingMessagesWorker>()
-                .build()
-        )
+
+        manager
+            .beginWith(SyncRequestBuilder<SendPendingMessagesWorker>().build())
+            .then(
+                SyncRequestBuilder<RefreshMessagesWorker>()
+                    .setInputData(RefreshMessagesWorker.forConversation(to))
+                    .build()
+            )
+            .enqueue()
     }
 
     override suspend fun accept(match: PendingMatch) {
