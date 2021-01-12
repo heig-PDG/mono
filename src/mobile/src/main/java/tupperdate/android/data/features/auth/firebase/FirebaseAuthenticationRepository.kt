@@ -30,6 +30,10 @@ class FirebaseAuthenticationRepository(
     auth: FirebaseAuth = FirebaseAuth.getInstance(),
 ) : AuthenticationRepository {
 
+    override val identifier: Flow<AuthenticationStatus.Identified> = auth.currentUserFlow
+        .mapNotNull { it?.uid }
+        .map { AuthenticationStatus.LoadingProfile(it) }
+
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     override val status: Flow<AuthenticationStatus> = auth.currentUserFlow.transformLatest { user ->
 

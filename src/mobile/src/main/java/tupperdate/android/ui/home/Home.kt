@@ -22,6 +22,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
+import tupperdate.android.data.features.messages.ConversationIdentifier
 import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.ui.home.chats.Conversations
 import tupperdate.android.ui.home.feed.Feed
@@ -35,6 +36,7 @@ import tupperdate.android.ui.theme.TupperdateTypography
 fun Home(
     onNewRecipeClick: () -> Unit,
     onRecipeDetailsClick: (Recipe) -> Unit,
+    onConversationClick: (ConversationIdentifier) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     startingSection: HomeSections = HomeSections.Feed,
@@ -60,7 +62,7 @@ fun Home(
                     )
                     HomeSections.Conversations ->
                         Conversations(
-                            onConversationClick = { /*TODO : Navigate to the conv detail.*/ },
+                            onConversationClick = onConversationClick,
                             modifier = Modifier.padding(innerPadding),
                         )
                     HomeSections.Profile -> Profile(

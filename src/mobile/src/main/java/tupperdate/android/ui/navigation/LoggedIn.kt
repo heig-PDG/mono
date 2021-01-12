@@ -7,6 +7,7 @@ import androidx.navigation.compose.*
 import org.koin.androidx.compose.getViewModel
 import tupperdate.android.ui.home.Home
 import tupperdate.android.ui.home.HomeSections
+import tupperdate.android.ui.home.chats.OneConversation
 import tupperdate.android.ui.home.feed.MatchDialog
 import tupperdate.android.ui.home.recipe.NewRecipe
 import tupperdate.android.ui.home.recipe.ViewRecipe
@@ -20,6 +21,11 @@ private object LoggedInDestination {
     const val FEED = "feed"
     const val PROFILE = "profile"
     const val CONVERSATIONS = "conversations"
+    const val VIEW_CONVERSATION = "conversation/{id}"
+
+    fun viewConversation(identifier: String): String {
+        return "conversation/$identifier"
+    }
 
     fun viewRecipe(identifier: String): String {
         return "viewRecipe/$identifier"
@@ -62,11 +68,25 @@ fun LoggedIn() {
                 )
             }
         }
+        composable(
+            LoggedInDestination.VIEW_CONVERSATION,
+            listOf(navArgument("id") { type = StringType })
+        ) {
+            it.arguments?.getString("id")?.let { id ->
+                OneConversation(
+                    id = id,
+                    onBack = navController::navigateUp,
+                )
+            }
+        }
         composable(LoggedInDestination.CONVERSATIONS) {
             Home(
                 onNewRecipeClick = { navController.navigate(LoggedInDestination.NEW_RECIPE) },
                 onRecipeDetailsClick = {
                     navController.navigate(LoggedInDestination.viewRecipe(it.identifier))
+                },
+                onConversationClick = {
+                    navController.navigate(LoggedInDestination.viewConversation(it))
                 },
                 onBack = { navController.navigateUp() },
                 startingSection = HomeSections.Conversations,
@@ -78,6 +98,9 @@ fun LoggedIn() {
                 onRecipeDetailsClick = {
                     navController.navigate(LoggedInDestination.viewRecipe(it.identifier))
                 },
+                onConversationClick = {
+                    navController.navigate(LoggedInDestination.viewConversation(it))
+                },
                 onBack = { navController.navigateUp() },
                 startingSection = HomeSections.Feed,
             )
@@ -87,6 +110,9 @@ fun LoggedIn() {
                 onNewRecipeClick = { navController.navigate(LoggedInDestination.NEW_RECIPE) },
                 onRecipeDetailsClick = {
                     navController.navigate(LoggedInDestination.viewRecipe(it.identifier))
+                },
+                onConversationClick = {
+                    navController.navigate(LoggedInDestination.viewConversation(it))
                 },
                 onBack = { navController.navigateUp() },
                 startingSection = HomeSections.Profile,

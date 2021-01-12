@@ -39,6 +39,11 @@ interface MessagesRepository {
     fun conversation(with: FirebaseUid): Flow<Conversation?>
 
     /**
+     * Returns a [Flow] of the [ConversationInfo] information with a specific user.
+     */
+    fun conversationInfo(with: FirebaseUid): Flow<ConversationInfo?>
+
+    /**
      * Returns a [Flow] of all the [messages] from a conversation with a specific user. These
      * messages will automatically get updated over time, as new data is generated on the server.
      */

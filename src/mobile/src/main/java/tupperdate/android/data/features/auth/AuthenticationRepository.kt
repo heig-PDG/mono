@@ -6,6 +6,7 @@ import tupperdate.android.data.features.picker.ImagePicker
 interface AuthenticationRepository {
 
     val status: Flow<AuthenticationStatus>
+    val identifier: Flow<AuthenticationStatus.Identified>
 
     suspend fun updateProfile(
         displayName: String,
