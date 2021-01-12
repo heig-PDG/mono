@@ -6,7 +6,5 @@ data class ModelRecipe<Picture>(
     val description: String,
     val picture: Picture?,
     val timestamp: Long,
-    val hasAllergens: Boolean,
-    val vegetarian: Boolean,
-    val warm: Boolean,
+    val attributes: Map<String, Boolean>,
 )
