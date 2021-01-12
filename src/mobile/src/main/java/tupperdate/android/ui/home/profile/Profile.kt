@@ -20,6 +20,7 @@ import org.koin.core.parameter.parametersOf
 import tupperdate.android.R
 import tupperdate.android.data.features.auth.AuthenticationStatus
 import tupperdate.android.data.features.recipe.Recipe
+import tupperdate.android.data.features.recipe.RecipeAttributes
 import tupperdate.android.ui.ambients.AmbientImagePicker
 import tupperdate.android.ui.ambients.AmbientProfile
 import tupperdate.android.ui.theme.*
@@ -242,29 +243,13 @@ fun ProfilePreview() {
             "Red lobster",
             "In the Santa Monica way",
             2077,
-            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg"
+            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg",
+            RecipeAttributes(
+                vegetarian = false,
+                warm = true,
+                hasAllergens = false,
+            ),
         ),
-        Recipe(
-            "Red lobster",
-            "Red lobster",
-            "In the Santa Monica way",
-            2077,
-            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg"
-        ),
-        Recipe(
-            "Red lobster",
-            "Red lobster",
-            "In the Santa Monica way",
-            2077,
-            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg"
-        ),
-        Recipe(
-            "Red lobster",
-            "Red lobster",
-            "In the Santa Monica way",
-            2077,
-            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg"
-        )
     )
     TupperdateTheme {
         val (name, setName) = remember { mutableStateOf("Aloy") }

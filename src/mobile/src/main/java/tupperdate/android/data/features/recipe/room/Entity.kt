@@ -12,10 +12,16 @@ import tupperdate.android.data.InternalDataApi
 data class RecipeEntity(
     @PrimaryKey
     @ColumnInfo(name = "id") val identifier: String,
+    // Recipe properties.
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "timestamp") val timestamp: Long,
     @ColumnInfo(name = "picture") val picture: String?,
+    // Recipe attributes.
+    @ColumnInfo(name = "attributeVegetarian") val attributeVegetarian: Boolean,
+    @ColumnInfo(name = "attributeWarm") val attributeWarm: Boolean,
+    @ColumnInfo(name = "attributeHasAllergens") val attributeHasAllergens: Boolean,
+    // Client-only state.
     @ColumnInfo(name = "inStack", defaultValue = "NULL") val inStack: Boolean?,
 )
 

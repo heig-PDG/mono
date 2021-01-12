@@ -6,4 +6,11 @@ data class Recipe(
     val description: String,
     val timestamp: Long,
     val picture: String?,
+    val attributes: RecipeAttributes,
+)
+
+data class RecipeAttributes(
+    val vegetarian: Boolean,
+    val warm: Boolean,
+    val hasAllergens: Boolean,
 )

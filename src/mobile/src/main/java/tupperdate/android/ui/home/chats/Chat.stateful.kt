@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 import tupperdate.android.data.features.messages.ConversationIdentifier
+import tupperdate.android.ui.theme.PlaceholderProfileImage
 
 @Composable
 fun Chat(
@@ -20,7 +21,7 @@ fun Chat(
     val messages by viewModel.messages.collectAsState(emptyList())
     Chat(
         displayName = title,
-        displayPicture = picture ?: "", // TODO : Handle profile pictures
+        displayPicture = picture ?: PlaceholderProfileImage,
         messages = messages,
         onBack = onBack,
         // TODO : Avoid duplicate sends

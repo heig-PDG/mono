@@ -22,7 +22,6 @@ import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.components.ProfilePicture
 import tupperdate.android.ui.theme.plus
 
-// TODO : Rename to Chat.
 @Composable
 fun Chat(
     displayName: String,
