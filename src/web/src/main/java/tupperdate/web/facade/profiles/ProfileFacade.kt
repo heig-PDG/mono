@@ -1,5 +1,7 @@
 package tupperdate.web.facade.profiles
 
+import tupperdate.web.facade.PictureBase64
+import tupperdate.web.facade.PictureUrl
 import tupperdate.web.model.Result
 import tupperdate.web.model.profiles.User
 

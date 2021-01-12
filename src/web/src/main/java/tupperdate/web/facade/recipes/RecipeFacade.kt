@@ -1,7 +1,7 @@
 package tupperdate.web.facade.recipes
 
-import tupperdate.web.facade.profiles.PictureBase64
-import tupperdate.web.facade.profiles.PictureUrl
+import tupperdate.web.facade.PictureBase64
+import tupperdate.web.facade.PictureUrl
 import tupperdate.web.model.Result
 import tupperdate.web.model.profiles.User
 
