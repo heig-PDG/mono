@@ -12,12 +12,15 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import tupperdate.android.data.InternalDataApi
+import tupperdate.android.data.SyncRequestBuilder
 import tupperdate.android.data.features.auth.firebase.FirebaseUid
 import tupperdate.android.data.features.messages.*
+import tupperdate.android.data.features.messages.room.PendingMessageEntity
 import tupperdate.android.data.features.messages.store.AllConversationFetcher
 import tupperdate.android.data.features.messages.store.AllConversationSourceOfTruth
 import tupperdate.android.data.features.messages.store.ConversationFetcher
 import tupperdate.android.data.features.messages.store.OneConversationSourceOfTruth
+import tupperdate.android.data.features.messages.work.SendPendingMessagesWorker
 import tupperdate.android.data.room.TupperdateDatabase
 
 @InternalDataApi
@@ -148,7 +151,6 @@ class MessagesRepositoryImpl(
                     body = msg.body,
                     timestamp = msg.timestamp,
                     from = if (msg.from == other) Sender.Other else Sender.Myself,
-                    sent = true,
                 )
             }
         }
@@ -157,7 +159,16 @@ class MessagesRepositoryImpl(
         to: FirebaseUid,
         message: String,
     ) {
-        TODO("Not yet implemented")
+        database.messages().post(
+            PendingMessageEntity(
+                recipient = to,
+                body = message,
+            )
+        )
+        manager.enqueue(
+            SyncRequestBuilder<SendPendingMessagesWorker>()
+                .build()
+        )
     }
 
     override suspend fun accept(match: PendingMatch) {

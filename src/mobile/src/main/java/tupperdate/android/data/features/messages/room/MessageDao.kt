@@ -28,6 +28,18 @@ abstract class MessageDao {
     abstract fun messages(forUid: FirebaseUid): Flow<List<MessageEntity>>
 
     /**
+     * Retrieves all the [PendingMessageEntity], which still need to be sent to the server.
+     */
+    @Query("SELECT * FROM messagesCreations")
+    abstract fun pending(): Flow<List<PendingMessageEntity>>
+
+    /**
+     * Deletes the [PendingMessageEntity] with the provided local id..
+     */
+    @Query("DELETE FROM messagesCreations WHERE messagesCreations.localId = :forLocalId")
+    abstract fun pendingDelete(forLocalId: Long)
+
+    /**
      * Posts a new [PendingMessageEntity], which will eventually get synced.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)

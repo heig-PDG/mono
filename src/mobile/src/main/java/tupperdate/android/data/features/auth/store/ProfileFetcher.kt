@@ -43,7 +43,7 @@ class ProfileFetcher(
                 val dto = client.get<UserDTO>("/users/${key}")
                 val profile = CompleteProfile(
                     identifier = key,
-                    phoneNumber = "012 345 67 89", // TODO : Fetch this from the API (issue #200).
+                    phoneNumber = dto.phone,
                     displayName = dto.displayName ?: "",
                     displayPictureUrl = dto.picture,
                 )
