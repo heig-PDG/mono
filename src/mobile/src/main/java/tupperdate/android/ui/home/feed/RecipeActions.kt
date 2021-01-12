@@ -27,31 +27,35 @@ fun RecipeActions(
     onBackClick: () -> Unit,
     onNewRecipeClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     Row(modifier, Arrangement.SpaceEvenly, Alignment.CenterVertically) {
         IconButton(
             onClick = onBackClick,
             icon = vectorResource(R.drawable.ic_home_cancel),
             backgroundColor = Color.ReturnButton,
-            Modifier.preferredSize(SmallSize)
+            enabled = enabled,
+            modifier = Modifier.preferredSize(SmallSize)
         )
         IconButton(
             onClick = onDislikeClick,
             icon = vectorResource(R.drawable.ic_home_dislike_recipe),
             backgroundColor = Color.DislikeButton,
-            Modifier.preferredSize(HugeSize)
+            enabled = enabled,
+            modifier = Modifier.preferredSize(HugeSize)
         )
         IconButton(
             onClick = onLikeClick,
             icon = vectorResource(R.drawable.ic_home_like_recipe),
             backgroundColor = Color.LikeButton,
-            Modifier.preferredSize(HugeSize)
+            enabled = enabled,
+            modifier = Modifier.preferredSize(HugeSize)
         )
         IconButton(
             onClick = onNewRecipeClick,
             icon = vectorResource(R.drawable.ic_home_new_recipe),
             backgroundColor = Color.RecipeAddButton,
-            Modifier.preferredSize(SmallSize)
+            modifier = Modifier.preferredSize(SmallSize)
         )
     }
 }
@@ -63,6 +67,7 @@ private fun IconButton(
     backgroundColor: Color,
     modifier: Modifier = Modifier,
     contentColor: Color = Color.White,
+    enabled: Boolean = true,
 ) {
     Button(
         onClick = onClick,
@@ -73,6 +78,7 @@ private fun IconButton(
             contentColor = contentColor
         ),
         contentPadding = ButtonDefaults.TextButtonContentPadding,
+        enabled = enabled,
     ) {
         Icon(icon)
     }
