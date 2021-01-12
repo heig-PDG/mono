@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import dev.chrisbanes.accompanist.coil.CoilImage
 import tupperdate.android.R
+import tupperdate.android.ui.theme.PlaceholderRecipeImage
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.material.BrandedButton
 
@@ -88,7 +89,7 @@ private fun MatchIcon(
 ) {
     Column(modifier, Arrangement.spacedBy(8.dp), Alignment.CenterHorizontally) {
         CoilImage(
-            imageUrl ?: "", // TODO : Handle default images
+            imageUrl ?: PlaceholderRecipeImage,
             Modifier
                 .size(56.dp).clip(CircleShape)
                 // .shade() is in the spec, but it doesn't look good.
