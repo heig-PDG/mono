@@ -7,7 +7,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,6 +19,8 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.koin.androidx.compose.getViewModel
 import tupperdate.android.R
 import tupperdate.android.data.features.messages.ConversationIdentifier
 import tupperdate.android.data.features.recipe.Recipe
@@ -30,39 +33,40 @@ import tupperdate.android.ui.theme.Smurf500
 import tupperdate.android.ui.theme.TupperdateTypography
 
 @Composable
+@OptIn(ExperimentalCoroutinesApi::class)
 fun Home(
     onNewRecipeClick: () -> Unit,
     onRecipeDetailsClick: (Recipe) -> Unit,
     onConversationClick: (ConversationIdentifier) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
-    startingSection: HomeSections = HomeSections.Feed,
 ) {
-    val (currentSection, setCurrentSection) = savedInstanceState { startingSection }
+    val viewModel = getViewModel<HomeViewModel>()
+    val section by viewModel.section.collectAsState()
     Scaffold(
         modifier = modifier,
         topBar = {
             TupperdateTopBar(
-                currentSection = currentSection,
-                onSectionSelected = setCurrentSection,
+                currentSection = section,
+                onSectionSelected = viewModel::onSectionSelected,
                 modifier = Modifier.fillMaxWidth(),
             )
         },
         bodyContent = { innerPadding ->
-            Crossfade(currentSection) { section ->
+            Crossfade(section) { section ->
                 when (section) {
-                    HomeSections.Feed -> Feed(
+                    HomeSection.Feed -> Feed(
                         onNewRecipeClick = onNewRecipeClick,
                         onOpenRecipeClick = onRecipeDetailsClick,
                         onBack = onBack,
                         modifier = Modifier.padding(innerPadding),
                     )
-                    HomeSections.Conversations ->
+                    HomeSection.Conversations ->
                         Conversations(
                             onConversationClick = onConversationClick,
                             modifier = Modifier.padding(innerPadding),
                         )
-                    HomeSections.Profile -> Profile(
+                    HomeSection.Profile -> Profile(
                         modifier = Modifier.padding(innerPadding),
                     )
                 }
@@ -73,8 +77,8 @@ fun Home(
 
 @Composable
 private fun TupperdateTopBar(
-    currentSection: HomeSections,
-    onSectionSelected: (HomeSections) -> Unit,
+    currentSection: HomeSection,
+    onSectionSelected: (HomeSection) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -84,19 +88,19 @@ private fun TupperdateTopBar(
     ) {
         IconItem(
             asset = vectorResource(R.drawable.ic_home_messages),
-            selected = currentSection == HomeSections.Conversations,
-            onSelected = { onSectionSelected(HomeSections.Conversations) },
+            selected = currentSection == HomeSection.Conversations,
+            onSelected = { onSectionSelected(HomeSection.Conversations) },
         )
 
         FeedItem(
-            selected = currentSection == HomeSections.Feed,
-            onSelected = { onSectionSelected(HomeSections.Feed) },
+            selected = currentSection == HomeSection.Feed,
+            onSelected = { onSectionSelected(HomeSection.Feed) },
         )
 
         IconItem(
             asset = vectorResource(R.drawable.ic_home_accounts),
-            selected = currentSection == HomeSections.Profile,
-            onSelected = { onSectionSelected(HomeSections.Profile) },
+            selected = currentSection == HomeSection.Profile,
+            onSelected = { onSectionSelected(HomeSection.Profile) },
         )
     }
 }
@@ -145,7 +149,7 @@ private fun FeedItem(
     }
 }
 
-enum class HomeSections {
+enum class HomeSection {
     Conversations,
     Feed,
     Profile,

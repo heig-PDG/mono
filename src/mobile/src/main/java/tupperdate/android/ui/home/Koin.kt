@@ -10,6 +10,7 @@ import tupperdate.android.ui.home.recipe.NewRecipeViewModel
 import tupperdate.android.ui.home.recipe.ViewRecipeViewModel
 
 val KoinModuleUIHome = module {
+    viewModel { HomeViewModel() }
     viewModel { FeedViewModel(get()) }
     viewModel { (picker: ImagePicker) ->
         ProfileViewModel(get(parameters = { parametersOf(picker) }))
