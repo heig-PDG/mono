@@ -12,9 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
+import androidx.compose.ui.zIndex
 import dev.chrisbanes.accompanist.coil.CoilImage
+import tupperdate.android.ui.theme.TupperdateTheme
 
 /**
  * A stack of [Bubble] representing the different recipes that have been matched for a single user.
@@ -40,7 +43,9 @@ fun MatchBubble(
             Bubble(
                 picture = url,
                 onClick = onClick,
-                modifier = Modifier.padding(start = 8.dp * index),
+                modifier = Modifier
+                    .padding(start = 8.dp * index)
+                    .zIndex(displayed.size - index.toFloat()),
                 enabled = true,
             )
         }
@@ -74,5 +79,14 @@ fun Bubble(
             .clip(CircleShape)
             .clickable(onClick = onClick, enabled = enabled)
             .border(8.dp, Color.Black.copy(alpha = 0.2f), CircleShape)
+    )
+}
+
+@Preview
+@Composable
+private fun MatchBubblePreview() = TupperdateTheme {
+    MatchBubble(
+        pictures = listOf(null, null, null),
+        onClick = { /* Ignored. */ },
     )
 }
