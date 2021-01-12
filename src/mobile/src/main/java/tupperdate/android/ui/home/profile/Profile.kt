@@ -11,12 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.chrisbanes.accompanist.coil.CoilImage
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 import tupperdate.android.R
@@ -24,13 +22,9 @@ import tupperdate.android.data.features.auth.AuthenticationStatus
 import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.ui.ambients.AmbientImagePicker
 import tupperdate.android.ui.ambients.AmbientProfile
-import tupperdate.android.ui.theme.ProfileEmail
-import tupperdate.android.ui.theme.ProfileName
-import tupperdate.android.ui.theme.TupperdateTheme
-import tupperdate.android.ui.theme.TupperdateTypography
+import tupperdate.android.ui.theme.*
 import tupperdate.android.ui.theme.components.ProfilePicture
 import tupperdate.android.ui.theme.material.BrandedButton
-import tupperdate.android.ui.theme.modifier.shade
 
 @Composable
 fun Profile(
@@ -156,11 +150,9 @@ private fun DisplayRecipeCard(
         shape = RoundedCornerShape(5.dp)
     ) {
         Box {
-            CoilImage(
-                data = recipe.picture ?: "", // TODO: Fix this default value for missing images
-                modifier = Modifier.shade().fillMaxSize(),
-                fadeIn = true,
-                contentScale = ContentScale.Crop,
+            ProfilePicture(
+                image = recipe.picture ?: PlaceholderProfileImage,
+                highlighted = false,
             )
             Row(
                 modifier = Modifier

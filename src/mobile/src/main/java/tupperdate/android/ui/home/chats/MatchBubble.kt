@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.compose.ui.zIndex
 import dev.chrisbanes.accompanist.coil.CoilImage
+import tupperdate.android.ui.theme.PlaceholderProfileImage
 import tupperdate.android.ui.theme.TupperdateTheme
 
 /**
@@ -72,7 +73,7 @@ fun Bubble(
     enabled: Boolean = false,
 ) {
     CoilImage(
-        data = picture ?: "", // TODO : Handle missing images.
+        data = picture ?: PlaceholderProfileImage,
         contentScale = ContentScale.Crop,
         modifier = modifier
             .preferredSize(56.dp)

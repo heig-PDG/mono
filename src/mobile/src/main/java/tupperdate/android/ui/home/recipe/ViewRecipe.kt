@@ -23,6 +23,7 @@ import org.koin.core.parameter.parametersOf
 import tupperdate.android.R
 import tupperdate.android.ui.theme.DislikeButton
 import tupperdate.android.ui.theme.LikeButton
+import tupperdate.android.ui.theme.PlaceholderRecipeImage
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -38,7 +39,7 @@ fun ViewRecipe(
     val description by viewModel.description().collectAsState()
 
     RecipeDetail(
-        heroImage = picture ?: "", // TODO: Fix this default value for missing images
+        heroImage = picture ?: PlaceholderRecipeImage,
         header = {
             Text(
                 text = stringResource(id = R.string.edit_recipe_title),
@@ -59,7 +60,6 @@ fun ViewRecipe(
                 hasAllergens = false,
             )
         },
-        // TODO : Actually read this from the API.
         description = {
             Text(
                 text = stringResource(id = R.string.edit_recipe_description),
