@@ -24,7 +24,7 @@
         <provider
             android:name="androidx.work.impl.WorkManagerInitializer"
             android:authorities="${applicationId}.workmanager-init"
-            tools:node="remove"/>
+            tools:node="remove" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -36,7 +36,9 @@
                 android:resource="@xml/paths" />
         </provider>
 
-        <activity android:name=".ui.MainActivity" />
+        <activity
+            android:name=".ui.MainActivity"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity-alias
             android:name=".Launcher.Home"

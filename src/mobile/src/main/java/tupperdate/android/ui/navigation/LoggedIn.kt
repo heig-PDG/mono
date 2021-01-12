@@ -1,11 +1,14 @@
 package tupperdate.android.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavType.StringType
 import androidx.navigation.compose.*
+import org.koin.androidx.compose.getViewModel
 import tupperdate.android.ui.home.Home
 import tupperdate.android.ui.home.HomeSections
+import tupperdate.android.ui.home.chats.Chat
+import tupperdate.android.ui.home.feed.MatchDialog
 import tupperdate.android.ui.home.recipe.NewRecipe
 import tupperdate.android.ui.home.recipe.ViewRecipe
 
@@ -18,6 +21,11 @@ private object LoggedInDestination {
     const val FEED = "feed"
     const val PROFILE = "profile"
     const val CONVERSATIONS = "conversations"
+    const val VIEW_CONVERSATION = "conversation/{id}"
+
+    fun viewConversation(identifier: String): String {
+        return "conversation/$identifier"
+    }
 
     fun viewRecipe(identifier: String): String {
         return "viewRecipe/$identifier"
@@ -29,8 +37,17 @@ private object LoggedInDestination {
  */
 @Composable
 fun LoggedIn() {
-    LaunchedEffect(true) {
-        // api.users.updateProfile()
+
+    val viewModel = getViewModel<LoggedInViewModel>()
+    val match = viewModel.match.collectAsState(null).value
+
+    if (match != null) {
+        MatchDialog(
+            myImageUrl = match.myPicture,
+            theirImageUrl = match.theirPicture,
+            onStartChattingClick = { viewModel.onAccept(match) },
+            onDismissRequest = { viewModel.onAccept(match) },
+        )
     }
 
     val navController = rememberNavController()
@@ -51,14 +68,27 @@ fun LoggedIn() {
                 )
             }
         }
+        composable(
+            LoggedInDestination.VIEW_CONVERSATION,
+            listOf(navArgument("id") { type = StringType })
+        ) {
+            it.arguments?.getString("id")?.let { id ->
+                Chat(
+                    id = id,
+                    onBack = navController::navigateUp,
+                )
+            }
+        }
         composable(LoggedInDestination.CONVERSATIONS) {
             Home(
                 onNewRecipeClick = { navController.navigate(LoggedInDestination.NEW_RECIPE) },
                 onRecipeDetailsClick = {
                     navController.navigate(LoggedInDestination.viewRecipe(it.identifier))
                 },
+                onConversationClick = {
+                    navController.navigate(LoggedInDestination.viewConversation(it))
+                },
                 onBack = { navController.navigateUp() },
-                onDevClick = { },
                 startingSection = HomeSections.Conversations,
             )
         }
@@ -68,8 +98,10 @@ fun LoggedIn() {
                 onRecipeDetailsClick = {
                     navController.navigate(LoggedInDestination.viewRecipe(it.identifier))
                 },
+                onConversationClick = {
+                    navController.navigate(LoggedInDestination.viewConversation(it))
+                },
                 onBack = { navController.navigateUp() },
-                onDevClick = { },
                 startingSection = HomeSections.Feed,
             )
         }
@@ -79,8 +111,10 @@ fun LoggedIn() {
                 onRecipeDetailsClick = {
                     navController.navigate(LoggedInDestination.viewRecipe(it.identifier))
                 },
+                onConversationClick = {
+                    navController.navigate(LoggedInDestination.viewConversation(it))
+                },
                 onBack = { navController.navigateUp() },
-                onDevClick = { },
                 startingSection = HomeSections.Profile,
             )
         }

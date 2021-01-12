@@ -22,6 +22,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
+import tupperdate.android.data.features.messages.ConversationIdentifier
 import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.ui.home.chats.Conversations
 import tupperdate.android.ui.home.feed.Feed
@@ -35,45 +36,42 @@ import tupperdate.android.ui.theme.TupperdateTypography
 fun Home(
     onNewRecipeClick: () -> Unit,
     onRecipeDetailsClick: (Recipe) -> Unit,
-    onDevClick: () -> Unit,
+    onConversationClick: (ConversationIdentifier) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     startingSection: HomeSections = HomeSections.Feed,
 ) {
     val (currentSection, setCurrentSection) = savedInstanceState { startingSection }
-
-    Scaffold(topBar = {
-        TupperdateTopBar(
-            currentSection = currentSection,
-            onSectionSelected = setCurrentSection,
-            modifier = Modifier.fillMaxWidth(),
-        )
-    }
-    ) { innerPadding ->
-        val innerModifier = modifier.padding(innerPadding)
-
-        Crossfade(current = currentSection) { section ->
-            when (section) {
-                HomeSections.Feed -> Feed(
-                    onNewRecipeClick = onNewRecipeClick,
-                    onOpenRecipeClick = onRecipeDetailsClick,
-                    onBack = onBack,
-                    modifier = innerModifier,
-                )
-                HomeSections.Conversations -> Conversations(
-                    onRecipeClick = {},
-                    onProfileClick = {},
-                    recipes = listOf(),
-                    conversations = listOf(),
-                    modifier = innerModifier,
-                )
-                HomeSections.Profile -> Profile(
-                    onDevClick = onDevClick,
-                    modifier = innerModifier,
-                )
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TupperdateTopBar(
+                currentSection = currentSection,
+                onSectionSelected = setCurrentSection,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        },
+        bodyContent = { innerPadding ->
+            Crossfade(currentSection) { section ->
+                when (section) {
+                    HomeSections.Feed -> Feed(
+                        onNewRecipeClick = onNewRecipeClick,
+                        onOpenRecipeClick = onRecipeDetailsClick,
+                        onBack = onBack,
+                        modifier = Modifier.padding(innerPadding),
+                    )
+                    HomeSections.Conversations ->
+                        Conversations(
+                            onConversationClick = onConversationClick,
+                            modifier = Modifier.padding(innerPadding),
+                        )
+                    HomeSections.Profile -> Profile(
+                        modifier = Modifier.padding(innerPadding),
+                    )
+                }
             }
         }
-    }
+    )
 }
 
 @Composable

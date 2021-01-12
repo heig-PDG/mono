@@ -39,7 +39,6 @@ class ProfileSourceOfTruth(
         key: FirebaseUid,
         value: AuthenticationStatus,
     ) {
-        // TODO : Only allow profile status upgrades.
         when (value) {
             Unknown, None -> Unit // Skipped.
             is LoadingProfile -> dao.save(
