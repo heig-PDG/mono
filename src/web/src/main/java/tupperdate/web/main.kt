@@ -14,6 +14,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import org.koin.ktor.ext.Koin
 import tupperdate.web.facade.profiles.KoinModuleFacadeProfile
+import tupperdate.web.facade.recipes.KoinModuleFacadeRecipe
 import tupperdate.web.legacy.auth.firebase
 import tupperdate.web.legacy.exceptions.registerException
 import tupperdate.web.legacy.routing.accounts.accounts
@@ -24,6 +25,7 @@ import tupperdate.web.legacy.util.getPort
 import tupperdate.web.legacy.util.initialiseApp
 import tupperdate.web.model.impl.firestore.KoinModuleModelFirestore
 import tupperdate.web.model.profiles.firestore.KoinModuleModelUsersFirestore
+import tupperdate.web.model.recipes.firestore.KoinModuleModelRecipesFirestore
 
 @JvmName("main")
 fun main() {
@@ -51,9 +53,14 @@ fun Application.installServer(firebase: FirebaseApp) {
     }
 
     install(Koin) {
+        modules(KoinModuleModelFirestore)
+
         modules(KoinModuleFacadeProfile)
+        modules(KoinModuleFacadeRecipe)
+
         modules(KoinModuleModelFirestore)
         modules(KoinModuleModelUsersFirestore)
+        modules(KoinModuleModelRecipesFirestore)
     }
 
     install(StatusPages) {

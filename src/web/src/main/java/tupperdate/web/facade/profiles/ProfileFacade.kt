@@ -9,7 +9,7 @@ interface ProfileFacade {
         user: User,
         profileId: String,
         profile: Profile<PictureBase64>,
-    ): Result<Profile<Unit>>
+    ): Result<Unit>
 
     suspend fun read(
         user: User,

@@ -12,7 +12,7 @@ class ProfileFacadeImpl(
         user: User,
         profileId: String,
         profile: Profile<PictureBase64>,
-    ): Result<Profile<Unit>> {
+    ): Result<Unit> {
         TODO("Not yet implemented")
     }
 
