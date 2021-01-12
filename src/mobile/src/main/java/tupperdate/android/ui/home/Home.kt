@@ -68,6 +68,7 @@ fun Home(
                             modifier = Modifier.padding(innerPadding),
                         )
                     HomeSection.Profile -> Profile(
+                        onNewRecipeClick = onNewRecipeClick,
                         modifier = Modifier.padding(innerPadding),
                     )
                 }

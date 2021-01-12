@@ -29,9 +29,10 @@ import tupperdate.android.ui.theme.material.BrandedButton
 
 @Composable
 fun Profile(
+    onNewRecipeClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // TODO: Add support for new tupps
+    // TODO : Display our own recipes
     // TODO: Add location to profiles
     val picker = AmbientImagePicker.current
     val viewModel = getViewModel<ProfileViewModel> { parametersOf(picker) }
@@ -60,7 +61,7 @@ fun Profile(
         onPictureClick = {
         },
         onLocationChange = {},
-        onNewRecipeClick = {},
+        onNewRecipeClick = onNewRecipeClick,
         modifier = modifier,
     )
 }
