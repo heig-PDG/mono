@@ -107,7 +107,6 @@ class FirebasePhoneRegistration(
             .setTimeout(25, TimeUnit.SECONDS)
             .setCallbacks(callbacks)
             .build()
-        // TODO: Replace setExecutor if necessary
 
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
