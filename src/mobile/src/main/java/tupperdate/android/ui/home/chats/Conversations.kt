@@ -14,15 +14,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
+import tupperdate.android.data.features.auth.firebase.FirebaseUid
 import tupperdate.android.data.features.messages.Conversation
 import tupperdate.android.data.features.messages.Match
 
+/**
+ * A composable that displays a [List] of all the conversations, as well as all the matches that
+ * could be used to actually create a new conversation with a different user.
+ *
+ * @param matches the [List] of the current matches.
+ * @param conversations the [List] of the current conversations.
+ * @param onConversationClick a callback invoked whenever a conversation or a match is clicked.
+ * @param modifier the modifier for this composable.
+ */
 @Composable
 fun Conversations(
-    onRecipeClick: () -> Unit,
-    onProfileClick: () -> Unit,
     matches: List<Match>,
     conversations: List<Conversation>,
+    onConversationClick: (FirebaseUid) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier) {
@@ -37,7 +46,7 @@ fun Conversations(
                 items(matches) {
                     MatchBubble(
                         pictures = it.theirPictures,
-                        onClick = { /*TODO*/ },
+                        onClick = { onConversationClick(it.identifier) },
                     )
                 }
             }
@@ -46,15 +55,14 @@ fun Conversations(
             Header(stringResource(R.string.chat_conversations))
         }
         items(conversations) {
-            // TODO : Sort items by last timestamp in ViewModel.
             Conversation(
                 title = it.previewTitle,
                 subtitle = it.previewBody,
-                highlighted = false, // TODO : Implement this.
+                highlighted = false, // TODO : Implement read receipts in the client.
                 image = it.picture,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable(onClick = {})
+                    .clickable(onClick = { onConversationClick(it.identifier) })
                     .padding(8.dp),
             )
         }

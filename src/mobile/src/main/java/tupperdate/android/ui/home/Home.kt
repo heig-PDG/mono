@@ -60,7 +60,10 @@ fun Home(
                     modifier = innerModifier,
                 )
                 HomeSections.Conversations ->
-                    Conversations(modifier = innerModifier)
+                    Conversations(
+                        onConversationClick = { /*TODO : Navigate to the conv detail.*/ },
+                        modifier = innerModifier,
+                    )
                 HomeSections.Profile -> Profile(
                     modifier = innerModifier,
                 )
