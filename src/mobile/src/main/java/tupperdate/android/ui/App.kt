@@ -1,5 +1,6 @@
 package tupperdate.android.ui
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.Composable
 import tupperdate.android.data.features.auth.AuthenticationStatus
 import tupperdate.android.ui.ambients.AmbientProfile
@@ -12,18 +13,20 @@ import tupperdate.android.ui.onboarding.OnboardingProfile
  */
 @Composable
 fun TupperdateApp() {
-    when (AmbientProfile.current) {
-        AuthenticationStatus.Unknown, is AuthenticationStatus.LoadingProfile -> {
-            /* Still loading. */
-        }
-        is AuthenticationStatus.None -> {
-            LoggedOut()
-        }
-        is AuthenticationStatus.AbsentProfile -> {
-            OnboardingProfile()
-        }
-        is AuthenticationStatus.CompleteProfile -> {
-            LoggedIn()
+    Crossfade(AmbientProfile.current) { profile ->
+        when (profile) {
+            AuthenticationStatus.Unknown, is AuthenticationStatus.LoadingProfile -> {
+                /* Ignored. */
+            }
+            is AuthenticationStatus.None -> {
+                LoggedOut()
+            }
+            is AuthenticationStatus.AbsentProfile -> {
+                OnboardingProfile()
+            }
+            is AuthenticationStatus.CompleteProfile -> {
+                LoggedIn()
+            }
         }
     }
 }
