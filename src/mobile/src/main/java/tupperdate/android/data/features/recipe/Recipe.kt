@@ -5,5 +5,5 @@ data class Recipe(
     val title: String,
     val description: String,
     val timestamp: Long,
-    val picture: String,
+    val picture: String?,
 )

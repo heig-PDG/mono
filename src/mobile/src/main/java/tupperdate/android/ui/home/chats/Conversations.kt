@@ -59,12 +59,12 @@ private fun Matches(
 
 @Composable
 private fun RecipeImage(
-    imageUrl: String,
+    imageUrl: String?,
     modifier: Modifier = Modifier,
 ) {
     ProfilePicture(
         modifier = modifier.size(56.dp),
-        image = imageUrl,
+        image = imageUrl ?: "", // TODO: Fix this default value for missing images
         highlighted = false
     )
 }

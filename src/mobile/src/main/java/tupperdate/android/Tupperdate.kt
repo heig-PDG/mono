@@ -1,6 +1,8 @@
 package tupperdate.android
 
 import android.app.Application
+import android.util.Log
+import androidx.work.Configuration
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import tupperdate.android.data.KoinDataApiModule
@@ -12,12 +14,17 @@ import tupperdate.android.ui.onboarding.KoinModuleUIOnboarding
 /**
  * The [Application] class, which is loaded when the user launches our program.
  */
-class Tupperdate : Application() {
+class Tupperdate : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
         startKoin()
     }
+
+    override fun getWorkManagerConfiguration() =
+        Configuration.Builder()
+            .setMinimumLoggingLevel(Log.DEBUG)
+            .build()
 }
 
 /**

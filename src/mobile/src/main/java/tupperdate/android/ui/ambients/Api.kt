@@ -22,5 +22,5 @@ val AmbientImagePicker: ProvidableAmbient<ImagePicker> =
  * An ambient that provides the current [AuthenticationStatus]. If the status could not be loaded,
  * a null value will be returned.
  */
-val AmbientProfile: ProvidableAmbient<AuthenticationStatus?> =
-    ambientOf { null }
+val AmbientProfile: ProvidableAmbient<AuthenticationStatus> =
+    ambientOf { AuthenticationStatus.Unknown }

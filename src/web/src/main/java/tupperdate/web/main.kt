@@ -4,6 +4,7 @@ package tupperdate.web
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.cloud.FirestoreClient
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
@@ -14,6 +15,7 @@ import io.ktor.server.netty.*
 import tupperdate.web.auth.firebase
 import tupperdate.web.exceptions.registerException
 import tupperdate.web.routing.accounts.accounts
+import tupperdate.web.routing.chats.chats
 import tupperdate.web.routing.recipes.recipes
 import tupperdate.web.routing.users.users
 import tupperdate.web.util.*
@@ -51,7 +53,8 @@ fun Application.installServer(firebase: FirebaseApp) {
         authenticate {
             accounts(FirebaseAuth.getInstance(firebase))
             recipes(firebase)
-            users(firebase)
+            users(firebase, FirebaseAuth.getInstance(firebase))
+            chats(FirestoreClient.getFirestore(firebase))
         }
     }
 }
