@@ -84,7 +84,7 @@ private fun ChatTopBar(
     TopAppBar(
         navigationIcon = {
             IconButton(onBack) {
-                Icon(vectorResource(R.drawable.ic_back_arrow))
+                Icon(vectorResource(R.drawable.ic_chat_back))
             }
         },
         title = {
