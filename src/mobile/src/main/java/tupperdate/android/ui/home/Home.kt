@@ -40,36 +40,36 @@ fun Home(
     startingSection: HomeSections = HomeSections.Feed,
 ) {
     val (currentSection, setCurrentSection) = savedInstanceState { startingSection }
-
-    Scaffold(topBar = {
-        TupperdateTopBar(
-            currentSection = currentSection,
-            onSectionSelected = setCurrentSection,
-            modifier = Modifier.fillMaxWidth(),
-        )
-    }
-    ) { innerPadding ->
-        val innerModifier = modifier.padding(innerPadding)
-
-        Crossfade(current = currentSection) { section ->
-            when (section) {
-                HomeSections.Feed -> Feed(
-                    onNewRecipeClick = onNewRecipeClick,
-                    onOpenRecipeClick = onRecipeDetailsClick,
-                    onBack = onBack,
-                    modifier = innerModifier,
-                )
-                HomeSections.Conversations ->
-                    Conversations(
-                        onConversationClick = { /*TODO : Navigate to the conv detail.*/ },
-                        modifier = innerModifier,
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TupperdateTopBar(
+                currentSection = currentSection,
+                onSectionSelected = setCurrentSection,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        },
+        bodyContent = { innerPadding ->
+            Crossfade(currentSection) { section ->
+                when (section) {
+                    HomeSections.Feed -> Feed(
+                        onNewRecipeClick = onNewRecipeClick,
+                        onOpenRecipeClick = onRecipeDetailsClick,
+                        onBack = onBack,
+                        modifier = Modifier.padding(innerPadding),
                     )
-                HomeSections.Profile -> Profile(
-                    modifier = innerModifier,
-                )
+                    HomeSections.Conversations ->
+                        Conversations(
+                            onConversationClick = { /*TODO : Navigate to the conv detail.*/ },
+                            modifier = Modifier.padding(innerPadding),
+                        )
+                    HomeSections.Profile -> Profile(
+                        modifier = Modifier.padding(innerPadding),
+                    )
+                }
             }
         }
-    }
+    )
 }
 
 @Composable
