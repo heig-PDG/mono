@@ -17,7 +17,7 @@ fun Conversations(
     Conversations(
         onRecipeClick = {},
         onProfileClick = {},
-        recipes = emptyList(),
+        matches = matches,
         conversations = conversations,
         modifier = modifier,
     )

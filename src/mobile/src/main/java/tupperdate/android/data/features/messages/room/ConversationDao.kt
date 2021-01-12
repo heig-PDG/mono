@@ -79,6 +79,9 @@ abstract class ConversationDao {
         }
     }
 
+    @Query("SELECT * FROM conversationsRecipes WHERE conversationsRecipes.convId = :forUid")
+    abstract suspend fun conversationRecipeAllOnce(forUid: FirebaseUid): List<ConversationRecipeEntity>
+
     @Insert
     abstract suspend fun conversationRecipeReplace(recipe: ConversationRecipeEntity)
 

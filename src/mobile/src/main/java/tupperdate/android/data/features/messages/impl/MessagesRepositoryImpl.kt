@@ -51,12 +51,24 @@ class MessagesRepositoryImpl(
         .map {
             it.map { conv ->
                 if (conv.accepted) null
-                // TODO : Fetch the actual recipes.
-                else PendingMatch(
-                    identifier = conv.identifier,
-                    myPicture = null,
-                    theirPicture = null,
-                )
+                else {
+                    val (theirs, mine) = database.conversations()
+                        .conversationRecipeAllOnce(conv.identifier)
+                        .partition { recipe -> recipe.recipeBelongsToThem }
+                    // TODO : We could use a custom fetcher to avoid nested queries, although this
+                    //        is not necessary.
+                    PendingMatch(
+                        identifier = conv.identifier,
+                        myPicture = mine.asSequence()
+                            .map { r -> r.recipePicture }
+                            .filterNotNull()
+                            .firstOrNull(),
+                        theirPicture = theirs.asSequence()
+                            .map { r -> r.recipePicture }
+                            .filterNotNull()
+                            .firstOrNull(),
+                    )
+                }
             }
         }
         .map { it.filterNotNull() }
@@ -69,10 +81,15 @@ class MessagesRepositoryImpl(
                     conv.previewBody == null &&
                     conv.previewTimestamp == null
                 ) {
+                    // TODO : We could use a custom fetcher to avoid nested queries, although this
+                    //        is not necessary.
+                    val (theirs, mine) = database.conversations()
+                        .conversationRecipeAllOnce(conv.identifier)
+                        .partition { recipe -> recipe.recipeBelongsToThem }
                     Match(
                         identifier = conv.identifier,
-                        myPictures = emptyList(), // TODO : Fetch actual recipes.
-                        theirPictures = emptyList(), // TODO : Fetch actual recipes.
+                        myPictures = mine.map { r -> r.recipePicture },
+                        theirPictures = theirs.map { r -> r.recipePicture },
                     )
                 } else {
                     null

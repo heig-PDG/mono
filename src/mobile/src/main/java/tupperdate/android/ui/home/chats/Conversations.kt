@@ -12,14 +12,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
 import tupperdate.android.data.features.messages.Conversation
-import tupperdate.android.data.features.recipe.Recipe
+import tupperdate.android.data.features.messages.Match
 import tupperdate.android.ui.theme.components.ProfilePicture
 
 @Composable
 fun Conversations(
     onRecipeClick: () -> Unit,
     onProfileClick: () -> Unit,
-    recipes: List<Recipe>,
+    matches: List<Match>,
     conversations: List<Conversation>,
     modifier: Modifier = Modifier,
 ) {
@@ -32,8 +32,11 @@ fun Conversations(
                 contentPadding = PaddingValues(start = 8.dp, end = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                items(recipes) {
-                    RecipeImage(imageUrl = it.picture)
+                items(matches) {
+                    MatchBubble(
+                        pictures = it.theirPictures,
+                        onClick = { /*TODO*/ },
+                    )
                 }
             }
         }
