@@ -1,5 +1,6 @@
 package tupperdate.android.ui.home.recipe
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.accompanist.coil.CoilImage
@@ -46,6 +48,8 @@ fun RecipeDetail(
         Box {
             CoilImage(
                 data = heroImage,
+                fadeIn = true,
+                loading = { Image(imageResource(R.drawable.placeholder_recipe)) },
                 modifier = Modifier
                     .preferredHeight(290.dp)
                     .fillMaxWidth(),
@@ -61,7 +65,6 @@ fun RecipeDetail(
                         .padding(16.dp)
                         .padding(bottom = 8.dp) // Anti-overlap.
                 ) {
-                    // TODO : Provide AmbientContentColor instead of specifying a tint.
                     Icon(vectorResource(R.drawable.ic_editrecipe_edit), tint = Color.White)
                 }
             }
