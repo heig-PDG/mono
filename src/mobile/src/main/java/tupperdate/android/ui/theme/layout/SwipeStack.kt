@@ -214,8 +214,7 @@ private fun SwipeStackPreview() {
     // Remember the swipe stack state.
     val state = rememberSwipeStackState()
 
-    // TODO (alex) : I don't like doing it this way, but I'm not sure that there's a different way
-    //               to change this state (at least with the SwipeableState<T> API).
+    // Could and should probably be done in an onCommit block.
     if (state.isSwiped) {
         items = items.drop(1).plus(next)
         next += 1
