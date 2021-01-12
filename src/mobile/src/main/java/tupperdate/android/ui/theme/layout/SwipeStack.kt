@@ -15,7 +15,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.drawLayer
 import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -115,7 +114,6 @@ fun rememberSwipeStackState(
     confirmStateChange: (SwipeStackValue) -> Boolean = { true },
 ): SwipeStackState {
     val clock = AmbientAnimationClock.current.asDisposableClock()
-    // TODO : Remember this across configuration changes, with rememberSavedInstanceState.
     return remember {
         SwipeStackState(initialValue, clock, confirmStateChange)
     }
