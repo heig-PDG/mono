@@ -10,7 +10,7 @@ interface ProfileFacade {
     suspend fun save(
         user: User,
         profileId: String,
-        profile: Profile<PictureBase64>,
+        profile: NewProfile<PictureBase64>,
     ): Result<Unit>
 
     suspend fun read(

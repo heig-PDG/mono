@@ -13,6 +13,7 @@ import io.ktor.serialization.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import org.koin.ktor.ext.Koin
+import tupperdate.web.facade.chats.KoinModuleFacadeChat
 import tupperdate.web.facade.profiles.KoinModuleFacadeProfile
 import tupperdate.web.facade.recipes.KoinModuleFacadeRecipe
 import tupperdate.web.legacy.auth.firebase
@@ -23,6 +24,7 @@ import tupperdate.web.legacy.routing.recipes.recipes
 import tupperdate.web.legacy.routing.users.users
 import tupperdate.web.legacy.util.getPort
 import tupperdate.web.legacy.util.initialiseApp
+import tupperdate.web.model.chats.firestore.KoinModuleModelChatsFirestore
 import tupperdate.web.model.impl.firestore.KoinModuleModelFirestore
 import tupperdate.web.model.profiles.firestore.KoinModuleModelUsersFirestore
 import tupperdate.web.model.recipes.firestore.KoinModuleModelRecipesFirestore
@@ -57,10 +59,12 @@ fun Application.installServer(firebase: FirebaseApp) {
 
         modules(KoinModuleFacadeProfile)
         modules(KoinModuleFacadeRecipe)
+        modules(KoinModuleFacadeChat)
 
         modules(KoinModuleModelFirestore)
         modules(KoinModuleModelUsersFirestore)
         modules(KoinModuleModelRecipesFirestore)
+        modules(KoinModuleModelChatsFirestore)
     }
 
     install(StatusPages) {
