@@ -31,6 +31,7 @@ import tupperdate.android.data.features.recipe.room.RecipeEntity
 )
 @InternalDataApi
 abstract class TupperdateDatabase : RoomDatabase() {
+    abstract fun conversations(): ConversationDao
     abstract fun messages(): MessageDao
     abstract fun profiles(): ProfileDao
     abstract fun recipes(): RecipeDao

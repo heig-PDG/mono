@@ -39,18 +39,20 @@ data class ConversationEntity(
  */
 @InternalDataApi
 @Entity(
-    primaryKeys = ["userId", "recipeId"],
+    tableName = "conversationsRecipes",
+    primaryKeys = ["convId", "recipeId"],
     foreignKeys = [ForeignKey(
         entity = ConversationEntity::class,
         parentColumns = ["id"],
-        childColumns = ["userId"],
+        childColumns = ["convId"],
         onUpdate = ForeignKey.CASCADE,
         onDelete = ForeignKey.CASCADE,
     )]
 )
 data class ConversationRecipeEntity(
-    @ColumnInfo(name = "userId") val identifier: String,
+    @ColumnInfo(name = "convId") val convId: String,
     @ColumnInfo(name = "recipeId") val recipeId: String,
+    @ColumnInfo(name = "recipeBelongsToThem") val recipeBelongsToThem: Boolean,
     @ColumnInfo(name = "recipePic") val recipePicture: String?,
     @ColumnInfo(name = "recipeName") val recipeName: String,
 )

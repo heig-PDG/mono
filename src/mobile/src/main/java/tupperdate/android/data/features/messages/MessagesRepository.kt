@@ -20,7 +20,7 @@ interface MessagesRepository {
      * accepted yet. When a new match occurs, it will be displayed with a "new match" popup until
      * it is not [pending] anymore.
      */
-    val pending: Flow<List<Match>>
+    val pending: Flow<List<PendingMatch>>
 
     /**
      * Returns a [Flow] of all the matches for the currently logged in user. This includes all the
@@ -52,5 +52,5 @@ interface MessagesRepository {
     /**
      * Accepts the given [Match], and acknowledges it locally.
      */
-    suspend fun accept(match: Match)
+    suspend fun accept(match: PendingMatch)
 }

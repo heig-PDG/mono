@@ -34,8 +34,8 @@ import tupperdate.android.ui.theme.material.BrandedButton
  */
 @Composable
 fun MatchDialog(
-    myImageUrl: String,
-    theirImageUrl: String,
+    myImageUrl: String?,
+    theirImageUrl: String?,
     onStartChattingClick: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
@@ -82,13 +82,13 @@ fun MatchDialog(
 
 @Composable
 private fun MatchIcon(
-    imageUrl: String,
+    imageUrl: String?,
     text: String,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier, Arrangement.spacedBy(8.dp), Alignment.CenterHorizontally) {
         CoilImage(
-            imageUrl,
+            imageUrl ?: "", // TODO : Handle default images
             Modifier
                 .size(56.dp).clip(CircleShape)
                 // .shade() is in the spec, but it doesn't look good.

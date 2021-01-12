@@ -41,11 +41,12 @@ fun Conversations(
             Header(stringResource(R.string.chat_conversations))
         }
         items(conversations) {
+            // TODO : Sort items by last timestamp in ViewModel.
             Conversation(
-                title = it.displayName,
-                subtitle = "NOT SUPPORTED", // TODO : Implement this.
+                title = it.previewTitle,
+                subtitle = it.previewBody, // TODO : Implement this.
                 highlighted = false, // TODO : Implement this.
-                image = it.picture,
+                image = it.picture ?: "", // TODO : Handle missing default images.
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable(onClick = {})

@@ -38,7 +38,7 @@ class RefreshAllConversationsWorker(
     override suspend fun doWork(): Result {
         val store = StoreBuilder.from(
             AllConversationFetcher(client),
-            AllConversationSourceOfTruth(database.messages()),
+            AllConversationSourceOfTruth(database.conversations()),
         ).build()
         store.fresh(Unit)
         return Result.success()

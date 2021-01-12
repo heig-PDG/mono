@@ -37,8 +37,8 @@ fun LoggedIn() {
 
     if (match != null) {
         MatchDialog(
-            myImageUrl = match.myPicture ?: "", // TODO : Handle default images.
-            theirImageUrl = match.theirPicture ?: "", // TODO : Handle default images.
+            myImageUrl = match.myPicture,
+            theirImageUrl = match.theirPicture,
             onStartChattingClick = { viewModel.onAccept(match) },
             onDismissRequest = { viewModel.onAccept(match) },
         )

@@ -1,3 +1,8 @@
 package tupperdate.android.data.features.messages
 
-typealias ConversationIdentifier = String
+import tupperdate.android.data.features.auth.firebase.FirebaseUid
+
+/**
+ * A typealias for conversation identifiers.
+ */
+typealias ConversationIdentifier = FirebaseUid
