@@ -30,7 +30,6 @@ import tupperdate.android.ui.theme.material.BrandedButton
 fun Profile(
     modifier: Modifier = Modifier,
 ) {
-    // TODO: Use new API
     // TODO: Add support for new tupps
     // TODO: Add location to profiles
     val picker = AmbientImagePicker.current
@@ -40,7 +39,7 @@ fun Profile(
     val profile = AmbientProfile.current
     val profileName = (profile as? AuthenticationStatus.Displayable)?.displayName ?: ""
     val profileImage = (profile as? AuthenticationStatus.Displayable)?.displayPictureUrl
-        ?: "https://via.placeholder.com/150"
+        ?: PlaceholderProfileImage
     val phone = (profile as? AuthenticationStatus.Displayable)?.phoneNumber ?: ""
     val (name, setName) = remember(profile) { mutableStateOf(profileName) }
 
