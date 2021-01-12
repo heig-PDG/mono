@@ -9,16 +9,16 @@ import org.koin.core.parameter.parametersOf
 import tupperdate.android.data.features.messages.ConversationIdentifier
 
 @Composable
-fun OneConversation(
+fun Chat(
     id: ConversationIdentifier,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val viewModel = getViewModel<OneConversationViewModel> { parametersOf(id) }
+    val viewModel = getViewModel<ChatViewModel> { parametersOf(id) }
     val title by viewModel.displayName.collectAsState("")
     val picture by viewModel.displayPicture.collectAsState(null)
     val messages by viewModel.messages.collectAsState(emptyList())
-    OneConversation(
+    Chat(
         displayName = title,
         displayPicture = picture ?: "", // TODO : Handle profile pictures
         messages = messages,

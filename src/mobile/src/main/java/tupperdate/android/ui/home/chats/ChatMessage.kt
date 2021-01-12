@@ -21,7 +21,12 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-// TODO : Handle proper offsetting.
+/**
+ * A [ChatMessage] displays a single conversation element.
+ *
+ * @param message the [Message] to display
+ * @param modifier the modifier for this composable
+ */
 @Composable
 fun ChatMessage(
     message: Message,

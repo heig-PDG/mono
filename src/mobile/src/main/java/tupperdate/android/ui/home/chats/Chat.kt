@@ -1,17 +1,16 @@
 package tupperdate.android.ui.home.chats
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,10 +20,11 @@ import tupperdate.android.data.features.messages.Message
 import tupperdate.android.data.features.messages.Sender
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.components.ProfilePicture
+import tupperdate.android.ui.theme.plus
 
 // TODO : Rename to Chat.
 @Composable
-fun OneConversation(
+fun Chat(
     displayName: String,
     displayPicture: Any,
     messages: List<Message>,
@@ -40,13 +40,22 @@ fun OneConversation(
                 onBack = onBack,
             )
         },
-        bodyContent = {
+        bodyContent = { padding ->
             LazyColumn(
-                contentPadding = PaddingValues(8.dp),
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(8.dp) + padding,
                 verticalArrangement = Arrangement.spacedBy(8.dp),
+                reverseLayout = true,
             ) {
                 items(messages) {
-                    ChatMessage(it)
+                    Box(Modifier.fillMaxWidth()) {
+                        val position = Modifier.align(
+                            if (it.from == Sender.Other) Alignment.CenterStart
+                            else Alignment.CenterEnd
+                        )
+                        ChatMessage(it, position)
+                    }
+
                 }
             }
         },
@@ -58,7 +67,8 @@ fun OneConversation(
                 onSubmit = {
                     onSendMessageClick(message)
                     setMessage("")
-                }
+                },
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     )
@@ -101,18 +111,35 @@ private fun MessageDraft(
     value: String,
     onValueChange: (String) -> Unit,
     onSubmit: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
-        onImeActionPerformed = { _, _ -> onSubmit() },
-    )
+    Surface(modifier, elevation = 4.dp) {
+        Row(
+            Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            Arrangement.spacedBy(16.dp),
+            Alignment.CenterVertically,
+        ) {
+            // TODO : Fix weird offset due to missing label.
+            OutlinedTextField(
+                value = value,
+                onValueChange = onValueChange,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+                onImeActionPerformed = { _, _ -> onSubmit() },
+                label = { Text(stringResource(R.string.chat_message_placeholder)) },
+                modifier = Modifier.weight(1f, fill = true),
+            )
+            Providers(AmbientContentAlpha provides ContentAlpha.medium) {
+                IconButton(onSubmit) {
+                    Icon(vectorResource(R.drawable.ic_chat_send))
+                }
+            }
+        }
+    }
 }
 
 @Preview
 @Composable
-private fun OneConversationPreview() {
+private fun ChatPreview() {
     val messages = remember {
         listOf(
             Message(
@@ -130,7 +157,7 @@ private fun OneConversationPreview() {
         )
     }
     TupperdateTheme {
-        OneConversation(
+        Chat(
             displayName = "Aloy",
             displayPicture = "https://pbs.twimg.com/profile_images/1257192502916001794/f1RW6Ogf_400x400.jpg",
             messages = messages,

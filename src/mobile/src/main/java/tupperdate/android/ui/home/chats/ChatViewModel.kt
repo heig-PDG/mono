@@ -10,7 +10,7 @@ import tupperdate.android.data.features.messages.ConversationIdentifier
 import tupperdate.android.data.features.messages.Message
 import tupperdate.android.data.features.messages.MessagesRepository
 
-class OneConversationViewModel(
+class ChatViewModel(
     private val id: ConversationIdentifier,
     private val repository: MessagesRepository,
 ) : ViewModel() {
@@ -24,6 +24,7 @@ class OneConversationViewModel(
         .map { it.displayPictureUrl }
 
     val messages: Flow<List<Message>> = repository.messages(id)
+        .map { it.sortedByDescending { msg -> msg.timestamp } }
 
     fun onSend(message: String) {
         viewModelScope.launch {

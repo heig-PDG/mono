@@ -7,7 +7,7 @@ import androidx.navigation.compose.*
 import org.koin.androidx.compose.getViewModel
 import tupperdate.android.ui.home.Home
 import tupperdate.android.ui.home.HomeSections
-import tupperdate.android.ui.home.chats.OneConversation
+import tupperdate.android.ui.home.chats.Chat
 import tupperdate.android.ui.home.feed.MatchDialog
 import tupperdate.android.ui.home.recipe.NewRecipe
 import tupperdate.android.ui.home.recipe.ViewRecipe
@@ -73,7 +73,7 @@ fun LoggedIn() {
             listOf(navArgument("id") { type = StringType })
         ) {
             it.arguments?.getString("id")?.let { id ->
-                OneConversation(
+                Chat(
                     id = id,
                     onBack = navController::navigateUp,
                 )
