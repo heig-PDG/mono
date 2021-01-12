@@ -1,4 +1,4 @@
-package tupperdate.web.routing.accounts
+package tupperdate.web.legacy.routing.accounts
 
 import com.google.firebase.auth.FirebaseAuth
 import io.ktor.routing.*

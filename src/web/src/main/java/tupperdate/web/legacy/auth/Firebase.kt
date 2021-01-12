@@ -1,4 +1,4 @@
-package tupperdate.web.auth
+package tupperdate.web.legacy.auth
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
@@ -6,7 +6,7 @@ import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.request.*
 import io.ktor.response.*
-import tupperdate.web.auth.FirebaseAuthenticationProvider.Configuration
+import tupperdate.web.legacy.auth.FirebaseAuthenticationProvider.Configuration
 
 /**
  * A [FirebaseAuthPrincipal] represents some information about the currently authenticated

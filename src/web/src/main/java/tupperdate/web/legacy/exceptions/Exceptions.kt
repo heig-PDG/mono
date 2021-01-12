@@ -1,4 +1,4 @@
-package tupperdate.web.exceptions
+package tupperdate.web.legacy.exceptions
 
 import io.ktor.application.*
 import io.ktor.features.*

@@ -12,13 +12,14 @@ import io.ktor.routing.*
 import io.ktor.serialization.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import tupperdate.web.auth.firebase
-import tupperdate.web.exceptions.registerException
-import tupperdate.web.routing.accounts.accounts
-import tupperdate.web.routing.chats.chats
-import tupperdate.web.routing.recipes.recipes
-import tupperdate.web.routing.users.users
-import tupperdate.web.util.*
+import tupperdate.web.legacy.auth.firebase
+import tupperdate.web.legacy.exceptions.registerException
+import tupperdate.web.legacy.routing.accounts.accounts
+import tupperdate.web.legacy.routing.chats.chats
+import tupperdate.web.legacy.routing.recipes.recipes
+import tupperdate.web.legacy.routing.users.users
+import tupperdate.web.legacy.util.getPort
+import tupperdate.web.legacy.util.initialiseApp
 
 @JvmName("main")
 fun main() {

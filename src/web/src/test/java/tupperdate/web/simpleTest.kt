@@ -4,7 +4,7 @@ import com.google.firebase.cloud.FirestoreClient
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import kotlinx.coroutines.runBlocking
-import tupperdate.web.util.*
+import tupperdate.web.legacy.util.*
 import kotlin.test.*
 
 

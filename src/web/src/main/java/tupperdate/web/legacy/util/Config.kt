@@ -1,4 +1,4 @@
-package tupperdate.web.util
+package tupperdate.web.legacy.util
 
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp

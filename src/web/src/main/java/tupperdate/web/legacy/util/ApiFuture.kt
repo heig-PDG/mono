@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package tupperdate.web.util
+package tupperdate.web.legacy.util
 
 import com.google.api.core.ApiFuture
 import com.google.api.core.ApiFutureCallback

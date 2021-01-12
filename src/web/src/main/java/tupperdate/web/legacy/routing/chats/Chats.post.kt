@@ -1,4 +1,4 @@
-package tupperdate.web.routing.chats
+package tupperdate.web.legacy.routing.chats
 
 import com.google.cloud.firestore.Firestore
 import io.ktor.application.*
@@ -7,12 +7,12 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import tupperdate.common.dto.MessageContentDTO
-import tupperdate.web.auth.firebaseAuthPrincipal
-import tupperdate.web.exceptions.statusException
-import tupperdate.web.model.Chat
-import tupperdate.web.model.Message
-import tupperdate.web.model.toMessageDTO
-import tupperdate.web.util.await
+import tupperdate.web.legacy.auth.firebaseAuthPrincipal
+import tupperdate.web.legacy.exceptions.statusException
+import tupperdate.web.legacy.model.Chat
+import tupperdate.web.legacy.model.Message
+import tupperdate.web.legacy.model.toMessageDTO
+import tupperdate.web.legacy.util.await
 
 fun Route.postMessage(store: Firestore) = post("/{userId}/messages") {
     val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)

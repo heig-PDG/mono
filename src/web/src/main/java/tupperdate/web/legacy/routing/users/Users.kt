@@ -1,4 +1,4 @@
-package tupperdate.web.routing.users
+package tupperdate.web.legacy.routing.users
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth

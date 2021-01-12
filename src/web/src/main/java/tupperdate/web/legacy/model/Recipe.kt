@@ -1,10 +1,10 @@
-package tupperdate.web.model
+package tupperdate.web.legacy.model
 
 import io.ktor.http.*
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.common.dto.RecipeAttributesDTO
 import tupperdate.common.dto.RecipeDTO
-import tupperdate.web.exceptions.statusException
+import tupperdate.web.legacy.exceptions.statusException
 
 data class Recipe(
     val id: String? = null,

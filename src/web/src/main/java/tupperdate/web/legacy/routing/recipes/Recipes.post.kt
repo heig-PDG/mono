@@ -1,4 +1,4 @@
-package tupperdate.web.routing.users
+package tupperdate.web.legacy.routing.recipes
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.cloud.FirestoreClient
@@ -9,32 +9,35 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import org.apache.commons.codec.binary.Base64
-import tupperdate.common.dto.MyUserDTO
-import tupperdate.web.auth.firebaseAuthPrincipal
-import tupperdate.web.exceptions.statusException
-import tupperdate.web.model.toUser
-import tupperdate.web.util.await
+import tupperdate.common.dto.NewRecipeDTO
+import tupperdate.common.dto.RecipeDTO
+import tupperdate.web.legacy.auth.firebaseAuthPrincipal
+import tupperdate.web.legacy.exceptions.statusException
+import tupperdate.web.legacy.model.toRecipe
+import tupperdate.web.legacy.model.toRecipeDTO
+import tupperdate.web.legacy.util.await
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
- * Puts a new [MyUserDTO] to the database.
+ * Posts a [NewRecipeDTO] to the database, and returns the built [RecipeDTO].
  *
  * @param firebase the [FirebaseApp] instance that is used.
  */
-fun Route.usersPut(firebase: FirebaseApp) = put("{userId}") {
+fun Route.recipesPost(firebase: FirebaseApp) = post {
+
     val store = FirestoreClient.getFirestore(firebase)
     val bucket = StorageClient.getInstance(firebase).bucket()
 
-    val pathUserId = call.parameters["userId"] ?: statusException(HttpStatusCode.BadRequest)
-    val authUserId = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
-    if (authUserId != pathUserId) throw statusException(HttpStatusCode.Forbidden)
+    val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+    val dto = call.receive<NewRecipeDTO>()
 
-    val doc = store.collection("users").document(authUserId)
-    val dto = call.receive<MyUserDTO>()
+    val doc = store.collection("recipes").document()
+
     val id = UUID.randomUUID().toString()
     val bytes = dto.imageBase64?.let { Base64.decodeBase64(it) }
-    var pict : String? = null
+
+    var pict: String? = null
 
     if (bytes != null) {
         val fileName = "$id.jpg"
@@ -43,13 +46,14 @@ fun Route.usersPut(firebase: FirebaseApp) = put("{userId}") {
             bytes.inputStream(),
             ContentType.Image.JPEG.contentType,
         )
-        // TODO: Find alternative to timeout
         val url = blob.signUrl(365, TimeUnit.DAYS)
         pict = url.toString()
     }
 
-    val user = dto.toUser(doc.id, pict)
+    // TODO: Firestore transaction
+    // For now, assume no two recipes are posted at the same time (bad assumption)
+    val recipe = dto.toRecipe(doc.id, uid, pict)
+    doc.set(recipe).await()
 
-    doc.set(user).await()
-    call.respond(HttpStatusCode.OK)
+    call.respond(recipe.toRecipeDTO())
 }

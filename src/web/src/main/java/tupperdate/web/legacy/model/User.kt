@@ -1,4 +1,4 @@
-package tupperdate.web.model
+package tupperdate.web.legacy.model
 
 import tupperdate.common.dto.MyUserDTO
 import tupperdate.common.dto.UserDTO

@@ -1,4 +1,4 @@
-package tupperdate.web.routing.users
+package tupperdate.web.legacy.routing.users
 
 import com.google.cloud.firestore.Firestore
 import com.google.firebase.auth.FirebaseAuth
@@ -7,11 +7,11 @@ import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import tupperdate.common.dto.*
-import tupperdate.web.auth.firebaseAuthPrincipal
-import tupperdate.web.exceptions.*
-import tupperdate.web.model.User
-import tupperdate.web.model.toUserDTO
-import tupperdate.web.util.await
+import tupperdate.web.legacy.auth.firebaseAuthPrincipal
+import tupperdate.web.legacy.exceptions.*
+import tupperdate.web.legacy.model.User
+import tupperdate.web.legacy.model.toUserDTO
+import tupperdate.web.legacy.util.await
 
 /**
  * Retrieves a [UserDTO] by user id

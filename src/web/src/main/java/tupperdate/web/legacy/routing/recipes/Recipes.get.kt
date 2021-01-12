@@ -1,4 +1,4 @@
-package tupperdate.web.routing.recipes
+package tupperdate.web.legacy.routing.recipes
 
 import com.google.cloud.firestore.DocumentSnapshot
 import com.google.cloud.firestore.Firestore
@@ -8,11 +8,11 @@ import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.response.*
 import io.ktor.routing.*
 import tupperdate.common.dto.RecipeDTO
-import tupperdate.web.auth.firebaseAuthPrincipal
-import tupperdate.web.exceptions.statusException
-import tupperdate.web.model.Recipe
-import tupperdate.web.model.toRecipeDTO
-import tupperdate.web.util.await
+import tupperdate.web.legacy.auth.firebaseAuthPrincipal
+import tupperdate.web.legacy.exceptions.statusException
+import tupperdate.web.legacy.model.Recipe
+import tupperdate.web.legacy.model.toRecipeDTO
+import tupperdate.web.legacy.util.await
 
 fun Route.recipesGet(store: Firestore) {
     own(store)
