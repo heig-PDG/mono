@@ -36,7 +36,7 @@ fun Route.getConvs(store: Firestore) = get("/{userId}") {
     )
 
     val user = store.collection("users").document(userId).get().await()
-        .toObject(User::class.java) ?: statusException(HttpStatusCode.InternalServerError)
+        .toObject(FirestoreUser::class.java) ?: statusException(HttpStatusCode.InternalServerError)
     val recipes = store.collection("recipes")
 
     val convDTO = ConversationDTO(

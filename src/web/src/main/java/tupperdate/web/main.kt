@@ -12,6 +12,8 @@ import io.ktor.routing.*
 import io.ktor.serialization.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import org.koin.ktor.ext.Koin
+import tupperdate.web.facade.profiles.KoinModuleFacadeProfile
 import tupperdate.web.legacy.auth.firebase
 import tupperdate.web.legacy.exceptions.registerException
 import tupperdate.web.legacy.routing.accounts.accounts
@@ -20,6 +22,8 @@ import tupperdate.web.legacy.routing.recipes.recipes
 import tupperdate.web.legacy.routing.users.users
 import tupperdate.web.legacy.util.getPort
 import tupperdate.web.legacy.util.initialiseApp
+import tupperdate.web.model.impl.firestore.KoinModuleModelFirestore
+import tupperdate.web.model.profiles.firestore.KoinModuleModelUsersFirestore
 
 @JvmName("main")
 fun main() {
@@ -44,6 +48,12 @@ fun Application.installServer(firebase: FirebaseApp) {
     install(CallLogging)
     install(ContentNegotiation) {
         json()
+    }
+
+    install(Koin) {
+        modules(KoinModuleFacadeProfile)
+        modules(KoinModuleModelFirestore)
+        modules(KoinModuleModelUsersFirestore)
     }
 
     install(StatusPages) {

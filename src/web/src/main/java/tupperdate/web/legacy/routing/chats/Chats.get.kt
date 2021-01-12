@@ -38,7 +38,7 @@ fun Route.getChats(store: Firestore) = get {
 
     val conversationDTOS: List<ConversationDTO> = convs.map { conv ->
             val user = store.collection("users").document(conv.theirId).get().await()
-                .toObject(User::class.java) ?: statusException(HttpStatusCode.InternalServerError)
+                .toObject(FirestoreUser::class.java) ?: statusException(HttpStatusCode.InternalServerError)
             val recipes = store.collection("recipes")
 
             return@map ConversationDTO(

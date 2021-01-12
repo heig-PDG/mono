@@ -33,6 +33,12 @@ dependencies {
     implementation 'com.google.cloud:google-cloud-firestore:2.1.0'
 }
 
+kotlin {
+    sourceSets.all {
+        languageSettings.enableLanguageFeature('InlineClasses')
+    }
+}
+
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }

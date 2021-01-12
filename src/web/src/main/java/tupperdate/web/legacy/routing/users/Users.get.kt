@@ -9,7 +9,7 @@ import io.ktor.routing.*
 import tupperdate.common.dto.*
 import tupperdate.web.legacy.auth.firebaseAuthPrincipal
 import tupperdate.web.legacy.exceptions.*
-import tupperdate.web.legacy.model.User
+import tupperdate.web.legacy.model.FirestoreUser
 import tupperdate.web.legacy.model.toUserDTO
 import tupperdate.web.legacy.util.await
 
@@ -26,7 +26,7 @@ fun Route.usersGet(store: Firestore, auth: FirebaseAuth) = get("{userId}") {
     if (authId != uid) statusException(HttpStatusCode.Unauthorized)
 
     val user = store.collection("users").document(uid)
-        .get().await().toObject(User::class.java) ?: statusException(HttpStatusCode.NotFound)
+        .get().await().toObject(FirestoreUser::class.java) ?: statusException(HttpStatusCode.NotFound)
 
         call.respond(HttpStatusCode.OK, user.toUserDTO(phone = phone))
 }
