@@ -16,7 +16,7 @@ class SimpleTest {
     @Test
     fun testUnauthorized() {
         withTestApplication {
-            application.installServer(firebase)
+            application.installServer()
 
             with(handleRequest(HttpMethod.Get, "/recipes")) {
                 assertEquals(HttpStatusCode.Unauthorized, response.status())

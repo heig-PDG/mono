@@ -11,6 +11,7 @@ import tupperdate.web.legacy.auth.firebaseAuthPrincipal
 import tupperdate.web.legacy.exceptions.statusException
 import tupperdate.web.legacy.model.*
 import tupperdate.web.legacy.util.await
+import tupperdate.web.model.profiles.firestore.FirestoreUser
 
 fun Route.getConvs(store: Firestore) = get("/{userId}") {
     val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)

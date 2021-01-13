@@ -5,5 +5,5 @@ import tupperdate.web.facade.profiles.ProfileFacade
 import tupperdate.web.facade.profiles.ProfileFacadeImpl
 
 val KoinModuleFacadeRecipe = module {
-    factory<ProfileFacade> { ProfileFacadeImpl(get()) }
+    factory<RecipeFacade> { RecipeFacadeImpl(get()) }
 }

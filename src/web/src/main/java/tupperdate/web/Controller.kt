@@ -5,15 +5,19 @@ import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import io.ktor.util.pipeline.*
 import org.koin.ktor.ext.inject
 import tupperdate.common.dto.MyUserDTO
+import tupperdate.common.dto.UserDTO
+import tupperdate.web.facade.profiles.Profile
 import tupperdate.web.facade.profiles.ProfileFacade
 import tupperdate.web.facade.profiles.toNewProfile
+import tupperdate.web.facade.profiles.toUserDTO
 import tupperdate.web.legacy.auth.firebaseAuthPrincipal
-import tupperdate.web.model.BadInputException
 import tupperdate.web.model.Result
-import tupperdate.web.model.UnauthorizedException
+import tupperdate.web.model.map
 import tupperdate.web.model.profiles.User
+import java.io.InputStream
 
 fun Route.endpoints() {
     route("/users") {
@@ -21,41 +25,39 @@ fun Route.endpoints() {
 
         put("{userId}") {
             facade.save(
-                user = call.user(),
-                profileId = call.param("userId"),
-                profile = call.receive<MyUserDTO>().toNewProfile()
-            ).response()?.let { call.respond(it) }
+                user = requireUser(),
+                profileId = requireParam("userId"),
+                profile = requireBody<MyUserDTO>().toNewProfile()
+            ).let { respond(it) }
         }
 
         get("{userId}") {
             facade.read(
-                user = call.user(),
-                profileId = call.param("userId")
-            ).response()?.let { call.respond(it) }
+                user = requireUser(),
+                profileId = requireParam("userId")
+            ).map(Profile::toUserDTO).let { respond(it) }
         }
     }
 }
 
-fun Result<*>.response(): Any? = when (this) {
-    is Result.Ok<*> -> this.result
-    is Result.Forbidden<*> -> HttpStatusCode.Forbidden
-    is Result.BadInput<*> -> HttpStatusCode.BadRequest
-    is Result.NotFound<*> -> HttpStatusCode.NotFound
-    is Result.MissingData<*> -> HttpStatusCode.InternalServerError
-    is Result.BadServer<*> -> HttpStatusCode.InternalServerError
+private suspend inline fun <T> PipelineContext<Unit, ApplicationCall>.respond(result: Result<T>) {
+    val (body, code) = when (result) {
+        is Result.Ok -> result.result to HttpStatusCode.OK
+        is Result.Forbidden -> result.message to HttpStatusCode.Forbidden
+        is Result.BadInput -> result.message to HttpStatusCode.BadRequest
+        is Result.NotFound -> result.message to HttpStatusCode.NotFound
+        is Result.MissingData -> result.message to HttpStatusCode.InternalServerError
+        is Result.BadServer -> result.message to HttpStatusCode.InternalServerError
+    }
+
+    call.respond(code, body ?: "Info not provided by server")
 }
 
-private fun ApplicationCall.param(parameter: String): String =
-    parameters[parameter] ?: throw BadInputException()
+private suspend inline fun <reified T: Any> PipelineContext<Unit, ApplicationCall>.requireBody(): T =
+    call.receive()
 
-private fun ApplicationCall.user(): User {
-    val id = firebaseAuthPrincipal?.uid ?: throw UnauthorizedException()
-    val data = request.header("Authorization") ?: throw UnauthorizedException()
-    if (!data.startsWith("Bearer")) throw UnauthorizedException()
-    val token = data.replaceFirst("Bearer", "").trim()
+private fun PipelineContext<Unit, ApplicationCall>.requireParam(name: String): String =
+    call.parameters[name] ?: statusException(HttpStatusCode.BadRequest)
 
-    return User(
-        token = token,
-        id = id,
-    )
-}
+private fun PipelineContext<Unit, ApplicationCall>.requireUser(): User =
+    call.firebaseAuthPrincipal?.uid?.let(::User) ?: statusException(HttpStatusCode.Unauthorized)

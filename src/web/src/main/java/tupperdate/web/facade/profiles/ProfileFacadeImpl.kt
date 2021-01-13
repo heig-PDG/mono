@@ -1,7 +1,7 @@
 package tupperdate.web.facade.profiles
 
-import tupperdate.web.model.ForbiddenException
 import tupperdate.web.model.Result
+import tupperdate.web.model.map
 import tupperdate.web.model.profiles.*
 
 class ProfileFacadeImpl(
@@ -13,7 +13,7 @@ class ProfileFacadeImpl(
         profileId: String,
         profile: NewProfile
     ): Result<Unit> {
-        if (user.id != profileId) throw ForbiddenException()
+        if (user.id != profileId) return Result.Forbidden()
         val newUser = ModelNewUser(
             identifier = user.id,
             displayName = profile.displayName,
@@ -27,8 +27,8 @@ class ProfileFacadeImpl(
         user: User,
         profileId: String,
     ): Result<Profile> {
-        if (user.id != profileId) return Result.Forbidden(ForbiddenException())
+        if (user.id != profileId) return Result.Forbidden()
 
-        return users.read(user).toResultProfile()
+        return users.read(user).map(ModelUser::toProfile)
     }
 }
