@@ -1,6 +1,16 @@
 package tupperdate.web.facade.profiles
 
-data class NewProfile<Picture>(
+import tupperdate.common.dto.MyUserDTO
+import tupperdate.web.facade.PictureBase64
+
+data class NewProfile(
     val displayName: String,
-    val picture: Picture?,
+    val picture: PictureBase64?,
 )
+
+fun MyUserDTO.toNewProfile(): NewProfile {
+    return NewProfile(
+        displayName = displayName,
+        picture = imageBase64?.let(::PictureBase64)
+    )
+}

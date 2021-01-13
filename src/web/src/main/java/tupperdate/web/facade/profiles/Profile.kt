@@ -1,8 +1,10 @@
 package tupperdate.web.facade.profiles
 
-data class Profile<Picture>(
+import tupperdate.web.facade.PictureUrl
+
+data class Profile(
     val identifier: String,
     val displayName: String,
-    val picture: Picture?,
+    val picture: PictureUrl?,
     val phone: String,
 )

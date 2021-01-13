@@ -73,9 +73,9 @@ fun Application.installServer(firebase: FirebaseApp) {
 
     install(Routing) {
         authenticate {
+            endpoints()
             accounts(FirebaseAuth.getInstance(firebase))
             recipes(firebase)
-            users(firebase, FirebaseAuth.getInstance(firebase))
             chats(FirestoreClient.getFirestore(firebase))
         }
     }

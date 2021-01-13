@@ -1,10 +1,8 @@
 package tupperdate.web.facade.profiles
 
-import tupperdate.web.facade.PictureBase64
-import tupperdate.web.facade.PictureUrl
+import tupperdate.web.model.ForbiddenException
 import tupperdate.web.model.Result
-import tupperdate.web.model.profiles.User
-import tupperdate.web.model.profiles.UserRepository
+import tupperdate.web.model.profiles.*
 
 class ProfileFacadeImpl(
     private val users: UserRepository,
@@ -13,15 +11,24 @@ class ProfileFacadeImpl(
     override suspend fun save(
         user: User,
         profileId: String,
-        profile: NewProfile<PictureBase64>
+        profile: NewProfile
     ): Result<Unit> {
-        TODO("Not yet implemented")
+        if (user.id != profileId) throw ForbiddenException()
+        val newUser = ModelNewUser(
+            identifier = user.id,
+            displayName = profile.displayName,
+            displayPicture = profile.picture,
+        )
+
+        return users.save(newUser)
     }
 
     override suspend fun read(
         user: User,
         profileId: String,
-    ): Result<Profile<PictureUrl>> {
-        TODO("Not yet implemented")
+    ): Result<Profile> {
+        if (user.id != profileId) return Result.Forbidden(ForbiddenException())
+
+        return users.read(user).toResultProfile()
     }
 }

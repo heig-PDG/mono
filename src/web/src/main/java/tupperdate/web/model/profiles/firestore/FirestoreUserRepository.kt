@@ -7,13 +7,11 @@ import io.ktor.http.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.apache.commons.codec.binary.Base64
+import tupperdate.web.facade.PictureUrl
 import tupperdate.web.legacy.util.await
 import tupperdate.web.model.NotFoundException
 import tupperdate.web.model.Result
-import tupperdate.web.model.profiles.ModelNewUser
-import tupperdate.web.model.profiles.ModelUser
-import tupperdate.web.model.profiles.User
-import tupperdate.web.model.profiles.UserRepository
+import tupperdate.web.model.profiles.*
 import java.util.*
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
@@ -45,10 +43,8 @@ class FirestoreUserRepository(
             picture = url.toString()
         }
 
-        val firestoreUser = FirestoreUser(
-            id = doc.id,
-            displayName = user.displayName,
-            picture = picture,
+        val firestoreUser = user.toFirestoreUser(
+            picture = picture?.let(::PictureUrl),
         )
 
         try {
