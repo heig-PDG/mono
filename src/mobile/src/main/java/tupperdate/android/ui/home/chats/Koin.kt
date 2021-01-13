@@ -5,4 +5,5 @@ import org.koin.dsl.module
 
 val KoinModuleUIMessages = module {
     viewModel { ConversationsViewModel(get()) }
+    viewModel { (id: String) -> ChatViewModel(id = id, get()) }
 }

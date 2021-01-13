@@ -4,9 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.AmbientContentAlpha
-import androidx.compose.material.ContentAlpha.high
-import androidx.compose.material.ContentAlpha.medium
-import androidx.compose.material.MaterialTheme.typography
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
@@ -45,19 +44,19 @@ fun Conversation(
             enabled = false,
         )
         Column {
-            val emphasis = if (highlighted) high else medium
+            val emphasis = if (highlighted) ContentAlpha.high else ContentAlpha.medium
             Providers(AmbientContentAlpha provides emphasis) {
                 Text(
                     text = title,
                     maxLines = 1,
-                    style = typography.subtitle1,
+                    style = MaterialTheme.typography.subtitle1,
                     overflow = TextOverflow.Ellipsis,
                 )
-                Providers(AmbientContentAlpha provides medium) {
+                Providers(AmbientContentAlpha provides ContentAlpha.medium) {
                     Text(
                         text = subtitle,
                         maxLines = 1,
-                        style = typography.subtitle2,
+                        style = MaterialTheme.typography.subtitle2,
                         overflow = TextOverflow.Ellipsis,
                     )
                 }

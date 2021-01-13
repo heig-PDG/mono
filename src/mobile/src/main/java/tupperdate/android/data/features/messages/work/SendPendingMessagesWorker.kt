@@ -28,7 +28,7 @@ class SendPendingMessagesWorker(
         var succcess = true
         for (message in pending) {
             try {
-                client.put<Unit>("/chats/${message.recipient}/messages") {
+                client.post<Unit>("/chats/${message.recipient}/messages") {
                     body = MessageContentDTO(content = message.body)
                 }
                 database.messages().pendingDelete(message.identifier)

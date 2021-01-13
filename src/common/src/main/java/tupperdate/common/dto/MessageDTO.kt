@@ -4,8 +4,8 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import utils.TimestampSerializer
 
-@ExperimentalSerializationApi
 @Serializable
+@OptIn(ExperimentalSerializationApi::class)
 data class MessageDTO(
     val id: String,
     val senderId: String,

@@ -27,6 +27,15 @@ abstract class MessageDao {
     )
     abstract fun messages(forUid: FirebaseUid): Flow<List<MessageEntity>>
 
+    @Query("DELETE FROM messages WHERE messages.id = :forId")
+    abstract suspend fun messagesDelete(forId: String)
+
+    @Query("DELETE FROM messages")
+    abstract suspend fun messagesDeleteAll()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun messagesReplace(entity: MessageEntity)
+
     /**
      * Retrieves all the [PendingMessageEntity], which still need to be sent to the server.
      */

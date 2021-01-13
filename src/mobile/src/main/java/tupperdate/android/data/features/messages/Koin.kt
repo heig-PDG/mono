@@ -7,6 +7,6 @@ import tupperdate.android.data.features.messages.impl.MessagesRepositoryImpl
 val KoinModuleDataMessages = module {
     factory<MessagesRepository> {
         @OptIn(InternalDataApi::class)
-        MessagesRepositoryImpl(get(), get(), get())
+        MessagesRepositoryImpl(get(), get(), get(), get())
     }
 }

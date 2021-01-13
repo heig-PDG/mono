@@ -13,19 +13,19 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import tupperdate.android.data.InternalDataApi
 import tupperdate.android.data.SyncRequestBuilder
+import tupperdate.android.data.features.auth.AuthenticationRepository
 import tupperdate.android.data.features.auth.firebase.FirebaseUid
 import tupperdate.android.data.features.messages.*
 import tupperdate.android.data.features.messages.room.PendingMessageEntity
-import tupperdate.android.data.features.messages.store.AllConversationFetcher
-import tupperdate.android.data.features.messages.store.AllConversationSourceOfTruth
-import tupperdate.android.data.features.messages.store.ConversationFetcher
-import tupperdate.android.data.features.messages.store.OneConversationSourceOfTruth
+import tupperdate.android.data.features.messages.store.*
+import tupperdate.android.data.features.messages.work.RefreshMessagesWorker
 import tupperdate.android.data.features.messages.work.SendPendingMessagesWorker
 import tupperdate.android.data.room.TupperdateDatabase
 
 @InternalDataApi
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class MessagesRepositoryImpl(
+    auth: AuthenticationRepository,
     private val database: TupperdateDatabase,
     private val manager: WorkManager,
     client: HttpClient,
@@ -39,6 +39,11 @@ class MessagesRepositoryImpl(
     private val singleConversationStore = StoreBuilder.from(
         fetcher = ConversationFetcher(client),
         sourceOfTruth = OneConversationSourceOfTruth(database.conversations()),
+    ).build()
+
+    private val singleConversationMessagesStore = StoreBuilder.from(
+        fetcher = MessagesFetcher(client),
+        sourceOfTruth = MessagesSourceOfTruth(auth, database.messages())
     ).build()
 
     /**
@@ -140,10 +145,22 @@ class MessagesRepositoryImpl(
             }
         }
 
+    override fun conversationInfo(
+        with: FirebaseUid,
+    ): Flow<ConversationInfo?> = singleConversationStore.stream(StoreRequest.cached(with, true))
+        .map { it.dataOrNull() }
+        .map {
+            it?.let { entity ->
+                ConversationInfo(entity.name, entity.picture)
+            }
+        }
+
     override fun messages(
         other: FirebaseUid,
-    ): Flow<List<Message>> = database.messages()
-        .messages(other)
+    ): Flow<List<Message>> = singleConversationMessagesStore
+        .stream(StoreRequest.cached(other, true))
+        .map { it.dataOrNull() }
+        .filterNotNull()
         .map {
             it.map { msg ->
                 Message(
@@ -165,10 +182,15 @@ class MessagesRepositoryImpl(
                 body = message,
             )
         )
-        manager.enqueue(
-            SyncRequestBuilder<SendPendingMessagesWorker>()
-                .build()
-        )
+
+        manager
+            .beginWith(SyncRequestBuilder<SendPendingMessagesWorker>().build())
+            .then(
+                SyncRequestBuilder<RefreshMessagesWorker>()
+                    .setInputData(RefreshMessagesWorker.forConversation(to))
+                    .build()
+            )
+            .enqueue()
     }
 
     override suspend fun accept(match: PendingMatch) {
