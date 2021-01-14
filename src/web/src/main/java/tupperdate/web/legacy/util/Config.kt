@@ -16,10 +16,10 @@ private const val DefaultGoogleBucketName = "GOOGLE_BUCKET_NAME"
  * [GoogleCredentials]. If no credential could be built, and exception will be thrown.
  */
 private fun getServiceAccount(): GoogleCredentials = requireNotNull(
-            System.getenv(DefaultGoogleServiceAccountEnvVariable)
-                    .byteInputStream()
-                    .let(GoogleCredentials::fromStream)
-    ) { "Missing \$$DefaultGoogleServiceAccountEnvVariable environment variable." }
+    System.getenv(DefaultGoogleServiceAccountEnvVariable)
+        .byteInputStream()
+        .let(GoogleCredentials::fromStream)
+) { "Missing \$$DefaultGoogleServiceAccountEnvVariable environment variable." }
 
 /**
  * Retrieves the database name from the environment variables and returns it. If no database name
@@ -34,12 +34,12 @@ private fun getDatabase(): String = requireNotNull(System.getenv(DefaultGoogleDa
  * If no storage url could be parsed, and exception will be thrown.
  */
 private fun getStorage(): String = requireNotNull(System.getenv(DefaultGoogleBucketName)) {
-        "Missing \$$DefaultGoogleBucketName environment variable."
-    }.apply {
-        if (this != "tupperdate-developement.appspot.com") {
-            throw RuntimeException("Wrong bucket name ($this)")
-        }
+    "Missing \$$DefaultGoogleBucketName environment variable."
+}.apply {
+    if (this != "tupperdate-developement.appspot.com") {
+        throw RuntimeException("Wrong bucket name ($this)")
     }
+}
 
 /**
  * Builds the [FirebaseOptions] object from the environment variables and returns it.
@@ -59,4 +59,5 @@ fun getPort(): Int = System.getenv(DefaultPortEnvVariable)?.toIntOrNull() ?: Def
 /**
  * Initialized the FirebaseApp from the environment variables and returns it.
  */
-fun initialiseApp(): FirebaseApp = FirebaseApp.initializeApp(getOptions(), UUID.randomUUID().toString())
+fun initialiseApp(): FirebaseApp =
+    FirebaseApp.initializeApp(getOptions(), UUID.randomUUID().toString())

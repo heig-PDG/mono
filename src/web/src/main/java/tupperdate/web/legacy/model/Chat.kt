@@ -4,29 +4,29 @@ import io.ktor.http.*
 import tupperdate.common.dto.MessageDTO
 import tupperdate.web.legacy.exceptions.statusException
 
-data class Chat (
+data class Chat(
     val id: String? = null,
-    val userId1 : String? = null,
-    val userId2 : String? = null,
-    val user1Recipes : List<String>? = null,
-    val user2Recipes : List<String>? = null,
+    val userId1: String? = null,
+    val userId2: String? = null,
+    val user1Recipes: List<String>? = null,
+    val user2Recipes: List<String>? = null,
 )
 
-data class Conv (
+data class Conv(
     val id: String,
-    val myId : String,
-    val theirId : String,
-    val myRecipes : List<String>,
-    val theirRecipes : List<String>,
+    val myId: String,
+    val theirId: String,
+    val myRecipes: List<String>,
+    val theirRecipes: List<String>,
 )
 
-data class NewChat (
+data class NewChat(
     val id: String? = null,
-    val userId1 : String? = null,
-    val userId2 : String? = null,
+    val userId1: String? = null,
+    val userId2: String? = null,
 )
 
-data class Message (
+data class Message(
     val id: String? = null,
     val tempId: String? = null,
     val content: String? = null,
@@ -34,7 +34,7 @@ data class Message (
     val fromUser: String? = null,
 )
 
-fun Message.toMessageDTO() : MessageDTO {
+fun Message.toMessageDTO(): MessageDTO {
 
     return MessageDTO(
         id = this.id ?: statusException(HttpStatusCode.InternalServerError),

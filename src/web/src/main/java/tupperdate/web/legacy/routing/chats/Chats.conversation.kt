@@ -19,7 +19,8 @@ fun Route.getConvs(store: Firestore) = get("/{userId}") {
 
     val docId = minOf(uid, userId) + "_" + maxOf(uid, userId)
 
-    val chat = store.collection("chats").document(docId).get().await().toObject(Chat::class.java) ?: statusException(HttpStatusCode.NotFound)
+    val chat = store.collection("chats").document(docId).get().await().toObject(Chat::class.java)
+        ?: statusException(HttpStatusCode.NotFound)
 
     if (chat.user1Recipes == null || chat.user2Recipes == null) {
         statusException(HttpStatusCode.NotFound)

@@ -41,8 +41,10 @@ fun Recipe.toRecipeDTO(): RecipeDTO {
         timestamp = this.timestamp ?: statusException(HttpStatusCode.InternalServerError),
         picture = this.picture,
         attributes = RecipeAttributesDTO(
-            hasAllergens = this.attributes?.get("hasAllergens") ?: statusException(HttpStatusCode.InternalServerError),
-            vegetarian = this.attributes["vegetarian"] ?: statusException(HttpStatusCode.InternalServerError),
+            hasAllergens = this.attributes?.get("hasAllergens")
+                ?: statusException(HttpStatusCode.InternalServerError),
+            vegetarian = this.attributes["vegetarian"]
+                ?: statusException(HttpStatusCode.InternalServerError),
             warm = this.attributes["warm"] ?: statusException(HttpStatusCode.InternalServerError),
         )
     )

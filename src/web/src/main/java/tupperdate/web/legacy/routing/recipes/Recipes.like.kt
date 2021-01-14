@@ -25,7 +25,8 @@ fun Route.recipesPut(store: Firestore) {
         val recipe = store.collection("recipes").document(recipeId).get().await()
             .toObject(Recipe::class.java) ?: statusException(HttpStatusCode.NotFound)
 
-        val callerId = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+        val callerId =
+            call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
         val userId = recipe.userId ?: statusException(HttpStatusCode.NotFound)
 
         val userDoc = store.collection("users").document(callerId)
@@ -60,7 +61,10 @@ fun Route.recipesPut(store: Firestore) {
         val userDoc = store.collection("users").document(uid)
         val recipeDoc = store.collection("recipes").document(recipeId)
 
-        val time = recipeDoc.get().await().toObject(Recipe::class.java)?.timestamp ?: statusException(HttpStatusCode.NotFound)
+        val time =
+            recipeDoc.get().await().toObject(Recipe::class.java)?.timestamp ?: statusException(
+                HttpStatusCode.NotFound
+            )
         userDoc.update("lastSeenRecipe", time)
 
         call.respond(HttpStatusCode.OK)

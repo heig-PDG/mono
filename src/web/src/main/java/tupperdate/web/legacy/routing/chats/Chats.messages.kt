@@ -8,7 +8,9 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import tupperdate.web.legacy.auth.firebaseAuthPrincipal
 import tupperdate.web.legacy.exceptions.statusException
-import tupperdate.web.legacy.model.*
+import tupperdate.web.legacy.model.Chat
+import tupperdate.web.legacy.model.Message
+import tupperdate.web.legacy.model.toMessageDTO
 import tupperdate.web.legacy.util.await
 
 fun Route.getMessages(store: Firestore) = get("/{userId}/messages") {
@@ -16,7 +18,8 @@ fun Route.getMessages(store: Firestore) = get("/{userId}/messages") {
     val userId = call.parameters["userId"] ?: statusException(HttpStatusCode.BadRequest)
 
     val chatId = minOf(uid, userId) + "_" + maxOf(uid, userId)
-    val chat = store.collection("chats").document(chatId).get().await().toObject(Chat::class.java) ?: statusException(HttpStatusCode.NotFound)
+    val chat = store.collection("chats").document(chatId).get().await().toObject(Chat::class.java)
+        ?: statusException(HttpStatusCode.NotFound)
 
     if (chat.user1Recipes == null || chat.user2Recipes == null) {
         statusException(HttpStatusCode.NotFound)
