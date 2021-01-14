@@ -19,7 +19,8 @@ fun Route.getChats(store: Firestore) = get {
     val smallerId = store.collection("chats").whereEqualTo("userId1", uid).get()
     val greaterId = store.collection("chats").whereEqualTo("userId2", uid).get()
 
-    val chats = (smallerId.await().toObjects(Chat::class.java) + greaterId.await().toObjects(Chat::class.java))
+    val chats = (smallerId.await().toObjects(Chat::class.java) + greaterId.await()
+        .toObjects(Chat::class.java))
         .filter { it.user1Recipes != null && it.user2Recipes != null }
 
     val convs: List<Conv> = chats.map {
@@ -38,27 +39,28 @@ fun Route.getChats(store: Firestore) = get {
     }
 
     val conversationDTOS: List<ConversationDTO> = convs.map { conv ->
-            val user = store.collection("users").document(conv.theirId).get().await()
-                .toObject(FirestoreUser::class.java) ?: statusException(HttpStatusCode.InternalServerError)
-            val recipes = store.collection("recipes")
+        val user = store.collection("users").document(conv.theirId).get().await()
+            .toObject(FirestoreUser::class.java)
+            ?: statusException(HttpStatusCode.InternalServerError)
+        val recipes = store.collection("recipes")
 
-            return@map ConversationDTO(
-                userId = conv.theirId,
-                displayName = user.displayName ?: statusException(HttpStatusCode.InternalServerError),
-                picture = user.picture ?: "https://thispersondoesnotexist.com/", // TODO: Fix me
-                lastMessage = store.collection("chats").document(conv.id).collection("messages")
-                    .orderBy("timestamp", Query.Direction.DESCENDING).limit(1).get().await()
-                    .toObjects(Message::class.java).getOrNull(0)?.toMessageDTO(),
-                myRecipes = conv.myRecipes.map {
-                    recipes.document(it).get().await().toObject(Recipe::class.java)
-                        ?: statusException(HttpStatusCode.InternalServerError)
-                }.map { it.toRecipeDTO() },
-                theirRecipes = conv.theirRecipes.map {
-                    recipes.document(it).get().await().toObject(Recipe::class.java)
-                        ?: statusException(HttpStatusCode.InternalServerError)
-                }.map { it.toRecipeDTO() },
-            )
-        }
+        return@map ConversationDTO(
+            userId = conv.theirId,
+            displayName = user.displayName ?: statusException(HttpStatusCode.InternalServerError),
+            picture = user.picture ?: "https://thispersondoesnotexist.com/", // TODO: Fix me
+            lastMessage = store.collection("chats").document(conv.id).collection("messages")
+                .orderBy("timestamp", Query.Direction.DESCENDING).limit(1).get().await()
+                .toObjects(Message::class.java).getOrNull(0)?.toMessageDTO(),
+            myRecipes = conv.myRecipes.map {
+                recipes.document(it).get().await().toObject(Recipe::class.java)
+                    ?: statusException(HttpStatusCode.InternalServerError)
+            }.map { it.toRecipeDTO() },
+            theirRecipes = conv.theirRecipes.map {
+                recipes.document(it).get().await().toObject(Recipe::class.java)
+                    ?: statusException(HttpStatusCode.InternalServerError)
+            }.map { it.toRecipeDTO() },
+        )
+    }
 
     call.respond(conversationDTOS)
 }

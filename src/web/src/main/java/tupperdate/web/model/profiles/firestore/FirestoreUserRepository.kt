@@ -59,7 +59,7 @@ class FirestoreUserRepository(
     ): Result<ModelUser> = coroutineScope {
         val firestoreUser = async {
             store.collection("users").document(user.id).get().await()
-            .toObject(FirestoreUser::class.java)
+                .toObject(FirestoreUser::class.java)
         }
         val phone = async { auth.getUserAsync(user.id).await().phoneNumber }
 
@@ -67,7 +67,7 @@ class FirestoreUserRepository(
             val result = firestoreUser.await()?.toModelUser(phone.await())
                 ?: return@coroutineScope NotFound()
             Ok(result)
-        } catch(throwable: Throwable) {
+        } catch (throwable: Throwable) {
             BadServer()
         }
     }
