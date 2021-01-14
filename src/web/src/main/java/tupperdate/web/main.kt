@@ -10,7 +10,7 @@ import io.ktor.routing.*
 import io.ktor.serialization.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import org.koin.core.context.startKoin
+import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 import tupperdate.web.facade.profiles.KoinModuleFacadeProfile
 import tupperdate.web.legacy.auth.firebase
@@ -26,19 +26,12 @@ fun main() {
     // Retrieve the port
     val port = getPort()
 
-    startKoin {
-        modules(KoinModuleModelFirebase)
-
-        modules(KoinModuleFacadeProfile)
-        //modules(KoinModuleFacadeRecipe)
-        //modules(KoinModuleFacadeChat)
-
-        modules(KoinModuleModelUsersFirestore)
-        //modules(KoinModuleModelRecipesFirestore)
-        //modules(KoinModuleModelChatsFirestore)
-    }
-
     val server = embeddedServer(Netty, port = port) {
+        install(Koin) {
+            modules(KoinModuleModelFirebase)
+            modules(KoinModuleFacadeProfile)
+            modules(KoinModuleModelUsersFirestore)
+        }
         installServer()
     }
 

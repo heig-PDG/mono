@@ -3,6 +3,7 @@ package tupperdate.web.legacy.util
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
+import java.util.*
 
 private const val DefaultPort = 1234
 private const val DefaultPortEnvVariable = "PORT"
@@ -58,4 +59,4 @@ fun getPort(): Int = System.getenv(DefaultPortEnvVariable)?.toIntOrNull() ?: Def
 /**
  * Initialized the FirebaseApp from the environment variables and returns it.
  */
-fun initialiseApp(): FirebaseApp = FirebaseApp.initializeApp(getOptions())
+fun initialiseApp(): FirebaseApp = FirebaseApp.initializeApp(getOptions(), UUID.randomUUID().toString())
