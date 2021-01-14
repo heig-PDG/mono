@@ -422,6 +422,8 @@ components:
       properties:
         id:
           type: string
+        userId:
+          type: string
         title:
           type: string
         description:
@@ -449,6 +451,8 @@ components:
     MessageDTO:
       properties:
         senderId:
+          type: string
+        tempId:
           type: string
         timestamp:
           type: string

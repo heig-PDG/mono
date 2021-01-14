@@ -8,6 +8,7 @@ import utils.TimestampSerializer
 @OptIn(ExperimentalSerializationApi::class)
 data class MessageDTO(
     val id: String,
+    val tempId: String,
     val senderId: String,
     @Serializable(with = TimestampSerializer::class)
     val timestamp: Long,
