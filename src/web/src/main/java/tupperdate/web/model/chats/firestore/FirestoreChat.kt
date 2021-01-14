@@ -4,15 +4,15 @@ import io.ktor.http.*
 import tupperdate.common.dto.MessageDTO
 import tupperdate.web.legacy.exceptions.statusException
 
-data class FirestoreChat (
+data class FirestoreChat(
     val id: String? = null,
-    val userId1 : String? = null,
-    val userId2 : String? = null,
-    val user1Recipes : List<String>? = null,
-    val user2Recipes : List<String>? = null,
+    val userId1: String? = null,
+    val userId2: String? = null,
+    val user1Recipes: List<String>? = null,
+    val user2Recipes: List<String>? = null,
 )
 
-data class FirestoreMessage (
+data class FirestoreMessage(
     val id: String? = null,
     val tempId: String? = null,
     val content: String? = null,
@@ -20,7 +20,7 @@ data class FirestoreMessage (
     val fromUser: String? = null,
 )
 
-fun FirestoreMessage.toMessageDTO() : MessageDTO {
+fun FirestoreMessage.toMessageDTO(): MessageDTO {
 
     return MessageDTO(
         id = this.id ?: statusException(HttpStatusCode.InternalServerError),

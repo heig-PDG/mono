@@ -51,7 +51,7 @@ private suspend inline fun <T> PipelineContext<Unit, ApplicationCall>.respond(re
     call.respond(code, body ?: "Info not provided by server")
 }
 
-private suspend inline fun <reified T: Any> PipelineContext<Unit, ApplicationCall>.requireBody(): T =
+private suspend inline fun <reified T : Any> PipelineContext<Unit, ApplicationCall>.requireBody(): T =
     call.receive()
 
 private fun PipelineContext<Unit, ApplicationCall>.requireParam(name: String): String =

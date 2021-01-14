@@ -19,8 +19,11 @@ package tupperdate.web.legacy.util
 import com.google.api.core.ApiFuture
 import com.google.api.core.ApiFutureCallback
 import com.google.api.core.ApiFutures
-import com.google.common.util.concurrent.*
-import kotlinx.coroutines.*
+import com.google.common.util.concurrent.MoreExecutors
+import kotlinx.coroutines.CancellableContinuation
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.concurrent.ExecutionException
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -62,5 +65,8 @@ private class ContinuationCallback<T>(
         @Suppress("UNCHECKED_CAST")
         cont?.resume(result as T)
     }
-    override fun onFailure(t: Throwable) { cont?.resumeWithException(t) }
+
+    override fun onFailure(t: Throwable) {
+        cont?.resumeWithException(t)
+    }
 }
