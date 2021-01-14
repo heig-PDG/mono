@@ -2,6 +2,7 @@ package tupperdate.android.data.features.recipe.room
 
 import tupperdate.android.data.InternalDataApi
 import tupperdate.android.data.features.recipe.Recipe
+import tupperdate.android.data.features.recipe.RecipeAttributes
 import tupperdate.common.dto.RecipeDTO
 
 /**
@@ -15,6 +16,9 @@ fun RecipeDTO.asRecipeEntity(inStack: Boolean?): RecipeEntity {
         description = this.description,
         picture = this.picture,
         timestamp = this.timestamp,
+        attributeVegetarian = this.attributes.vegetarian,
+        attributeWarm = this.attributes.warm,
+        attributeHasAllergens = this.attributes.hasAllergens,
         inStack = inStack,
     )
 }
@@ -30,5 +34,10 @@ fun RecipeEntity.toRecipe(): Recipe {
         description = this.description,
         timestamp = this.timestamp,
         picture = this.picture,
+        attributes = RecipeAttributes(
+            vegetarian = this.attributeVegetarian,
+            warm = this.attributeWarm,
+            hasAllergens = this.attributeHasAllergens,
+        )
     )
 }

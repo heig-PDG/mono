@@ -75,16 +75,19 @@ fun Feed(
             }
         }
 
-        SwipeStack(
-            items = recipes,
-            modifier = Modifier.weight(1F),
-            swipeStackState = state,
-        ) { recipe ->
-            RecipeCard(
-                recipe = recipe,
-                onInfoClick = { onRecipeDetailsClick(recipe) },
-                modifier = Modifier.fillMaxSize()
-            )
+        Box(Modifier.weight(1f)) {
+            EmptyFeed(Modifier.fillMaxSize().padding(32.dp))
+            SwipeStack(
+                items = recipes,
+                modifier = Modifier.fillMaxSize(),
+                swipeStackState = state,
+            ) { recipe ->
+                RecipeCard(
+                    recipe = recipe,
+                    onInfoClick = { onRecipeDetailsClick(recipe) },
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         }
 
         RecipeActions(
@@ -93,6 +96,7 @@ fun Feed(
             onBackClick = onRecipePreviousClick,
             onNewRecipeClick = onNewRecipeClick,
             modifier = Modifier.fillMaxWidth(),
+            enabled = topRecipe != null,
         )
     }
 }

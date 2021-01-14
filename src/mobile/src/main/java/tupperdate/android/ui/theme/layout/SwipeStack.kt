@@ -15,7 +15,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.drawLayer
 import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -115,7 +114,6 @@ fun rememberSwipeStackState(
     confirmStateChange: (SwipeStackValue) -> Boolean = { true },
 ): SwipeStackState {
     val clock = AmbientAnimationClock.current.asDisposableClock()
-    // TODO : Remember this across configuration changes, with rememberSavedInstanceState.
     return remember {
         SwipeStackState(initialValue, clock, confirmStateChange)
     }
@@ -216,8 +214,7 @@ private fun SwipeStackPreview() {
     // Remember the swipe stack state.
     val state = rememberSwipeStackState()
 
-    // TODO (alex) : I don't like doing it this way, but I'm not sure that there's a different way
-    //               to change this state (at least with the SwipeableState<T> API).
+    // Could and should probably be done in an onCommit block.
     if (state.isSwiped) {
         items = items.drop(1).plus(next)
         next += 1

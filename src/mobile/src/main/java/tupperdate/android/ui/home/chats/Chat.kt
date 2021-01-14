@@ -22,7 +22,6 @@ import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.components.ProfilePicture
 import tupperdate.android.ui.theme.plus
 
-// TODO : Rename to Chat.
 @Composable
 fun Chat(
     displayName: String,
@@ -85,7 +84,7 @@ private fun ChatTopBar(
     TopAppBar(
         navigationIcon = {
             IconButton(onBack) {
-                Icon(vectorResource(R.drawable.ic_back_arrow))
+                Icon(vectorResource(R.drawable.ic_chat_back))
             }
         },
         title = {

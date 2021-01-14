@@ -8,6 +8,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 import tupperdate.android.ui.ambients.AmbientImagePicker
+import tupperdate.android.ui.theme.PlaceholderProfileImage
 
 @Composable
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -20,7 +21,7 @@ fun OnboardingProfile(
     val image by viewModel.image.collectAsState()
     OnboardingProfile(
         name = name,
-        image = image ?: "", // TODO : Provide a good default.
+        image = image ?: PlaceholderProfileImage,
         onNameChange = viewModel::onNameChange,
         onEditPictureClick = viewModel::onImageClick,
         onSaveClick = viewModel::onSaveClick,

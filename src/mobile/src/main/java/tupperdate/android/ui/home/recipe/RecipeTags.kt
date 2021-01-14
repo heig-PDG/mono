@@ -38,7 +38,6 @@ fun RecipeTags(
     onClickHot: (() -> Unit)? = NoOp,
     onClickAllergens: (() -> Unit)? = NoOp,
 ) {
-    // TODO : String resources.
     Row(
         modifier.wrapContentWidth(),
         Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
@@ -47,28 +46,27 @@ fun RecipeTags(
         RecipeInfoButton(
             onClick = onClickVegan ?: NoOp,
             icon = vectorResource(if (vegan) R.drawable.ic_editrecipe_veggie else R.drawable.ic_editrecipe_not_veggie),
-            title = (if (vegan) stringResource(id = R.string.edit_recipe_veggie)
-            else stringResource(id = R.string.edit_recipe_not_veggie)),
-            Modifier.weight(1f),
+            title = (if (vegan) stringResource(R.string.edit_recipe_veggie)
+            else stringResource(R.string.edit_recipe_not_veggie)),
+            modifier = Modifier.weight(1f),
             enabled = onClickVegan != null,
         )
         VerticalDivider(Modifier.preferredHeight(48.dp))
         RecipeInfoButton(
             onClick = onClickHot ?: NoOp,
             icon = vectorResource(if (hot) R.drawable.ic_editrecipe_warm else R.drawable.ic_editrecipe_cold),
-            title = (if (hot) stringResource(id = R.string.edit_recipe_warm)
-            else stringResource(id = R.string.edit_recipe_cold)),
-            Modifier.weight(1f),
+            title = (if (hot) stringResource(R.string.edit_recipe_warm)
+            else stringResource(R.string.edit_recipe_cold)),
+            modifier = Modifier.weight(1f),
             enabled = onClickHot != null,
         )
         VerticalDivider(Modifier.preferredHeight(48.dp))
         RecipeInfoButton(
             onClick = onClickAllergens ?: NoOp,
-            // TODO : Icon.
             icon = vectorResource(if (hasAllergens) R.drawable.ic_editrecipe_allergens else R.drawable.ic_editrecipe_allergens),
             title = (if (hasAllergens) stringResource(id = R.string.edit_recipe_allergens)
             else stringResource(id = R.string.edit_recipe_no_allergens)),
-            Modifier.weight(1f),
+            modifier = Modifier.weight(1f),
             enabled = onClickAllergens != null,
         )
     }

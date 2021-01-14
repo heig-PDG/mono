@@ -1,19 +1,18 @@
 package tupperdate.android.ui.home
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.material.AmbientContentColor
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.animation.animate
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -21,6 +20,8 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.koin.androidx.compose.getViewModel
 import tupperdate.android.R
 import tupperdate.android.data.features.messages.ConversationIdentifier
 import tupperdate.android.data.features.recipe.Recipe
@@ -33,39 +34,41 @@ import tupperdate.android.ui.theme.Smurf500
 import tupperdate.android.ui.theme.TupperdateTypography
 
 @Composable
+@OptIn(ExperimentalCoroutinesApi::class)
 fun Home(
     onNewRecipeClick: () -> Unit,
     onRecipeDetailsClick: (Recipe) -> Unit,
     onConversationClick: (ConversationIdentifier) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
-    startingSection: HomeSections = HomeSections.Feed,
 ) {
-    val (currentSection, setCurrentSection) = savedInstanceState { startingSection }
+    val viewModel = getViewModel<HomeViewModel>()
+    val section by viewModel.section.collectAsState()
     Scaffold(
         modifier = modifier,
         topBar = {
             TupperdateTopBar(
-                currentSection = currentSection,
-                onSectionSelected = setCurrentSection,
+                currentSection = section,
+                onSectionSelected = viewModel::onSectionSelected,
                 modifier = Modifier.fillMaxWidth(),
             )
         },
         bodyContent = { innerPadding ->
-            Crossfade(currentSection) { section ->
+            Crossfade(section) { section ->
                 when (section) {
-                    HomeSections.Feed -> Feed(
+                    HomeSection.Feed -> Feed(
                         onNewRecipeClick = onNewRecipeClick,
                         onOpenRecipeClick = onRecipeDetailsClick,
                         onBack = onBack,
                         modifier = Modifier.padding(innerPadding),
                     )
-                    HomeSections.Conversations ->
+                    HomeSection.Conversations ->
                         Conversations(
                             onConversationClick = onConversationClick,
                             modifier = Modifier.padding(innerPadding),
                         )
-                    HomeSections.Profile -> Profile(
+                    HomeSection.Profile -> Profile(
+                        onNewRecipeClick = onNewRecipeClick,
                         modifier = Modifier.padding(innerPadding),
                     )
                 }
@@ -76,29 +79,30 @@ fun Home(
 
 @Composable
 private fun TupperdateTopBar(
-    currentSection: HomeSections,
-    onSectionSelected: (HomeSections) -> Unit,
+    currentSection: HomeSection,
+    onSectionSelected: (HomeSection) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = modifier.padding(16.dp)
+        modifier.preferredHeight(56.dp),
+        Arrangement.SpaceBetween,
+        Alignment.CenterVertically,
     ) {
         IconItem(
             asset = vectorResource(R.drawable.ic_home_messages),
-            selected = currentSection == HomeSections.Conversations,
-            onSelected = { onSectionSelected(HomeSections.Conversations) },
+            selected = currentSection == HomeSection.Conversations,
+            onSelected = { onSectionSelected(HomeSection.Conversations) },
         )
 
         FeedItem(
-            selected = currentSection == HomeSections.Feed,
-            onSelected = { onSectionSelected(HomeSections.Feed) },
+            selected = currentSection == HomeSection.Feed,
+            onSelected = { onSectionSelected(HomeSection.Feed) },
         )
 
         IconItem(
             asset = vectorResource(R.drawable.ic_home_accounts),
-            selected = currentSection == HomeSections.Profile,
-            onSelected = { onSectionSelected(HomeSections.Profile) },
+            selected = currentSection == HomeSection.Profile,
+            onSelected = { onSectionSelected(HomeSection.Profile) },
         )
     }
 }
@@ -110,14 +114,17 @@ private fun IconItem(
     onSelected: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val color = if (selected) Color.Smurf500 else Color.InactiveIcons
-
+    val color = animate(if (selected) Color.Smurf500 else Color.InactiveIcons)
     Providers(AmbientContentColor provides color) {
-        Icon(
-            asset,
-            modifier.selectable(selected = selected, onClick = onSelected),
-        )
+        IconButton(onSelected, modifier) {
+            Icon(asset)
+        }
     }
+}
+
+private val TupperdateTitle = buildAnnotatedString {
+    withStyle(SpanStyle(color = Color.Flamingo500)) { append("tupper ") }
+    withStyle(SpanStyle(color = Color.Smurf500)) { append("• date") }
 }
 
 @Composable
@@ -126,28 +133,27 @@ private fun FeedItem(
     onSelected: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val title = buildAnnotatedString {
-        withStyle(SpanStyle(color = Color.Flamingo500)) { append("tupper ") }
-        withStyle(SpanStyle(color = Color.Smurf500)) { append("• date") }
-    }
-
-    if (selected) {
-        Text(
-            text = title,
-            style = TupperdateTypography.h6,
-            modifier = modifier.selectable(selected = selected, onClick = onSelected),
-        )
-    } else {
-        Providers(AmbientContentColor provides Color.InactiveIcons) {
-            Icon(
-                vectorResource(R.drawable.ic_home_cards),
-                modifier.selectable(selected = selected, onClick = onSelected),
+    Crossfade(selected) {
+        if (selected) {
+            Text(
+                text = TupperdateTitle,
+                style = TupperdateTypography.h6,
+                modifier = modifier
+                    .clip(RoundedCornerShape(50))
+                    .clickable(onClick = onSelected)
+                    .padding(horizontal = 12.dp, vertical = 4.dp),
+            )
+        } else {
+            IconItem(
+                asset = vectorResource(R.drawable.ic_home_cards),
+                selected = selected,
+                onSelected = onSelected,
             )
         }
     }
 }
 
-enum class HomeSections {
+enum class HomeSection {
     Conversations,
     Feed,
     Profile,

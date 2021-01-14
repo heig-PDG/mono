@@ -1,11 +1,15 @@
 <resources>
 
-    <style name="Theme.Tupperdate" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Base.Theme.Tupperdate" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">#60B2FF</item>
         <item name="colorPrimaryDark">#339CFF</item>
         <item name="colorPrimaryVariant">#339CFF</item>
         <item name="colorSecondary">#FF99FB</item>
         <item name="colorSecondaryVariant">#FF6BF9</item>
+    </style>
+
+    <style name="Theme.Tupperdate" parent="Base.Theme.Tupperdate">
+        <!-- API-level specific variations. -->
     </style>
 
 </resources>

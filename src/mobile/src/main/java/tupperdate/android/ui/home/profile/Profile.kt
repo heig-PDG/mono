@@ -11,33 +11,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.chrisbanes.accompanist.coil.CoilImage
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 import tupperdate.android.R
 import tupperdate.android.data.features.auth.AuthenticationStatus
 import tupperdate.android.data.features.recipe.Recipe
+import tupperdate.android.data.features.recipe.RecipeAttributes
 import tupperdate.android.ui.ambients.AmbientImagePicker
 import tupperdate.android.ui.ambients.AmbientProfile
-import tupperdate.android.ui.theme.ProfileEmail
-import tupperdate.android.ui.theme.ProfileName
-import tupperdate.android.ui.theme.TupperdateTheme
-import tupperdate.android.ui.theme.TupperdateTypography
+import tupperdate.android.ui.theme.*
 import tupperdate.android.ui.theme.components.ProfilePicture
 import tupperdate.android.ui.theme.material.BrandedButton
-import tupperdate.android.ui.theme.modifier.shade
 
 @Composable
 fun Profile(
+    onNewRecipeClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // TODO: Use new API
-    // TODO: Add support for new tupps
+    // TODO : Display our own recipes
     // TODO: Add location to profiles
     val picker = AmbientImagePicker.current
     val viewModel = getViewModel<ProfileViewModel> { parametersOf(picker) }
@@ -46,7 +41,7 @@ fun Profile(
     val profile = AmbientProfile.current
     val profileName = (profile as? AuthenticationStatus.Displayable)?.displayName ?: ""
     val profileImage = (profile as? AuthenticationStatus.Displayable)?.displayPictureUrl
-        ?: "https://via.placeholder.com/150"
+        ?: PlaceholderProfileImage
     val phone = (profile as? AuthenticationStatus.Displayable)?.phoneNumber ?: ""
     val (name, setName) = remember(profile) { mutableStateOf(profileName) }
 
@@ -66,7 +61,7 @@ fun Profile(
         onPictureClick = {
         },
         onLocationChange = {},
-        onNewRecipeClick = {},
+        onNewRecipeClick = onNewRecipeClick,
         modifier = modifier,
     )
 }
@@ -156,11 +151,9 @@ private fun DisplayRecipeCard(
         shape = RoundedCornerShape(5.dp)
     ) {
         Box {
-            CoilImage(
-                data = recipe.picture ?: "", // TODO: Fix this default value for missing images
-                modifier = Modifier.shade().fillMaxSize(),
-                fadeIn = true,
-                contentScale = ContentScale.Crop,
+            ProfilePicture(
+                image = recipe.picture ?: PlaceholderProfileImage,
+                highlighted = false,
             )
             Row(
                 modifier = Modifier
@@ -251,29 +244,13 @@ fun ProfilePreview() {
             "Red lobster",
             "In the Santa Monica way",
             2077,
-            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg"
+            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg",
+            RecipeAttributes(
+                vegetarian = false,
+                warm = true,
+                hasAllergens = false,
+            ),
         ),
-        Recipe(
-            "Red lobster",
-            "Red lobster",
-            "In the Santa Monica way",
-            2077,
-            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg"
-        ),
-        Recipe(
-            "Red lobster",
-            "Red lobster",
-            "In the Santa Monica way",
-            2077,
-            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg"
-        ),
-        Recipe(
-            "Red lobster",
-            "Red lobster",
-            "In the Santa Monica way",
-            2077,
-            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg"
-        )
     )
     TupperdateTheme {
         val (name, setName) = remember { mutableStateOf("Aloy") }

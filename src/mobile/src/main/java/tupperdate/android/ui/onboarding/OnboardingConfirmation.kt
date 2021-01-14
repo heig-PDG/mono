@@ -18,7 +18,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tupperdate.android.R
 import tupperdate.android.ui.onboarding.OnboardingConfirmationViewModel.ConfirmationState
-import tupperdate.android.ui.onboarding.OnboardingConfirmationViewModel.ConfirmationState.*
+import tupperdate.android.ui.onboarding.OnboardingConfirmationViewModel.ConfirmationState.InternalError
+import tupperdate.android.ui.onboarding.OnboardingConfirmationViewModel.ConfirmationState.VerificationError
+import tupperdate.android.ui.theme.InactiveIcons
 import tupperdate.android.ui.theme.TupperdateTheme
 import tupperdate.android.ui.theme.TupperdateTypography
 import tupperdate.android.ui.theme.material.BrandedButton
@@ -126,11 +128,12 @@ private fun onlyReturnTopBar(onBack: () -> Unit) {
     TopAppBar(
         title = {},
         navigationIcon = {
-            IconButton(onClick = onBack) {
-                Icon(vectorResource(id = R.drawable.ic_back_arrow))
+            IconButton(onBack) {
+                Icon(vectorResource(R.drawable.ic_onboarding_back))
             }
         },
-        backgroundColor = MaterialTheme.colors.surface,
+        backgroundColor = MaterialTheme.colors.background,
+        contentColor = Color.InactiveIcons,
         elevation = 0.dp,
     )
 }

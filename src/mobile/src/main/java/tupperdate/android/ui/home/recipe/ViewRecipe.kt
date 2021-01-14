@@ -23,6 +23,7 @@ import org.koin.core.parameter.parametersOf
 import tupperdate.android.R
 import tupperdate.android.ui.theme.DislikeButton
 import tupperdate.android.ui.theme.LikeButton
+import tupperdate.android.ui.theme.PlaceholderRecipeImage
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -32,34 +33,33 @@ fun ViewRecipe(
     modifier: Modifier = Modifier,
 ) {
     val viewModel = getViewModel<ViewRecipeViewModel> { parametersOf(identifier) }
-
-    val title by viewModel.title().collectAsState()
-    val picture by viewModel.picture().collectAsState()
-    val description by viewModel.description().collectAsState()
+    val recipe by viewModel.recipe.collectAsState(null)
 
     RecipeDetail(
-        heroImage = picture ?: "", // TODO: Fix this default value for missing images
+        heroImage = recipe?.picture ?: PlaceholderRecipeImage,
         header = {
             Text(
                 text = stringResource(id = R.string.edit_recipe_title),
                 modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.overline
             )
-            Text(title, Modifier.fillMaxWidth(), style = MaterialTheme.typography.h5)
+            Text(
+                text = recipe?.title ?: "",
+                modifier = Modifier.fillMaxWidth(),
+                style = MaterialTheme.typography.h5
+            )
             ViewRecipeButtons(
                 onSkip = { onBack() },
                 onLike = { onBack() },
             )
         },
         icons = {
-            // TODO : Actually read this data from the API.
             RecipeTags(
-                vegan = false,
-                hot = false,
-                hasAllergens = false,
+                vegan = recipe?.attributes?.vegetarian ?: false,
+                hot = recipe?.attributes?.warm ?: false,
+                hasAllergens = recipe?.attributes?.hasAllergens ?: false,
             )
         },
-        // TODO : Actually read this from the API.
         description = {
             Text(
                 text = stringResource(id = R.string.edit_recipe_description),
@@ -67,7 +67,7 @@ fun ViewRecipe(
                 style = MaterialTheme.typography.overline
             )
             Text(
-                text = description,
+                text = recipe?.description ?: "",
                 modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.body1,
             )
