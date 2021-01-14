@@ -8,7 +8,6 @@ import io.ktor.routing.*
 import io.ktor.util.pipeline.*
 import org.koin.ktor.ext.inject
 import tupperdate.common.dto.MyUserDTO
-import tupperdate.common.dto.UserDTO
 import tupperdate.web.facade.profiles.Profile
 import tupperdate.web.facade.profiles.ProfileFacade
 import tupperdate.web.facade.profiles.toNewProfile
@@ -17,7 +16,6 @@ import tupperdate.web.legacy.auth.firebaseAuthPrincipal
 import tupperdate.web.model.Result
 import tupperdate.web.model.map
 import tupperdate.web.model.profiles.User
-import java.io.InputStream
 
 fun Route.endpoints() {
     route("/users") {
