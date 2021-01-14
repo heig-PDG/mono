@@ -24,6 +24,13 @@ object RecipeFetchers {
     }
 
     /**
+     * A [Fetcher] that retrieves all the recipes for the currently logged in user.
+     */
+    fun ownRecipesFetcher(client: HttpClient): Fetcher<Unit, List<RecipeDTO>> {
+        return Fetcher.of { client.get("/recipes/own") }
+    }
+
+    /**
      * A [Fetcher] that retrieves a single [RecipeDTO] for the currently logged in user.
      */
     fun singleRecipeFetcher(client: HttpClient): Fetcher<String, RecipeDTO> {

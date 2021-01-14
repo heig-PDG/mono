@@ -1,7 +1,6 @@
 package tupperdate.android.ui.home
 
 import org.koin.android.viewmodel.dsl.viewModel
-import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import tupperdate.android.data.features.picker.ImagePicker
 import tupperdate.android.ui.home.feed.FeedViewModel
@@ -13,7 +12,7 @@ val KoinModuleUIHome = module {
     viewModel { HomeViewModel() }
     viewModel { FeedViewModel(get()) }
     viewModel { (picker: ImagePicker) ->
-        ProfileViewModel(get(parameters = { parametersOf(picker) }))
+        ProfileViewModel(get(), get())
     }
     viewModel { (picker: ImagePicker, onBack: () -> Unit) ->
         NewRecipeViewModel(picker, onBack, get())

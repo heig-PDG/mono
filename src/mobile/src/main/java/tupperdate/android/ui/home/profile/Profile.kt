@@ -32,11 +32,11 @@ fun Profile(
     onNewRecipeClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // TODO : Display our own recipes
     // TODO: Add location to profiles
     val picker = AmbientImagePicker.current
     val viewModel = getViewModel<ProfileViewModel> { parametersOf(picker) }
     val editing by viewModel.editing.collectAsState(false)
+    val recipes by viewModel.recipes.collectAsState(emptyList())
 
     val profile = AmbientProfile.current
     val profileName = (profile as? AuthenticationStatus.Displayable)?.displayName ?: ""
@@ -50,7 +50,7 @@ fun Profile(
         phone = phone,
         profilePicture = profileImage,
         location = "",
-        userRecipes = listOf(),
+        userRecipes = recipes,
         editing = editing,
         onEditClick = viewModel::onEditClick,
         onNameChange = setName,

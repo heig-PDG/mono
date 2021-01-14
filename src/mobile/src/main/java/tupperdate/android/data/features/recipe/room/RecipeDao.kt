@@ -28,6 +28,18 @@ abstract class RecipeDao {
     abstract fun recipesStack(): Flow<List<RecipeEntity>>
 
     /**
+     * Finds all the recipe that should be displayed for the specified user.
+     */
+    @Query(
+        """
+        SELECT * FROM recipes
+        WHERE recipes.owner = :user
+        ORDER BY recipes.timestamp ASC
+        """
+    )
+    abstract fun recipesForUser(user: String): Flow<List<RecipeEntity>>
+
+    /**
      * Finds the recipe for a certain provided id.
      */
     @Query(
