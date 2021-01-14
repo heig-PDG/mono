@@ -47,7 +47,7 @@ class RecipeRepositoryImpl(
     override fun stack(): Flow<List<Recipe>> {
         val store = StoreBuilder.from(
             RecipeFetchers.allRecipesFetcher(client),
-            RecipeStackSourceOfTruth(database.recipes()),
+            RecipeStackSourceOfTruth(auth, database.recipes()),
         ).build()
 
         return store.stream(StoreRequest.cached(Unit, true))

@@ -21,11 +21,11 @@ abstract class RecipeDao {
     @Query(
         """
         SELECT * FROM recipes
-        WHERE recipes.inStack = 1
+        WHERE recipes.inStack = 1 AND recipes.owner != :user
         ORDER BY timestamp ASC
         """
     )
-    abstract fun recipesStack(): Flow<List<RecipeEntity>>
+    abstract fun recipesStack(user: String): Flow<List<RecipeEntity>>
 
     /**
      * Finds all the recipe that should be displayed for the specified user.
