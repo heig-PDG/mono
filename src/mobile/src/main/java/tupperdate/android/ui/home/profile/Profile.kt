@@ -1,5 +1,6 @@
 package tupperdate.android.ui.home.profile
 
+import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -87,7 +88,7 @@ private fun Profile(
     modifier: Modifier = Modifier,
 ) {
 
-    Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
+    ScrollableColumn(modifier.fillMaxSize().padding(16.dp)) {
         Text(
             text = stringResource(R.string.profile_title_capital),
             style = TupperdateTypography.overline,
