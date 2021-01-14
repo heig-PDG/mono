@@ -5,7 +5,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -116,54 +119,23 @@ private fun Profile(
             modifier = Modifier
                 .fillMaxWidth(1f)
                 .padding(top = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             item {
                 BrandedButton(
                     value = stringResource(R.string.profile_new_recipe),
                     onClick = onNewRecipeClick,
                     modifier = Modifier
-                        .width(RecipeCardWidth)
-                        .height(RecipeCardHeight)
+                        .width(120.dp)
+                        .height(160.dp)
                         .padding(end = 16.dp),
                     shape = RoundedCornerShape(5.dp)
                 )
             }
             items(userRecipes) {
-                DisplayRecipeCard(
+                ProfileRecipe(
                     recipe = it,
                     modifier = Modifier.padding(end = 16.dp)
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun DisplayRecipeCard(
-    recipe: Recipe,
-    modifier: Modifier = Modifier,
-) {
-    Card(
-        modifier = modifier
-            .height(RecipeCardHeight)
-            .width(RecipeCardWidth),
-        shape = RoundedCornerShape(5.dp)
-    ) {
-        Box {
-            ProfilePicture(
-                image = recipe.picture ?: PlaceholderProfileImage,
-                highlighted = false,
-            )
-            Row(
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(16.dp)
-            ) {
-                Text(
-                    text = recipe.title,
-                    style = TupperdateTypography.caption,
-                    color = Color.White
                 )
             }
         }
@@ -272,6 +244,3 @@ fun ProfilePreview() {
             onNewRecipeClick = {})
     }
 }
-
-private val RecipeCardWidth = 120.dp
-private val RecipeCardHeight = 160.dp
