@@ -241,6 +241,7 @@ fun ProfilePreview() {
     val reList = listOf(
         Recipe(
             "Red lobster",
+            "Lobster owner",
             "Red lobster",
             "In the Santa Monica way",
             2077,

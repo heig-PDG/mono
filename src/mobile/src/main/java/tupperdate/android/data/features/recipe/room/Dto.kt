@@ -12,6 +12,7 @@ import tupperdate.common.dto.RecipeDTO
 fun RecipeDTO.asRecipeEntity(inStack: Boolean?): RecipeEntity {
     return RecipeEntity(
         identifier = this.id,
+        ownerId = this.userId,
         title = this.title,
         description = this.description,
         picture = this.picture,
@@ -30,6 +31,7 @@ fun RecipeDTO.asRecipeEntity(inStack: Boolean?): RecipeEntity {
 fun RecipeEntity.toRecipe(): Recipe {
     return Recipe(
         identifier = this.identifier,
+        owner = this.ownerId,
         title = this.title,
         description = this.description,
         timestamp = this.timestamp,
