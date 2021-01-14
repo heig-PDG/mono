@@ -18,7 +18,7 @@ fun Route.postMessage(store: Firestore) = post("/{userId}/messages") {
     val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
     val userId = call.parameters["userId"] ?: statusException(HttpStatusCode.BadRequest)
 
-    val content = call.receive<MessageContentDTO>()
+    val messageContent = call.receive<MessageContentDTO>()
 
     val chatId = minOf(uid, userId) + "_" + maxOf(uid, userId)
     val chat = store.collection("chats").document(chatId).get().await().toObject(Chat::class.java) ?: statusException(HttpStatusCode.NotFound)
@@ -29,7 +29,8 @@ fun Route.postMessage(store: Firestore) = post("/{userId}/messages") {
     val newDoc = store.collection("chats").document(chatId).collection("messages").document()
     val message = Message(
         id = newDoc.id,
-        content = content.content,
+        tempId = messageContent.tempId,
+        content = messageContent.content,
         timestamp = System.currentTimeMillis(),
         fromUser = uid
     )

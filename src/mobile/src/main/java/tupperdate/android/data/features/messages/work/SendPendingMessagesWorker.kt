@@ -29,7 +29,10 @@ class SendPendingMessagesWorker(
         for (message in pending) {
             try {
                 client.post<Unit>("/chats/${message.recipient}/messages") {
-                    body = MessageContentDTO(content = message.body)
+                    body = MessageContentDTO(
+                        content = message.body,
+                        tempId = "",
+                    )
                 }
                 database.messages().pendingDelete(message.identifier)
             } catch (throwable: Throwable) {

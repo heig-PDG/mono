@@ -28,6 +28,7 @@ data class NewChat (
 
 data class Message (
     val id: String? = null,
+    val tempId: String? = null,
     val content: String? = null,
     val timestamp: Long? = null,
     val fromUser: String? = null,
@@ -37,6 +38,7 @@ fun Message.toMessageDTO() : MessageDTO {
 
     return MessageDTO(
         id = this.id ?: statusException(HttpStatusCode.InternalServerError),
+        tempId = this.tempId ?: statusException(HttpStatusCode.InternalServerError),
         senderId = this.fromUser ?: statusException(HttpStatusCode.InternalServerError),
         timestamp = this.timestamp ?: statusException(HttpStatusCode.InternalServerError),
         content = this.content ?: statusException(HttpStatusCode.InternalServerError),
