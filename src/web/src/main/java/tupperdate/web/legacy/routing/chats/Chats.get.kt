@@ -7,27 +7,27 @@ import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import tupperdate.common.dto.ConversationDTO
-import tupperdate.web.legacy.auth.firebaseAuthPrincipal
+import tupperdate.web.legacy.auth.tupperdateAuthPrincipal
 import tupperdate.web.legacy.exceptions.statusException
 import tupperdate.web.legacy.model.*
 import tupperdate.web.legacy.util.await
 import tupperdate.web.model.profiles.firestore.FirestoreUser
 
 fun Route.getChats(store: Firestore) = get {
-    val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+    val id = call.tupperdateAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
 
-    val smallerId = store.collection("chats").whereEqualTo("userId1", uid).get()
-    val greaterId = store.collection("chats").whereEqualTo("userId2", uid).get()
+    val smallerId = store.collection("chats").whereEqualTo("userId1", id).get()
+    val greaterId = store.collection("chats").whereEqualTo("userId2", id).get()
 
     val chats = (smallerId.await().toObjects(Chat::class.java) + greaterId.await()
         .toObjects(Chat::class.java))
         .filter { it.user1Recipes != null && it.user2Recipes != null }
 
     val convs: List<Conv> = chats.map {
-        val myId = if (uid == it.userId1) it.userId1 else it.userId2
-        val theirId = if (uid != it.userId1) it.userId1 else it.userId2
-        val myRecipes = if (uid == it.userId1) it.user1Recipes else it.user2Recipes
-        val theirRecipes = if (uid != it.userId1) it.user1Recipes else it.user2Recipes
+        val myId = if (id.uid == it.userId1) it.userId1 else it.userId2
+        val theirId = if (id.uid != it.userId1) it.userId1 else it.userId2
+        val myRecipes = if (id.uid == it.userId1) it.user1Recipes else it.user2Recipes
+        val theirRecipes = if (id.uid != it.userId1) it.user1Recipes else it.user2Recipes
 
         return@map Conv(
             id = it.id ?: statusException(HttpStatusCode.InternalServerError),

@@ -1,11 +1,17 @@
 package tupperdate.web.facade.profiles
 
 import tupperdate.web.model.Result
+import tupperdate.web.model.accounts.PhoneRepository
+import tupperdate.web.model.flatMap
 import tupperdate.web.model.map
-import tupperdate.web.model.profiles.*
+import tupperdate.web.model.profiles.ModelNewUser
+import tupperdate.web.model.profiles.User
+import tupperdate.web.model.profiles.UserRepository
+import tupperdate.web.model.profiles.toProfile
 
 class ProfileFacadeImpl(
     private val users: UserRepository,
+    private val phones: PhoneRepository,
 ) : ProfileFacade {
 
     override suspend fun save(
@@ -13,9 +19,9 @@ class ProfileFacadeImpl(
         profileId: String,
         profile: NewProfile
     ): Result<Unit> {
-        if (user.id != profileId) return Result.Forbidden()
+        if (user.id.uid != profileId) return Result.Forbidden()
         val newUser = ModelNewUser(
-            identifier = user.id,
+            identifier = user.id.uid,
             displayName = profile.displayName,
             displayPicture = profile.picture,
         )
@@ -27,8 +33,11 @@ class ProfileFacadeImpl(
         user: User,
         profileId: String,
     ): Result<Profile> {
-        if (user.id != profileId) return Result.Forbidden()
 
-        return users.read(user).map(ModelUser::toProfile)
+        if (user.id.uid != profileId) return Result.Forbidden()
+
+        return phones.read(user).flatMap { phone ->
+            users.read(user).map { it.toProfile(phone.number) }
+        }
     }
 }

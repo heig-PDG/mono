@@ -6,7 +6,7 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import tupperdate.web.legacy.auth.firebaseAuthPrincipal
+import tupperdate.web.legacy.auth.tupperdateAuthPrincipal
 import tupperdate.web.legacy.exceptions.statusException
 import tupperdate.web.legacy.model.Chat
 import tupperdate.web.legacy.model.Message
@@ -14,10 +14,10 @@ import tupperdate.web.legacy.model.toMessageDTO
 import tupperdate.web.legacy.util.await
 
 fun Route.getMessages(store: Firestore) = get("/{userId}/messages") {
-    val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+    val id = call.tupperdateAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
     val userId = call.parameters["userId"] ?: statusException(HttpStatusCode.BadRequest)
 
-    val chatId = minOf(uid, userId) + "_" + maxOf(uid, userId)
+    val chatId = minOf(id.uid, userId) + "_" + maxOf(id.uid, userId)
     val chat = store.collection("chats").document(chatId).get().await().toObject(Chat::class.java)
         ?: statusException(HttpStatusCode.NotFound)
 
