@@ -11,11 +11,11 @@ import io.ktor.routing.*
 import org.apache.commons.codec.binary.Base64
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.common.dto.RecipeDTO
-import tupperdate.web.utils.auth.tupperdateAuthPrincipal
 import tupperdate.web.legacy.model.toRecipe
 import tupperdate.web.legacy.model.toRecipeDTO
 import tupperdate.web.legacy.util.await
-import tupperdate.web.statusException
+import tupperdate.web.utils.auth.tupperdateAuthPrincipal
+import tupperdate.web.utils.statusException
 import java.util.*
 import java.util.concurrent.TimeUnit
 

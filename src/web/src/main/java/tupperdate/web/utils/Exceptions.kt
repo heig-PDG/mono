@@ -1,4 +1,4 @@
-package tupperdate.web
+package tupperdate.web.utils
 
 import io.ktor.application.*
 import io.ktor.features.*

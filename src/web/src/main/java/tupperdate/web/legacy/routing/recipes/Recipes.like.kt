@@ -7,11 +7,11 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import tupperdate.web.utils.auth.tupperdateAuthPrincipal
 import tupperdate.web.legacy.model.NewChat
 import tupperdate.web.legacy.model.Recipe
 import tupperdate.web.legacy.util.await
-import tupperdate.web.statusException
+import tupperdate.web.utils.auth.tupperdateAuthPrincipal
+import tupperdate.web.utils.statusException
 
 
 /**

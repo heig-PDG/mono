@@ -4,7 +4,7 @@ import io.ktor.http.*
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.common.dto.RecipeAttributesDTO
 import tupperdate.common.dto.RecipeDTO
-import tupperdate.web.statusException
+import tupperdate.web.utils.statusException
 
 data class FirestoreRecipe(
     val id: String? = null,

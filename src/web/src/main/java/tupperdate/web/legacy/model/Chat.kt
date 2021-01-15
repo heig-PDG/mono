@@ -2,7 +2,7 @@ package tupperdate.web.legacy.model
 
 import io.ktor.http.*
 import tupperdate.common.dto.MessageDTO
-import tupperdate.web.statusException
+import tupperdate.web.utils.statusException
 
 data class Chat(
     val id: String? = null,

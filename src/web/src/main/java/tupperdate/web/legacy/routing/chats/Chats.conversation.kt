@@ -7,11 +7,11 @@ import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import tupperdate.common.dto.ConversationDTO
-import tupperdate.web.utils.auth.tupperdateAuthPrincipal
 import tupperdate.web.legacy.model.*
 import tupperdate.web.legacy.util.await
 import tupperdate.web.model.profiles.firestore.FirestoreUser
-import tupperdate.web.statusException
+import tupperdate.web.utils.auth.tupperdateAuthPrincipal
+import tupperdate.web.utils.statusException
 
 fun Route.getConvs(store: Firestore) = get("/{userId}") {
     val id = call.tupperdateAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)

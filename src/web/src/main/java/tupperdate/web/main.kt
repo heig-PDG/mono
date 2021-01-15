@@ -13,7 +13,6 @@ import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 import tupperdate.web.facade.accounts.KoinModuleFacadeAccountReal
 import tupperdate.web.facade.profiles.KoinModuleFacadeProfile
-import tupperdate.web.utils.auth.tupperdate
 import tupperdate.web.legacy.routing.accounts.accounts
 import tupperdate.web.legacy.routing.chats.chats
 import tupperdate.web.legacy.routing.recipes.recipes
@@ -22,6 +21,8 @@ import tupperdate.web.model.accounts.firestore.KoinModuleModelAuthFirebase
 import tupperdate.web.model.accounts.firestore.KoinModuleModelPhonesFirebase
 import tupperdate.web.model.impl.firestore.KoinModuleModelFirebase
 import tupperdate.web.model.profiles.firestore.KoinModuleModelUsersFirestore
+import tupperdate.web.utils.auth.tupperdate
+import tupperdate.web.utils.registerException
 
 @JvmName("main")
 fun main() {

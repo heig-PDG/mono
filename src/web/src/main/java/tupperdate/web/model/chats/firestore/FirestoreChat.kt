@@ -2,7 +2,7 @@ package tupperdate.web.model.chats.firestore
 
 import io.ktor.http.*
 import tupperdate.common.dto.MessageDTO
-import tupperdate.web.statusException
+import tupperdate.web.utils.statusException
 
 data class FirestoreChat(
     val id: String? = null,
