@@ -15,7 +15,7 @@ import tupperdate.web.facade.profiles.toUserDTO
 import tupperdate.web.model.Result
 import tupperdate.web.model.map
 import tupperdate.web.model.profiles.User
-import tupperdate.web.utils.auth.tupperdateAuthPrincipal
+import tupperdate.web.utils.tupperdateAuthPrincipal
 import tupperdate.web.utils.statusException
 
 fun Route.endpoints() {

@@ -2,7 +2,7 @@ package tupperdate.web.model.accounts.firestore
 
 import com.google.firebase.auth.FirebaseAuth
 import tupperdate.web.facade.accounts.Phone
-import tupperdate.web.legacy.util.await
+import tupperdate.web.utils.await
 import tupperdate.web.model.Result
 import tupperdate.web.model.accounts.PhoneRepository
 import tupperdate.web.model.profiles.User

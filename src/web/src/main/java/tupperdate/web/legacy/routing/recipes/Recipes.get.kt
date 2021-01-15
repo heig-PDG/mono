@@ -10,8 +10,8 @@ import io.ktor.routing.*
 import tupperdate.common.dto.RecipeDTO
 import tupperdate.web.legacy.model.Recipe
 import tupperdate.web.legacy.model.toRecipeDTO
-import tupperdate.web.legacy.util.await
-import tupperdate.web.utils.auth.tupperdateAuthPrincipal
+import tupperdate.web.utils.await
+import tupperdate.web.utils.tupperdateAuthPrincipal
 import tupperdate.web.utils.statusException
 
 fun Route.recipesGet(store: Firestore) {

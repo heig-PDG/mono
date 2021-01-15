@@ -7,7 +7,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.apache.commons.codec.binary.Base64
 import tupperdate.web.facade.PictureUrl
-import tupperdate.web.legacy.util.await
+import tupperdate.web.utils.await
 import tupperdate.web.model.Result
 import tupperdate.web.model.Result.*
 import tupperdate.web.model.profiles.*

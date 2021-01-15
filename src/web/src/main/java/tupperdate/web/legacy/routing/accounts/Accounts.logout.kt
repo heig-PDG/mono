@@ -5,7 +5,7 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import tupperdate.web.utils.auth.tupperdateAuthPrincipal
+import tupperdate.web.utils.tupperdateAuthPrincipal
 import tupperdate.web.utils.statusException
 
 fun Route.logout(auth: FirebaseAuth) = post("logout") {

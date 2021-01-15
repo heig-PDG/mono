@@ -1,4 +1,4 @@
-package tupperdate.web.utils.auth
+package tupperdate.web.utils
 
 import com.google.firebase.auth.FirebaseAuthException
 import io.ktor.application.*
@@ -8,8 +8,8 @@ import io.ktor.response.*
 import tupperdate.web.facade.accounts.AccountFacade
 import tupperdate.web.facade.accounts.AccountId
 import tupperdate.web.facade.accounts.Token
-import tupperdate.web.utils.auth.TupperdateAuthenticationProvider.Configuration
 import tupperdate.web.model.Result
+import tupperdate.web.utils.TupperdateAuthenticationProvider.Configuration
 
 /**
  * A [TupperdateAuthPrincipal] represents some information about the currently authenticated

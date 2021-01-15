@@ -9,8 +9,8 @@ import io.ktor.routing.*
 import tupperdate.web.legacy.model.Chat
 import tupperdate.web.legacy.model.Message
 import tupperdate.web.legacy.model.toMessageDTO
-import tupperdate.web.legacy.util.await
-import tupperdate.web.utils.auth.tupperdateAuthPrincipal
+import tupperdate.web.utils.await
+import tupperdate.web.utils.tupperdateAuthPrincipal
 import tupperdate.web.utils.statusException
 
 fun Route.getMessages(store: Firestore) = get("/{userId}/messages") {

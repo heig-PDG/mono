@@ -21,7 +21,7 @@ import tupperdate.web.model.accounts.firestore.KoinModuleModelAuthFirebase
 import tupperdate.web.model.accounts.firestore.KoinModuleModelPhonesFirebase
 import tupperdate.web.model.impl.firestore.KoinModuleModelFirebase
 import tupperdate.web.model.profiles.firestore.KoinModuleModelUsersFirestore
-import tupperdate.web.utils.auth.tupperdate
+import tupperdate.web.utils.tupperdate
 import tupperdate.web.utils.registerException
 
 @JvmName("main")

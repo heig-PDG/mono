@@ -13,8 +13,8 @@ import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.common.dto.RecipeDTO
 import tupperdate.web.legacy.model.toRecipe
 import tupperdate.web.legacy.model.toRecipeDTO
-import tupperdate.web.legacy.util.await
-import tupperdate.web.utils.auth.tupperdateAuthPrincipal
+import tupperdate.web.utils.await
+import tupperdate.web.utils.tupperdateAuthPrincipal
 import tupperdate.web.utils.statusException
 import java.util.*
 import java.util.concurrent.TimeUnit
