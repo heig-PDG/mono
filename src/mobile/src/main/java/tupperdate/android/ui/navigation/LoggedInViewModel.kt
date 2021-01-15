@@ -12,7 +12,6 @@ class LoggedInViewModel(
     private val messages: MessagesRepository,
 ) : ViewModel() {
 
-    // TODO : Introduce a grace delay in case of multiple matches.
     val match: Flow<PendingMatch?> = messages.pending.map { it.firstOrNull() }
 
     /**
