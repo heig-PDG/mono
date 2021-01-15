@@ -26,6 +26,14 @@ class ChatViewModel(
     val messages: Flow<List<Message>> = repository.messages(id)
         .map { it.sortedByDescending { msg -> msg.timestamp } }
 
+    val recipesMine: Flow<List<String?>> = repository.conversation(id)
+        .filterNotNull()
+        .map { it.myRecipePictures }
+
+    val recipesTheirs: Flow<List<String?>> = repository.conversation(id)
+        .filterNotNull()
+        .map { it.theirRecipePictures }
+
     fun onSend(message: String) {
         viewModelScope.launch {
             repository.send(id, message)

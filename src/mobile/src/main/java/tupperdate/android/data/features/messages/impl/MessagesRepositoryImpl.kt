@@ -63,8 +63,6 @@ class MessagesRepositoryImpl(
                     val (theirs, mine) = database.conversations()
                         .conversationRecipeAllOnce(conv.identifier)
                         .partition { recipe -> recipe.recipeBelongsToThem }
-                    // TODO : We could use a custom fetcher to avoid nested queries, although this
-                    //        is not necessary.
                     PendingMatch(
                         identifier = conv.identifier,
                         myPicture = mine.asSequence()
@@ -89,8 +87,6 @@ class MessagesRepositoryImpl(
                     conv.previewBody == null &&
                     conv.previewTimestamp == null
                 ) {
-                    // TODO : We could use a custom fetcher to avoid nested queries, although this
-                    //        is not necessary.
                     val (theirs, mine) = database.conversations()
                         .conversationRecipeAllOnce(conv.identifier)
                         .partition { recipe -> recipe.recipeBelongsToThem }
@@ -114,13 +110,20 @@ class MessagesRepositoryImpl(
                 if (entity.previewTimestamp == null ||
                     entity.previewBody == null
                 ) null
-                else Conversation(
-                    identifier = entity.identifier,
-                    picture = entity.picture,
-                    previewTitle = entity.name,
-                    previewBody = entity.previewBody,
-                    previewTimestamp = entity.previewTimestamp,
-                )
+                else {
+                    val (theirs, mine) = database.conversations()
+                        .conversationRecipeAllOnce(entity.identifier)
+                        .partition { recipe -> recipe.recipeBelongsToThem }
+                    Conversation(
+                        identifier = entity.identifier,
+                        picture = entity.picture,
+                        previewTitle = entity.name,
+                        previewBody = entity.previewBody,
+                        previewTimestamp = entity.previewTimestamp,
+                        myRecipePictures = mine.map { r -> r.recipePicture },
+                        theirRecipePictures = theirs.map { r -> r.recipePicture },
+                    )
+                }
             }
         }
         .map { it.filterNotNull() }
@@ -135,13 +138,20 @@ class MessagesRepositoryImpl(
                 if (entity.previewTimestamp == null ||
                     entity.previewBody == null
                 ) null
-                else Conversation(
-                    identifier = entity.identifier,
-                    picture = entity.picture,
-                    previewTitle = entity.name,
-                    previewBody = entity.previewBody,
-                    previewTimestamp = entity.previewTimestamp,
-                )
+                else {
+                    val (theirs, mine) = database.conversations()
+                        .conversationRecipeAllOnce(entity.identifier)
+                        .partition { recipe -> recipe.recipeBelongsToThem }
+                    Conversation(
+                        identifier = entity.identifier,
+                        picture = entity.picture,
+                        previewTitle = entity.name,
+                        previewBody = entity.previewBody,
+                        previewTimestamp = entity.previewTimestamp,
+                        myRecipePictures = mine.map { r -> r.recipePicture },
+                        theirRecipePictures = theirs.map { r -> r.recipePicture },
+                    )
+                }
             }
         }
 
