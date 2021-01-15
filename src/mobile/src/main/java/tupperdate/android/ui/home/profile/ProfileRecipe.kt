@@ -1,6 +1,7 @@
 package tupperdate.android.ui.home.profile
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -23,6 +24,7 @@ import tupperdate.android.ui.theme.modifier.shade
 @Composable
 fun ProfileRecipe(
     recipe: Recipe,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -31,7 +33,7 @@ fun ProfileRecipe(
             .preferredWidth(ProfileRecipeWidth),
         shape = RoundedCornerShape(8.dp)
     ) {
-        Box {
+        Box(Modifier.clickable(onClick = onClick)) {
             CoilImage(
                 data = recipe.picture ?: PlaceholderRecipeImage,
                 contentScale = ContentScale.Crop,

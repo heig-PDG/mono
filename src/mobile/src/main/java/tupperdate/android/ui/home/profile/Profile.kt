@@ -34,6 +34,7 @@ import tupperdate.android.ui.theme.material.BrandedButton
 @Composable
 fun Profile(
     onNewRecipeClick: () -> Unit,
+    onOwnRecipeClick: (Recipe) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     // TODO: Add location to profiles
@@ -50,36 +51,39 @@ fun Profile(
     val (name, setName) = remember(profile) { mutableStateOf(profileName) }
 
     Profile(
-        name = name,
-        phone = phone,
+        profileName = name,
+        profilePhone = phone,
         profilePicture = profileImage,
-        userRecipes = recipes,
-        editing = editing,
-        onEditClick = viewModel::onEditClick,
-        onNameChange = setName,
-        onSaveClick = {
+        profileEditing = editing,
+        onProfileNameChanged = setName,
+        onProfileEditClick = viewModel::onEditClick,
+        onProfileSaveClick = {
             // TODO : Let the ViewModel own the text state.
             viewModel.onSave(name)
         },
-        onPictureClick = {
-        },
-        onNewRecipeClick = onNewRecipeClick,
+        onProfilePictureClick = { /*TODO*/ },
+        recipes = recipes,
+        onRecipeNewClick = onNewRecipeClick,
+        onRecipeOwnClick = onOwnRecipeClick,
         modifier = modifier,
     )
 }
 
 @Composable
 private fun Profile(
-    name: String,
-    phone: String,
+    // Profile management.
+    profileName: String,
+    profilePhone: String,
     profilePicture: Any,
-    userRecipes: List<Recipe>,
-    editing: Boolean,
-    onEditClick: () -> Unit,
-    onSaveClick: () -> Unit,
-    onNameChange: (String) -> Unit,
-    onPictureClick: () -> Unit,
-    onNewRecipeClick: () -> Unit,
+    profileEditing: Boolean,
+    onProfileNameChanged: (String) -> Unit,
+    onProfileEditClick: () -> Unit,
+    onProfileSaveClick: () -> Unit,
+    onProfilePictureClick: () -> Unit,
+    // Recipe management.
+    recipes: List<Recipe>,
+    onRecipeNewClick: () -> Unit,
+    onRecipeOwnClick: (Recipe) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -96,14 +100,14 @@ private fun Profile(
         }
         item {
             ProfileRecap(
-                name = name,
-                phone = phone,
+                name = profileName,
+                phone = profilePhone,
                 image = profilePicture,
-                editing = editing,
-                onEditClick = onEditClick,
-                onNameChange = onNameChange,
-                onSaveClick = onSaveClick,
-                onPictureClick = onPictureClick,
+                editing = profileEditing,
+                onEditClick = onProfileEditClick,
+                onNameChange = onProfileNameChanged,
+                onSaveClick = onProfileSaveClick,
+                onPictureClick = onProfilePictureClick,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
         }
@@ -124,15 +128,15 @@ private fun Profile(
                 item {
                     BrandedButton(
                         value = stringResource(R.string.profile_new_recipe),
-                        onClick = onNewRecipeClick,
+                        onClick = onRecipeNewClick,
                         modifier = Modifier
                             .width(120.dp)
                             .height(160.dp),
                         shape = RoundedCornerShape(5.dp)
                     )
                 }
-                items(userRecipes) {
-                    ProfileRecipe(it)
+                items(recipes) {
+                    ProfileRecipe(it, onClick = { onRecipeOwnClick(it) })
                 }
             }
         }
@@ -206,13 +210,13 @@ private fun ProfileRecap(
 fun ProfilePreview() {
     val reList = listOf(
         Recipe(
-            "Red lobster",
-            "Lobster owner",
-            "Red lobster",
-            "In the Santa Monica way",
-            2077,
-            "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg",
-            RecipeAttributes(
+            identifier = "Red lobster",
+            owner = "Lobster owner",
+            title = "Red lobster",
+            description = "In the Santa Monica way",
+            timestamp = 2077,
+            picture = "https://www.theflavorbender.com/wp-content/uploads/2019/01/How-to-cook-Lobster-6128-700x1049.jpg",
+            attributes = RecipeAttributes(
                 vegetarian = false,
                 warm = true,
                 hasAllergens = false,
@@ -224,15 +228,16 @@ fun ProfilePreview() {
         val (editing, setEditing) = remember { mutableStateOf(false) }
 
         Profile(
-            name = name,
-            phone = "079 123 55 41",
+            profileName = name,
+            profilePhone = "079 123 55 41",
             profilePicture = "https://pbs.twimg.com/profile_images/1257192502916001794/f1RW6Ogf_400x400.jpg",
-            userRecipes = reList,
-            editing = editing,
-            onEditClick = { setEditing(true) },
-            onNameChange = setName,
-            onSaveClick = { setEditing(false) },
-            onPictureClick = {},
-            onNewRecipeClick = {})
+            profileEditing = editing,
+            onProfileNameChanged = setName,
+            onProfileEditClick = { setEditing(true) },
+            onProfileSaveClick = { setEditing(false) },
+            onProfilePictureClick = { /*TODO*/ },
+            recipes = reList,
+            onRecipeNewClick = { /*TODO*/ },
+            onRecipeOwnClick = { /*TODO*/ })
     }
 }
