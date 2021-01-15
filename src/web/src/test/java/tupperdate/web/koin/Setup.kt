@@ -5,7 +5,6 @@ import io.ktor.server.testing.*
 import org.koin.ktor.ext.Koin
 import tupperdate.web.facade.profiles.KoinModuleFacadeProfile
 import tupperdate.web.installServer
-import tupperdate.web.model.accounts.firestore.KoinModuleModelPhonesFirebase
 import tupperdate.web.model.impl.firestore.KoinModuleModelFirebase
 import tupperdate.web.model.profiles.firestore.KoinModuleModelUsersFirestore
 
@@ -16,6 +15,7 @@ fun <R> withTupperdateTestApplication(engine: TestApplicationEngine.() -> R): R 
             modules(KoinModuleModelUsersFirestore)
 
             modules(KoinModuleRepositoryPhoneMock)
+            modules(KoinModuleNotificationMock)
 
             modules(KoinModuleFacadeAccountMock)
             modules(KoinModuleFacadeProfile)

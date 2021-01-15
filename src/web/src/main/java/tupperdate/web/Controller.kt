@@ -8,18 +8,24 @@ import io.ktor.routing.*
 import io.ktor.util.pipeline.*
 import org.koin.ktor.ext.inject
 import tupperdate.common.dto.MyUserDTO
-import tupperdate.web.facade.profiles.Profile
-import tupperdate.web.facade.profiles.ProfileFacade
-import tupperdate.web.facade.profiles.toNewProfile
-import tupperdate.web.facade.profiles.toUserDTO
+import tupperdate.common.dto.NewNotificationTokenDTO
+import tupperdate.web.facade.profiles.*
 import tupperdate.web.legacy.auth.tupperdateAuthPrincipal
 import tupperdate.web.model.Result
 import tupperdate.web.model.map
 import tupperdate.web.model.profiles.User
 
 fun Route.endpoints() {
+    val facade by this.inject<ProfileFacade>()
+    route("/notifications") {
+        post {
+            facade.register(
+                user = requireUser(),
+                token = requireBody<NewNotificationTokenDTO>().toNotificationToken()
+            ).let { respond(it) }
+        }
+    }
     route("/users") {
-        val facade by this.inject<ProfileFacade>()
 
         put("{userId}") {
             facade.save(

@@ -8,6 +8,7 @@ import org.koin.android.ext.koin.androidLogger
 import tupperdate.android.data.KoinDataApiModule
 import tupperdate.android.data.features.auth.KoinModuleDataAuthentication
 import tupperdate.android.data.features.messages.KoinModuleDataMessages
+import tupperdate.android.data.features.notifications.KoinModuleDataNotification
 import tupperdate.android.data.features.recipe.KoinModuleDataRecipe
 import tupperdate.android.ui.home.KoinModuleUIHome
 import tupperdate.android.ui.home.chats.KoinModuleUIMessages
@@ -43,6 +44,7 @@ fun Tupperdate.startKoin() = org.koin.core.context.startKoin {
     modules(KoinModuleDataAuthentication)
     modules(KoinModuleDataMessages)
     modules(KoinModuleDataRecipe)
+    modules(KoinModuleDataNotification)
 
     // Application modules.
     modules(KoinModuleUILoggedIn)
