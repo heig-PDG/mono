@@ -6,15 +6,17 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.junit.Test
-import tupperdate.common.dto.*
+import tupperdate.common.dto.MyUserDTO
+import tupperdate.common.dto.NewRecipeDTO
+import tupperdate.common.dto.RecipeAttributesDTO
+import tupperdate.common.dto.RecipeDTO
 import tupperdate.web.utils.authRequest
+import tupperdate.web.utils.botId
 import tupperdate.web.utils.botName
 import tupperdate.web.utils.jsonType
 import tupperdate.web.utils.koin.withTupperdateTestApplication
-import tupperdate.web.utils.botId
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
-
 
 class RecipesTest {
 
@@ -70,7 +72,7 @@ class RecipesTest {
     }
 
     @Test
-    fun testGetSomeRecipe() {
+    fun testPostGetSomeRecipe() {
         val title = "botRecipeTitle2"
         val description = "botRecipeDescription2"
         val hasAllergens = true
