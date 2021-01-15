@@ -4,7 +4,7 @@ import io.ktor.http.*
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.common.dto.RecipeAttributesDTO
 import tupperdate.common.dto.RecipeDTO
-import tupperdate.web.legacy.exceptions.statusException
+import tupperdate.web.statusException
 
 data class Recipe(
     val id: String? = null,

@@ -6,12 +6,12 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import tupperdate.web.legacy.auth.tupperdateAuthPrincipal
-import tupperdate.web.legacy.exceptions.statusException
+import tupperdate.web.utils.auth.tupperdateAuthPrincipal
 import tupperdate.web.legacy.model.Chat
 import tupperdate.web.legacy.model.Message
 import tupperdate.web.legacy.model.toMessageDTO
 import tupperdate.web.legacy.util.await
+import tupperdate.web.statusException
 
 fun Route.getMessages(store: Firestore) = get("/{userId}/messages") {
     val id = call.tupperdateAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)

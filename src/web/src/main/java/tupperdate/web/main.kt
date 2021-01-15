@@ -13,7 +13,7 @@ import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 import tupperdate.web.facade.accounts.KoinModuleFacadeAccountReal
 import tupperdate.web.facade.profiles.KoinModuleFacadeProfile
-import tupperdate.web.legacy.auth.tupperdate
+import tupperdate.web.utils.auth.tupperdate
 import tupperdate.web.legacy.routing.accounts.accounts
 import tupperdate.web.legacy.routing.chats.chats
 import tupperdate.web.legacy.routing.recipes.recipes

@@ -12,7 +12,7 @@ import tupperdate.web.facade.profiles.Profile
 import tupperdate.web.facade.profiles.ProfileFacade
 import tupperdate.web.facade.profiles.toNewProfile
 import tupperdate.web.facade.profiles.toUserDTO
-import tupperdate.web.legacy.auth.tupperdateAuthPrincipal
+import tupperdate.web.utils.auth.tupperdateAuthPrincipal
 import tupperdate.web.model.Result
 import tupperdate.web.model.map
 import tupperdate.web.model.profiles.User

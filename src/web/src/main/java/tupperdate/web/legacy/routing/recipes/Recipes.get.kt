@@ -8,11 +8,11 @@ import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.response.*
 import io.ktor.routing.*
 import tupperdate.common.dto.RecipeDTO
-import tupperdate.web.legacy.auth.tupperdateAuthPrincipal
-import tupperdate.web.legacy.exceptions.statusException
+import tupperdate.web.utils.auth.tupperdateAuthPrincipal
 import tupperdate.web.legacy.model.Recipe
 import tupperdate.web.legacy.model.toRecipeDTO
 import tupperdate.web.legacy.util.await
+import tupperdate.web.statusException
 
 fun Route.recipesGet(store: Firestore) {
     own(store)

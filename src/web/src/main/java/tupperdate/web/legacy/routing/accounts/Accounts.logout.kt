@@ -5,8 +5,8 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import tupperdate.web.legacy.auth.tupperdateAuthPrincipal
-import tupperdate.web.legacy.exceptions.statusException
+import tupperdate.web.utils.auth.tupperdateAuthPrincipal
+import tupperdate.web.statusException
 
 fun Route.logout(auth: FirebaseAuth) = post("logout") {
     val id = call.tupperdateAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
