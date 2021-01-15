@@ -9,7 +9,6 @@ import tupperdate.web.model.profiles.User
 import tupperdate.web.model.profiles.UserRepository
 import tupperdate.web.model.recipes.RecipeRepository
 import tupperdate.web.model.recipes.toModelNewRecipe
-import tupperdate.web.model.recipes.toRecipe
 
 class RecipeFacadeImpl(
     private val recipes: RecipeRepository,
@@ -73,7 +72,7 @@ class RecipeFacadeImpl(
         if (chats.saveNewChat(newChat) !is Result.Ok) { return res1 }
 
         // Append recipe likes to correct array
-        val res2 = chats.updateLikes(chatId, mapOf(callerLike to FieldValue.arrayUnion(recipeId)))
+        val res2 = chats.updateLikes(chatId, mapOf(callerLike to recipeId))
         if (res2 !is Result.Ok) { return res2 }
 
         // set recipe as seen

@@ -1,7 +1,7 @@
 package tupperdate.web.model.recipes.firestore
 
-import io.ktor.http.*
 import tupperdate.web.facade.PictureUrl
+import tupperdate.web.model.recipes.ModelNewRecipe
 import tupperdate.web.model.recipes.ModelRecipe
 
 data class FirestoreRecipe(
@@ -24,7 +24,19 @@ fun FirestoreRecipe.toModelRecipe(): ModelRecipe? {
         picture = picture?.let(::PictureUrl),
         timestamp = timestamp ?: return null,
         hasAllergens = attributes?.get("hasAllergens") ?: return null,
-        vegetarian = attributes?.get("vegetarian") ?: return null,
-        warm = attributes?.get("warm") ?: return null,
+        vegetarian = attributes.get("vegetarian") ?: return null,
+        warm = attributes.get("warm") ?: return null,
+    )
+}
+
+fun ModelNewRecipe.toFirestoreRecipe(id: String, userId: String, picture: PictureUrl?): FirestoreRecipe {
+    return FirestoreRecipe(
+        id = id,
+        userId = userId,
+        title = title,
+        description = description,
+        timestamp = System.currentTimeMillis(),
+        picture = picture?.url,
+        attributes = attributes,
     )
 }

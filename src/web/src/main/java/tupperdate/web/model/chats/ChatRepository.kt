@@ -32,6 +32,6 @@ interface ChatRepository {
 
     suspend fun updateLikes(
         chatId: String,
-        likes: Map<String, FieldValue>,
+        likes: Map<String, String>,
     ): Result<Unit>
 }

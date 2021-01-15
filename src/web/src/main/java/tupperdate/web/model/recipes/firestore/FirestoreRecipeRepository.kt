@@ -3,22 +3,15 @@ package tupperdate.web.model.recipes.firestore
 import com.google.cloud.firestore.DocumentSnapshot
 import com.google.cloud.firestore.Firestore
 import com.google.firebase.cloud.StorageClient
-import io.ktor.application.*
 import io.ktor.http.*
-import io.ktor.response.*
 import org.apache.commons.codec.binary.Base64
 import tupperdate.web.facade.PictureUrl
-import tupperdate.web.legacy.model.Recipe
-import tupperdate.web.legacy.model.toRecipeDTO
 import tupperdate.web.model.Result
 import tupperdate.web.model.profiles.User
 import tupperdate.web.model.recipes.ModelNewRecipe
 import tupperdate.web.model.recipes.ModelRecipe
 import tupperdate.web.model.recipes.RecipeRepository
-import tupperdate.web.model.recipes.toFirestoreRecipe
 import tupperdate.web.utils.await
-import tupperdate.web.utils.statusException
-import tupperdate.web.utils.tupperdateAuthPrincipal
 import java.util.*
 import java.util.concurrent.TimeUnit
 

@@ -84,7 +84,6 @@ fun Route.endpoints() {
 
 
         put("/{recipeId}/like") {
-            println("Hello")
             respond(facade.like(user = requireUser(), recipeId = requireParam("recipeId")))
         }
 
