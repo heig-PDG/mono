@@ -6,7 +6,7 @@ import io.ktor.server.testing.*
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.koin.ktor.ext.inject
-import tupperdate.web.koin.withTupperdateTestApplication
+import tupperdate.web.utils.koin.withTupperdateTestApplication
 import tupperdate.web.utils.await
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals

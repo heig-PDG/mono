@@ -1,4 +1,4 @@
-package tupperdate.web.koin
+package tupperdate.web.utils.koin
 
 import tupperdate.web.facade.accounts.AccountFacade
 import tupperdate.web.facade.accounts.AccountId
