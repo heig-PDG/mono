@@ -2,6 +2,7 @@ package tupperdate.web.model
 
 sealed class Result<T> {
     data class Ok<T>(val result: T) : Result<T>()
+    data class Unauthorized<T>(val message: String? = null) : Result<T>()
     data class Forbidden<T>(val message: String? = null) : Result<T>()
     data class BadInput<T>(val message: String? = null) : Result<T>()
     data class NotFound<T>(val message: String? = null) : Result<T>()
@@ -11,7 +12,8 @@ sealed class Result<T> {
 
 inline fun <S, T> Result<S>.map(f: (S) -> T): Result<T> = when (this) {
     is Result.Ok -> Result.Ok(f(this.result))
-    is Result.Forbidden -> Result.Forbidden()
+    is Result.Unauthorized -> Result.Unauthorized(this.message)
+    is Result.Forbidden -> Result.Forbidden(this.message)
     is Result.BadInput -> Result.BadInput(this.message)
     is Result.NotFound -> Result.NotFound(this.message)
     is Result.MissingData -> Result.MissingData(this.message)
@@ -20,7 +22,8 @@ inline fun <S, T> Result<S>.map(f: (S) -> T): Result<T> = when (this) {
 
 inline fun <S, T> Result<S>.flatMap(f: (S) -> Result<T>): Result<T> = when (this) {
     is Result.Ok -> f(this.result)
-    is Result.Forbidden -> Result.Forbidden()
+    is Result.Unauthorized -> Result.Unauthorized(this.message)
+    is Result.Forbidden -> Result.Forbidden(this.message)
     is Result.BadInput -> Result.BadInput(this.message)
     is Result.NotFound -> Result.NotFound(this.message)
     is Result.MissingData -> Result.MissingData(this.message)

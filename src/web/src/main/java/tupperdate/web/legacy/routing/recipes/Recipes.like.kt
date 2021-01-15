@@ -7,7 +7,7 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import tupperdate.web.legacy.auth.firebaseAuthPrincipal
+import tupperdate.web.legacy.auth.tupperdateAuthPrincipal
 import tupperdate.web.legacy.exceptions.statusException
 import tupperdate.web.legacy.model.NewChat
 import tupperdate.web.legacy.model.Recipe
@@ -26,17 +26,17 @@ fun Route.recipesPut(store: Firestore) {
             .toObject(Recipe::class.java) ?: statusException(HttpStatusCode.NotFound)
 
         val callerId =
-            call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+            call.tupperdateAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
         val userId = recipe.userId ?: statusException(HttpStatusCode.NotFound)
 
-        val userDoc = store.collection("users").document(callerId)
+        val userDoc = store.collection("users").document(callerId.uid)
 
         // A user can't like his own recipe
-        if (callerId == userId) statusException(HttpStatusCode.Forbidden)
+        if (callerId.uid == userId) statusException(HttpStatusCode.Forbidden)
 
-        fun smallerId() = minOf(callerId, userId)
-        fun greaterId() = maxOf(callerId, userId)
-        fun callerLike() = if (userId < callerId) "user1Recipes" else "user2Recipes"
+        fun smallerId() = minOf(callerId.uid, userId)
+        fun greaterId() = maxOf(callerId.uid, userId)
+        fun callerLike() = if (userId < callerId.uid) "user1Recipes" else "user2Recipes"
 
         val chatDoc = store.collection("chats").document(smallerId() + "_" + greaterId())
 
@@ -56,9 +56,9 @@ fun Route.recipesPut(store: Firestore) {
 
     put("{recipeId}/dislike") {
         val recipeId = call.parameters["recipeId"] ?: statusException(HttpStatusCode.BadRequest)
-        val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+        val id = call.tupperdateAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
 
-        val userDoc = store.collection("users").document(uid)
+        val userDoc = store.collection("users").document(id.uid)
         val recipeDoc = store.collection("recipes").document(recipeId)
 
         val time =
