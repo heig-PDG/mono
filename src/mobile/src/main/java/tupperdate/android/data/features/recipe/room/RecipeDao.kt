@@ -59,6 +59,16 @@ abstract class RecipeDao {
     abstract suspend fun recipesInsert(entity: RecipeEntity): Long
 
     /**
+     * Un-swipes a single [RecipeEntity], adding it back to the stack. It will not necessarily
+     * be added to the top of the stack.
+     */
+    @Transaction
+    open suspend fun recipesUnswipe(forId: String) {
+        val recipe = recipeOnce(forId) ?: return
+        recipesInsert(recipe.copy(inStack = true))
+    }
+
+    /**
      * Similar to [recipe], but does not return a [Flow] with changes over time. You're very
      * unlikely to use this method.
      *

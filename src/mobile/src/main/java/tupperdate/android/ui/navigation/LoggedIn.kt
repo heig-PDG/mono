@@ -85,7 +85,6 @@ fun LoggedIn() {
                 onConversationClick = {
                     navController.navigate(LoggedInDestination.viewConversation(it))
                 },
-                onBack = { navController.navigateUp() },
             )
         }
     }

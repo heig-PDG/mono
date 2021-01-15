@@ -2,9 +2,7 @@ package tupperdate.android.ui.home.feed
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.data.features.recipe.RecipeRepository
@@ -18,8 +16,19 @@ class FeedViewModel(
     private val recipeRepository: RecipeRepository
 ) : ViewModel() {
 
+    /**
+     * The last recipe that was swiped in the stack. It will get replaced as new recipes are liked
+     * or disliked, letting you issue a new vote.
+     */
+    private val lastSwiped = MutableStateFlow<Recipe?>(null)
+
     private val stack = recipeRepository.stack()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    /**
+     * A [Flow] that emits true if the unswipe action should be enabled.
+     */
+    val unswipeEnabled = lastSwiped.map { it != null }
 
     /**
      * Returns a [Flow] of the recipes that should be displayed in the stack.
@@ -29,11 +38,23 @@ class FeedViewModel(
     }
 
     /**
+     * Callback called when the user presses the back button.
+     */
+    fun onUnswipe() {
+        val recipe = lastSwiped.value ?: return
+        lastSwiped.value = null
+        viewModelScope.launch {
+            recipeRepository.unswipe(recipe.identifier)
+        }
+    }
+
+    /**
      * Callback called when the user presses the like button.
      */
     fun onLike() {
         val top = stack.value.firstOrNull() ?: return
         viewModelScope.launch {
+            lastSwiped.value = top
             recipeRepository.like(top.identifier)
         }
     }
@@ -44,6 +65,7 @@ class FeedViewModel(
     fun onDislike() {
         val top = stack.value.firstOrNull() ?: return
         viewModelScope.launch {
+            lastSwiped.value = top
             recipeRepository.dislike(top.identifier)
         }
     }

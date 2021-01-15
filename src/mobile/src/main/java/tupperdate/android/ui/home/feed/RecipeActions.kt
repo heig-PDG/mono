@@ -27,28 +27,29 @@ fun RecipeActions(
     onBackClick: () -> Unit,
     onNewRecipeClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true,
+    likeEnabled: Boolean = true,
+    unswipeEnabled: Boolean = false,
 ) {
     Row(modifier, Arrangement.SpaceEvenly, Alignment.CenterVertically) {
         IconButton(
             onClick = onBackClick,
             icon = vectorResource(R.drawable.ic_home_cancel),
             backgroundColor = Color.ReturnButton,
-            enabled = enabled,
+            enabled = unswipeEnabled,
             modifier = Modifier.preferredSize(SmallSize)
         )
         IconButton(
             onClick = onDislikeClick,
             icon = vectorResource(R.drawable.ic_home_dislike_recipe),
             backgroundColor = Color.DislikeButton,
-            enabled = enabled,
+            enabled = likeEnabled,
             modifier = Modifier.preferredSize(HugeSize)
         )
         IconButton(
             onClick = onLikeClick,
             icon = vectorResource(R.drawable.ic_home_like_recipe),
             backgroundColor = Color.LikeButton,
-            enabled = enabled,
+            enabled = likeEnabled,
             modifier = Modifier.preferredSize(HugeSize)
         )
         IconButton(
