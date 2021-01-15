@@ -12,7 +12,7 @@ val KoinModuleUIHome = module {
     viewModel { HomeViewModel() }
     viewModel { FeedViewModel(get()) }
     viewModel { (picker: ImagePicker) ->
-        ProfileViewModel(get(), get())
+        ProfileViewModel(picker, get(), get())
     }
     viewModel { (picker: ImagePicker, onBack: () -> Unit) ->
         NewRecipeViewModel(picker, onBack, get())

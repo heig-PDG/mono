@@ -61,7 +61,7 @@ fun Profile(
             // TODO : Let the ViewModel own the text state.
             viewModel.onSave(name)
         },
-        onProfilePictureClick = { /*TODO*/ },
+        onProfilePictureClick = viewModel::onProfilePictureClick,
         recipes = recipes,
         onRecipeNewClick = onNewRecipeClick,
         onRecipeOwnClick = onOwnRecipeClick,
