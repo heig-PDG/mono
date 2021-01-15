@@ -19,15 +19,14 @@ import kotlin.test.assertEquals
 class UsersTest {
 
     @Test
-    fun testPutUser() {
+    fun testPutGetUser() {
         withTupperdateTestApplication {
             // Put user profile
             handleRequest(HttpMethod.Put, "/users/$botId") {
                 authRequest()
                 jsonType()
-                val json = Json.encodeToString(MyUserDTO(displayName = botName, imageBase64 = null))
-                println(json)
-                setBody(json)
+                val body = MyUserDTO(displayName = botName, imageBase64 = null)
+                setBody(Json.encodeToString(body))
             }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
 
             // Get user profile
