@@ -11,33 +11,28 @@ import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.common.dto.RecipeDTO
 
 /**
- * An implementation of a [SourceOfTruth] that can manage groups of recipes (in the recipe stack)
- * and does not require a specific key to be fetched.
+ * An implementation of a [SourceOfTruth] that can manage all the recipes for the currently logged
+ * in user. It does not require a specific key to be fetched.
  *
  * @param dao the [RecipeDao] that is accessed by this [SourceOfTruth].
  */
 @InternalDataApi
-class RecipeStackSourceOfTruth(
+class RecipeOwnSourceOfTruth(
     private val auth: AuthenticationRepository,
     private val dao: RecipeDao,
 ) : SourceOfTruth<Unit, List<RecipeDTO>, List<Recipe>> {
 
-    override suspend fun delete(key: Unit) {
-        // Ignore.
-    }
-
-    override suspend fun deleteAll() {
-        // Ignore.
-    }
+    override suspend fun delete(key: Unit) = Unit // Ignored.
+    override suspend fun deleteAll() = Unit // Ignored.
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun reader(key: Unit): Flow<List<Recipe>?> {
-        return auth.identifier
-            .flatMapLatest { dao.recipesStack(it.identifier) }
-            .map { it.map(RecipeEntity::toRecipe) }
-    }
+    override fun reader(key: Unit): Flow<List<Recipe>?> = auth.identifier
+        .map { it.identifier }
+        .flatMapLatest { dao.recipesForUser(it) }
+        .map { it.map { entity -> entity.toRecipe() } }
 
     override suspend fun write(key: Unit, value: List<RecipeDTO>) {
-        dao.recipesInsertAll(value.map { it.asRecipeEntity(inStack = true) })
+        // TODO : Handle recipe deletion from server.
+        dao.recipesInsertAll(value.map { it.asRecipeEntity(inStack = null) })
     }
 }

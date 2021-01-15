@@ -10,13 +10,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
 import tupperdate.android.data.InternalDataApi
 import tupperdate.android.data.SyncRequestBuilder
+import tupperdate.android.data.features.auth.AuthenticationRepository
 import tupperdate.android.data.features.recipe.NewRecipe
 import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.data.features.recipe.RecipeRepository
 import tupperdate.android.data.features.recipe.api.RecipeFetchers
 import tupperdate.android.data.features.recipe.room.PendingNewRecipeEntity
+import tupperdate.android.data.features.recipe.room.RecipeOwnSourceOfTruth
 import tupperdate.android.data.features.recipe.room.RecipeSourceOfTruth
 import tupperdate.android.data.features.recipe.room.RecipeStackSourceOfTruth
+import tupperdate.android.data.features.recipe.work.RefreshOwnWorker
 import tupperdate.android.data.features.recipe.work.RefreshStackWorker
 import tupperdate.android.data.features.recipe.work.SyncPendingCreationsWorker
 import tupperdate.android.data.features.recipe.work.SyncPendingVotesWorker
@@ -25,6 +28,7 @@ import tupperdate.android.data.room.TupperdateDatabase
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 @InternalDataApi
 class RecipeRepositoryImpl(
+    private val auth: AuthenticationRepository,
     private val database: TupperdateDatabase,
     private val client: HttpClient,
     private val workManager: WorkManager,
@@ -43,7 +47,17 @@ class RecipeRepositoryImpl(
     override fun stack(): Flow<List<Recipe>> {
         val store = StoreBuilder.from(
             RecipeFetchers.allRecipesFetcher(client),
-            RecipeStackSourceOfTruth(database.recipes()),
+            RecipeStackSourceOfTruth(auth, database.recipes()),
+        ).build()
+
+        return store.stream(StoreRequest.cached(Unit, true))
+            .mapNotNull { it.dataOrNull() }
+    }
+
+    override fun own(): Flow<List<Recipe>> {
+        val store = StoreBuilder.from(
+            RecipeFetchers.ownRecipesFetcher(client),
+            RecipeOwnSourceOfTruth(auth, database.recipes())
         ).build()
 
         return store.stream(StoreRequest.cached(Unit, true))
@@ -62,9 +76,12 @@ class RecipeRepositoryImpl(
             )
         )
 
+        val refreshStack = SyncRequestBuilder<RefreshStackWorker>().build()
+        val refreshOwn = SyncRequestBuilder<RefreshOwnWorker>().build()
+
         // Fetch the newly created recipe.
         workManager.beginWith(SyncRequestBuilder<SyncPendingCreationsWorker>().build())
-            .then(SyncRequestBuilder<RefreshStackWorker>().build())
+            .then(listOf(refreshStack, refreshOwn))
             .enqueue()
     }
 

@@ -23,17 +23,19 @@ import tupperdate.common.dto.UserDTO
  * that the user profile has not been set yet.
  *
  * @param client the [HttpClient] that is used to fetch the profiles from the server.
+ * @param skipLoading true if the [ProfileFetcher] should skip providing the loading states.
  */
 @InternalDataApi
 @OptIn(FlowPreview::class)
 class ProfileFetcher(
     private val client: HttpClient,
+    private val skipLoading: Boolean = false,
 ) : Fetcher<FirebaseUid, AuthenticationStatus> {
 
     override fun invoke(
         key: FirebaseUid,
     ) = flow<FetcherResult<AuthenticationStatus>> {
-        emit(Data(LoadingProfile(key)))
+        if (!skipLoading) emit(Data(LoadingProfile(key)))
 
         // Until we've reached a satisfying result...
         var keepFetching = true
