@@ -13,6 +13,7 @@ import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 import tupperdate.web.facade.accounts.KoinModuleFacadeAccountReal
 import tupperdate.web.facade.profiles.KoinModuleFacadeProfile
+import tupperdate.web.facade.recipes.KoinModuleFacadeRecipe
 import tupperdate.web.legacy.routing.chats.chats
 import tupperdate.web.legacy.routing.recipes.recipes
 import tupperdate.web.legacy.util.getPort
@@ -35,8 +36,9 @@ fun main() {
             modules(KoinModuleModelAuthFirebase)
             modules(KoinModuleModelPhonesFirebase)
 
-            modules(KoinModuleFacadeProfile)
             modules(KoinModuleFacadeAccountReal)
+            modules(KoinModuleFacadeProfile)
+            modules(KoinModuleFacadeRecipe)
         }
         installServer()
     }

@@ -5,6 +5,7 @@ import tupperdate.web.facade.PictureUrl
 import tupperdate.web.model.Result
 import tupperdate.web.model.profiles.User
 import tupperdate.web.model.recipes.RecipeRepository
+import tupperdate.web.model.recipes.toModelNewRecipe
 
 class RecipeFacadeImpl(
     private val recipes: RecipeRepository,
@@ -12,28 +13,28 @@ class RecipeFacadeImpl(
 
     override suspend fun save(
         user: User,
-        recipe: NewRecipe<PictureBase64>,
+        recipe: NewRecipe,
     ): Result<Unit> {
-        TODO("Not yet implemented")
+        return recipes.save(user, recipe.toModelNewRecipe())
     }
 
     override suspend fun readOwn(
         user: User,
-    ): Result<List<Recipe<PictureUrl>>> {
+    ): Result<List<Recipe>> {
         TODO("Not yet implemented")
     }
 
     override suspend fun readAll(
         user: User,
         count: Int,
-    ): Result<List<Recipe<PictureUrl>>> {
+    ): Result<List<Recipe>> {
         TODO("Not yet implemented")
     }
 
     override suspend fun readOne(
         user: User,
         recipeId: String,
-    ): Result<Recipe<PictureUrl>> {
+    ): Result<Recipe> {
         TODO("Not yet implemented")
     }
 

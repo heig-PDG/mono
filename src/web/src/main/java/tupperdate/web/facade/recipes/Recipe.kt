@@ -1,10 +1,12 @@
 package tupperdate.web.facade.recipes
 
-data class Recipe<Picture>(
+import tupperdate.web.facade.PictureUrl
+
+data class Recipe(
     val id: String,
     val title: String,
     val description: String,
-    val picture: Picture?,
+    val picture: PictureUrl?,
     val hasAllergens: Boolean,
     val vegetarian: Boolean,
     val warm: Boolean,

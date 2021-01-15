@@ -16,22 +16,6 @@ data class Recipe(
     val attributes: Map<String, Boolean>? = null,
 )
 
-fun NewRecipeDTO.toRecipe(id: String, userId: String, picture: String?): Recipe {
-    return Recipe(
-        id = id,
-        userId = userId,
-        title = this.title,
-        description = this.description,
-        timestamp = System.currentTimeMillis(),
-        picture = picture,
-        attributes = mapOf(
-            "hasAllergens" to this.attributes.hasAllergens,
-            "vegetarian" to this.attributes.vegetarian,
-            "warm" to this.attributes.warm,
-        ),
-    )
-}
-
 fun Recipe.toRecipeDTO(): RecipeDTO {
     return RecipeDTO(
         id = requireNotNull(this.id),

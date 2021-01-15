@@ -8,11 +8,14 @@ import io.ktor.routing.*
 import io.ktor.util.pipeline.*
 import org.koin.ktor.ext.inject
 import tupperdate.common.dto.MyUserDTO
+import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.web.facade.accounts.AccountFacade
 import tupperdate.web.facade.profiles.Profile
 import tupperdate.web.facade.profiles.ProfileFacade
 import tupperdate.web.facade.profiles.toNewProfile
 import tupperdate.web.facade.profiles.toUserDTO
+import tupperdate.web.facade.recipes.RecipeFacade
+import tupperdate.web.facade.recipes.toNewRecipe
 import tupperdate.web.model.Result
 import tupperdate.web.model.map
 import tupperdate.web.model.profiles.User
@@ -20,6 +23,7 @@ import tupperdate.web.utils.tupperdateAuthPrincipal
 import tupperdate.web.utils.statusException
 
 fun Route.endpoints() {
+    // Accounts
     route("/accounts") {
         val facade by this.inject<AccountFacade>()
         post("logout") {
@@ -27,6 +31,7 @@ fun Route.endpoints() {
         }
     }
 
+    // Users
     route("/users") {
         val facade by this.inject<ProfileFacade>()
 
@@ -44,6 +49,39 @@ fun Route.endpoints() {
                 profileId = requireParam("userId")
             ).map(Profile::toUserDTO).let { respond(it) }
         }
+    }
+
+    // Recipes
+    route("/recipes") {
+        val facade by this.inject<RecipeFacade>()
+
+        post {
+            facade.save(
+                user = requireUser(),
+                recipe = requireBody<NewRecipeDTO>().toNewRecipe(),
+            )
+        }
+        /*
+        get("/own") {
+
+        }
+
+        get("/{identifier}") {
+
+        }
+
+        get {
+
+        }
+
+        put("{recipeId}/like") {
+
+        }
+
+        put("{recipeId}/dislike") {
+
+        }
+        */
     }
 }
 

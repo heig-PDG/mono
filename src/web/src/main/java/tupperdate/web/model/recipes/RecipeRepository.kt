@@ -1,6 +1,5 @@
 package tupperdate.web.model.recipes
 
-import tupperdate.web.facade.PictureBase64
 import tupperdate.web.facade.PictureUrl
 import tupperdate.web.model.Result
 import tupperdate.web.model.profiles.User
@@ -9,7 +8,7 @@ interface RecipeRepository {
 
     suspend fun save(
         user: User,
-        recipe: ModelNewRecipe<PictureBase64>,
+        recipe: ModelNewRecipe,
     ): Result<Unit>
 
     suspend fun readOwn(
