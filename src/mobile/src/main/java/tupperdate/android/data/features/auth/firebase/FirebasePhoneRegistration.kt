@@ -35,83 +35,90 @@ class FirebasePhoneRegistration(
     override suspend fun requestCode(
         number: String,
         force: Boolean,
-    ): RequestCodeResult = suspendCoroutine { continuation ->
+    ): RequestCodeResult {
+        // 1. Check preconditions.
+        if (number.isBlank()) return InvalidNumberError
 
-        val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+        // 2. Use FirebaseAuth SDK.
+        return suspendCoroutine { continuation ->
 
-            private val isResumed = AtomicBoolean(false)
+            val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
-            private fun resumeOnce(f: () -> Unit) {
-                if (isResumed.compareAndSet(false, true)) {
-                    f()
+                private val isResumed = AtomicBoolean(false)
+
+                private fun resumeOnce(f: () -> Unit) {
+                    if (isResumed.compareAndSet(false, true)) {
+                        f()
+                    }
                 }
-            }
 
-            override fun onVerificationCompleted(
-                credential: PhoneAuthCredential,
-            ) {
-                firebaseAuth.signInWithCredential(credential)
-                    .addOnCompleteListener { result ->
-                        if (result.isSuccessful) {
-                            resumeOnce {
-                                continuation.resume(LoggedIn)
-                            }
-                        } else {
-                            resumeOnce {
-                                continuation.resume(InternalError)
-                                result.exception?.printStackTrace()
+                override fun onVerificationCompleted(
+                    credential: PhoneAuthCredential,
+                ) {
+                    firebaseAuth.signInWithCredential(credential)
+                        .addOnCompleteListener { result ->
+                            if (result.isSuccessful) {
+                                resumeOnce {
+                                    continuation.resume(LoggedIn)
+                                }
+                            } else {
+                                resumeOnce {
+                                    continuation.resume(InternalError)
+                                    result.exception?.printStackTrace()
+                                }
                             }
                         }
-                    }
-            }
+                }
 
-            override fun onVerificationFailed(
-                problem: FirebaseException,
-            ) {
-                when (problem) {
-                    is FirebaseAuthInvalidCredentialsException -> resumeOnce {
-                        continuation.resume(
-                            InvalidNumberError
-                        )
+                override fun onVerificationFailed(
+                    problem: FirebaseException,
+                ) {
+                    when (problem) {
+                        is FirebaseAuthInvalidCredentialsException -> resumeOnce {
+                            continuation.resume(
+                                InvalidNumberError
+                            )
+                        }
+                        else -> resumeOnce {
+                            problem.printStackTrace()
+                            continuation.resume(
+                                InternalError
+                            )
+                        }
                     }
-                    else -> resumeOnce {
-                        problem.printStackTrace()
-                        continuation.resume(
-                            InternalError
-                        )
+                }
+
+                override fun onCodeSent(
+                    verification: String,
+                    token: PhoneAuthProvider.ForceResendingToken,
+                ) {
+                    this@FirebasePhoneRegistration.verification.value = verification
+                    this@FirebasePhoneRegistration.forceToken.value = token
+                    resumeOnce {
+                        continuation.resume(RequiresVerification)
                     }
                 }
             }
 
-            override fun onCodeSent(
-                verification: String,
-                token: PhoneAuthProvider.ForceResendingToken,
-            ) {
-                this@FirebasePhoneRegistration.verification.value = verification
-                this@FirebasePhoneRegistration.forceToken.value = token
-                resumeOnce {
-                    continuation.resume(RequiresVerification)
+            val token = forceToken.value
+            val options = PhoneAuthOptions.newBuilder(firebaseAuth)
+                .apply {
+                    if (token != null && force) {
+                        setForceResendingToken(token)
+                    }
                 }
-            }
+                .setActivity(activity)
+                .setPhoneNumber(number)
+                .setTimeout(25, TimeUnit.SECONDS)
+                .setCallbacks(callbacks)
+                .build()
+
+            PhoneAuthProvider.verifyPhoneNumber(options)
         }
-
-        val token = forceToken.value
-        val options = PhoneAuthOptions.newBuilder(firebaseAuth)
-            .apply {
-                if (token != null && force) {
-                    setForceResendingToken(token)
-                }
-            }
-            .setActivity(activity)
-            .setPhoneNumber(number)
-            .setTimeout(25, TimeUnit.SECONDS)
-            .setCallbacks(callbacks)
-            .build()
-
-        PhoneAuthProvider.verifyPhoneNumber(options)
     }
 
     override suspend fun verify(code: String): VerificationResult {
+        if (code.isBlank()) return VerificationResult.InvalidVerificationError
         val verification = this@FirebasePhoneRegistration.verification.value
         return if (verification == null) {
             VerificationResult.InternalError
