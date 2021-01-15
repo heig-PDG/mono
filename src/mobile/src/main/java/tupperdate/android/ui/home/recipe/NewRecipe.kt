@@ -42,7 +42,7 @@ fun NewRecipe(
                     isVegan = recipe.vegetarian,
                     isWarm = recipe.warm,
                     hasAllergens = recipe.hasAllergens,
-                    picture = null, // TODO : Handle images.
+                    picture = null, // Images are added internally by the ViewModel.
                 )
             )
         },
