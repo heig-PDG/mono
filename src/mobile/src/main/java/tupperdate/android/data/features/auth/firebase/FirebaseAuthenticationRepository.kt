@@ -69,6 +69,20 @@ class FirebaseAuthenticationRepository(
 
     override suspend fun updateProfile(
         displayName: String,
+    ): ProfileResult {
+        // TODO : Use a PATCH-based implementation.
+        return updateProfile(displayName, null)
+    }
+
+    override suspend fun updateProfile(
+        picture: ImagePicker.Handle?,
+    ): ProfileResult {
+        // TODO : Use a PATCH-based implementation.
+        return updateProfile("TODO : PATCH PROFILES", picture)
+    }
+
+    override suspend fun updateProfile(
+        displayName: String,
         picture: ImagePicker.Handle?
     ): ProfileResult {
 
