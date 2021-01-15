@@ -1,11 +1,15 @@
 package tupperdate.web.model.recipes.firestore
 
+import com.google.cloud.firestore.DocumentSnapshot
 import com.google.cloud.firestore.Firestore
 import com.google.firebase.cloud.StorageClient
+import io.ktor.application.*
 import io.ktor.http.*
+import io.ktor.response.*
 import org.apache.commons.codec.binary.Base64
 import tupperdate.web.facade.PictureUrl
 import tupperdate.web.legacy.model.Recipe
+import tupperdate.web.legacy.model.toRecipeDTO
 import tupperdate.web.model.Result
 import tupperdate.web.model.profiles.User
 import tupperdate.web.model.recipes.ModelNewRecipe
@@ -14,6 +18,7 @@ import tupperdate.web.model.recipes.RecipeRepository
 import tupperdate.web.model.recipes.toFirestoreRecipe
 import tupperdate.web.utils.await
 import tupperdate.web.utils.statusException
+import tupperdate.web.utils.tupperdateAuthPrincipal
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -67,8 +72,36 @@ class FirestoreRecipeRepository(
     override suspend fun readAll(
         user: User,
         count: Int,
+        lastSeenRecipe: Long,
     ): Result<List<ModelRecipe>> {
-        TODO("Not yet implemented")
+        // Filter user own recipes
+        val filtered = mutableListOf<DocumentSnapshot>()
+
+        var keepGoing = true
+        var lastSnapshot: DocumentSnapshot? = null
+        while (keepGoing) {
+            val remaining = count - filtered.size
+            val retrieved = when (lastSnapshot) {
+                null -> store.collection("recipes")
+                    .whereGreaterThan("timestamp", lastSeenRecipe)
+                    .orderBy("timestamp")
+                    .limit(remaining)
+                    .get().await()
+                else -> store.collection("recipes")
+                    .whereGreaterThan("timestamp", lastSeenRecipe)
+                    .orderBy("timestamp")
+                    .startAfter(lastSnapshot)
+                    .limit(remaining)
+                    .get().await()
+            }
+            filtered.addAll(retrieved.filter { it["userId"] != user.id.uid })
+            lastSnapshot = retrieved.lastOrNull()
+            keepGoing = filtered.size < count && retrieved.size() == count && lastSnapshot != null
+        }
+
+        val recipes = filtered.mapNotNull { it.toObject(FirestoreRecipe::class.java) }
+            .mapNotNull { it.toModelRecipe() }
+        return Result.Ok(recipes)
     }
 
     override suspend fun readOne(

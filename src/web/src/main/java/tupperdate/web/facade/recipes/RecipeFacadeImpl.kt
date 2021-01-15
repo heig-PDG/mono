@@ -3,12 +3,14 @@ package tupperdate.web.facade.recipes
 import tupperdate.web.model.Result
 import tupperdate.web.model.map
 import tupperdate.web.model.profiles.User
+import tupperdate.web.model.profiles.UserRepository
 import tupperdate.web.model.recipes.RecipeRepository
 import tupperdate.web.model.recipes.toModelNewRecipe
 import tupperdate.web.model.recipes.toRecipe
 
 class RecipeFacadeImpl(
     private val recipes: RecipeRepository,
+    private val users: UserRepository,
 ) : RecipeFacade {
 
     override suspend fun save(
@@ -28,7 +30,12 @@ class RecipeFacadeImpl(
         user: User,
         count: Int,
     ): Result<List<Recipe>> {
-        TODO("Not yet implemented")
+        val lastSeenRecipe = when(val time = users.read(user).map { it.lastSeenRecipe }) {
+            is Result.Ok -> time.result
+            else -> 0
+        }
+
+        return recipes.readAll(user, count, lastSeenRecipe).map { it.map { that -> that.toRecipe() } }
     }
 
     override suspend fun readOne(

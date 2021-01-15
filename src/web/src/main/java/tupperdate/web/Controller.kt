@@ -20,8 +20,8 @@ import tupperdate.web.facade.recipes.toRecipeDTO
 import tupperdate.web.model.Result
 import tupperdate.web.model.map
 import tupperdate.web.model.profiles.User
-import tupperdate.web.utils.tupperdateAuthPrincipal
 import tupperdate.web.utils.statusException
+import tupperdate.web.utils.tupperdateAuthPrincipal
 
 fun Route.endpoints() {
     // Accounts
@@ -64,18 +64,25 @@ fun Route.endpoints() {
         }
 
         get("/own") {
-            facade.readOwn(user = requireUser()).map { it.map { recipe -> recipe.toRecipeDTO() } }.let { respond(it) }
+            facade.readOwn(user = requireUser()).map { it.map { recipe -> recipe.toRecipeDTO() } }
+                .let { respond(it) }
         }
 
         get("/{identifier}") {
-            facade.readOne(user = requireUser(), recipeId = requireParam("identifier")).map { it.toRecipeDTO() }.let { respond(it) }
+            facade.readOne(user = requireUser(), recipeId = requireParam("identifier"))
+                .map { it.toRecipeDTO() }.let { respond(it) }
+        }
+
+
+        get {
+            facade.readAll(
+                user = requireUser(),
+                count = requireParam("count").toIntOrNull()
+                    ?: throw statusException(HttpStatusCode.BadRequest)
+            ).map { it.map { recipe -> recipe.toRecipeDTO() } }.let { respond(it) }
         }
 
         /*
-        get {
-
-        }
-
         put("{recipeId}/like") {
 
         }

@@ -1,6 +1,5 @@
 package tupperdate.web.model.recipes
 
-import tupperdate.web.facade.PictureUrl
 import tupperdate.web.model.Result
 import tupperdate.web.model.profiles.User
 
@@ -18,6 +17,7 @@ interface RecipeRepository {
     suspend fun readAll(
         user: User,
         count: Int,
+        lastSeenRecipe: Long,
     ): Result<List<ModelRecipe>>
 
     suspend fun readOne(

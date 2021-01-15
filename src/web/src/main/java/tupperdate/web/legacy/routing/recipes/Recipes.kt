@@ -7,7 +7,6 @@ import io.ktor.routing.*
 fun Route.recipes(firebase: FirebaseApp) {
     route("/recipes") {
         // TODO (alex) : Provide the store differently ?
-        recipesGet(FirestoreClient.getFirestore(firebase))
         recipesPut(FirestoreClient.getFirestore(firebase))
     }
 }
