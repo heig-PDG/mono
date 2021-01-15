@@ -12,7 +12,7 @@ import tupperdate.web.facade.profiles.Profile
 import tupperdate.web.facade.profiles.ProfileFacade
 import tupperdate.web.facade.profiles.toNewProfile
 import tupperdate.web.facade.profiles.toUserDTO
-import tupperdate.web.legacy.auth.firebaseAuthPrincipal
+import tupperdate.web.legacy.auth.tupperdateAuthPrincipal
 import tupperdate.web.model.Result
 import tupperdate.web.model.map
 import tupperdate.web.model.profiles.User
@@ -41,6 +41,7 @@ fun Route.endpoints() {
 private suspend inline fun <T> PipelineContext<Unit, ApplicationCall>.respond(result: Result<T>) {
     val (body, code) = when (result) {
         is Result.Ok -> result.result to HttpStatusCode.OK
+        is Result.Unauthorized -> result.message to HttpStatusCode.Unauthorized
         is Result.Forbidden -> result.message to HttpStatusCode.Forbidden
         is Result.BadInput -> result.message to HttpStatusCode.BadRequest
         is Result.NotFound -> result.message to HttpStatusCode.NotFound
@@ -58,4 +59,4 @@ private fun PipelineContext<Unit, ApplicationCall>.requireParam(name: String): S
     call.parameters[name] ?: statusException(HttpStatusCode.BadRequest)
 
 private fun PipelineContext<Unit, ApplicationCall>.requireUser(): User =
-    call.firebaseAuthPrincipal?.uid?.let(::User) ?: statusException(HttpStatusCode.Unauthorized)
+    call.tupperdateAuthPrincipal?.uid?.let(::User) ?: statusException(HttpStatusCode.Unauthorized)

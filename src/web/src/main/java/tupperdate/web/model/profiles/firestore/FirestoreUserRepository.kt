@@ -1,7 +1,6 @@
 package tupperdate.web.model.profiles.firestore
 
 import com.google.cloud.firestore.Firestore
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.cloud.StorageClient
 import io.ktor.http.*
 import kotlinx.coroutines.async
@@ -16,7 +15,6 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class FirestoreUserRepository(
-    private val auth: FirebaseAuth,
     private val store: Firestore,
     private val storage: StorageClient,
 ) : UserRepository {
@@ -58,13 +56,12 @@ class FirestoreUserRepository(
         user: User,
     ): Result<ModelUser> = coroutineScope {
         val firestoreUser = async {
-            store.collection("users").document(user.id).get().await()
+            store.collection("users").document(user.id.uid).get().await()
                 .toObject(FirestoreUser::class.java)
         }
-        val phone = async { auth.getUserAsync(user.id).await().phoneNumber }
 
         try {
-            val result = firestoreUser.await()?.toModelUser(phone.await())
+            val result = firestoreUser.await()?.toModelUser()
                 ?: return@coroutineScope NotFound()
             Ok(result)
         } catch (throwable: Throwable) {

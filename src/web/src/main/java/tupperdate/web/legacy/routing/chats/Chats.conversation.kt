@@ -7,17 +7,17 @@ import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import tupperdate.common.dto.ConversationDTO
-import tupperdate.web.legacy.auth.firebaseAuthPrincipal
+import tupperdate.web.legacy.auth.tupperdateAuthPrincipal
 import tupperdate.web.legacy.exceptions.statusException
 import tupperdate.web.legacy.model.*
 import tupperdate.web.legacy.util.await
 import tupperdate.web.model.profiles.firestore.FirestoreUser
 
 fun Route.getConvs(store: Firestore) = get("/{userId}") {
-    val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+    val id = call.tupperdateAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
     val userId = call.parameters["userId"] ?: statusException(HttpStatusCode.BadRequest)
 
-    val docId = minOf(uid, userId) + "_" + maxOf(uid, userId)
+    val docId = minOf(id.uid, userId) + "_" + maxOf(id.uid, userId)
 
     val chat = store.collection("chats").document(docId).get().await().toObject(Chat::class.java)
         ?: statusException(HttpStatusCode.NotFound)
@@ -26,12 +26,12 @@ fun Route.getConvs(store: Firestore) = get("/{userId}") {
         statusException(HttpStatusCode.NotFound)
     }
 
-    val myRecipes = if (uid == chat.userId1) chat.user1Recipes else chat.user2Recipes
-    val theirRecipes = if (uid != chat.userId1) chat.user1Recipes else chat.user2Recipes
+    val myRecipes = if (id.uid == chat.userId1) chat.user1Recipes else chat.user2Recipes
+    val theirRecipes = if (id.uid != chat.userId1) chat.user1Recipes else chat.user2Recipes
 
     val conv = Conv(
         id = docId,
-        myId = uid,
+        myId = id.uid,
         theirId = userId,
         myRecipes = myRecipes,
         theirRecipes = theirRecipes,

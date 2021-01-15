@@ -11,7 +11,7 @@ import io.ktor.routing.*
 import org.apache.commons.codec.binary.Base64
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.common.dto.RecipeDTO
-import tupperdate.web.legacy.auth.firebaseAuthPrincipal
+import tupperdate.web.legacy.auth.tupperdateAuthPrincipal
 import tupperdate.web.legacy.exceptions.statusException
 import tupperdate.web.legacy.model.toRecipe
 import tupperdate.web.legacy.model.toRecipeDTO
@@ -29,7 +29,7 @@ fun Route.recipesPost(firebase: FirebaseApp) = post {
     val store = FirestoreClient.getFirestore(firebase)
     val bucket = StorageClient.getInstance(firebase).bucket()
 
-    val uid = call.firebaseAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
+    val callerId = call.tupperdateAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
     val dto = call.receive<NewRecipeDTO>()
 
     val doc = store.collection("recipes").document()
@@ -52,7 +52,7 @@ fun Route.recipesPost(firebase: FirebaseApp) = post {
 
     // TODO: Firestore transaction
     // For now, assume no two recipes are posted at the same time (bad assumption)
-    val recipe = dto.toRecipe(doc.id, uid, pict)
+    val recipe = dto.toRecipe(doc.id, callerId.uid, pict)
     doc.set(recipe).await()
 
     call.respond(recipe.toRecipeDTO())

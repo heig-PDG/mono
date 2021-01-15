@@ -10,12 +10,11 @@ data class FirestoreUser(
     val lastSeenRecipe: Long? = null
 )
 
-fun FirestoreUser.toModelUser(phone: String): ModelUser? {
+fun FirestoreUser.toModelUser(): ModelUser? {
     return ModelUser(
         identifier = this.id ?: return null,
         displayName = this.displayName ?: return null,
         displayPicture = picture?.let(::PictureUrl),
         lastSeenRecipe = this.lastSeenRecipe ?: 0,
-        phone = phone,
     )
 }

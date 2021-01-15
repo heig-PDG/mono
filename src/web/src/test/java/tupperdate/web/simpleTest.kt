@@ -6,6 +6,7 @@ import io.ktor.server.testing.*
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.koin.ktor.ext.inject
+import tupperdate.web.koin.withTupperdateTestApplication
 import tupperdate.web.legacy.util.await
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
@@ -16,8 +17,10 @@ class SimpleTest {
     @Test
     fun testUnauthorized() {
         withTupperdateTestApplication {
-            with(handleRequest(HttpMethod.Get, "/recipes")) {
-                assertEquals(HttpStatusCode.Unauthorized, response.status())
+            with(handleRequest(HttpMethod.Get, "/recipes?count=1") {
+                addHeader(HttpHeaders.Authorization, "Bearer Tokythetoken")
+            }) {
+                assertEquals(HttpStatusCode.OK, response.status())
             }
         }
     }

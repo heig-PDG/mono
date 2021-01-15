@@ -8,12 +8,11 @@ data class ModelUser(
     val displayName: String,
     val displayPicture: PictureUrl?,
     val lastSeenRecipe: Long,
-    val phone: String,
 )
 
-fun ModelUser.toProfile(): Profile = Profile(
+fun ModelUser.toProfile(phone: String): Profile = Profile(
     identifier = this.identifier,
     displayName = this.displayName,
     picture = this.displayPicture,
-    phone = this.phone,
+    phone = phone,
 )
