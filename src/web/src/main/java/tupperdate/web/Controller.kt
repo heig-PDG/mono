@@ -16,6 +16,7 @@ import tupperdate.web.facade.profiles.toNewProfile
 import tupperdate.web.facade.profiles.toUserDTO
 import tupperdate.web.facade.recipes.RecipeFacade
 import tupperdate.web.facade.recipes.toNewRecipe
+import tupperdate.web.facade.recipes.toRecipeDTO
 import tupperdate.web.model.Result
 import tupperdate.web.model.map
 import tupperdate.web.model.profiles.User
@@ -59,13 +60,14 @@ fun Route.endpoints() {
             facade.save(
                 user = requireUser(),
                 recipe = requireBody<NewRecipeDTO>().toNewRecipe(),
-            )
+            ).let { respond(it) }
         }
-        /*
+
         get("/own") {
-
+            facade.readOwn(user = requireUser()).map { it.map { recipe -> recipe.toRecipeDTO() } }.let { respond(it) }
         }
 
+        /*
         get("/{identifier}") {
 
         }

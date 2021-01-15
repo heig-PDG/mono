@@ -13,17 +13,17 @@ interface RecipeRepository {
 
     suspend fun readOwn(
         user: User,
-    ): Result<List<ModelRecipe<PictureUrl>>>
+    ): Result<List<ModelRecipe>>
 
     suspend fun readAll(
         user: User,
         count: Int,
-    ): Result<List<ModelRecipe<PictureUrl>>>
+    ): Result<List<ModelRecipe>>
 
     suspend fun readOne(
         user: User,
         recipeId: String,
-    ): Result<ModelRecipe<PictureUrl>>
+    ): Result<ModelRecipe>
 
     suspend fun like(
         user: User,

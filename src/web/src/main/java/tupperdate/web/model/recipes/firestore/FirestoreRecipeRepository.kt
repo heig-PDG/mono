@@ -4,7 +4,6 @@ import com.google.cloud.firestore.Firestore
 import com.google.firebase.cloud.StorageClient
 import io.ktor.http.*
 import org.apache.commons.codec.binary.Base64
-import tupperdate.web.facade.PictureBase64
 import tupperdate.web.facade.PictureUrl
 import tupperdate.web.model.Result
 import tupperdate.web.model.profiles.User
@@ -42,7 +41,8 @@ class FirestoreRecipeRepository(
         }
 
         // TODO: Firestore transaction: For now, assume no two recipes are posted at the same time (bad assumption)
-        val firestoreRecipe = recipe.toFirestoreRecipe(id = doc.id, userId = user.id.uid, pict?.let(::PictureUrl))
+        val firestoreRecipe =
+            recipe.toFirestoreRecipe(id = doc.id, userId = user.id.uid, pict?.let(::PictureUrl))
         return try {
             doc.set(firestoreRecipe).await()
             Result.Ok(Unit)
@@ -53,21 +53,26 @@ class FirestoreRecipeRepository(
 
     override suspend fun readOwn(
         user: User,
-    ): Result<List<ModelRecipe<PictureUrl>>> {
-        TODO("Not yet implemented")
+    ): Result<List<ModelRecipe>> {
+        val recipes = store.collection("recipes").whereEqualTo("userId", user.id.uid).get().await()
+            .toObjects(FirestoreRecipe::class.java).map {
+                it.toModelRecipe() ?: return Result.BadServer()
+            }
+
+        return Result.Ok(recipes)
     }
 
     override suspend fun readAll(
         user: User,
         count: Int,
-    ): Result<List<ModelRecipe<PictureUrl>>> {
+    ): Result<List<ModelRecipe>> {
         TODO("Not yet implemented")
     }
 
     override suspend fun readOne(
         user: User,
         recipeId: String,
-    ): Result<ModelRecipe<PictureUrl>> {
+    ): Result<ModelRecipe> {
         TODO("Not yet implemented")
     }
 

@@ -1,6 +1,5 @@
 package tupperdate.web.facade.chats
 
-import tupperdate.web.facade.PictureUrl
 import tupperdate.web.facade.recipes.Recipe
 
 data class Chat(
@@ -8,6 +7,6 @@ data class Chat(
     val displayName: String,
     val picture: String?,
     val lastMessage: Message?,
-    val myRecipes: List<Recipe<PictureUrl>>,
-    val theirRecipes: List<Recipe<PictureUrl>>,
+    val myRecipes: List<Recipe>,
+    val theirRecipes: List<Recipe>,
 )

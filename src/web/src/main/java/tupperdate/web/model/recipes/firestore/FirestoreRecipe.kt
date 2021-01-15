@@ -1,10 +1,8 @@
 package tupperdate.web.model.recipes.firestore
 
 import io.ktor.http.*
-import tupperdate.common.dto.NewRecipeDTO
-import tupperdate.common.dto.RecipeAttributesDTO
-import tupperdate.common.dto.RecipeDTO
-import tupperdate.web.utils.statusException
+import tupperdate.web.facade.PictureUrl
+import tupperdate.web.model.recipes.ModelRecipe
 
 data class FirestoreRecipe(
     val id: String? = null,
@@ -16,36 +14,17 @@ data class FirestoreRecipe(
     val attributes: Map<String, Boolean>? = null,
 )
 
-fun NewRecipeDTO.toFirestoreRecipe(id: String, userId: String, picture: String?): FirestoreRecipe {
-    return FirestoreRecipe(
-        id = id,
-        userId = userId,
-        title = this.title,
-        description = this.description,
-        timestamp = System.currentTimeMillis(),
-        picture = picture,
-        attributes = mapOf(
-            "hasAllergens" to this.attributes.hasAllergens,
-            "vegetarian" to this.attributes.vegetarian,
-            "warm" to this.attributes.warm,
-        ),
-    )
-}
 
-fun FirestoreRecipe.toRecipeDTO(): RecipeDTO {
-    return RecipeDTO(
-        id = requireNotNull(this.id),
-        userId = this.userId ?: statusException(HttpStatusCode.InternalServerError),
-        title = this.title ?: statusException(HttpStatusCode.InternalServerError),
-        description = this.description ?: statusException(HttpStatusCode.InternalServerError),
-        timestamp = this.timestamp ?: statusException(HttpStatusCode.InternalServerError),
-        picture = this.picture,
-        attributes = RecipeAttributesDTO(
-            hasAllergens = this.attributes?.get("hasAllergens")
-                ?: statusException(HttpStatusCode.InternalServerError),
-            vegetarian = this.attributes["vegetarian"]
-                ?: statusException(HttpStatusCode.InternalServerError),
-            warm = this.attributes["warm"] ?: statusException(HttpStatusCode.InternalServerError),
-        )
+fun FirestoreRecipe.toModelRecipe(): ModelRecipe? {
+    return ModelRecipe(
+        identifier = id ?: return null,
+        userId = userId ?: return null,
+        title = title ?: return null,
+        description = description ?: return null,
+        picture = picture?.let(::PictureUrl),
+        timestamp = timestamp ?: return null,
+        hasAllergens = attributes?.get("hasAllergens") ?: return null,
+        vegetarian = attributes?.get("vegetarian") ?: return null,
+        warm = attributes?.get("warm") ?: return null,
     )
 }
