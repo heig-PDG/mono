@@ -69,9 +69,38 @@ class FirebaseAuthenticationRepository(
 
     override suspend fun updateProfile(
         displayName: String,
-        picture: ImagePicker.Handle?
-    ): ProfileResult {
+    ) = requestUpdateProfile(
+        displayName = displayName,
+        picture = null,
+        updateName = true,
+        updatePicture = false,
+    )
 
+    override suspend fun updateProfile(
+        picture: ImagePicker.Handle?,
+    ) = requestUpdateProfile(
+        displayName = "",
+        picture = picture,
+        updateName = false,
+        updatePicture = true,
+    )
+
+    override suspend fun updateProfile(
+        displayName: String,
+        picture: ImagePicker.Handle?
+    ) = requestUpdateProfile(
+        displayName = displayName,
+        picture = picture,
+        updateName = true,
+        updatePicture = true,
+    )
+
+    private suspend fun requestUpdateProfile(
+        displayName: String,
+        picture: ImagePicker.Handle?,
+        updateName: Boolean,
+        updatePicture: Boolean,
+    ): ProfileResult {
         val connected = status.filterIsInstance<AuthenticationStatus.Identified>().first()
 
         val update = SyncRequestBuilder<UpdateProfileWorker>()
@@ -80,6 +109,8 @@ class FirebaseAuthenticationRepository(
                     uid = connected.identifier,
                     name = displayName,
                     picture = picture?.uri?.toString(),
+                    updateName = updateName,
+                    updatePicture = updatePicture,
                 )
             )
             .build()

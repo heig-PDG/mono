@@ -15,5 +15,5 @@ val KoinModuleDataRecipe = module {
 
     // Stores.
     @OptIn(InternalDataApi::class)
-    factory<RecipeRepository> { RecipeRepositoryImpl(get(), get(), get()) }
+    factory<RecipeRepository> { RecipeRepositoryImpl(get(), get(), get(), get()) }
 }

@@ -12,6 +12,7 @@ import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import tupperdate.android.data.InternalDataApi
+import tupperdate.android.data.features.auth.AuthenticationRepository
 import tupperdate.android.data.features.recipe.api.RecipeFetchers
 import tupperdate.android.data.features.recipe.room.RecipeStackSourceOfTruth
 import tupperdate.android.data.room.TupperdateDatabase
@@ -27,13 +28,14 @@ class RefreshStackWorker(
     params: WorkerParameters,
 ) : CoroutineWorker(context, params), KoinComponent {
 
+    private val auth by inject<AuthenticationRepository>()
     private val client by inject<HttpClient>()
     private val database by inject<TupperdateDatabase>()
 
     override suspend fun doWork(): Result {
         val store = StoreBuilder.from(
             RecipeFetchers.allRecipesFetcher(client),
-            RecipeStackSourceOfTruth(database.recipes()),
+            RecipeStackSourceOfTruth(auth, database.recipes()),
         ).build()
         store.fresh(Unit)
         return Result.success()

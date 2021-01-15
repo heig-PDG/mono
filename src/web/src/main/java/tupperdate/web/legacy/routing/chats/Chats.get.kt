@@ -16,8 +16,8 @@ import tupperdate.web.utils.statusException
 fun Route.getChats(store: Firestore) = get {
     val id = call.tupperdateAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
 
-    val smallerId = store.collection("chats").whereEqualTo("userId1", id).get()
-    val greaterId = store.collection("chats").whereEqualTo("userId2", id).get()
+    val smallerId = store.collection("chats").whereEqualTo("userId1", id.uid).get()
+    val greaterId = store.collection("chats").whereEqualTo("userId2", id.uid).get()
 
     val chats = (smallerId.await().toObjects(Chat::class.java) + greaterId.await()
         .toObjects(Chat::class.java))

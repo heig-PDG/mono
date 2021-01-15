@@ -13,6 +13,7 @@ data class RecipeEntity(
     @PrimaryKey
     @ColumnInfo(name = "id") val identifier: String,
     // Recipe properties.
+    @ColumnInfo(name = "owner") val ownerId: String,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "timestamp") val timestamp: Long,

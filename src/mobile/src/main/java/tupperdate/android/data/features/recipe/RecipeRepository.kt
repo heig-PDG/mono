@@ -21,6 +21,11 @@ interface RecipeRepository {
     fun stack(): Flow<List<Recipe>>
 
     /**
+     * Returns all the [Recipe] that have been created by the currently logged in user.
+     */
+    fun own(): Flow<List<Recipe>>
+
+    /**
      * Creates a new recipe, provided with a [NewRecipe] instance.
      */
     suspend fun create(recipe: NewRecipe)

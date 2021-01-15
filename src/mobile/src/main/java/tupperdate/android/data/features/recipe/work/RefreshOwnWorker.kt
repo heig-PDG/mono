@@ -1,4 +1,4 @@
-package tupperdate.android.data.features.auth.work
+package tupperdate.android.data.features.recipe.work
 
 import android.content.Context
 import androidx.work.CoroutineWorker
@@ -8,23 +8,25 @@ import com.dropbox.android.external.store4.fresh
 import io.ktor.client.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.first
 import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import tupperdate.android.data.InternalDataApi
 import tupperdate.android.data.features.auth.AuthenticationRepository
-import tupperdate.android.data.features.auth.store.ProfileFetcher
-import tupperdate.android.data.features.auth.store.ProfileSourceOfTruth
+import tupperdate.android.data.features.recipe.api.RecipeFetchers
+import tupperdate.android.data.features.recipe.room.RecipeOwnSourceOfTruth
 import tupperdate.android.data.room.TupperdateDatabase
 
+/**
+ * A [CoroutineWorker] that can fetch some recipes for the currently logged in user.
+ */
 @InternalDataApi
 @OptIn(
     KoinApiExtension::class,
-    FlowPreview::class,
     ExperimentalCoroutinesApi::class,
+    FlowPreview::class,
 )
-class RefreshProfileWorker(
+class RefreshOwnWorker(
     context: Context,
     params: WorkerParameters,
 ) : CoroutineWorker(context, params), KoinComponent {
@@ -34,17 +36,11 @@ class RefreshProfileWorker(
     private val database by inject<TupperdateDatabase>()
 
     override suspend fun doWork(): Result {
-        return try {
-            val user = auth.identifier.first().identifier
-            val store = StoreBuilder.from(
-                ProfileFetcher(client, skipLoading = true),
-                ProfileSourceOfTruth(database.profiles())
-            ).build()
-            store.fresh(user)
-            Result.success()
-        } catch (throwable: Throwable) {
-            throwable.printStackTrace()
-            Result.retry()
-        }
+        val store = StoreBuilder.from(
+            RecipeFetchers.ownRecipesFetcher(client),
+            RecipeOwnSourceOfTruth(auth, database.recipes()),
+        ).build()
+        store.fresh(Unit)
+        return Result.success()
     }
 }
