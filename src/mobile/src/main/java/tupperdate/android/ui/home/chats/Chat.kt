@@ -119,19 +119,16 @@ private fun ChatTopBar(
             }
         },
         title = {
-            Row(
-                Modifier,
-                Arrangement.spacedBy(8.dp),
-                Alignment.CenterVertically
-            ) {
-                ProfilePicture(
-                    image = picture,
-                    highlighted = false,
-                    modifier = Modifier.preferredSize(24.dp),
-                )
-                Text(title)
-            }
+            Text(title)
         },
+        actions = {
+            ProfilePicture(
+                image = picture,
+                highlighted = false,
+                modifier = Modifier.padding(end = 8.dp).size(40.dp),
+            )
+        },
+        backgroundColor = MaterialTheme.colors.surface,
         modifier = modifier,
     )
 }
