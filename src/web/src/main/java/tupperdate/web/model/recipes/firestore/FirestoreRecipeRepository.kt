@@ -5,6 +5,7 @@ import com.google.firebase.cloud.StorageClient
 import io.ktor.http.*
 import org.apache.commons.codec.binary.Base64
 import tupperdate.web.facade.PictureUrl
+import tupperdate.web.legacy.model.Recipe
 import tupperdate.web.model.Result
 import tupperdate.web.model.profiles.User
 import tupperdate.web.model.recipes.ModelNewRecipe
@@ -12,6 +13,7 @@ import tupperdate.web.model.recipes.ModelRecipe
 import tupperdate.web.model.recipes.RecipeRepository
 import tupperdate.web.model.recipes.toFirestoreRecipe
 import tupperdate.web.utils.await
+import tupperdate.web.utils.statusException
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -73,7 +75,15 @@ class FirestoreRecipeRepository(
         user: User,
         recipeId: String,
     ): Result<ModelRecipe> {
-        TODO("Not yet implemented")
+        try {
+            val firestoreRecipe = store.collection("recipes").document(recipeId).get().await()
+                .toObject(FirestoreRecipe::class.java) ?: return Result.NotFound()
+            val modelRecipe = firestoreRecipe.toModelRecipe() ?: return Result.BadServer()
+
+            return Result.Ok(modelRecipe)
+        } catch (throwable: Throwable) {
+            return Result.BadServer()
+        }
     }
 
     override suspend fun like(

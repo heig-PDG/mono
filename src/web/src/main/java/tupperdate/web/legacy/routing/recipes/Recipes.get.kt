@@ -15,37 +15,7 @@ import tupperdate.web.utils.tupperdateAuthPrincipal
 import tupperdate.web.utils.statusException
 
 fun Route.recipesGet(store: Firestore) {
-    own(store)
-    some(store)
     all(store)
-}
-
-/**
- * Retrieves a [List] of all the [RecipeDTO] that the authenticated user has posted
- *
- * @param store the [Firestore] instance that is used.
- */
-private fun Route.own(store: Firestore) = get("/own") {
-    // Extract query params.
-    val uid = call.tupperdateAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
-
-    val recipes = store.collection("recipes").whereEqualTo("userId", uid).get().await()
-        .toObjects(Recipe::class.java).map { it.toRecipeDTO() }
-
-    call.respond(recipes)
-}
-
-/**
- * Retrieves a single recipe from its identifier.
- *
- * @param store the [Firestore] instance that is used.
- */
-private fun Route.some(store: Firestore) = get("/{identifier}") {
-    val id = call.parameters["identifier"] ?: statusException(HttpStatusCode.BadRequest)
-
-    val document = store.collection("recipes").document(id).get().await()
-    val recipe = document.toObject(Recipe::class.java) ?: statusException(NotFound)
-    call.respond(recipe.toRecipeDTO())
 }
 
 /**

@@ -35,7 +35,7 @@ class RecipeFacadeImpl(
         user: User,
         recipeId: String,
     ): Result<Recipe> {
-        TODO("Not yet implemented")
+        return recipes.readOne(user, recipeId).map { it.toRecipe() }
     }
 
     override suspend fun like(

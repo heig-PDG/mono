@@ -67,11 +67,11 @@ fun Route.endpoints() {
             facade.readOwn(user = requireUser()).map { it.map { recipe -> recipe.toRecipeDTO() } }.let { respond(it) }
         }
 
-        /*
         get("/{identifier}") {
-
+            facade.readOne(user = requireUser(), recipeId = requireParam("identifier")).map { it.toRecipeDTO() }.let { respond(it) }
         }
 
+        /*
         get {
 
         }
