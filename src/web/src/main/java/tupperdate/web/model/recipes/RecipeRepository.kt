@@ -24,14 +24,4 @@ interface RecipeRepository {
         user: User,
         recipeId: String,
     ): Result<ModelRecipe>
-
-    suspend fun like(
-        user: User,
-        recipeId: String,
-    ): Result<Unit>
-
-    suspend fun dislike(
-        user: User,
-        recipeId: String,
-    ): Result<Unit>
 }
