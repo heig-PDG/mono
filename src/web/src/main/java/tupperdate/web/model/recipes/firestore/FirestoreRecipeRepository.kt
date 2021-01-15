@@ -118,18 +118,4 @@ class FirestoreRecipeRepository(
             return Result.BadServer()
         }
     }
-
-    override suspend fun like(
-        user: User,
-        recipeId: String,
-    ): Result<Unit> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun dislike(
-        user: User,
-        recipeId: String,
-    ): Result<Unit> {
-        TODO("Not yet implemented")
-    }
 }

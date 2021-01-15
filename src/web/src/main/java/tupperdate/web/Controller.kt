@@ -36,7 +36,7 @@ fun Route.endpoints() {
     route("/users") {
         val facade by this.inject<ProfileFacade>()
 
-        put("{userId}") {
+        put("/{userId}") {
             facade.save(
                 user = requireUser(),
                 profileId = requireParam("userId"),
@@ -44,7 +44,7 @@ fun Route.endpoints() {
             ).let { respond(it) }
         }
 
-        get("{userId}") {
+        get("/{userId}") {
             facade.read(
                 user = requireUser(),
                 profileId = requireParam("userId")
@@ -82,13 +82,13 @@ fun Route.endpoints() {
             ).map { it.map { recipe -> recipe.toRecipeDTO() } }.let { respond(it) }
         }
 
-        /*
-        put("{recipeId}/like") {
 
+        put("/{recipeId}/like") {
+            println("Hello")
+            respond(facade.like(user = requireUser(), recipeId = requireParam("recipeId")))
         }
 
-        */
-        put("{recipeId}/dislike") {
+        put("/{recipeId}/dislike") {
             respond(facade.dislike(user = requireUser(), recipeId = requireParam("recipeId")))
         }
     }
