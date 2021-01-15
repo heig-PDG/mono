@@ -19,14 +19,14 @@ fun <R> withTupperdateTestApplication(engine: TestApplicationEngine.() -> R): R 
         application.install(Koin) {
             modules(KoinModuleModelFirebase)
             modules(KoinModuleModelAuthFirebase)
-            modules(KoinModuleModelPhonesFirebase)
+
             modules(KoinModuleModelUsersFirestore)
             modules(KoinModuleModelChatsFirestore)
             modules(KoinModuleModelRecipesFirestore)
-            modules(KoinModuleRepositoryPhoneMock)
-
 
             modules(KoinModuleFacadeAccountMock)
+            modules(KoinModuleRepositoryPhoneMock)
+
             modules(KoinModuleFacadeProfile)
             modules(KoinModuleFacadeRecipe)
 
