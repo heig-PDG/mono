@@ -8,6 +8,7 @@ import io.ktor.routing.*
 import io.ktor.util.pipeline.*
 import org.koin.ktor.ext.inject
 import tupperdate.common.dto.MyUserDTO
+import tupperdate.web.facade.accounts.AccountFacade
 import tupperdate.web.facade.profiles.Profile
 import tupperdate.web.facade.profiles.ProfileFacade
 import tupperdate.web.facade.profiles.toNewProfile
@@ -19,6 +20,13 @@ import tupperdate.web.utils.tupperdateAuthPrincipal
 import tupperdate.web.utils.statusException
 
 fun Route.endpoints() {
+    route("/accounts") {
+        val facade by this.inject<AccountFacade>()
+        post("logout") {
+            respond(facade.logout(user = requireUser()))
+        }
+    }
+
     route("/users") {
         val facade by this.inject<ProfileFacade>()
 
