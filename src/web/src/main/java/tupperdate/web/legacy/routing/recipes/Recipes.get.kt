@@ -29,7 +29,7 @@ private fun Route.own(store: Firestore) = get("/own") {
     // Extract query params.
     val uid = call.tupperdateAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)
 
-    val recipes = store.collection("recipes").whereEqualTo("userId", uid).get().await()
+    val recipes = store.collection("recipes").whereEqualTo("userId", uid.uid).get().await()
         .toObjects(Recipe::class.java).map { it.toRecipeDTO() }
 
     call.respond(recipes)
