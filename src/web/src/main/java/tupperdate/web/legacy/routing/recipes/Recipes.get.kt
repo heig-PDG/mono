@@ -84,7 +84,7 @@ private fun Route.all(store: Firestore) = get {
                 .limit(remaining)
                 .get().await()
         }
-        filtered.addAll(retrieved.filter { it["userId"] != id })
+        filtered.addAll(retrieved.filter { it["userId"] != id.uid })
         lastSnapshot = retrieved.lastOrNull()
         keepGoing = filtered.size < count && retrieved.size() == count && lastSnapshot != null
     }
