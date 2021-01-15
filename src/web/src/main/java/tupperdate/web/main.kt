@@ -15,7 +15,6 @@ import tupperdate.web.facade.accounts.KoinModuleFacadeAccountReal
 import tupperdate.web.facade.profiles.KoinModuleFacadeProfile
 import tupperdate.web.facade.recipes.KoinModuleFacadeRecipe
 import tupperdate.web.legacy.routing.chats.chats
-import tupperdate.web.legacy.routing.recipes.recipes
 import tupperdate.web.legacy.util.getPort
 import tupperdate.web.model.accounts.firestore.KoinModuleModelAuthFirebase
 import tupperdate.web.model.accounts.firestore.KoinModuleModelPhonesFirebase
@@ -64,7 +63,6 @@ fun Application.installServer() {
     install(Routing) {
         authenticate {
             endpoints()
-            recipes(get())
             chats(get())
         }
     }

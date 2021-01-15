@@ -52,6 +52,16 @@ class FirestoreUserRepository(
         }
     }
 
+    override suspend fun updateLastSeenRecipe(user: User, lastSeenRecipe: Long): Result<Unit> {
+        val userDoc = store.collection("users").document(user.id.uid)
+        return try {
+            userDoc.update("lastSeenRecipe", lastSeenRecipe)
+            Ok(Unit)
+        } catch (throwable: Throwable) {
+            BadServer()
+        }
+    }
+
     override suspend fun read(
         user: User,
     ): Result<ModelUser> = coroutineScope {

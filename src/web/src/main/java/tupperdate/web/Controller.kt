@@ -87,10 +87,10 @@ fun Route.endpoints() {
 
         }
 
-        put("{recipeId}/dislike") {
-
-        }
         */
+        put("{recipeId}/dislike") {
+            respond(facade.dislike(user = requireUser(), recipeId = requireParam("recipeId")))
+        }
     }
 }
 
