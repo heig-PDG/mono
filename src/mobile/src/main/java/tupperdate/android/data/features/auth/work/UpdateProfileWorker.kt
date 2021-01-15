@@ -28,6 +28,10 @@ class UpdateProfileWorker(
         val name = inputData.getString(KeyName) ?: return Result.failure()
         val picture = inputData.getString(KeyPicture)
 
+        // TODO : Use these fields to call a patch endpoint rather than a put endpoint.
+        val updateName = inputData.getBoolean(KeyUpdateName, true)
+        val updatePicture = inputData.getBoolean(KeyUpdatePicture, true)
+
         return try {
             client.put<Unit>("/users/${uid}") {
                 body = MyUserDTO(
@@ -48,16 +52,22 @@ class UpdateProfileWorker(
         private const val KeyUid = "uid"
         private const val KeyName = "name"
         private const val KeyPicture = "picture"
+        private const val KeyUpdateName = "updateName"
+        private const val KeyUpdatePicture = "updatePicture"
 
         operator fun invoke(
             uid: String,
             name: String,
             picture: String?,
+            updateName: Boolean,
+            updatePicture: Boolean,
         ): androidx.work.Data {
             return workDataOf(
                 KeyUid to uid,
                 KeyName to name,
                 KeyPicture to picture,
+                KeyUpdateName to updateName,
+                KeyUpdatePicture to updatePicture,
             )
         }
     }
