@@ -1,8 +1,8 @@
 package tupperdate.android.ui.home.profile
 
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -53,7 +53,6 @@ fun Profile(
         name = name,
         phone = phone,
         profilePicture = profileImage,
-        location = "",
         userRecipes = recipes,
         editing = editing,
         onEditClick = viewModel::onEditClick,
@@ -64,80 +63,77 @@ fun Profile(
         },
         onPictureClick = {
         },
-        onLocationChange = {},
         onNewRecipeClick = onNewRecipeClick,
         modifier = modifier,
     )
 }
-
 
 @Composable
 private fun Profile(
     name: String,
     phone: String,
     profilePicture: Any,
-    location: String,
     userRecipes: List<Recipe>,
     editing: Boolean,
     onEditClick: () -> Unit,
     onSaveClick: () -> Unit,
     onNameChange: (String) -> Unit,
     onPictureClick: () -> Unit,
-    onLocationChange: (String) -> Unit,
     onNewRecipeClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
-    ScrollableColumn(modifier.fillMaxSize().padding(16.dp)) {
-        Text(
-            text = stringResource(R.string.profile_title_capital),
-            style = TupperdateTypography.overline,
-        )
-        ProfileRecap(
-            name = name,
-            phone = phone,
-            image = profilePicture,
-            editing = editing,
-            onEditClick = onEditClick,
-            onNameChange = onNameChange,
-            onSaveClick = onSaveClick,
-            onPictureClick = onPictureClick,
-        )
-        OutlinedTextField(
-            value = location,
-            onValueChange = onLocationChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 4.dp, bottom = 24.dp),
-            label = { Text(stringResource(R.string.profile_location)) },
-            placeholder = { Text(stringResource(R.string.profile_location_placeholder)) },
-        )
-        Text(
-            text = stringResource(R.string.profile_tupps),
-            style = TupperdateTypography.overline
-        )
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth(1f)
-                .padding(top = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            item {
-                BrandedButton(
-                    value = stringResource(R.string.profile_new_recipe),
-                    onClick = onNewRecipeClick,
-                    modifier = Modifier
-                        .width(120.dp)
-                        .height(160.dp)
-                        .padding(end = 16.dp),
-                    shape = RoundedCornerShape(5.dp)
-                )
-            }
-            items(userRecipes) {
-                ProfileRecipe(
-                    recipe = it,
-                    modifier = Modifier.padding(end = 16.dp)
-                )
+    LazyColumn(
+        modifier = modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        item {
+            Text(
+                text = stringResource(R.string.profile_title_capital),
+                style = TupperdateTypography.overline,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+        }
+        item {
+            ProfileRecap(
+                name = name,
+                phone = phone,
+                image = profilePicture,
+                editing = editing,
+                onEditClick = onEditClick,
+                onNameChange = onNameChange,
+                onSaveClick = onSaveClick,
+                onPictureClick = onPictureClick,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+        }
+        item {
+            Text(
+                text = stringResource(R.string.profile_tupps),
+                style = TupperdateTypography.overline,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+        }
+        item {
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(1f),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp),
+            ) {
+                item {
+                    BrandedButton(
+                        value = stringResource(R.string.profile_new_recipe),
+                        onClick = onNewRecipeClick,
+                        modifier = Modifier
+                            .width(120.dp)
+                            .height(160.dp),
+                        shape = RoundedCornerShape(5.dp)
+                    )
+                }
+                items(userRecipes) {
+                    ProfileRecipe(it)
+                }
             }
         }
     }
@@ -156,10 +152,7 @@ private fun ProfileRecap(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(end = 3.dp, top = 16.dp, bottom = 16.dp)
-            .height(72.dp),
+        modifier = modifier.fillMaxWidth().height(72.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         ProfilePicture(
@@ -234,14 +227,12 @@ fun ProfilePreview() {
             name = name,
             phone = "079 123 55 41",
             profilePicture = "https://pbs.twimg.com/profile_images/1257192502916001794/f1RW6Ogf_400x400.jpg",
-            location = "Song's Edge",
             userRecipes = reList,
             editing = editing,
             onEditClick = { setEditing(true) },
             onNameChange = setName,
             onSaveClick = { setEditing(false) },
             onPictureClick = {},
-            onLocationChange = {},
             onNewRecipeClick = {})
     }
 }
