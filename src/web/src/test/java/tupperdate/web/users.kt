@@ -59,7 +59,7 @@ class UsersTest {
             }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
 
             // Patch user profile
-            handleRequest(HttpMethod.Put, "/users/$botId") {
+            handleRequest(HttpMethod.Patch, "/users/$botId") {
                 authRequest(botId)
                 jsonType()
                 val body = MyUserPartDTO(
@@ -80,7 +80,7 @@ class UsersTest {
             }
 
             // Patch user profile
-            handleRequest(HttpMethod.Put, "/users/$botId") {
+            handleRequest(HttpMethod.Patch, "/users/$botId") {
                 authRequest(botId)
                 jsonType()
                 val body = MyUserPartDTO(
