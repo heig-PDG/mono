@@ -28,6 +28,10 @@ class FirestoreChatRepository(
             return Result.BadServer()
         }
 
+        if (modelChats.isEmpty()) {
+            return Result.NotFound("One of the recipes list was empty...")
+        }
+
         val convs = modelChats.map {
             val myId = if (user.id.uid == it.user1) it.user1 else it.user2
             val theirId = if (user.id.uid != it.user1) it.user1 else it.user2
