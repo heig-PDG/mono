@@ -9,6 +9,7 @@ import tupperdate.web.facade.PictureUrl
 import tupperdate.web.model.Result
 import tupperdate.web.model.profiles.User
 import tupperdate.web.model.recipes.ModelNewRecipe
+import tupperdate.web.model.recipes.ModelPartRecipe
 import tupperdate.web.model.recipes.ModelRecipe
 import tupperdate.web.model.recipes.RecipeRepository
 import tupperdate.web.utils.await
@@ -49,6 +50,10 @@ class FirestoreRecipeRepository(
         } catch (throwable: Throwable) {
             Result.BadServer()
         }
+    }
+
+    override suspend fun update(user: User, recipe: ModelPartRecipe): Result<Unit> {
+        TODO("Not yet implemented")
     }
 
     override suspend fun readOwn(

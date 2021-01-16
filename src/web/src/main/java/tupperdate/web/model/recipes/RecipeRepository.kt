@@ -14,6 +14,14 @@ interface RecipeRepository {
     ): Result<Unit>
 
     /**
+     * Update a recipe
+     */
+    suspend fun update(
+        user: User,
+        recipe: ModelPartRecipe,
+    ): Result<Unit>
+
+    /**
      * Read of user's recipes
      */
     suspend fun readOwn(
