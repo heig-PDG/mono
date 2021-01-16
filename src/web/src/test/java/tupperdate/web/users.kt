@@ -9,10 +9,9 @@ import org.junit.Test
 import tupperdate.common.dto.MyUserDTO
 import tupperdate.common.dto.UserDTO
 import tupperdate.web.utils.authRequest
-import tupperdate.web.utils.botName
 import tupperdate.web.utils.jsonType
 import tupperdate.web.utils.koin.withTupperdateTestApplication
-import tupperdate.web.utils.botId
+import java.util.*
 import kotlin.test.assertEquals
 
 
@@ -20,6 +19,8 @@ class UsersTest {
 
     @Test
     fun testPutGetUser() {
+        val botId = UUID.randomUUID().toString()
+        val botName = UUID.randomUUID().toString()
         withTupperdateTestApplication {
             // Put user profile
             handleRequest(HttpMethod.Put, "/users/$botId") {

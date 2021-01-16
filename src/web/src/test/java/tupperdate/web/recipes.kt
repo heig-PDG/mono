@@ -11,10 +11,9 @@ import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.common.dto.RecipeAttributesDTO
 import tupperdate.common.dto.RecipeDTO
 import tupperdate.web.utils.authRequest
-import tupperdate.web.utils.botId
-import tupperdate.web.utils.botName
 import tupperdate.web.utils.jsonType
 import tupperdate.web.utils.koin.withTupperdateTestApplication
+import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
@@ -22,8 +21,10 @@ class RecipesTest {
 
     @Test
     fun testPostGetOwnRecipe() {
-        val title = "botRecipeTitle1"
-        val description = "botRecipeDescription1"
+        val botId = UUID.randomUUID().toString()
+        val botName = UUID.randomUUID().toString()
+        val title = UUID.randomUUID().toString()
+        val description = UUID.randomUUID().toString()
         val hasAllergens = true
         val vegetarian = false
         val warm = false
@@ -73,8 +74,10 @@ class RecipesTest {
 
     @Test
     fun testPostGetSomeRecipe() {
-        val title = "botRecipeTitle2"
-        val description = "botRecipeDescription2"
+        val botId = UUID.randomUUID().toString()
+        val botName = UUID.randomUUID().toString()
+        val title = UUID.randomUUID().toString()
+        val description = UUID.randomUUID().toString()
         val hasAllergens = true
         val vegetarian = false
         val warm = false
@@ -143,12 +146,12 @@ class RecipesTest {
 
     @Test
     fun testPostGetAllRecipesFromOthers() {
-        val bot1Id = "bot1Id"
-        val bot2Id = "bot2Id"
-        val bot1Name = "bot1Name"
-        val bot2Name = "bot2Name"
-        val title = "botRecipeTitle3"
-        val description = "botRecipeDescription3"
+        val bot1Id = UUID.randomUUID().toString()
+        val bot2Id = UUID.randomUUID().toString()
+        val bot1Name = UUID.randomUUID().toString()
+        val bot2Name = UUID.randomUUID().toString()
+        val title = UUID.randomUUID().toString()
+        val description = UUID.randomUUID().toString()
         val hasAllergens = false
         val vegetarian = false
         val warm = true
@@ -206,12 +209,12 @@ class RecipesTest {
 
     @Test
     fun testPostGetAllLikeRecipe() {
-        val bot1Id = "bot1Id"
-        val bot2Id = "bot2Id"
-        val bot1Name = "bot1Name"
-        val bot2Name = "bot2Name"
-        val title = "botRecipeTitle4"
-        val description = "botRecipeDescription4"
+        val bot1Id = UUID.randomUUID().toString()
+        val bot2Id = UUID.randomUUID().toString()
+        val bot1Name = UUID.randomUUID().toString()
+        val bot2Name = UUID.randomUUID().toString()
+        val title = UUID.randomUUID().toString()
+        val description = UUID.randomUUID().toString()
         val hasAllergens = false
         val vegetarian = false
         val warm = true
@@ -299,12 +302,12 @@ class RecipesTest {
 
     @Test
     fun testPostGetAllDislikeRecipe() {
-        val bot1Id = "bot1Id"
-        val bot2Id = "bot2Id"
-        val bot1Name = "bot1Name"
-        val bot2Name = "bot2Name"
-        val title = "botRecipeTitle4"
-        val description = "botRecipeDescription4"
+        val bot1Id = UUID.randomUUID().toString()
+        val bot2Id = UUID.randomUUID().toString()
+        val bot1Name = UUID.randomUUID().toString()
+        val bot2Name = UUID.randomUUID().toString()
+        val title = UUID.randomUUID().toString()
+        val description = UUID.randomUUID().toString()
         val hasAllergens = false
         val vegetarian = false
         val warm = true
@@ -391,12 +394,12 @@ class RecipesTest {
 
     @Test
     fun testPost3Recipeslike1Recipe() {
-        val bot1Id = "bot1Id"
-        val bot2Id = "bot2Id"
-        val bot1Name = "bot1Name"
-        val bot2Name = "bot2Name"
-        val title = "botRecipeTitle4"
-        val description = "botRecipeDescription4"
+        val bot1Id = UUID.randomUUID().toString()
+        val bot2Id = UUID.randomUUID().toString()
+        val bot1Name = UUID.randomUUID().toString()
+        val bot2Name = UUID.randomUUID().toString()
+        val title = UUID.randomUUID().toString()
+        val description = UUID.randomUUID().toString()
         val hasAllergens = false
         val vegetarian = false
         val warm = true
@@ -508,10 +511,10 @@ class RecipesTest {
 
     @Test
     fun testGetAllRecipesFromOthersNoRecipesPosted() {
-        val bot1Id = "bot1Id"
-        val bot2Id = "bot2Id"
-        val bot1Name = "bot1Name"
-        val bot2Name = "bot2Name"
+        val bot1Id = UUID.randomUUID().toString()
+        val bot2Id = UUID.randomUUID().toString()
+        val bot1Name = UUID.randomUUID().toString()
+        val bot2Name = UUID.randomUUID().toString()
 
         withTupperdateTestApplication {
             // Put user profile 1
@@ -543,8 +546,8 @@ class RecipesTest {
 
     @Test
     fun testGetOwnNoRecipesPosted() {
-        val bot1Id = "bot1Id"
-        val bot1Name = "bot1Name"
+        val bot1Id = UUID.randomUUID().toString()
+        val bot1Name = UUID.randomUUID().toString()
 
         withTupperdateTestApplication {
             // Put user profile
@@ -568,16 +571,16 @@ class RecipesTest {
 
     @Test
     fun testGetAllRecipesNoSeeOwnRecipes() {
-        val bot1Id = "bot1Id"
-        val bot1Name = "bot1Name"
-        val title = "botRecipeTitle4"
-        val description = "botRecipeDescription4"
+        val bot1Id = UUID.randomUUID().toString()
+        val bot1Name = UUID.randomUUID().toString()
+        val title = UUID.randomUUID().toString()
+        val description = UUID.randomUUID().toString()
         val hasAllergens = false
         val vegetarian = false
         val warm = true
 
         withTupperdateTestApplication {
-            // Put user profile 1
+            // Put user profile
             handleRequest(HttpMethod.Put, "/users/$bot1Id") {
                 authRequest(bot1Id)
                 jsonType()
@@ -585,7 +588,7 @@ class RecipesTest {
                 setBody(Json.encodeToString(body))
             }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
 
-            // Post recipes as bot 1
+            // Post recipes as bot
             handleRequest(HttpMethod.Post, "/recipes") {
                 authRequest(bot1Id)
                 jsonType()
@@ -602,7 +605,6 @@ class RecipesTest {
                 setBody(Json.encodeToString(body))
             }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
 
-            // Get recipes as bot 2
             handleRequest(HttpMethod.Get, "/recipes?count=1") {
                 authRequest(bot1Id)
             }.apply {

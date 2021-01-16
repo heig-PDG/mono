@@ -16,6 +16,7 @@ interface ChatFacade {
      */
     suspend fun readOne(
         user: User,
+        userId: String,
     ): Result<Chat>
 
     /**
@@ -23,15 +24,15 @@ interface ChatFacade {
      */
     suspend fun readMessages(
         user: User,
-        otherUserId: String,
-    ): Result<List<Chat>>
+        userId: String,
+    ): Result<List<Message>>
 
     /**
      * Send a message to another user
      */
     suspend fun sendMessage(
         user: User,
-        otherUserId: String,
-        content: String,
+        userId: String,
+        newMessage: NewMessage,
     ): Result<Unit>
 }
