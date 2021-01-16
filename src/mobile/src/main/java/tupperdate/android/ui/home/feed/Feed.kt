@@ -98,7 +98,10 @@ fun Feed(
                     overlay = {
                         val progress = state.progress
                         // Swiping to the "like" state.
-                        if (progress.from == NotSwiped && progress.to == SwipedEnd) {
+                        if (progress.from == NotSwiped
+                            && progress.to == SwipedEnd
+                            && topRecipe == recipe
+                        ) {
                             SwipeOverlay(
                                 color = Color.LikeButton,
                                 progress = state.progress.fraction,
@@ -107,7 +110,10 @@ fun Feed(
                             )
                         }
                         // Swiping to the "dislike" state.
-                        if (progress.from == NotSwiped && progress.to == SwipedStart) {
+                        if (progress.from == NotSwiped
+                            && progress.to == SwipedStart
+                            && topRecipe == recipe
+                        ) {
                             SwipeOverlay(
                                 color = Color.DislikeButton,
                                 progress = state.progress.fraction,
