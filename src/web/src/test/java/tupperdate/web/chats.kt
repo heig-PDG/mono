@@ -131,7 +131,7 @@ class ChatTest {
 
             // Like recipe as bot 1
             handleRequest(HttpMethod.Put, "/recipes/$recipeIdBot1/like") {
-                authRequest(bot2Id)
+                authRequest(bot1Id)
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
             }
