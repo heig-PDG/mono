@@ -58,7 +58,7 @@ class ChatFacadeImpl(
                 userId = conv.theirId,
                 displayName = chatUser.displayName,
                 picture = chatUser.displayPicture?.url,
-                lastMessage = lastMessage.toMessage(),
+                lastMessage = lastMessage?.toMessage(),
                 myRecipes = myRecipes.map { it.toRecipe() },
                 theirRecipes = theirRecipes.map { it.toRecipe() },
             )
@@ -105,7 +105,7 @@ class ChatFacadeImpl(
                 userId = conv.theirId,
                 displayName = chatUser.displayName,
                 picture = chatUser.displayPicture?.url,
-                lastMessage = lastMessage.toMessage(),
+                lastMessage = lastMessage?.toMessage(),
                 myRecipes = myRecipes.map { it.toRecipe() },
                 theirRecipes = theirRecipes.map { it.toRecipe() },
             )

@@ -79,7 +79,7 @@ class FirestoreChatRepository(
     override suspend fun readLastMessages(
         user: User,
         userId: String,
-    ): Result<ModelMessage> {
+    ): Result<ModelMessage?> {
         val chatId = minOf(user.id.uid, userId) + "_" + maxOf(user.id.uid, userId)
 
         val modelChat = try {
@@ -95,8 +95,8 @@ class FirestoreChatRepository(
 
         return try {
             val messages = store.collection("chats").document(chatId).collection("messages")
-                .orderBy("timestamp", Query.Direction.DESCENDING).get().await()
-                .toObjects(FirestoreMessage::class.java).mapNotNull { it.toModelMessage() }[0]
+                .orderBy("timestamp", Query.Direction.DESCENDING).limit(1).get().await()
+                .toObjects(FirestoreMessage::class.java).map { it.toModelMessage() }.getOrNull(0)
             Result.Ok(messages)
         } catch (throwable: Throwable) {
             Result.BadServer()

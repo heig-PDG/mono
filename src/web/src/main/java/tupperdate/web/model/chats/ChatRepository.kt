@@ -26,7 +26,7 @@ interface ChatRepository {
     suspend fun readLastMessages(
         user: User,
         userId: String,
-    ): Result<ModelMessage>
+    ): Result<ModelMessage?>
 
     /**
      * Read all messages in a chat
