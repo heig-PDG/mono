@@ -243,11 +243,11 @@ class ChatTest {
             assertEquals(2, messagesBot1.size)
             assertEquals(2, messagesBot2.size)
 
-            assertEquals(bot1MessageContent.content, messagesBot1[0].content)
-            assertEquals(bot2MessageContent.content, messagesBot2[1].content)
+            assertEquals(bot1MessageContent.content, messagesBot1[1].content)
+            assertEquals(bot2MessageContent.content, messagesBot2[0].content)
 
-            assertEquals(bot1MessageContent.tempId, messagesBot1[0].tempId)
-            assertEquals(bot2MessageContent.tempId, messagesBot2[1].tempId)
+            assertEquals(bot1MessageContent.tempId, messagesBot1[1].tempId)
+            assertEquals(bot2MessageContent.tempId, messagesBot2[0].tempId)
         }
     }
 
@@ -271,7 +271,7 @@ class ChatTest {
             authRequest(botId)
         }.apply {
             assertEquals(HttpStatusCode.OK, response.status())
-            return Json.decodeFromString<List<MessageDTO>>(response.content ?: "")
+            return Json.decodeFromString(response.content ?: "")
         }
     }
 
@@ -282,6 +282,7 @@ class ChatTest {
     ) {
         handleRequest(HttpMethod.Post, "/chats/$receiverId/messages") {
             authRequest(botId)
+            jsonType()
             setBody(Json.encodeToString(message))
         }.apply {
             assertEquals(HttpStatusCode.OK, response.status())
