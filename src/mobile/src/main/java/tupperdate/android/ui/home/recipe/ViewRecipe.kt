@@ -49,8 +49,14 @@ fun ViewRecipe(
                 style = MaterialTheme.typography.h5
             )
             ViewRecipeButtons(
-                onSkip = { onBack() },
-                onLike = { onBack() },
+                onSkip = {
+                    viewModel.onDislike()
+                    onBack()
+                },
+                onLike = {
+                    viewModel.onLike()
+                    onBack()
+                },
             )
         },
         icons = {
