@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="chat_empty">You don\'t have matches yet. Add some recipes !</string>
     <string name="chat_matches_list">START CHATTING</string>
     <string name="chat_conversations">CONVERSATIONS</string>
     <string name="chat_message_placeholder">Tupp something here</string>
