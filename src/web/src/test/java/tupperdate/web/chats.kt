@@ -8,15 +8,16 @@ import kotlinx.serialization.json.Json
 import org.junit.Test
 import tupperdate.common.dto.*
 import tupperdate.web.utils.authRequest
-import tupperdate.web.utils.botId
-import tupperdate.web.utils.botName
 import tupperdate.web.utils.jsonType
 import tupperdate.web.utils.koin.withTupperdateTestApplication
+import java.util.*
 import kotlin.test.assertEquals
 
 class ChatTest {
     @Test
     fun getEmptyChatList() {
+        val botId = UUID.randomUUID().toString()
+        val botName = UUID.randomUUID().toString()
         withTupperdateTestApplication {
             // Put user profile
             handleRequest(HttpMethod.Put, "/users/$botId") {
@@ -39,13 +40,13 @@ class ChatTest {
 
     @Test
     fun testMatchGetChats() {
-        val bot1Id = "bot1Id"
-        val bot2Id = "bot2Id"
-        val bot1Name = "bot1Name"
-        val bot2Name = "bot2Name"
+        val bot1Id = UUID.randomUUID().toString()
+        val bot2Id = UUID.randomUUID().toString()
+        val bot1Name = UUID.randomUUID().toString()
+        val bot2Name = UUID.randomUUID().toString()
         val newRecipe1 = NewRecipeDTO(
-            title = "botRecipeTitle1",
-            description = "botRecipeDescription1",
+            title = UUID.randomUUID().toString(),
+            description = UUID.randomUUID().toString(),
             attributes = RecipeAttributesDTO(
                 hasAllergens = false,
                 vegetarian = true,
@@ -54,8 +55,8 @@ class ChatTest {
             imageBase64 = null,
         )
         val newRecipe2 = NewRecipeDTO(
-            title = "botRecipeTitle2",
-            description = "botRecipeDescription2",
+            title = UUID.randomUUID().toString(),
+            description = UUID.randomUUID().toString(),
             attributes = RecipeAttributesDTO(
                 hasAllergens = true,
                 vegetarian = false,
@@ -119,13 +120,13 @@ class ChatTest {
 
     @Test
     fun testGetConv() {
-        val bot1Id = "bot1Id"
-        val bot2Id = "bot2Id"
-        val bot1Name = "bot1Name"
-        val bot2Name = "bot2Name"
+        val bot1Id = UUID.randomUUID().toString()
+        val bot2Id = UUID.randomUUID().toString()
+        val bot1Name = UUID.randomUUID().toString()
+        val bot2Name = UUID.randomUUID().toString()
         val newRecipe1 = NewRecipeDTO(
-            title = "botRecipeTitle1",
-            description = "botRecipeDescription1",
+            title = UUID.randomUUID().toString(),
+            description = UUID.randomUUID().toString(),
             attributes = RecipeAttributesDTO(
                 hasAllergens = false,
                 vegetarian = true,
@@ -134,8 +135,8 @@ class ChatTest {
             imageBase64 = null,
         )
         val newRecipe2 = NewRecipeDTO(
-            title = "botRecipeTitle2",
-            description = "botRecipeDescription2",
+            title = UUID.randomUUID().toString(),
+            description = UUID.randomUUID().toString(),
             attributes = RecipeAttributesDTO(
                 hasAllergens = true,
                 vegetarian = false,
@@ -184,15 +185,17 @@ class ChatTest {
 
     @Test
     fun testPostGetMessages() {
-        val bot1Id = "bot1Id"
-        val bot2Id = "bot2Id"
-        val bot1Name = "bot1Name"
-        val bot2Name = "bot2Name"
-        val bot1MessageContent = MessageContentDTO("Hello", "tempId1")
-        val bot2MessageContent = MessageContentDTO("World", "tempId2")
+        val bot1Id = UUID.randomUUID().toString()
+        val bot2Id = UUID.randomUUID().toString()
+        val bot1Name = UUID.randomUUID().toString()
+        val bot2Name = UUID.randomUUID().toString()
+        val bot1MessageContent =
+            MessageContentDTO(UUID.randomUUID().toString(), UUID.randomUUID().toString())
+        val bot2MessageContent =
+            MessageContentDTO(UUID.randomUUID().toString(), UUID.randomUUID().toString())
         val newRecipe1 = NewRecipeDTO(
-            title = "botRecipeTitle1",
-            description = "botRecipeDescription1",
+            title = UUID.randomUUID().toString(),
+            description = UUID.randomUUID().toString(),
             attributes = RecipeAttributesDTO(
                 hasAllergens = false,
                 vegetarian = true,
@@ -201,8 +204,8 @@ class ChatTest {
             imageBase64 = null,
         )
         val newRecipe2 = NewRecipeDTO(
-            title = "botRecipeTitle2",
-            description = "botRecipeDescription2",
+            title = UUID.randomUUID().toString(),
+            description = UUID.randomUUID().toString(),
             attributes = RecipeAttributesDTO(
                 hasAllergens = true,
                 vegetarian = false,
@@ -312,23 +315,23 @@ class ChatTest {
 
     private fun TestApplicationEngine.postRecipe(
         botId: String,
-        newRecipe1: NewRecipeDTO
+        newRecipe: NewRecipeDTO
     ) {
         handleRequest(HttpMethod.Post, "/recipes") {
             authRequest(botId)
             jsonType()
-            setBody(Json.encodeToString(newRecipe1))
+            setBody(Json.encodeToString(newRecipe))
         }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
     }
 
     private fun TestApplicationEngine.registerUser(
-        bot1Id: String,
-        bot1Name: String
+        botId: String,
+        botName: String
     ) {
-        handleRequest(HttpMethod.Put, "/users/$bot1Id") {
-            authRequest(bot1Id)
+        handleRequest(HttpMethod.Put, "/users/$botId") {
+            authRequest(botId)
             jsonType()
-            val body = MyUserDTO(displayName = bot1Name, imageBase64 = null)
+            val body = MyUserDTO(displayName = botName, imageBase64 = null)
             setBody(Json.encodeToString(body))
         }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
     }

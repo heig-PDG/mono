@@ -59,7 +59,7 @@ private fun deleteCollection(collection: CollectionReference, batchSize: Int = 1
         // future.get() blocks on document retrieval
         val documents: List<QueryDocumentSnapshot> = future.get().documents
         for (document in documents) {
-            document.reference.delete()
+            document.reference.delete().get()
             ++deleted
         }
         if (deleted >= batchSize) {
