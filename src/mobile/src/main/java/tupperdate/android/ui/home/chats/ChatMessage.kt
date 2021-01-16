@@ -10,8 +10,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import tupperdate.android.R
 import tupperdate.android.data.features.messages.Message
 import tupperdate.android.data.features.messages.Sender
 import tupperdate.android.ui.theme.Smurf100
@@ -32,12 +34,15 @@ fun ChatMessage(
     message: Message,
     modifier: Modifier = Modifier,
 ) {
-    val color =
-        if (message.from == Sender.Myself) Color.Smurf200
-        else Color.Smurf100
+    val color = when {
+        message.pending -> MaterialTheme.colors.surface
+        message.from == Sender.Myself -> Color.Smurf200
+        else -> Color.Smurf100
+    }
     ChatMessage(
         body = message.body,
         timestamp = message.timestamp,
+        sent = !message.pending,
         color = color,
         modifier = modifier,
     )
@@ -49,6 +54,7 @@ fun ChatMessage(
  *
  * @param body the body of the message
  * @param timestamp when the message was sent, in UNIX epoch millis
+ * @param sent true iff the message was already sent.
  * @param modifier the modifier for this composable
  * @param color the background color of the chat message
  */
@@ -56,6 +62,7 @@ fun ChatMessage(
 fun ChatMessage(
     body: String,
     timestamp: Long,
+    sent: Boolean,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colors.surface,
 ) {
@@ -82,11 +89,18 @@ fun ChatMessage(
                     text = body,
                     style = MaterialTheme.typography.body1,
                 )
-                Text(
-                    text = formatted,
-                    modifier = Modifier.align(Alignment.End),
-                    style = MaterialTheme.typography.caption,
-                )
+                if (sent) {
+                    Text(
+                        text = formatted,
+                        modifier = Modifier.align(Alignment.End),
+                        style = MaterialTheme.typography.caption,
+                    )
+                } else {
+                    Icon(
+                        vectorResource(R.drawable.ic_chat_pending_message),
+                        Modifier.align(Alignment.End).preferredSize(16.dp)
+                    )
+                }
             }
         }
     }
@@ -105,6 +119,7 @@ private fun ChatMessagePreview() = TupperdateTheme {
                 ChatMessage(
                     body = "Hello world.",
                     timestamp = timestamp,
+                    sent = false,
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth(.9f),
@@ -113,6 +128,7 @@ private fun ChatMessagePreview() = TupperdateTheme {
                     body = "Hello world. This is a much larger text that spans multiple lines.",
                     timestamp = timestamp,
                     color = Color.Smurf200,
+                    sent = true,
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth(.9f),

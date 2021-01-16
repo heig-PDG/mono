@@ -174,12 +174,14 @@ private fun ChatPreview() {
                 timestamp = System.currentTimeMillis(),
                 body = "Do you dream of Scorchers ?",
                 from = Sender.Myself,
+                pending = false
             ),
             Message(
                 identifier = "",
                 timestamp = System.currentTimeMillis(),
                 body = "Only when I miss hunting one",
                 from = Sender.Other,
+                pending = true,
             ),
         )
     }

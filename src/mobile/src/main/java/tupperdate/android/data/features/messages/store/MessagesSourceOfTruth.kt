@@ -36,6 +36,7 @@ class MessagesSourceOfTruth(
                 else Pair(key, self)
             val entity = MessageEntity(
                 identifier = message.id,
+                localIdentifier = message.tempId,
                 body = message.content,
                 timestamp = message.timestamp,
                 from = sender,
