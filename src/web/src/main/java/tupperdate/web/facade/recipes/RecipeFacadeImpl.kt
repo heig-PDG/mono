@@ -22,7 +22,12 @@ class RecipeFacadeImpl(
         user: User,
         recipe: NewRecipe,
     ): Result<Unit> {
-        return recipes.save(user, recipe.toModelNewRecipe())
+        val result =  recipes.save(user, recipe.toModelNewRecipe())
+
+        // Let all the currently active clients sync the stack.
+        if (result is Result.Ok) notifications.dispatch(Notification.ToAll.UserSyncAllStackRecipes)
+
+        return result
     }
 
     override suspend fun readOwn(
