@@ -565,4 +565,51 @@ class RecipesTest {
             }
         }
     }
+
+    @Test
+    fun testGetAllRecipesNoSeeOwnRecipes() {
+        val bot1Id = "bot1Id"
+        val bot1Name = "bot1Name"
+        val title = "botRecipeTitle4"
+        val description = "botRecipeDescription4"
+        val hasAllergens = false
+        val vegetarian = false
+        val warm = true
+
+        withTupperdateTestApplication {
+            // Put user profile 1
+            handleRequest(HttpMethod.Put, "/users/$bot1Id") {
+                authRequest(bot1Id)
+                jsonType()
+                val body = MyUserDTO(displayName = bot1Name, imageBase64 = null)
+                setBody(Json.encodeToString(body))
+            }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
+
+            // Post recipes as bot 1
+            handleRequest(HttpMethod.Post, "/recipes") {
+                authRequest(bot1Id)
+                jsonType()
+                val body = NewRecipeDTO(
+                    title = title,
+                    description = description,
+                    attributes = RecipeAttributesDTO(
+                        hasAllergens = hasAllergens,
+                        vegetarian = vegetarian,
+                        warm = warm,
+                    ),
+                    imageBase64 = null,
+                )
+                setBody(Json.encodeToString(body))
+            }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
+
+            // Get recipes as bot 2
+            handleRequest(HttpMethod.Get, "/recipes?count=1") {
+                authRequest(bot1Id)
+            }.apply {
+                assertEquals(HttpStatusCode.OK, response.status())
+                val recipes = Json.decodeFromString<List<RecipeDTO>>(response.content ?: "")
+                assertEquals(0, recipes.size)
+            }
+        }
+    }
 }
