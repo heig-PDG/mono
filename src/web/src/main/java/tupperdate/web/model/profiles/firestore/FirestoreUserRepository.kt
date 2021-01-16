@@ -86,7 +86,9 @@ class FirestoreUserRepository(
         }
 
         return try {
-            doc.update(partUserMap).await()
+            if (partUserMap.isNotEmpty()) {
+                doc.update(partUserMap).await()
+            }
             Ok(Unit)
         } catch (throwable: Throwable) {
             throwable.printStackTrace()
