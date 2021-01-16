@@ -9,6 +9,7 @@ import io.ktor.routing.*
 import io.ktor.serialization.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import kotlinx.serialization.json.Json
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 import tupperdate.web.facade.accounts.KoinModuleFacadeAccount
@@ -57,7 +58,9 @@ fun Application.installServer() {
     install(DefaultHeaders)
     install(CallLogging)
     install(ContentNegotiation) {
-        json()
+        json(Json {
+            encodeDefaults = false
+        })
     }
 
     install(Authentication) {
