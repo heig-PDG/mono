@@ -3,21 +3,24 @@ package tupperdate.web.model.profiles.firestore
 import com.google.cloud.firestore.Firestore
 import com.google.cloud.firestore.SetOptions
 import com.google.firebase.cloud.StorageClient
+import com.google.firebase.messaging.FirebaseMessaging
 import io.ktor.http.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.apache.commons.codec.binary.Base64
+import tupperdate.common.dto.notifications.Notifications
 import tupperdate.web.facade.PictureUrl
-import tupperdate.web.utils.await
 import tupperdate.web.model.Result
 import tupperdate.web.model.Result.*
 import tupperdate.web.model.profiles.*
+import tupperdate.web.utils.await
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 class FirestoreUserRepository(
     private val store: Firestore,
     private val storage: StorageClient,
+    private val messaging: FirebaseMessaging,
 ) : UserRepository {
 
     override suspend fun save(
@@ -97,6 +100,13 @@ class FirestoreUserRepository(
                 .document(user.id.uid)
                 .set(mapOf("notifications" to token.value), SetOptions.merge())
                 .await()
+
+            // Subscribe to the shared topics.
+            messaging.subscribeToTopicAsync(
+                listOf(token.value),
+                Notifications.TopicStack
+            ).await().successCount
+
             Ok(Unit)
         } catch (throwable: Throwable) {
             BadServer()

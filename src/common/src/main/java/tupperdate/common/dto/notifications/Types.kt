@@ -5,6 +5,10 @@ package tupperdate.common.dto.notifications
  * constants are shared between the client and the server to ensure convergence.
  */
 object Notifications {
+
+    // Topics
+    const val TopicStack = "tupperdate_topic_stack"
+
     // Key types.
 
     // All messages have a KeyType.

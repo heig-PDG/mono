@@ -1,6 +1,7 @@
 package tupperdate.web.model.accounts.fcm
 
 import com.google.firebase.messaging.Message
+import tupperdate.common.dto.notifications.Notifications
 import tupperdate.common.dto.notifications.Notifications.KeyArgumentConversationId
 import tupperdate.common.dto.notifications.Notifications.KeyArgumentRecipeId
 import tupperdate.common.dto.notifications.Notifications.KeyType
@@ -11,6 +12,7 @@ import tupperdate.common.dto.notifications.Notifications.TypeSyncOneConversation
 import tupperdate.common.dto.notifications.Notifications.TypeSyncOneRecipe
 import tupperdate.common.dto.notifications.Notifications.TypeSyncProfile
 import tupperdate.web.model.accounts.Notification
+import tupperdate.web.model.accounts.Notification.ToAll
 import tupperdate.web.model.accounts.Notification.ToUser
 import tupperdate.web.model.accounts.Notification.ToUser.*
 
@@ -49,6 +51,14 @@ suspend fun Notification.toMessage(
             .setToken(getToken(this.user))
             .putData(KeyType, TypeSyncOneRecipe)
             .putData(KeyArgumentRecipeId, this.id)
+            .build()
+    }
+
+    is ToAll -> when (this) {
+
+        ToAll.UserSyncAllStackRecipes -> Message.builder()
+            .setTopic(Notifications.TopicStack)
+            .putData(KeyType, TypeSyncAllStackRecipes)
             .build()
     }
 }
