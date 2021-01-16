@@ -11,6 +11,13 @@ interface UserRepository {
     ): Result<Unit>
 
     /**
+     * Update (patch) a user
+     */
+    suspend fun update(
+        user: ModelPartUser,
+    ): Result<Unit>
+
+    /**
      * Update id of the last recipe seen by an user
      */
     suspend fun updateLastSeenRecipe(

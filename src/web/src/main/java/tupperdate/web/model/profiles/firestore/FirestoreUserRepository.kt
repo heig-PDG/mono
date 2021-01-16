@@ -60,6 +60,40 @@ class FirestoreUserRepository(
         }
     }
 
+    override suspend fun update(partUser: ModelPartUser): Result<Unit> {
+        val doc = store.collection("users").document(partUser.identifier)
+
+        val id = UUID.randomUUID().toString()
+        val bytes = partUser.imageBase64?.let { Base64.decodeBase64(it.encoded) }
+        val partUserMap = mutableMapOf<String, Any?>()
+
+        if (partUser.displayNameProvided) {
+            partUserMap["displayName"] = partUser.displayName
+        }
+
+        if (partUser.imageBase64Provided && bytes != null) {
+            val fileName = "$id.jpg"
+            val blob = storage.bucket().create(
+                fileName,
+                bytes.inputStream(),
+                ContentType.Image.JPEG.contentType,
+            )
+            // TODO: Find alternative to timeout
+            val url = blob.signUrl(365, TimeUnit.DAYS)
+            partUserMap["picture"] = url.toString()
+        } else if (partUser.imageBase64Provided && bytes == null) {
+            partUserMap["picture"] = null
+        }
+
+        return try {
+            doc.update(partUserMap).await()
+            Ok(Unit)
+        } catch (throwable: Throwable) {
+            throwable.printStackTrace()
+            BadServer()
+        }
+    }
+
     override suspend fun updateLastSeenRecipe(user: User, lastSeenRecipe: Long): Result<Unit> {
         val userDoc = store.collection("users").document(user.id.uid)
         return try {

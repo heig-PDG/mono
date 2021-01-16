@@ -11,3 +11,4 @@ data class MyUserPartDTO(
     @Serializable(with = OptionalPropertySerializer::class)
     val imageBase64: OptionalProperty<String?>,
 )
+
