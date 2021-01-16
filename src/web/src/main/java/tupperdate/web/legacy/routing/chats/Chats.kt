@@ -5,7 +5,6 @@ import io.ktor.routing.*
 
 fun Route.chats(store: Firestore) {
     route("/chats") {
-        getChats(store)
         getConvs(store)
         getMessages(store)
         postMessage(store)

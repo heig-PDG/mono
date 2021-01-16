@@ -1,6 +1,5 @@
 package tupperdate.web.model.chats
 
-import com.google.cloud.firestore.FieldValue
 import tupperdate.web.model.Result
 import tupperdate.web.model.profiles.User
 
@@ -8,12 +7,12 @@ interface ChatRepository {
 
     suspend fun readAll(
         user: User,
-    ): Result<List<ModelChat>>
+    ): Result<List<Conversation>>
 
     suspend fun readOne(
         user: User,
-        otherUserId: String,
-    ): Result<ModelChat>
+        userId: String,
+    ): Result<Conversation>
 
     suspend fun readMessages(
         user: User,

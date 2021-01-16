@@ -2,6 +2,7 @@ package tupperdate.web.model.chats.firestore
 
 import io.ktor.http.*
 import tupperdate.common.dto.MessageDTO
+import tupperdate.web.model.chats.ModelChat
 import tupperdate.web.utils.statusException
 
 data class FirestoreChat(
@@ -20,13 +21,12 @@ data class FirestoreMessage(
     val fromUser: String? = null,
 )
 
-fun FirestoreMessage.toMessageDTO(): MessageDTO {
-
-    return MessageDTO(
-        id = this.id ?: statusException(HttpStatusCode.InternalServerError),
-        tempId = this.tempId ?: statusException(HttpStatusCode.InternalServerError),
-        senderId = this.fromUser ?: statusException(HttpStatusCode.InternalServerError),
-        timestamp = this.timestamp ?: statusException(HttpStatusCode.InternalServerError),
-        content = this.content ?: statusException(HttpStatusCode.InternalServerError),
+fun FirestoreChat.toModelChat(): ModelChat? {
+    return ModelChat(
+        identifier = id ?: return null,
+        user1 = userId1 ?: return null,
+        user2 = userId2 ?: return null,
+        user1Recipes = user1Recipes,
+        user2Recipes = user2Recipes,
     )
 }

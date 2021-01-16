@@ -11,12 +11,13 @@ interface ChatFacade {
 
     suspend fun readOne(
         user: User,
+        userId: String,
     ): Result<Chat>
 
     suspend fun readMessages(
         user: User,
         otherUserId: String,
-    ): Result<List<Chat>>
+    ): Result<List<Message>>
 
     suspend fun sendMessage(
         user: User,

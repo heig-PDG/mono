@@ -11,11 +11,9 @@ import tupperdate.common.dto.MyUserDTO
 import tupperdate.common.dto.NewNotificationTokenDTO
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.web.facade.accounts.AccountFacade
-import tupperdate.web.facade.profiles.Profile
-import tupperdate.web.facade.profiles.ProfileFacade
-import tupperdate.web.facade.profiles.toNewProfile
-import tupperdate.web.facade.profiles.toNotificationToken
-import tupperdate.web.facade.profiles.toUserDTO
+import tupperdate.web.facade.chats.ChatFacade
+import tupperdate.web.facade.chats.toConversationDTO
+import tupperdate.web.facade.profiles.*
 import tupperdate.web.facade.recipes.RecipeFacade
 import tupperdate.web.facade.recipes.toNewRecipe
 import tupperdate.web.facade.recipes.toRecipeDTO
@@ -26,26 +24,30 @@ import tupperdate.web.utils.statusException
 import tupperdate.web.utils.tupperdateAuthPrincipal
 
 fun Route.endpoints() {
-    val facade by this.inject<ProfileFacade>()
+    val profileFacade by this.inject<ProfileFacade>()
+
+    // Notifications
     route("/notifications") {
         post {
-            facade.register(
+            profileFacade.register(
                 user = requireUser(),
                 token = requireBody<NewNotificationTokenDTO>().toNotificationToken()
             ).let { respond(it) }
         }
     }
 
+    // Accounts
     route("/accounts") {
-        val facade by this.inject<AccountFacade>()
+        val accountFacade by this.inject<AccountFacade>()
         post("logout") {
-            respond(facade.logout(user = requireUser()))
+            respond(accountFacade.logout(user = requireUser()))
         }
     }
 
+    // Users
     route("/users") {
         put("/{userId}") {
-            facade.save(
+            profileFacade.save(
                 user = requireUser(),
                 profileId = requireParam("userId"),
                 profile = requireBody<MyUserDTO>().toNewProfile()
@@ -53,7 +55,7 @@ fun Route.endpoints() {
         }
 
         get("/{userId}") {
-            facade.read(
+            profileFacade.read(
                 user = requireUser(),
                 profileId = requireParam("userId")
             ).map(Profile::toUserDTO).let { respond(it) }
@@ -62,41 +64,61 @@ fun Route.endpoints() {
 
     // Recipes
     route("/recipes") {
-        val facade by this.inject<RecipeFacade>()
+        val recipeFacade by this.inject<RecipeFacade>()
 
         post {
-            facade.save(
+            recipeFacade.save(
                 user = requireUser(),
                 recipe = requireBody<NewRecipeDTO>().toNewRecipe(),
             ).let { respond(it) }
         }
 
         get("/own") {
-            facade.readOwn(user = requireUser()).map { it.map { recipe -> recipe.toRecipeDTO() } }
+            recipeFacade.readOwn(user = requireUser())
+                .map { it.map { recipe -> recipe.toRecipeDTO() } }
                 .let { respond(it) }
         }
 
         get("/{identifier}") {
-            facade.readOne(user = requireUser(), recipeId = requireParam("identifier"))
+            recipeFacade.readOne(user = requireUser(), recipeId = requireParam("identifier"))
                 .map { it.toRecipeDTO() }.let { respond(it) }
         }
 
-
         get {
-            facade.readAll(
+            recipeFacade.readAll(
                 user = requireUser(),
                 count = requireParam("count").toIntOrNull()
                     ?: throw statusException(HttpStatusCode.BadRequest)
             ).map { it.map { recipe -> recipe.toRecipeDTO() } }.let { respond(it) }
         }
 
-
         put("/{recipeId}/like") {
-            respond(facade.like(user = requireUser(), recipeId = requireParam("recipeId")))
+            respond(recipeFacade.like(user = requireUser(), recipeId = requireParam("recipeId")))
         }
 
         put("/{recipeId}/dislike") {
-            respond(facade.dislike(user = requireUser(), recipeId = requireParam("recipeId")))
+            respond(recipeFacade.dislike(user = requireUser(), recipeId = requireParam("recipeId")))
+        }
+
+        // Chats
+        route("/chats") {
+            val chatFacade by this.inject<ChatFacade>()
+            get {
+                chatFacade.readAll(user = requireUser())
+                    .map { it.map { chat -> chat.toConversationDTO() } }.let { respond(it) }
+            }
+
+            get("/{userId}") {
+                chatFacade.readOne(user = requireUser(), userId = requireParam("userId")).map { it.toConversationDTO() }
+            }
+
+            get("/{userId}/messages") {
+
+            }
+
+            post("/{userId}/messages") {
+
+            }
         }
     }
 }
