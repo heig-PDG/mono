@@ -500,7 +500,7 @@ class RecipesTest {
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
                 val recipe = Json.decodeFromString<List<RecipeDTO>>(response.content ?: "")[0]
-                assertNotEquals(recipe.id, recipeIds[2])
+                assertEquals(recipe.id, recipeIds[2])
             }
         }
     }
