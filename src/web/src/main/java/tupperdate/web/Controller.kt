@@ -12,7 +12,10 @@ import tupperdate.common.dto.MyUserDTO
 import tupperdate.common.dto.NewNotificationTokenDTO
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.web.facade.accounts.AccountFacade
-import tupperdate.web.facade.chats.*
+import tupperdate.web.facade.chats.ChatFacade
+import tupperdate.web.facade.chats.toConversationDTO
+import tupperdate.web.facade.chats.toMessageDTO
+import tupperdate.web.facade.chats.toNewMessage
 import tupperdate.web.facade.profiles.*
 import tupperdate.web.facade.recipes.RecipeFacade
 import tupperdate.web.facade.recipes.toNewRecipe
@@ -99,33 +102,33 @@ fun Route.endpoints() {
         put("/{recipeId}/dislike") {
             respond(recipeFacade.dislike(user = requireUser(), recipeId = requireParam("recipeId")))
         }
+    }
 
-        // Chats
-        route("/chats") {
-            val chatFacade by this.inject<ChatFacade>()
-            get {
-                chatFacade.readAll(user = requireUser())
-                    .map { it.map { chat -> chat.toConversationDTO() } }.let { respond(it) }
-            }
+    // Chats
+    route("/chats") {
+        val chatFacade by this.inject<ChatFacade>()
+        get {
+            chatFacade.readAll(user = requireUser())
+                .map { it.map { chat -> chat.toConversationDTO() } }.let { respond(it) }
+        }
 
-            get("/{userId}") {
-                chatFacade.readOne(user = requireUser(), userId = requireParam("userId"))
-                    .map { it.toConversationDTO() }.let { respond(it) }
-            }
+        get("/{userId}") {
+            chatFacade.readOne(user = requireUser(), userId = requireParam("userId"))
+                .map { it.toConversationDTO() }.let { respond(it) }
+        }
 
-            get("/{userId}/messages") {
-                chatFacade.readMessages(user = requireUser(), userId = requireParam("userId"))
-                    .map { it.map { message -> message.toMessageDTO() } }.let { respond(it) }
-            }
+        get("/{userId}/messages") {
+            chatFacade.readMessages(user = requireUser(), userId = requireParam("userId"))
+                .map { it.map { message -> message.toMessageDTO() } }.let { respond(it) }
+        }
 
-            post("/{userId}/messages") {
-                val newMessage = requireBody<MessageContentDTO>()
-                chatFacade.sendMessage(
-                    user = requireUser(),
-                    userId = requireParam("userId"),
-                    newMessage = newMessage.toNewMessage(),
-                )
-            }
+        post("/{userId}/messages") {
+            val newMessage = requireBody<MessageContentDTO>()
+            chatFacade.sendMessage(
+                user = requireUser(),
+                userId = requireParam("userId"),
+                newMessage = newMessage.toNewMessage(),
+            )
         }
     }
 }
