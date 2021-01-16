@@ -5,6 +5,9 @@ import tupperdate.web.model.Result
 import tupperdate.web.model.profiles.User
 
 interface PhoneRepository {
+    /**
+     * Return user's phone number
+     */
     suspend fun read(
         user: User,
     ): Result<Phone>
