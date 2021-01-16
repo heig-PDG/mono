@@ -71,7 +71,10 @@ fun RecipeCard(
                 modifier = Modifier.shade().fillMaxSize(),
                 fadeIn = true,
                 loading = {
-                    Image(imageResource(R.drawable.placeholder_recipe))
+                    Image(
+                        bitmap = imageResource(R.drawable.placeholder_recipe),
+                        contentScale = ContentScale.Crop,
+                    )
                 },
                 contentScale = ContentScale.Crop,
             )

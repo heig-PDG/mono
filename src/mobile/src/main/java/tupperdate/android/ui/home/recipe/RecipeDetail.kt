@@ -58,7 +58,12 @@ fun RecipeDetail(
                 CoilImage(
                     data = heroImage,
                     fadeIn = true,
-                    loading = { Image(imageResource(R.drawable.placeholder_recipe)) },
+                    loading = {
+                        Image(
+                            bitmap = imageResource(R.drawable.placeholder_recipe),
+                            contentScale = ContentScale.Crop,
+                        )
+                    },
                     modifier = Modifier
                         .preferredHeight(290.dp)
                         .fillMaxWidth(),

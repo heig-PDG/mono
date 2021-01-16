@@ -10,7 +10,6 @@ import tupperdate.android.data.features.picker.ImagePicker
 import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.data.features.recipe.RecipeRepository
 
-// TODO : Use an image picker here.
 class ProfileViewModel(
     private val picker: ImagePicker,
     private val auth: AuthenticationRepository,
@@ -36,7 +35,6 @@ class ProfileViewModel(
         name: String,
     ) {
         viewModelScope.launch {
-            // TODO : Upload new images.
             auth.updateProfile(displayName = name)
             currentlyEditing.value = false
         }

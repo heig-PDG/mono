@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.compose.ui.zIndex
@@ -29,17 +30,19 @@ import tupperdate.android.ui.theme.TupperdateTheme
  * @param pictures the [String] urls to display for recipes.
  * @param onClick the callback to call when the conversation is clicked.
  * @param modifier the composable modifier.
+ * @param bubbleSize the size of the bubbles.
  */
 @Composable
 fun MatchBubble(
     pictures: List<String?>,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    bubbleSize: Dp = 56.dp,
 ) {
     val displayed = remember(pictures) {
         pictures.asSequence()
             .take(MatchBubbleStackHeight)
-            .sortedBy { it }
+            .sortedWith(nullsLast<String>().thenBy { it })
             .toList()
     }
     Box(modifier) {
@@ -49,6 +52,7 @@ fun MatchBubble(
                 onClick = onClick,
                 modifier = Modifier
                     .padding(start = 8.dp * index)
+                    .preferredSize(bubbleSize)
                     .zIndex(displayed.size - index.toFloat()),
                 enabled = true,
             )

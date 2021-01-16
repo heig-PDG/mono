@@ -1,7 +1,9 @@
 package tupperdate.android.ui.home.chats
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -10,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
@@ -27,6 +30,8 @@ fun Chat(
     displayName: String,
     displayPicture: Any,
     messages: List<Message>,
+    recipesMine: List<String?>,
+    recipesTheirs: List<String?>,
     onBack: () -> Unit,
     onSendMessageClick: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -44,6 +49,7 @@ fun Chat(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(8.dp) + padding,
                 verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
                 reverseLayout = true,
             ) {
                 items(messages) {
@@ -54,7 +60,32 @@ fun Chat(
                         )
                         ChatMessage(it, position)
                     }
-
+                }
+                item {
+                    Row(
+                        Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                        Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+                        Alignment.CenterVertically,
+                    ) {
+                        MatchBubble(
+                            pictures = recipesMine,
+                            onClick = { },
+                            bubbleSize = 32.dp,
+                        )
+                        Text(
+                            text = stringResource(R.string.matches_title2),
+                            style = MaterialTheme.typography.subtitle2,
+                            color = Color.White,
+                            modifier = Modifier
+                                .background(Color.LightGray, CircleShape)
+                                .padding(horizontal = 16.dp, vertical = 8.dp),
+                        )
+                        MatchBubble(
+                            pictures = recipesTheirs,
+                            onClick = { },
+                            bubbleSize = 32.dp,
+                        )
+                    }
                 }
             }
         },
@@ -73,7 +104,6 @@ fun Chat(
     )
 }
 
-// TODO : Tweak TopBar composable.
 @Composable
 private fun ChatTopBar(
     title: String,
@@ -88,19 +118,16 @@ private fun ChatTopBar(
             }
         },
         title = {
-            Row(
-                Modifier,
-                Arrangement.spacedBy(8.dp),
-                Alignment.CenterVertically
-            ) {
-                ProfilePicture(
-                    image = picture,
-                    highlighted = false,
-                    modifier = Modifier.preferredSize(24.dp),
-                )
-                Text(title)
-            }
+            Text(title)
         },
+        actions = {
+            ProfilePicture(
+                image = picture,
+                highlighted = false,
+                modifier = Modifier.padding(end = 8.dp).size(40.dp),
+            )
+        },
+        backgroundColor = MaterialTheme.colors.surface,
         modifier = modifier,
     )
 }
@@ -146,12 +173,14 @@ private fun ChatPreview() {
                 timestamp = System.currentTimeMillis(),
                 body = "Do you dream of Scorchers ?",
                 from = Sender.Myself,
+                pending = false
             ),
             Message(
                 identifier = "",
                 timestamp = System.currentTimeMillis(),
                 body = "Only when I miss hunting one",
                 from = Sender.Other,
+                pending = true,
             ),
         )
     }
@@ -160,6 +189,8 @@ private fun ChatPreview() {
             displayName = "Aloy",
             displayPicture = "https://pbs.twimg.com/profile_images/1257192502916001794/f1RW6Ogf_400x400.jpg",
             messages = messages,
+            recipesMine = emptyList(),
+            recipesTheirs = emptyList(),
             onBack = { },
             onSendMessageClick = { },
         )

@@ -24,22 +24,33 @@ class SendPendingMessagesWorker(
     private val database by inject<TupperdateDatabase>()
 
     override suspend fun doWork(): Result {
-        val pending = database.messages().pending().first()
+        // 1. Clean up the database of pending messages that were already sent.
+        cleanupSentAndReceived()
+
+        // 2. Sync new pending messages.
+        val pending = database.messages().pendingToSend().first()
         var succcess = true
         for (message in pending) {
             try {
                 client.post<Unit>("/chats/${message.recipient}/messages") {
                     body = MessageContentDTO(
                         content = message.body,
-                        tempId = "",
+                        tempId = message.identifier,
                     )
                 }
-                database.messages().pendingDelete(message.identifier)
+                database.messages().pendingMarkSent(message.identifier)
             } catch (throwable: Throwable) {
                 // TODO : Handle client exceptions.
                 succcess = false
             }
         }
         return if (succcess) Result.success() else Result.retry()
+    }
+
+    private suspend fun cleanupSentAndReceived() {
+        val sent = database.messages().pendingSent().first()
+        for (message in sent) {
+            database.messages().pendingClear(message.identifier)
+        }
     }
 }

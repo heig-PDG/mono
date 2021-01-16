@@ -7,7 +7,6 @@ import io.ktor.client.features.*
 import io.ktor.client.features.auth.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.logging.*
-import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.util.*
 import org.koin.dsl.module
@@ -26,9 +25,10 @@ private val KoinKtorModule = module {
                 logger = Logger.SIMPLE
             }
             defaultRequest {
-                // TODO : Use HTTPS.
-                host = "api.tupperdate.me"
-                port = 80
+                url {
+                    protocol = URLProtocol.HTTPS
+                    host = "api.tupperdate.me"
+                }
                 contentType(ContentType.parse("application/json"))
             }
         }
