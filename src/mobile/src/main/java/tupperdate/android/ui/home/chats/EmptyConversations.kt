@@ -35,7 +35,7 @@ fun EmptyConversations(
         )
         Providers(AmbientContentAlpha provides ContentAlpha.disabled) {
             Text(
-                text = stringResource(R.string.home_no_recipes),
+                text = stringResource(R.string.chat_empty),
                 style = MaterialTheme.typography.h6,
                 textAlign = TextAlign.Center,
             )

@@ -1,8 +1,11 @@
 package tupperdate.android.ui.home.chats
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.getViewModel
 import tupperdate.android.data.features.auth.firebase.FirebaseUid
 
@@ -23,7 +26,11 @@ fun Conversations(
 
     if (conversations != null && matches != null) {
         if (conversations.isEmpty() && matches.isEmpty()) {
-            EmptyConversations()
+            EmptyConversations(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(32.dp),
+            )
         } else {
             Conversations(
                 matches = matches,
