@@ -1,4 +1,4 @@
-package tupperdate.web.koin
+package tupperdate.web.utils.koin
 
 import tupperdate.web.model.Result
 import tupperdate.web.model.accounts.Notification

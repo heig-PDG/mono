@@ -9,6 +9,7 @@ import io.ktor.application.*
 import io.ktor.server.testing.*
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
+import tupperdate.web.facade.chats.KoinModuleFacadeChat
 import tupperdate.web.facade.profiles.KoinModuleFacadeProfile
 import tupperdate.web.facade.recipes.KoinModuleFacadeRecipe
 import tupperdate.web.installServer
@@ -35,8 +36,9 @@ fun <R> withTupperdateTestApplication(engine: TestApplicationEngine.() -> R): R 
 
             modules(KoinModuleFacadeProfile)
             modules(KoinModuleFacadeRecipe)
-
+            modules(KoinModuleFacadeChat)
         }
+
         application.installServer()
         val firestore by application.inject<Firestore>()
         deleteCollection(firestore.collection("users"))
