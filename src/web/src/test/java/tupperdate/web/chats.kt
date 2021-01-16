@@ -280,7 +280,7 @@ class ChatTest {
         receiverId: String,
         message: MessageContentDTO
     ) {
-        handleRequest(HttpMethod.Post, "/chats/$receiverId/message") {
+        handleRequest(HttpMethod.Post, "/chats/$receiverId/messages") {
             authRequest(botId)
             setBody(Json.encodeToString(message))
         }.apply {

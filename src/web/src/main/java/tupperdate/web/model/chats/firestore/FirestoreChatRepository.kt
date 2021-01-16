@@ -95,7 +95,7 @@ class FirestoreChatRepository(
 
         return try {
             val messages = store.collection("chats").document(chatId).collection("messages")
-                .orderBy("timestamp", Query.Direction.DESCENDING).limit(1).get().await()
+                .orderBy("timestamp", Query.Direction.DESCENDING).get().await()
                 .toObjects(FirestoreMessage::class.java).mapNotNull { it.toModelMessage() }[0]
             Result.Ok(messages)
         } catch (throwable: Throwable) {
