@@ -27,7 +27,10 @@ open class OptionalPropertySerializer<T>(
         value: OptionalProperty<T>,
     ) {
         when (value) {
-            OptionalProperty.NotProvided -> Unit
+            OptionalProperty.NotProvided -> throw SerializationException(
+                "Tried to serialize an optional property that had no value present." +
+                        " Is encodeDefaults false?"
+            )
             is OptionalProperty.Provided ->
                 valueSerializer.serialize(encoder, value.value)
         }

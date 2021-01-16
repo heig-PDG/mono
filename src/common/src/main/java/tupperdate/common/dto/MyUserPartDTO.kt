@@ -7,8 +7,8 @@ import utils.OptionalPropertySerializer
 @Serializable
 data class MyUserPartDTO(
     @Serializable(with = OptionalPropertySerializer::class)
-    val displayName: OptionalProperty<String?>,
+    val displayName: OptionalProperty<String?> = OptionalProperty.NotProvided,
     @Serializable(with = OptionalPropertySerializer::class)
-    val imageBase64: OptionalProperty<String?>,
+    val imageBase64: OptionalProperty<String?> = OptionalProperty.NotProvided,
 )
 

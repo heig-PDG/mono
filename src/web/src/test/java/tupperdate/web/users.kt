@@ -62,10 +62,7 @@ class UsersTest {
             handleRequest(HttpMethod.Patch, "/users/$botId") {
                 authRequest(botId)
                 jsonType()
-                val body = MyUserPartDTO(
-                    displayName = OptionalProperty.NotProvided,
-                    imageBase64 = OptionalProperty.NotProvided,
-                )
+                val body = MyUserPartDTO()
                 setBody(Json.encodeToString(body))
             }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
 
@@ -85,7 +82,6 @@ class UsersTest {
                 jsonType()
                 val body = MyUserPartDTO(
                     displayName = OptionalProperty.Provided(botNameAfter),
-                    imageBase64 = OptionalProperty.NotProvided,
                 )
                 setBody(Json.encodeToString(body))
             }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
