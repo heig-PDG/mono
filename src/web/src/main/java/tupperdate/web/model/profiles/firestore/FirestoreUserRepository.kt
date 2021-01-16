@@ -1,6 +1,7 @@
 package tupperdate.web.model.profiles.firestore
 
 import com.google.cloud.firestore.Firestore
+import com.google.cloud.firestore.SetOptions
 import com.google.firebase.cloud.StorageClient
 import io.ktor.http.*
 import kotlinx.coroutines.async
@@ -45,7 +46,10 @@ class FirestoreUserRepository(
         )
 
         try {
-            doc.set(firestoreUser).await()
+            doc.set(
+                firestoreUser,
+                SetOptions.mergeFields("displayName", "picture"),
+            ).await()
             Ok(Unit)
         } catch (throwable: Throwable) {
             BadServer()
@@ -64,6 +68,24 @@ class FirestoreUserRepository(
             val result = firestoreUser.await()?.toModelUser()
                 ?: return@coroutineScope NotFound()
             Ok(result)
+        } catch (throwable: Throwable) {
+            BadServer()
+        }
+    }
+
+    override suspend fun register(
+        user: User,
+        token: ModelNotificationToken,
+    ): Result<Unit> {
+        // We consider that users will only receive notifications on a single device at a time. This
+        // could be handled differently, with lifetimes associated with each token, would each user
+        // have a set of phones at their disposals.
+        return try {
+            store.collection("users")
+                .document(user.id.uid)
+                .update("notifications", token.value)
+                .await()
+            Ok(Unit)
         } catch (throwable: Throwable) {
             BadServer()
         }
