@@ -21,6 +21,14 @@ interface ChatRepository {
     ): Result<Conversation>
 
     /**
+     * Read last message in a chat
+     */
+    suspend fun readLastMessages(
+        user: User,
+        userId: String,
+    ): Result<ModelMessage>
+
+    /**
      * Read all messages in a chat
      */
     suspend fun readMessages(

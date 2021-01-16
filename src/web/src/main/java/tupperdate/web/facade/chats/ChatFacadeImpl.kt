@@ -36,10 +36,11 @@ class ChatFacadeImpl(
                     else -> return res.map { listOf() }
                 }
             val lastMessage =
-                when (val res = chatRepository.readMessages(user = user, userId = conv.theirId)) {
+                when (val res = chatRepository.readLastMessages(user = user, userId = conv.theirId)) {
                     is Result.Ok -> res.result
                     else -> return res.map { listOf() }
-                }.getOrNull(0)
+                }
+
             val myRecipes = conv.myRecipes.map {
                 when (val res = recipeRepository.readOne(user, it)) {
                     is Result.Ok -> res.result
@@ -57,7 +58,7 @@ class ChatFacadeImpl(
                 userId = conv.theirId,
                 displayName = chatUser.displayName,
                 picture = chatUser.displayPicture?.url,
-                lastMessage = lastMessage?.toMessage(),
+                lastMessage = lastMessage.toMessage(),
                 myRecipes = myRecipes.map { it.toRecipe() },
                 theirRecipes = theirRecipes.map { it.toRecipe() },
             )
@@ -81,10 +82,10 @@ class ChatFacadeImpl(
             else -> return res.map { emptyChat() }
         }
         val lastMessage =
-            when (val res = chatRepository.readMessages(user = user, userId = conv.theirId)) {
+            when (val res = chatRepository.readLastMessages(user = user, userId = conv.theirId)) {
                 is Result.Ok -> res.result
                 else -> return res.map { emptyChat() }
-            }.getOrNull(0)
+            }
 
         val myRecipes = conv.myRecipes.map {
             when (val res = recipeRepository.readOne(user, it)) {
@@ -104,7 +105,7 @@ class ChatFacadeImpl(
                 userId = conv.theirId,
                 displayName = chatUser.displayName,
                 picture = chatUser.displayPicture?.url,
-                lastMessage = lastMessage?.toMessage(),
+                lastMessage = lastMessage.toMessage(),
                 myRecipes = myRecipes.map { it.toRecipe() },
                 theirRecipes = theirRecipes.map { it.toRecipe() },
             )

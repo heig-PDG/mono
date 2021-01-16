@@ -80,6 +80,33 @@ class FirestoreChatRepository(
         )
     }
 
+    override suspend fun readLastMessages(
+        user: User,
+        userId: String,
+    ): Result<ModelMessage> {
+        val chatId = minOf(user.id.uid, userId) + "_" + maxOf(user.id.uid, userId)
+
+        val modelChat = try {
+            store.collection("chats").document(chatId).get().await()
+                .toObject(FirestoreChat::class.java)?.toModelChat() ?: return Result.NotFound()
+        } catch (throwable: Throwable) {
+            return Result.BadServer()
+        }
+
+        if (modelChat.user1Recipes == null || modelChat.user2Recipes == null) {
+            return Result.NotFound()
+        }
+
+        return try {
+            val messages = store.collection("chats").document(chatId).collection("messages")
+                .orderBy("timestamp", Query.Direction.DESCENDING).limit(1).get().await()
+                .toObjects(FirestoreMessage::class.java).mapNotNull { it.toModelMessage() }[0]
+            Result.Ok(messages)
+        } catch (throwable: Throwable) {
+            Result.BadServer()
+        }
+    }
+
     override suspend fun readMessages(
         user: User,
         userId: String,
