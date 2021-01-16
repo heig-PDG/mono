@@ -28,7 +28,7 @@ class ChatTest {
             }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
 
             // Get chat list
-            handleRequest(HttpMethod.Get, "/recipes/own") {
+            handleRequest(HttpMethod.Get, "/chats") {
                 authRequest(botId)
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
