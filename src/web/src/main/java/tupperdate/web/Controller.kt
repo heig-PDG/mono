@@ -11,7 +11,10 @@ import tupperdate.common.dto.MyUserDTO
 import tupperdate.common.dto.NewNotificationTokenDTO
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.web.facade.accounts.AccountFacade
-import tupperdate.web.facade.profiles.*
+import tupperdate.web.facade.profiles.Profile
+import tupperdate.web.facade.profiles.ProfileFacade
+import tupperdate.web.facade.profiles.toNewProfile
+import tupperdate.web.facade.profiles.toNotificationToken
 import tupperdate.web.facade.profiles.toUserDTO
 import tupperdate.web.facade.recipes.RecipeFacade
 import tupperdate.web.facade.recipes.toNewRecipe

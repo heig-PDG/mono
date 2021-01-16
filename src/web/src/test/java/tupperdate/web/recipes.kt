@@ -195,7 +195,7 @@ class RecipesTest {
                 val recipe = Json.decodeFromString<List<RecipeDTO>>(response.content ?: "")[0]
                 assertEquals(recipe.title, title)
                 assertEquals(recipe.description, description)
-                assertEquals(recipe.userId, botId)
+                assertEquals(recipe.userId, bot1Id)
                 assertEquals(recipe.attributes.hasAllergens, hasAllergens)
                 assertEquals(recipe.attributes.vegetarian, vegetarian)
                 assertEquals(recipe.attributes.warm, warm)
@@ -235,7 +235,23 @@ class RecipesTest {
                 setBody(Json.encodeToString(body))
             }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
 
-            // Post recipe as bot 1
+            // Post recipes as bot 1
+            handleRequest(HttpMethod.Post, "/recipes") {
+                authRequest(bot1Id)
+                jsonType()
+                val body = NewRecipeDTO(
+                    title = title,
+                    description = description,
+                    attributes = RecipeAttributesDTO(
+                        hasAllergens = hasAllergens,
+                        vegetarian = vegetarian,
+                        warm = warm,
+                    ),
+                    imageBase64 = null,
+                )
+                setBody(Json.encodeToString(body))
+            }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
+
             handleRequest(HttpMethod.Post, "/recipes") {
                 authRequest(bot1Id)
                 jsonType()
@@ -258,19 +274,12 @@ class RecipesTest {
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
                 val recipe = Json.decodeFromString<List<RecipeDTO>>(response.content ?: "")[0]
-                assertEquals(recipe.title, title)
-                assertEquals(recipe.description, description)
-                assertEquals(recipe.userId, botId)
-                assertEquals(recipe.attributes.hasAllergens, hasAllergens)
-                assertEquals(recipe.attributes.vegetarian, vegetarian)
-                assertEquals(recipe.attributes.warm, warm)
-                assertNotEquals(recipe.timestamp, 0)
 
                 recipeId = recipe.id
             }
 
             // Dislike recipe as bot 2
-            handleRequest(HttpMethod.Get, "/recipes/$recipeId/dislike") {
+            handleRequest(HttpMethod.Put, "/recipes/$recipeId/dislike") {
                 authRequest(bot2Id)
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -282,7 +291,7 @@ class RecipesTest {
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
                 val recipe = Json.decodeFromString<List<RecipeDTO>>(response.content ?: "")[0]
-                assertNotEquals(recipe.id, recipeId)
+                assertNotEquals(recipeId, recipe.id)
             }
 
         }

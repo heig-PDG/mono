@@ -23,7 +23,7 @@ class UsersTest {
         withTupperdateTestApplication {
             // Put user profile
             handleRequest(HttpMethod.Put, "/users/$botId") {
-                authRequest()
+                authRequest(botId)
                 jsonType()
                 val body = MyUserDTO(displayName = botName, imageBase64 = null)
                 setBody(Json.encodeToString(body))
@@ -31,7 +31,7 @@ class UsersTest {
 
             // Get user profile
             handleRequest(HttpMethod.Get, "/users/$botId") {
-                authRequest()
+                authRequest(botId)
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
                 val user = Json.decodeFromString<UserDTO>(response.content ?: "")

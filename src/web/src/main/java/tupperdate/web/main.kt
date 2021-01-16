@@ -23,8 +23,8 @@ import tupperdate.web.model.chats.firestore.KoinModuleModelChatsFirestore
 import tupperdate.web.model.impl.firestore.KoinModuleModelFirebase
 import tupperdate.web.model.profiles.firestore.KoinModuleModelUsersFirestore
 import tupperdate.web.model.recipes.firestore.KoinModuleModelRecipesFirestore
-import tupperdate.web.utils.tupperdate
 import tupperdate.web.utils.registerException
+import tupperdate.web.utils.tupperdate
 
 @JvmName("main")
 fun main() {

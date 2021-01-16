@@ -7,7 +7,7 @@ const val botId = "botId"
 const val botName = "botName"
 
 fun TestApplicationRequest.authRequest(id: String) {
-    addHeader(HttpHeaders.Authorization, id)
+    addHeader(HttpHeaders.Authorization, "Bearer $id")
 }
 
 fun TestApplicationRequest.jsonType() {
