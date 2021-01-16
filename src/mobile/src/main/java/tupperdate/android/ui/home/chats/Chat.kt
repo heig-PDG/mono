@@ -104,7 +104,6 @@ fun Chat(
     )
 }
 
-// TODO : Tweak TopBar composable.
 @Composable
 private fun ChatTopBar(
     title: String,

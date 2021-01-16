@@ -35,6 +35,7 @@ class ChatViewModel(
         .map { it.theirRecipePictures }
 
     fun onSend(message: String) {
+        if (message.isBlank()) return
         viewModelScope.launch {
             repository.send(id, message)
         }

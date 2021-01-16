@@ -34,8 +34,6 @@ data class ConversationEntity(
  * These recipes can be displayed to the user to indicate what made multiple users match. This will
  * for instance be the case match bubbles, or at the start of a direct conversation between two
  * users.
- *
- * TODO : Actually store the recipes in the fetchers.
  */
 @InternalDataApi
 @Entity(

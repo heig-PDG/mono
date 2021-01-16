@@ -28,8 +28,6 @@ fun Chat(
         recipesMine = recipesMine,
         recipesTheirs = recipesTheirs,
         onBack = onBack,
-        // TODO : Avoid duplicate sends
-        // TODO : Sender feedback
         onSendMessageClick = viewModel::onSend,
         modifier = modifier,
     )
