@@ -78,8 +78,8 @@ class ChatTest {
             val recipeIdBot1 = getOldestRecipeId(bot1Id)
 
             // Like recipes
-            likeRecipe(recipeIdBot2, bot1Id)
-            likeRecipe(recipeIdBot1, bot2Id)
+            likeRecipe(bot1Id, recipeIdBot2)
+            likeRecipe(bot2Id, recipeIdBot1)
 
             // Get chats as bot 1
             handleRequest(HttpMethod.Get, "/chats") {
@@ -158,8 +158,8 @@ class ChatTest {
             val recipeIdBot1 = getOldestRecipeId(bot1Id)
 
             // Like recipes
-            likeRecipe(recipeIdBot2, bot1Id)
-            likeRecipe(recipeIdBot1, bot2Id)
+            likeRecipe(bot1Id, recipeIdBot2)
+            likeRecipe(bot2Id, recipeIdBot1)
 
             // Get conv as bot 1
             val conv1 = getConversation(bot1Id, bot2Id)
