@@ -487,8 +487,8 @@ class RecipesTest {
                 assertEquals(HttpStatusCode.OK, response.status())
             }
 
-            // Dislike recipe 2 as bot 2
-            handleRequest(HttpMethod.Put, "/recipes/${recipeIds[2]}/dislike") {
+            // Dislike recipe 1 as bot 2
+            handleRequest(HttpMethod.Put, "/recipes/${recipeIds[1]}/dislike") {
                 authRequest(bot2Id)
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -500,7 +500,7 @@ class RecipesTest {
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
                 val recipe = Json.decodeFromString<List<RecipeDTO>>(response.content ?: "")[0]
-                assertNotEquals(recipe.id, recipeIds[1])
+                assertNotEquals(recipe.id, recipeIds[2])
             }
         }
     }
