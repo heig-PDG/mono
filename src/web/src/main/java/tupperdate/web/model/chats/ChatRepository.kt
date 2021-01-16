@@ -16,7 +16,7 @@ interface ChatRepository {
 
     suspend fun readMessages(
         user: User,
-        otherUserId: String,
+        userId: String,
     ): Result<List<ModelMessage>>
 
     suspend fun sendMessage(

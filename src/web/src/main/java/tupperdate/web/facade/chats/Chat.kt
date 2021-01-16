@@ -30,3 +30,20 @@ fun Chat.toConversationDTO(): ConversationDTO {
         theirRecipes = theirRecipes.map {it.toRecipeDTO() }
     )
 }
+
+fun emptyChat(): Chat {
+    return Chat(
+        userId = "",
+        displayName = "",
+        picture = null,
+        lastMessage = Message(
+            id = "",
+            tempId = "",
+            senderId = "",
+            timestamp = 0,
+            content = "",
+        ),
+        myRecipes = listOf(),
+        theirRecipes = listOf(),
+    )
+}

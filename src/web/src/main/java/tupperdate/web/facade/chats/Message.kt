@@ -1,5 +1,6 @@
 package tupperdate.web.facade.chats
 
+import tupperdate.common.dto.MessageDTO
 import tupperdate.web.model.chats.ModelMessage
 
 data class Message(
@@ -13,6 +14,16 @@ data class Message(
 fun ModelMessage.toMessage(): Message {
     return Message(
         id = identifier,
+        tempId = tempId,
+        senderId = senderId,
+        timestamp = timestamp,
+        content = content,
+    )
+}
+
+fun Message.toMessageDTO(): MessageDTO {
+    return MessageDTO(
+        id = id,
         tempId = tempId,
         senderId = senderId,
         timestamp = timestamp,

@@ -13,6 +13,7 @@ import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.web.facade.accounts.AccountFacade
 import tupperdate.web.facade.chats.ChatFacade
 import tupperdate.web.facade.chats.toConversationDTO
+import tupperdate.web.facade.chats.toMessageDTO
 import tupperdate.web.facade.profiles.*
 import tupperdate.web.facade.recipes.RecipeFacade
 import tupperdate.web.facade.recipes.toNewRecipe
@@ -109,11 +110,13 @@ fun Route.endpoints() {
             }
 
             get("/{userId}") {
-                chatFacade.readOne(user = requireUser(), userId = requireParam("userId")).map { it.toConversationDTO() }
+                chatFacade.readOne(user = requireUser(), userId = requireParam("userId"))
+                    .map { it.toConversationDTO() }.let { respond(it) }
             }
 
             get("/{userId}/messages") {
-
+                chatFacade.readMessages(user = requireUser(), userId = requireParam("userId"))
+                    .map { it.map { message -> message.toMessageDTO() } }.let { respond(it) }
             }
 
             post("/{userId}/messages") {

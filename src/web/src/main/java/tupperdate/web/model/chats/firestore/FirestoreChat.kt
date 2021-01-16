@@ -3,6 +3,7 @@ package tupperdate.web.model.chats.firestore
 import io.ktor.http.*
 import tupperdate.common.dto.MessageDTO
 import tupperdate.web.model.chats.ModelChat
+import tupperdate.web.model.chats.ModelMessage
 import tupperdate.web.utils.statusException
 
 data class FirestoreChat(
@@ -28,5 +29,15 @@ fun FirestoreChat.toModelChat(): ModelChat? {
         user2 = userId2 ?: return null,
         user1Recipes = user1Recipes,
         user2Recipes = user2Recipes,
+    )
+}
+
+fun FirestoreMessage.toModelMessage(): ModelMessage? {
+    return ModelMessage(
+        identifier = id ?: return null,
+        tempId = tempId ?: return null,
+        content = content ?: return null,
+        timestamp = timestamp ?: return null,
+        senderId = fromUser ?: return null,
     )
 }

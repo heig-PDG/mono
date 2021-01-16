@@ -16,7 +16,7 @@ interface ChatFacade {
 
     suspend fun readMessages(
         user: User,
-        otherUserId: String,
+        userId: String,
     ): Result<List<Message>>
 
     suspend fun sendMessage(
