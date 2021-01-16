@@ -134,10 +134,8 @@ class ChatFacadeImpl(
         // Let all the two clients sync their chats.
         if (result is Result.Ok) {
             notificationRepository.dispatch(
-                notification = arrayOf(
-                    Notification.ToUser.UserSyncOneConversation(userId, user.id.uid),
-                    Notification.ToUser.UserSyncOneConversation(user.id.uid, userId),
-                )
+                Notification.ToUser.UserSyncOneConversation(userId, user.id.uid),
+                Notification.ToUser.UserSyncOneConversation(user.id.uid, userId),
             )
         }
 
