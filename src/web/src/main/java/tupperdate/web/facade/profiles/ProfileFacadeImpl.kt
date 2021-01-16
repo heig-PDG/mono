@@ -8,17 +8,13 @@ import tupperdate.web.model.accounts.NotificationRepository
 import tupperdate.web.model.accounts.PhoneRepository
 import tupperdate.web.model.flatMap
 import tupperdate.web.model.map
-import tupperdate.web.model.profiles.ModelNewUser
-import tupperdate.web.model.profiles.User
-import tupperdate.web.model.profiles.UserRepository
-import tupperdate.web.model.profiles.toProfile
+import tupperdate.web.model.profiles.*
 
 class ProfileFacadeImpl(
     private val users: UserRepository,
     private val phones: PhoneRepository,
     private val notifications: NotificationRepository,
 ) : ProfileFacade {
-
     override suspend fun save(
         user: User,
         profileId: String,
@@ -32,6 +28,30 @@ class ProfileFacadeImpl(
         )
 
         val result = users.save(newUser)
+
+        // Deferred non-blocking notification.
+        if (result is Result.Ok) {
+            GlobalScope.launch {
+                notifications.send(
+                    Notification
+                        .ToUser
+                        .UserSyncProfile(user.id.uid)
+                )
+            }
+        }
+
+        return result
+    }
+
+    override suspend fun update(
+        user: User,
+        profileId: String,
+        partProfile: PartProfile
+    ): Result<Unit> {
+        if (user.id.uid != profileId) return Result.Forbidden()
+        val partUser = partProfile.toModelPartUser(userId = user.id.uid)
+
+        val result = users.update(partUser)
 
         // Deferred non-blocking notification.
         if (result is Result.Ok) {

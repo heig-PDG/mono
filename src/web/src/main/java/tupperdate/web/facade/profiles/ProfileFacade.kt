@@ -15,6 +15,15 @@ interface ProfileFacade {
     ): Result<Unit>
 
     /**
+     * Patch a user profile given a [PartProfile]
+     */
+    suspend fun update(
+        user: User,
+        profileId: String,
+        partProfile: PartProfile,
+    ): Result<Unit>
+
+    /**
      * Fetch and return profile of an user
      */
     suspend fun read(
