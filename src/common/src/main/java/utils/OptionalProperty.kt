@@ -5,7 +5,7 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-sealed class OptionalProperty<T> {
+sealed class OptionalProperty<out T> {
     object NotProvided : OptionalProperty<Nothing>()
     data class Provided<T>(val value: T) : OptionalProperty<T>()
 }
