@@ -48,7 +48,7 @@ fun Profile(
     val profileImage = (profile as? AuthenticationStatus.Displayable)?.displayPictureUrl
         ?: PlaceholderProfileImage
     val phone = (profile as? AuthenticationStatus.Displayable)?.phoneNumber ?: ""
-    val (name, setName) = remember(profile) { mutableStateOf(profileName) }
+    val (name, setName) = remember(profileName) { mutableStateOf(profileName) }
 
     Profile(
         profileName = name,
