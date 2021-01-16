@@ -48,10 +48,11 @@ class FirestoreUserRepository(
         try {
             doc.set(
                 firestoreUser,
-                SetOptions.mergeFields("displayName", "picture"),
+                SetOptions.mergeFields("id", "displayName", "picture"),
             ).await()
             Ok(Unit)
         } catch (throwable: Throwable) {
+            throwable.printStackTrace()
             BadServer()
         }
     }
@@ -69,6 +70,7 @@ class FirestoreUserRepository(
                 ?: return@coroutineScope NotFound()
             Ok(result)
         } catch (throwable: Throwable) {
+            throwable.printStackTrace()
             BadServer()
         }
     }
@@ -83,7 +85,7 @@ class FirestoreUserRepository(
         return try {
             store.collection("users")
                 .document(user.id.uid)
-                .update("notifications", token.value)
+                .set(mapOf("notifications" to token.value), SetOptions.merge())
                 .await()
             Ok(Unit)
         } catch (throwable: Throwable) {

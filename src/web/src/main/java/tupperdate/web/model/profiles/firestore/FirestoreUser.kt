@@ -7,7 +7,8 @@ data class FirestoreUser(
     val id: String? = null,
     val displayName: String? = null,
     val picture: String? = null,
-    val lastSeenRecipe: Long? = null
+    val lastSeenRecipe: Long? = null,
+    val notification: String? = null,
 )
 
 fun FirestoreUser.toModelUser(): ModelUser? {
