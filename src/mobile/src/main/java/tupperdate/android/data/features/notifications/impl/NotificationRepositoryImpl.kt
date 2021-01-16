@@ -13,6 +13,7 @@ import tupperdate.android.data.features.notifications.NotificationToken
 import tupperdate.android.data.features.notifications.work.LinkWorker
 import tupperdate.android.data.features.recipe.work.RefreshOwnWorker
 import tupperdate.android.data.features.recipe.work.RefreshStackWorker
+import tupperdate.android.data.features.recipe.work.TryOnceRefreshRecipeWorker
 
 @InternalDataApi
 class NotificationRepositoryImpl(
@@ -33,29 +34,20 @@ class NotificationRepositoryImpl(
         notification: Notification,
     ) {
         Log.d("NotificationRepository", "Got $notification")
-        when (notification) {
-            Notification.SyncAllOwnRecipes -> manager.enqueue(
-                SyncRequestBuilder<RefreshOwnWorker>()
-                    .build()
-            )
-            Notification.SyncAllStackRecipes -> manager.enqueue(
-                SyncRequestBuilder<RefreshStackWorker>()
-                    .build()
-            )
-            Notification.SyncAllConversations -> manager.enqueue(
-                SyncRequestBuilder<RefreshAllConversationsWorker>()
-                    .build()
-            )
-            Notification.SyncProfile -> manager.enqueue(
-                SyncRequestBuilder<RefreshProfileWorker>()
-                    .build()
-            )
-            is Notification.SyncOneConversation -> manager.enqueue(
-                SyncRequestBuilder<RefreshMessagesWorker>()
-                    .setInputData(RefreshMessagesWorker.forConversation(notification.id))
-                    .build()
-            )
-            is Notification.SyncOneRecipe -> Unit // TODO : Handle this case.
+
+        val request = when (notification) {
+            Notification.SyncAllOwnRecipes -> SyncRequestBuilder<RefreshOwnWorker>().build()
+            Notification.SyncAllStackRecipes -> SyncRequestBuilder<RefreshStackWorker>().build()
+            Notification.SyncAllConversations -> SyncRequestBuilder<RefreshAllConversationsWorker>().build()
+            Notification.SyncProfile -> SyncRequestBuilder<RefreshProfileWorker>().build()
+            is Notification.SyncOneConversation -> SyncRequestBuilder<RefreshMessagesWorker>().setInputData(
+                RefreshMessagesWorker.forConversation(notification.id)
+            ).build()
+            is Notification.SyncOneRecipe -> SyncRequestBuilder<TryOnceRefreshRecipeWorker>().setInputData(
+                TryOnceRefreshRecipeWorker.forId(notification.id)
+            ).build()
         }
+
+        manager.enqueue(request)
     }
 }

@@ -15,4 +15,9 @@ sealed class Notification {
         class UserSyncOneConversation(recipient: String, val id: String) : ToUser(recipient)
         class UserSyncOneRecipe(recipient: String, val id: String) : ToUser(recipient)
     }
+
+    // Collapsible messages sent to all users.
+    sealed class ToAll: Notification() {
+        object UserSyncAllStackRecipes: ToAll()
+    }
 }

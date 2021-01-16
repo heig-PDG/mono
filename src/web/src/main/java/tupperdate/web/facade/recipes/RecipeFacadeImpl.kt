@@ -1,7 +1,8 @@
 package tupperdate.web.facade.recipes
 
-import com.google.cloud.firestore.FieldValue
 import tupperdate.web.model.Result
+import tupperdate.web.model.accounts.Notification
+import tupperdate.web.model.accounts.NotificationRepository
 import tupperdate.web.model.chats.ChatRepository
 import tupperdate.web.model.chats.ModelNewChat
 import tupperdate.web.model.map
@@ -14,13 +15,19 @@ class RecipeFacadeImpl(
     private val recipes: RecipeRepository,
     private val users: UserRepository,
     private val chats: ChatRepository,
+    private val notifications: NotificationRepository,
 ) : RecipeFacade {
 
     override suspend fun save(
         user: User,
         recipe: NewRecipe,
     ): Result<Unit> {
-        return recipes.save(user, recipe.toModelNewRecipe())
+        val result =  recipes.save(user, recipe.toModelNewRecipe())
+
+        // Let all the currently active clients sync the stack.
+        if (result is Result.Ok) notifications.dispatch(Notification.ToAll.UserSyncAllStackRecipes)
+
+        return result
     }
 
     override suspend fun readOwn(
@@ -73,10 +80,25 @@ class RecipeFacadeImpl(
 
         // Append recipe likes to correct array
         val res2 = chats.updateLikes(chatId, mapOf(callerLike to recipeId))
-        if (res2 !is Result.Ok) { return res2 }
+        if (res2 !is Result.Ok) {
+            return res2
+        }
+
+        // Notify both users that their conversations might have changed.
+        notifications.dispatch(
+            Notification.ToUser.UserSyncAllConversations(smallerId),
+            Notification.ToUser.UserSyncAllConversations(greaterId),
+        )
 
         // set recipe as seen
-        return users.updateLastSeenRecipe(user, recipe.timestamp)
+        val result = users.updateLastSeenRecipe(user, recipe.timestamp)
+
+        // Notify the user that his stack might have changed.
+        if (result is Result.Ok) notifications.dispatch(
+            Notification.ToUser.UserSyncAllStackRecipes(user.id.uid),
+        )
+
+        return result
     }
 
     override suspend fun dislike(
