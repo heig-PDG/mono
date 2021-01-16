@@ -9,7 +9,7 @@ import tupperdate.web.model.profiles.User
 class AccountFacadeImplMock() : AccountFacade {
 
     override suspend fun authenticate(bearer: Token): Result<AccountId> {
-        return Result.Ok(AccountId("botId"))
+        return Result.Ok(AccountId(bearer.bearer))
     }
 
     override suspend fun logout(user: User): Result<Unit> {

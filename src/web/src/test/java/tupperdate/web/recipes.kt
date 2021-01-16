@@ -31,7 +31,7 @@ class RecipesTest {
         withTupperdateTestApplication {
             // Put user profile
             handleRequest(HttpMethod.Put, "/users/$botId") {
-                authRequest()
+                authRequest(botId)
                 jsonType()
                 val body = MyUserDTO(displayName = botName, imageBase64 = null)
                 setBody(Json.encodeToString(body))
@@ -39,7 +39,7 @@ class RecipesTest {
 
             // Post recipe
             handleRequest(HttpMethod.Post, "/recipes") {
-                authRequest()
+                authRequest(botId)
                 jsonType()
                 val body = NewRecipeDTO(
                     title = title,
@@ -56,7 +56,7 @@ class RecipesTest {
 
             // Get recipe
             handleRequest(HttpMethod.Get, "/recipes/own") {
-                authRequest()
+                authRequest(botId)
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
                 val recipe = Json.decodeFromString<List<RecipeDTO>>(response.content ?: "")[0]
@@ -84,7 +84,7 @@ class RecipesTest {
         withTupperdateTestApplication {
             // Put user profile
             handleRequest(HttpMethod.Put, "/users/$botId") {
-                authRequest()
+                authRequest(botId)
                 jsonType()
                 val body = MyUserDTO(displayName = botName, imageBase64 = null)
                 setBody(Json.encodeToString(body))
@@ -92,7 +92,7 @@ class RecipesTest {
 
             // Post recipe
             handleRequest(HttpMethod.Post, "/recipes") {
-                authRequest()
+                authRequest(botId)
                 jsonType()
                 val body = NewRecipeDTO(
                     title = title,
@@ -109,7 +109,7 @@ class RecipesTest {
 
             // Get recipe
             handleRequest(HttpMethod.Get, "/recipes/own") {
-                authRequest()
+                authRequest(botId)
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
                 val recipe = Json.decodeFromString<List<RecipeDTO>>(response.content ?: "")[0]
@@ -126,7 +126,7 @@ class RecipesTest {
 
             // Get this particular recipe
             handleRequest(HttpMethod.Get, "/recipes/$recipeId") {
-                authRequest()
+                authRequest(botId)
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
                 val recipe = Json.decodeFromString<RecipeDTO>(response.content ?: "")
@@ -138,6 +138,153 @@ class RecipesTest {
                 assertEquals(recipe.attributes.warm, warm)
                 assertNotEquals(recipe.timestamp, 0)
             }
+        }
+    }
+
+    @Test
+    fun testPostGetAllRecipesFromOthers() {
+        val bot1Id = "bot1Id"
+        val bot2Id = "bot2Id"
+        val bot1Name = "bot1Name"
+        val bot2Name = "bot2Name"
+        val title = "botRecipeTitle3"
+        val description = "botRecipeDescription3"
+        val hasAllergens = false
+        val vegetarian = false
+        val warm = true
+
+        withTupperdateTestApplication {
+            // Put user profile 1
+            handleRequest(HttpMethod.Put, "/users/$bot1Id") {
+                authRequest(bot1Id)
+                jsonType()
+                val body = MyUserDTO(displayName = bot1Name, imageBase64 = null)
+                setBody(Json.encodeToString(body))
+            }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
+
+            // Put user profile 2
+            handleRequest(HttpMethod.Put, "/users/$bot2Id") {
+                authRequest(bot2Id)
+                jsonType()
+                val body = MyUserDTO(displayName = bot2Name, imageBase64 = null)
+                setBody(Json.encodeToString(body))
+            }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
+
+            // Post recipe as bot 1
+            handleRequest(HttpMethod.Post, "/recipes") {
+                authRequest(bot1Id)
+                jsonType()
+                val body = NewRecipeDTO(
+                    title = title,
+                    description = description,
+                    attributes = RecipeAttributesDTO(
+                        hasAllergens = hasAllergens,
+                        vegetarian = vegetarian,
+                        warm = warm,
+                    ),
+                    imageBase64 = null,
+                )
+                setBody(Json.encodeToString(body))
+            }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
+
+            // Get recipes as bot 2
+            handleRequest(HttpMethod.Get, "/recipes?count=1") {
+                authRequest(bot2Id)
+            }.apply {
+                assertEquals(HttpStatusCode.OK, response.status())
+                val recipe = Json.decodeFromString<List<RecipeDTO>>(response.content ?: "")[0]
+                assertEquals(recipe.title, title)
+                assertEquals(recipe.description, description)
+                assertEquals(recipe.userId, botId)
+                assertEquals(recipe.attributes.hasAllergens, hasAllergens)
+                assertEquals(recipe.attributes.vegetarian, vegetarian)
+                assertEquals(recipe.attributes.warm, warm)
+                assertNotEquals(recipe.timestamp, 0)
+            }
+        }
+    }
+
+    @Test
+    fun testPostGetAllDislikeRecipe() {
+        val bot1Id = "bot1Id"
+        val bot2Id = "bot2Id"
+        val bot1Name = "bot1Name"
+        val bot2Name = "bot2Name"
+        val title = "botRecipeTitle4"
+        val description = "botRecipeDescription4"
+        val hasAllergens = false
+        val vegetarian = false
+        val warm = true
+
+        var recipeId = ""
+
+        withTupperdateTestApplication {
+            // Put user profile 1
+            handleRequest(HttpMethod.Put, "/users/$bot1Id") {
+                authRequest(bot1Id)
+                jsonType()
+                val body = MyUserDTO(displayName = bot1Name, imageBase64 = null)
+                setBody(Json.encodeToString(body))
+            }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
+
+            // Put user profile 2
+            handleRequest(HttpMethod.Put, "/users/$bot2Id") {
+                authRequest(bot2Id)
+                jsonType()
+                val body = MyUserDTO(displayName = bot2Name, imageBase64 = null)
+                setBody(Json.encodeToString(body))
+            }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
+
+            // Post recipe as bot 1
+            handleRequest(HttpMethod.Post, "/recipes") {
+                authRequest(bot1Id)
+                jsonType()
+                val body = NewRecipeDTO(
+                    title = title,
+                    description = description,
+                    attributes = RecipeAttributesDTO(
+                        hasAllergens = hasAllergens,
+                        vegetarian = vegetarian,
+                        warm = warm,
+                    ),
+                    imageBase64 = null,
+                )
+                setBody(Json.encodeToString(body))
+            }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
+
+            // Get recipes as bot 2
+            handleRequest(HttpMethod.Get, "/recipes?count=1") {
+                authRequest(bot2Id)
+            }.apply {
+                assertEquals(HttpStatusCode.OK, response.status())
+                val recipe = Json.decodeFromString<List<RecipeDTO>>(response.content ?: "")[0]
+                assertEquals(recipe.title, title)
+                assertEquals(recipe.description, description)
+                assertEquals(recipe.userId, botId)
+                assertEquals(recipe.attributes.hasAllergens, hasAllergens)
+                assertEquals(recipe.attributes.vegetarian, vegetarian)
+                assertEquals(recipe.attributes.warm, warm)
+                assertNotEquals(recipe.timestamp, 0)
+
+                recipeId = recipe.id
+            }
+
+            // Dislike recipe as bot 2
+            handleRequest(HttpMethod.Get, "/recipes/$recipeId/dislike") {
+                authRequest(bot2Id)
+            }.apply {
+                assertEquals(HttpStatusCode.OK, response.status())
+            }
+
+            // Get recipes as bot 2 again, and check previous one is not visible anymore
+            handleRequest(HttpMethod.Get, "/recipes?count=1") {
+                authRequest(bot2Id)
+            }.apply {
+                assertEquals(HttpStatusCode.OK, response.status())
+                val recipe = Json.decodeFromString<List<RecipeDTO>>(response.content ?: "")[0]
+                assertNotEquals(recipe.id, recipeId)
+            }
+
         }
     }
 }
