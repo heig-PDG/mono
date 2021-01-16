@@ -39,7 +39,6 @@ fun Home(
     onNewRecipeClick: () -> Unit,
     onRecipeDetailsClick: (Recipe) -> Unit,
     onConversationClick: (ConversationIdentifier) -> Unit,
-    onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val viewModel = getViewModel<HomeViewModel>()
@@ -59,7 +58,6 @@ fun Home(
                     HomeSection.Feed -> Feed(
                         onNewRecipeClick = onNewRecipeClick,
                         onOpenRecipeClick = onRecipeDetailsClick,
-                        onBack = onBack,
                         modifier = Modifier.padding(innerPadding),
                     )
                     HomeSection.Conversations ->

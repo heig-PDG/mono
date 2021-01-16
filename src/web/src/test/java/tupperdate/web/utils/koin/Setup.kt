@@ -24,6 +24,7 @@ fun <R> withTupperdateTestApplication(engine: TestApplicationEngine.() -> R): R 
 
             modules(KoinModuleFacadeAccountMock)
             modules(KoinModuleRepositoryPhoneMock)
+            modules(KoinModuleNotificationMock)
 
             modules(KoinModuleFacadeProfile)
             modules(KoinModuleFacadeRecipe)

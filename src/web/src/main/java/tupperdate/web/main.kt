@@ -16,6 +16,7 @@ import tupperdate.web.facade.profiles.KoinModuleFacadeProfile
 import tupperdate.web.facade.recipes.KoinModuleFacadeRecipe
 import tupperdate.web.legacy.routing.chats.chats
 import tupperdate.web.legacy.util.getPort
+import tupperdate.web.model.accounts.fcm.KoinModuleModelNotificationFcm
 import tupperdate.web.model.accounts.firestore.KoinModuleModelAuthFirebase
 import tupperdate.web.model.accounts.firestore.KoinModuleModelPhonesFirebase
 import tupperdate.web.model.chats.firestore.KoinModuleModelChatsFirestore
@@ -35,6 +36,7 @@ fun main() {
             modules(KoinModuleModelFirebase)
             modules(KoinModuleModelAuthFirebase)
             modules(KoinModuleModelPhonesFirebase)
+            modules(KoinModuleModelNotificationFcm)
             modules(KoinModuleModelUsersFirestore)
             modules(KoinModuleModelChatsFirestore)
             modules(KoinModuleModelRecipesFirestore)

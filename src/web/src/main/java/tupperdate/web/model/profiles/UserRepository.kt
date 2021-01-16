@@ -15,4 +15,9 @@ interface UserRepository {
     suspend fun read(
         user: User,
     ): Result<ModelUser>
+
+    suspend fun register(
+        user: User,
+        token: ModelNotificationToken,
+    ): Result<Unit>
 }

@@ -1,9 +1,6 @@
 package tupperdate.android.data.features.messages.room
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 import tupperdate.android.data.InternalDataApi
 import tupperdate.android.data.features.auth.firebase.FirebaseUid
@@ -36,17 +33,42 @@ abstract class MessageDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun messagesReplace(entity: MessageEntity)
 
+    @Query("SELECT * FROM messages WHERE messages.localId = :forId")
+    abstract suspend fun messageForLocalIdOnce(forId: String): MessageEntity?
+
     /**
      * Retrieves all the [PendingMessageEntity], which still need to be sent to the server.
      */
-    @Query("SELECT * FROM messagesCreations")
-    abstract fun pending(): Flow<List<PendingMessageEntity>>
+    @Query("SELECT * FROM messagesCreations WHERE messagesCreations.uid = :forUid")
+    abstract fun pending(forUid: FirebaseUid): Flow<List<PendingMessageEntity>>
+
+    @Query("SELECT * FROM messagesCreations WHERE messagesCreations.sent = 0")
+    abstract fun pendingToSend(): Flow<List<PendingMessageEntity>>
+
+    @Query("SELECT * FROM messagesCreations WHERE messagesCreations.sent != 0")
+    abstract fun pendingSent(): Flow<List<PendingMessageEntity>>
+
+    @Transaction
+    open suspend fun pendingClear(forLocalId: String) {
+        pendingOnce(forLocalId) ?: return
+        messageForLocalIdOnce(forLocalId) ?: return
+        pendingDelete(forLocalId)
+    }
 
     /**
      * Deletes the [PendingMessageEntity] with the provided local id..
      */
     @Query("DELETE FROM messagesCreations WHERE messagesCreations.localId = :forLocalId")
-    abstract fun pendingDelete(forLocalId: Long)
+    abstract fun pendingDelete(forLocalId: String)
+
+    @Query("SELECT * FROM messagesCreations WHERE messagesCreations.localId = :forLocalId")
+    abstract suspend fun pendingOnce(forLocalId: String): PendingMessageEntity?
+
+    @Transaction
+    open suspend fun pendingMarkSent(forLocalId: String) {
+        val message = pendingOnce(forLocalId) ?: return
+        post(message.copy(sent = true))
+    }
 
     /**
      * Posts a new [PendingMessageEntity], which will eventually get synced.

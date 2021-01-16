@@ -19,22 +19,25 @@ import tupperdate.android.ui.theme.layout.rememberSwipeStackState
 fun Feed(
     onNewRecipeClick: () -> Unit,
     onOpenRecipeClick: (Recipe) -> Unit,
-    onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val viewModel = getViewModel<FeedViewModel>()
     val recipes by viewModel.stack().collectAsState(emptyList())
+    val unswipeable by viewModel.unswipeEnabled.collectAsState(false)
 
     Feed(
         recipes = recipes,
+        unswipeEnabled = unswipeable,
+
+        // Recipe callbacks.
         onRecipeLiked = viewModel::onLike,
         onRecipeDisliked = viewModel::onDislike,
-        onRecipePreviousClick = onBack,
+        onRecipePreviousClick = viewModel::onUnswipe,
 
-        // Interactions
+        // External interactions.
         onNewRecipeClick = onNewRecipeClick,
         onRecipeDetailsClick = onOpenRecipeClick,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -42,6 +45,7 @@ fun Feed(
 @Composable
 fun Feed(
     recipes: List<Recipe>,
+    unswipeEnabled: Boolean,
     // Interacting with the current recipe.
     onRecipeLiked: () -> Unit,
     onRecipeDisliked: () -> Unit,
@@ -96,7 +100,8 @@ fun Feed(
             onBackClick = onRecipePreviousClick,
             onNewRecipeClick = onNewRecipeClick,
             modifier = Modifier.fillMaxWidth(),
-            enabled = topRecipe != null,
+            likeEnabled = topRecipe != null,
+            unswipeEnabled = unswipeEnabled,
         )
     }
 }

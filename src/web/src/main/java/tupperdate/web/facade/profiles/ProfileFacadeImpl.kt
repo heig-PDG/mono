@@ -1,6 +1,10 @@
 package tupperdate.web.facade.profiles
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import tupperdate.web.model.Result
+import tupperdate.web.model.accounts.Notification
+import tupperdate.web.model.accounts.NotificationRepository
 import tupperdate.web.model.accounts.PhoneRepository
 import tupperdate.web.model.flatMap
 import tupperdate.web.model.map
@@ -12,6 +16,7 @@ import tupperdate.web.model.profiles.toProfile
 class ProfileFacadeImpl(
     private val users: UserRepository,
     private val phones: PhoneRepository,
+    private val notifications: NotificationRepository,
 ) : ProfileFacade {
 
     override suspend fun save(
@@ -26,7 +31,20 @@ class ProfileFacadeImpl(
             displayPicture = profile.picture,
         )
 
-        return users.save(newUser)
+        val result = users.save(newUser)
+
+        // Deferred non-blocking notification.
+        if (result is Result.Ok) {
+            GlobalScope.launch {
+                notifications.send(
+                    Notification
+                        .ToUser
+                        .UserSyncProfile(user.id.uid)
+                )
+            }
+        }
+
+        return result
     }
 
     override suspend fun read(
@@ -40,4 +58,9 @@ class ProfileFacadeImpl(
             users.read(user).map { it.toProfile(phone.number) }
         }
     }
+
+    override suspend fun register(
+        user: User,
+        token: NewNotificationToken,
+    ) = users.register(user, token.toModelToken())
 }

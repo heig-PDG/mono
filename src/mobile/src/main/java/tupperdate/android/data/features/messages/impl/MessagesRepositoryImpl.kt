@@ -7,10 +7,7 @@ import io.ktor.client.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import tupperdate.android.data.InternalDataApi
 import tupperdate.android.data.SyncRequestBuilder
 import tupperdate.android.data.features.auth.AuthenticationRepository
@@ -21,6 +18,7 @@ import tupperdate.android.data.features.messages.store.*
 import tupperdate.android.data.features.messages.work.RefreshMessagesWorker
 import tupperdate.android.data.features.messages.work.SendPendingMessagesWorker
 import tupperdate.android.data.room.TupperdateDatabase
+import java.util.*
 
 @InternalDataApi
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
@@ -63,8 +61,6 @@ class MessagesRepositoryImpl(
                     val (theirs, mine) = database.conversations()
                         .conversationRecipeAllOnce(conv.identifier)
                         .partition { recipe -> recipe.recipeBelongsToThem }
-                    // TODO : We could use a custom fetcher to avoid nested queries, although this
-                    //        is not necessary.
                     PendingMatch(
                         identifier = conv.identifier,
                         myPicture = mine.asSequence()
@@ -89,8 +85,6 @@ class MessagesRepositoryImpl(
                     conv.previewBody == null &&
                     conv.previewTimestamp == null
                 ) {
-                    // TODO : We could use a custom fetcher to avoid nested queries, although this
-                    //        is not necessary.
                     val (theirs, mine) = database.conversations()
                         .conversationRecipeAllOnce(conv.identifier)
                         .partition { recipe -> recipe.recipeBelongsToThem }
@@ -114,13 +108,20 @@ class MessagesRepositoryImpl(
                 if (entity.previewTimestamp == null ||
                     entity.previewBody == null
                 ) null
-                else Conversation(
-                    identifier = entity.identifier,
-                    picture = entity.picture,
-                    previewTitle = entity.name,
-                    previewBody = entity.previewBody,
-                    previewTimestamp = entity.previewTimestamp,
-                )
+                else {
+                    val (theirs, mine) = database.conversations()
+                        .conversationRecipeAllOnce(entity.identifier)
+                        .partition { recipe -> recipe.recipeBelongsToThem }
+                    Conversation(
+                        identifier = entity.identifier,
+                        picture = entity.picture,
+                        previewTitle = entity.name,
+                        previewBody = entity.previewBody,
+                        previewTimestamp = entity.previewTimestamp,
+                        myRecipePictures = mine.map { r -> r.recipePicture },
+                        theirRecipePictures = theirs.map { r -> r.recipePicture },
+                    )
+                }
             }
         }
         .map { it.filterNotNull() }
@@ -135,13 +136,20 @@ class MessagesRepositoryImpl(
                 if (entity.previewTimestamp == null ||
                     entity.previewBody == null
                 ) null
-                else Conversation(
-                    identifier = entity.identifier,
-                    picture = entity.picture,
-                    previewTitle = entity.name,
-                    previewBody = entity.previewBody,
-                    previewTimestamp = entity.previewTimestamp,
-                )
+                else {
+                    val (theirs, mine) = database.conversations()
+                        .conversationRecipeAllOnce(entity.identifier)
+                        .partition { recipe -> recipe.recipeBelongsToThem }
+                    Conversation(
+                        identifier = entity.identifier,
+                        picture = entity.picture,
+                        previewTitle = entity.name,
+                        previewBody = entity.previewBody,
+                        previewTimestamp = entity.previewTimestamp,
+                        myRecipePictures = mine.map { r -> r.recipePicture },
+                        theirRecipePictures = theirs.map { r -> r.recipePicture },
+                    )
+                }
             }
         }
 
@@ -155,22 +163,51 @@ class MessagesRepositoryImpl(
             }
         }
 
+    private fun singleConversationPendingMessages(uid: FirebaseUid) = database.messages()
+        .pending(uid)
+
     override fun messages(
         other: FirebaseUid,
-    ): Flow<List<Message>> = singleConversationMessagesStore
-        .stream(StoreRequest.cached(other, true))
-        .map { it.dataOrNull() }
-        .filterNotNull()
-        .map {
-            it.map { msg ->
+    ): Flow<List<Message>> {
+        // Actually received messages.
+        val received = singleConversationMessagesStore
+            .stream(StoreRequest.cached(other, true))
+            .map { it.dataOrNull() }
+            .filterNotNull()
+        // Pending messages, which are soon to be sent.
+        val sent = singleConversationPendingMessages(other)
+        return combine(received, sent) { r, s ->
+            // Add all the "standard" server messages.
+            val start = r.map { msg ->
                 Message(
                     identifier = msg.identifier,
                     body = msg.body,
                     timestamp = msg.timestamp,
                     from = if (msg.from == other) Sender.Other else Sender.Myself,
+                    pending = false,
                 )
             }
+            val maxTimestamp = start.maxOfOrNull { it.timestamp } ?: 0
+            // Add our local, pending messages, but...
+            val end = s
+                // ... only if they're not the duplicate of a server message, and...
+                .filter { item -> r.none { it.localIdentifier == item.identifier } }
+                // ... make sure they're visually distinct.
+                .map { msg ->
+                    Message(
+                        identifier = msg.identifier,
+                        body = msg.body,
+                        // Make sure our local messages are after server-issued messages. The
+                        // timestamps for local messages are not displayed, so we can leverage them
+                        // to get correct sorting.
+                        timestamp = msg.timestamp + maxTimestamp,
+                        from = Sender.Myself,
+                        pending = true,
+                    )
+                }
+            start + end
         }
+    }
 
     override suspend fun send(
         to: FirebaseUid,
@@ -178,8 +215,11 @@ class MessagesRepositoryImpl(
     ) {
         database.messages().post(
             PendingMessageEntity(
+                identifier = UUID.randomUUID().toString(),
                 recipient = to,
                 body = message,
+                timestamp = System.currentTimeMillis(),
+                sent = false,
             )
         )
 

@@ -8,11 +8,10 @@ import io.ktor.routing.*
 import io.ktor.util.pipeline.*
 import org.koin.ktor.ext.inject
 import tupperdate.common.dto.MyUserDTO
+import tupperdate.common.dto.NewNotificationTokenDTO
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.web.facade.accounts.AccountFacade
-import tupperdate.web.facade.profiles.Profile
-import tupperdate.web.facade.profiles.ProfileFacade
-import tupperdate.web.facade.profiles.toNewProfile
+import tupperdate.web.facade.profiles.*
 import tupperdate.web.facade.profiles.toUserDTO
 import tupperdate.web.facade.recipes.RecipeFacade
 import tupperdate.web.facade.recipes.toNewRecipe
@@ -24,7 +23,16 @@ import tupperdate.web.utils.statusException
 import tupperdate.web.utils.tupperdateAuthPrincipal
 
 fun Route.endpoints() {
-    // Accounts
+    val facade by this.inject<ProfileFacade>()
+    route("/notifications") {
+        post {
+            facade.register(
+                user = requireUser(),
+                token = requireBody<NewNotificationTokenDTO>().toNotificationToken()
+            ).let { respond(it) }
+        }
+    }
+
     route("/accounts") {
         val facade by this.inject<AccountFacade>()
         post("logout") {
@@ -32,10 +40,7 @@ fun Route.endpoints() {
         }
     }
 
-    // Users
     route("/users") {
-        val facade by this.inject<ProfileFacade>()
-
         put("/{userId}") {
             facade.save(
                 user = requireUser(),

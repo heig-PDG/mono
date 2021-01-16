@@ -98,4 +98,8 @@ class RecipeRepositoryImpl(
             .then(SyncRequestBuilder<RefreshStackWorker>().build())
             .enqueue()
     }
+
+    override suspend fun unswipe(id: String) {
+        database.recipes().recipesUnswipe(id)
+    }
 }

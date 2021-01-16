@@ -131,6 +131,7 @@ dependencies {
     implementation "androidx.activity:activity-ktx:1.2.0-rc01"
     implementation "androidx.fragment:fragment-ktx:1.3.0-rc01"
     implementation "androidx.browser:browser:1.3.0"
+    implementation "androidx.exifinterface:exifinterface:1.3.2"
     implementation "androidx.work:work-runtime-ktx:2.4.0"
     implementation "androidx.work:work-gcm:2.4.0"
     implementation "com.google.android.material:material:1.2.1"
@@ -153,6 +154,8 @@ dependencies {
     implementation platform("com.google.firebase:firebase-bom:26.1.0")
     implementation "com.google.firebase:firebase-auth"
     implementation "com.google.firebase:firebase-firestore"
+    implementation "com.google.firebase:firebase-messaging"
+    implementation "com.google.firebase:firebase-analytics"
 
     // Client-side Ktor dependencies.
     implementation "io.ktor:ktor-client-cio:1.4.3"

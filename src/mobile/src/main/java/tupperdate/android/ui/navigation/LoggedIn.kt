@@ -37,17 +37,20 @@ fun LoggedIn() {
 
     val viewModel = getViewModel<LoggedInViewModel>()
     val match = viewModel.match.collectAsState(null).value
+    val navController = rememberNavController()
 
     if (match != null) {
         MatchDialog(
             myImageUrl = match.myPicture,
             theirImageUrl = match.theirPicture,
-            onStartChattingClick = { viewModel.onAccept(match) },
+            onStartChattingClick = {
+                navController.navigate(LoggedInDestination.viewConversation(match.identifier))
+                viewModel.onAccept(match)
+            },
             onDismissRequest = { viewModel.onAccept(match) },
         )
     }
 
-    val navController = rememberNavController()
     NavHost(navController = navController, startDestination = LoggedInDestination.HOME) {
         composable(LoggedInDestination.NEW_RECIPE) {
             NewRecipe(
@@ -85,7 +88,6 @@ fun LoggedIn() {
                 onConversationClick = {
                     navController.navigate(LoggedInDestination.viewConversation(it))
                 },
-                onBack = { navController.navigateUp() },
             )
         }
     }

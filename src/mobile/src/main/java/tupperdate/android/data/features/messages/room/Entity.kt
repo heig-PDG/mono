@@ -34,8 +34,6 @@ data class ConversationEntity(
  * These recipes can be displayed to the user to indicate what made multiple users match. This will
  * for instance be the case match bubbles, or at the start of a direct conversation between two
  * users.
- *
- * TODO : Actually store the recipes in the fetchers.
  */
 @InternalDataApi
 @Entity(
@@ -68,6 +66,7 @@ data class ConversationRecipeEntity(
 data class MessageEntity(
     @PrimaryKey
     @ColumnInfo(name = "id") val identifier: String,
+    @ColumnInfo(name = "localId") val localIdentifier: String,
     @ColumnInfo(name = "uidFrom") val from: String,
     @ColumnInfo(name = "uidTo") val to: String,
     @ColumnInfo(name = "timestampMillis") val timestamp: Long,
@@ -78,14 +77,14 @@ data class MessageEntity(
  * Sent messages are created as [PendingMessageEntity], before being sent via a worker
  * asynchronously. Because messages are sent in the order of their [identifier], no reordering takes
  * place in case of intermittent connectivity with the remote server.
- *
- * TODO : Display pending messages without flashing.
  */
 @InternalDataApi
 @Entity(tableName = "messagesCreations")
 data class PendingMessageEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "localId") val identifier: Long = 0,
+    @PrimaryKey
+    @ColumnInfo(name = "localId") val identifier: String,
+    @ColumnInfo(name = "localTimestampMillis") val timestamp: Long,
+    @ColumnInfo(name = "sent") val sent: Boolean,
     @ColumnInfo(name = "uid") val recipient: FirebaseUid,
     @ColumnInfo(name = "body") val body: String,
 )

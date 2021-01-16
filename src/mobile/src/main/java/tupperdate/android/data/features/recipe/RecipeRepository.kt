@@ -41,4 +41,10 @@ interface RecipeRepository {
      * Dislikes a recipe, based on its id.
      */
     suspend fun dislike(id: String)
+
+    /**
+     * Un-swipes the recipe from the [stack], making it appear again locally. This does not have
+     * an effect on other devices, but allows the user to "dislike then like" as needed.
+     */
+    suspend fun unswipe(id: String)
 }

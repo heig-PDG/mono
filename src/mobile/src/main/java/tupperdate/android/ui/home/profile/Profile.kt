@@ -235,9 +235,9 @@ fun ProfilePreview() {
             onProfileNameChanged = setName,
             onProfileEditClick = { setEditing(true) },
             onProfileSaveClick = { setEditing(false) },
-            onProfilePictureClick = { /*TODO*/ },
+            onProfilePictureClick = { },
             recipes = reList,
-            onRecipeNewClick = { /*TODO*/ },
-            onRecipeOwnClick = { /*TODO*/ })
+            onRecipeNewClick = { },
+            onRecipeOwnClick = { })
     }
 }

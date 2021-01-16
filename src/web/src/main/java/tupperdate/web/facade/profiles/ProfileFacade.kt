@@ -15,4 +15,9 @@ interface ProfileFacade {
         user: User,
         profileId: String,
     ): Result<Profile>
+
+    suspend fun register(
+        user: User,
+        token: NewNotificationToken,
+    ): Result<Unit>
 }
