@@ -8,9 +8,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.onCommit
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.getViewModel
+import tupperdate.android.R
 import tupperdate.android.data.features.recipe.Recipe
+import tupperdate.android.ui.theme.DislikeButton
+import tupperdate.android.ui.theme.LikeButton
 import tupperdate.android.ui.theme.layout.SwipeStack
 import tupperdate.android.ui.theme.layout.SwipeStackValue.*
 import tupperdate.android.ui.theme.layout.rememberSwipeStackState
@@ -89,7 +94,28 @@ fun Feed(
                 RecipeCard(
                     recipe = recipe,
                     onInfoClick = { onRecipeDetailsClick(recipe) },
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    overlay = {
+                        val progress = state.progress
+                        // Swiping to the "like" state.
+                        if (progress.from == NotSwiped && progress.to == SwipedEnd) {
+                            SwipeOverlay(
+                                color = Color.LikeButton,
+                                progress = state.progress.fraction,
+                                vector = vectorResource(R.drawable.ic_home_like_recipe),
+                                modifier = Modifier.fillMaxSize(),
+                            )
+                        }
+                        // Swiping to the "dislike" state.
+                        if (progress.from == NotSwiped && progress.to == SwipedStart) {
+                            SwipeOverlay(
+                                color = Color.DislikeButton,
+                                progress = state.progress.fraction,
+                                vector = vectorResource(R.drawable.ic_home_dislike_recipe),
+                                modifier = Modifier.fillMaxSize(),
+                            )
+                        }
+                    }
                 )
             }
         }
