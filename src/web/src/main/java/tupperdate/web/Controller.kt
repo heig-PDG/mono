@@ -128,7 +128,7 @@ fun Route.endpoints() {
                 user = requireUser(),
                 userId = requireParam("userId"),
                 newMessage = newMessage.toNewMessage(),
-            )
+            ).let { respond(it) }
         }
     }
 }

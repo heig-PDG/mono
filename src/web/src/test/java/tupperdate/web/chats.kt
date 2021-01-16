@@ -255,7 +255,7 @@ class ChatTest {
         botId: String,
         userId: String,
     ): ConversationDTO {
-        handleRequest(HttpMethod.Get, "/chats/$userId/messages") {
+        handleRequest(HttpMethod.Get, "/chats/$userId") {
             authRequest(botId)
         }.apply {
             assertEquals(HttpStatusCode.OK, response.status())
