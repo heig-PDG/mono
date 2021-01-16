@@ -7,13 +7,12 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.util.pipeline.*
 import org.koin.ktor.ext.inject
+import tupperdate.common.dto.MessageContentDTO
 import tupperdate.common.dto.MyUserDTO
 import tupperdate.common.dto.NewNotificationTokenDTO
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.web.facade.accounts.AccountFacade
-import tupperdate.web.facade.chats.ChatFacade
-import tupperdate.web.facade.chats.toConversationDTO
-import tupperdate.web.facade.chats.toMessageDTO
+import tupperdate.web.facade.chats.*
 import tupperdate.web.facade.profiles.*
 import tupperdate.web.facade.recipes.RecipeFacade
 import tupperdate.web.facade.recipes.toNewRecipe
@@ -120,7 +119,12 @@ fun Route.endpoints() {
             }
 
             post("/{userId}/messages") {
-
+                val newMessage = requireBody<MessageContentDTO>()
+                chatFacade.sendMessage(
+                    user = requireUser(),
+                    userId = requireParam("userId"),
+                    newMessage = newMessage.toNewMessage(),
+                )
             }
         }
     }

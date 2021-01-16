@@ -21,7 +21,7 @@ interface ChatFacade {
 
     suspend fun sendMessage(
         user: User,
-        otherUserId: String,
-        content: String,
+        userId: String,
+        newMessage: NewMessage,
     ): Result<Unit>
 }

@@ -21,8 +21,8 @@ interface ChatRepository {
 
     suspend fun sendMessage(
         user: User,
-        otherUserId: String,
-        content: String,
+        userId: String,
+        newMessage: ModelNewMessage,
     ): Result<Unit>
 
     suspend fun saveNewChat(

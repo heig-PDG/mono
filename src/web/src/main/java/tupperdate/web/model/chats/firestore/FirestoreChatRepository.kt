@@ -6,10 +6,7 @@ import com.google.cloud.firestore.Query
 import com.google.cloud.firestore.SetOptions
 import io.ktor.http.*
 import tupperdate.web.model.Result
-import tupperdate.web.model.chats.ChatRepository
-import tupperdate.web.model.chats.Conversation
-import tupperdate.web.model.chats.ModelMessage
-import tupperdate.web.model.chats.ModelNewChat
+import tupperdate.web.model.chats.*
 import tupperdate.web.model.profiles.User
 import tupperdate.web.utils.await
 
@@ -101,17 +98,44 @@ class FirestoreChatRepository(
                 .orderBy("timestamp", Query.Direction.DESCENDING).get().await()
                 .toObjects(FirestoreMessage::class.java).mapNotNull { it.toModelMessage() }
             Result.Ok(messages)
-        } catch(throwable: Throwable) {
+        } catch (throwable: Throwable) {
             Result.BadServer()
         }
     }
 
     override suspend fun sendMessage(
         user: User,
-        otherUserId: String,
-        content: String,
+        userId: String,
+        newMessage: ModelNewMessage,
     ): Result<Unit> {
-        TODO("Not yet implemented")
+        val chatId = minOf(user.id.uid, userId) + "_" + maxOf(user.id.uid, userId)
+
+        val modelChat = try {
+            store.collection("chats").document(chatId).get().await()
+                .toObject(FirestoreChat::class.java)?.toModelChat() ?: return Result.NotFound()
+        } catch (throwable: Throwable) {
+            return Result.BadServer()
+        }
+
+        if (modelChat.user1Recipes == null || modelChat.user2Recipes == null) {
+            return Result.NotFound()
+        }
+
+        val newDoc = store.collection("chats").document(chatId).collection("messages").document()
+        val message = FirestoreMessage(
+            id = newDoc.id,
+            tempId = newMessage.tempId,
+            content = newMessage.content,
+            timestamp = System.currentTimeMillis(),
+            fromUser = user.id.uid
+        )
+
+        return try {
+            newDoc.set(message).await()
+            Result.Ok(Unit)
+        } catch (throwable: Throwable) {
+            Result.BadServer()
+        }
     }
 
     override suspend fun saveNewChat(chat: ModelNewChat): Result<Unit> {
