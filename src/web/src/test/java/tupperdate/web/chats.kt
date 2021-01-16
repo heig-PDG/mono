@@ -116,7 +116,7 @@ class ChatTest {
                 assertEquals(HttpStatusCode.OK, response.status())
                 val recipes = Json.decodeFromString<List<RecipeDTO>>(response.content ?: "")
                 assertEquals(1, recipes.size)
-                recipeIdBot1 = recipes[0].id
+                recipeIdBot2 = recipes[0].id
             }
 
             // Get recipes as bot 2
@@ -126,18 +126,18 @@ class ChatTest {
                 assertEquals(HttpStatusCode.OK, response.status())
                 val recipes = Json.decodeFromString<List<RecipeDTO>>(response.content ?: "")
                 assertEquals(1, recipes.size)
-                recipeIdBot2 = recipes[0].id
+                recipeIdBot1 = recipes[0].id
             }
 
             // Like recipe as bot 1
-            handleRequest(HttpMethod.Put, "/recipes/$recipeIdBot1/like") {
+            handleRequest(HttpMethod.Put, "/recipes/$recipeIdBot2/like") {
                 authRequest(bot1Id)
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
             }
 
             // Like recipe as bot 2
-            handleRequest(HttpMethod.Put, "/recipes/$recipeIdBot2/like") {
+            handleRequest(HttpMethod.Put, "/recipes/$recipeIdBot1/like") {
                 authRequest(bot2Id)
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -158,8 +158,6 @@ class ChatTest {
                 assertEquals(1, chat.theirRecipes.size)
                 assertEquals(recipeIdBot1, chat.myRecipes[0].id)
                 assertEquals(recipeIdBot2, chat.theirRecipes[0].id)
-                assertEquals(recipeIdBot1, chat.myRecipes[0].id)
-                assertEquals(recipeIdBot2, chat.theirRecipes[0].id)
             }
 
             // Get chats as bot 2
@@ -175,8 +173,6 @@ class ChatTest {
                 assertEquals(null, chat.lastMessage)
                 assertEquals(1, chat.myRecipes.size)
                 assertEquals(1, chat.theirRecipes.size)
-                assertEquals(recipeIdBot2, chat.myRecipes[0].id)
-                assertEquals(recipeIdBot1, chat.theirRecipes[0].id)
                 assertEquals(recipeIdBot2, chat.myRecipes[0].id)
                 assertEquals(recipeIdBot1, chat.theirRecipes[0].id)
             }
