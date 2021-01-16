@@ -76,7 +76,7 @@ class ChatTest {
 
             // Get recipes id
             val recipeIdBot2 = getOldestRecipeId(bot1Id)
-            val recipeIdBot1 = getOldestRecipeId(bot1Id)
+            val recipeIdBot1 = getOldestRecipeId(bot2Id)
 
             // Like recipes
             likeRecipe(bot1Id, recipeIdBot2)
@@ -156,7 +156,7 @@ class ChatTest {
 
             // Get recipes id
             val recipeIdBot2 = getOldestRecipeId(bot1Id)
-            val recipeIdBot1 = getOldestRecipeId(bot1Id)
+            val recipeIdBot1 = getOldestRecipeId(bot2Id)
 
             // Like recipes
             likeRecipe(bot1Id, recipeIdBot2)
@@ -225,7 +225,7 @@ class ChatTest {
 
             // Get recipes id
             val recipeIdBot2 = getOldestRecipeId(bot1Id)
-            val recipeIdBot1 = getOldestRecipeId(bot1Id)
+            val recipeIdBot1 = getOldestRecipeId(bot2Id)
 
             // Like recipes
             likeRecipe(bot1Id, recipeIdBot2)
