@@ -8,7 +8,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.apache.commons.codec.binary.Base64
 import tupperdate.web.facade.PictureUrl
-import tupperdate.web.legacy.util.await
+import tupperdate.web.utils.await
 import tupperdate.web.model.Result
 import tupperdate.web.model.Result.*
 import tupperdate.web.model.profiles.*
@@ -53,6 +53,16 @@ class FirestoreUserRepository(
             Ok(Unit)
         } catch (throwable: Throwable) {
             throwable.printStackTrace()
+            BadServer()
+        }
+    }
+
+    override suspend fun updateLastSeenRecipe(user: User, lastSeenRecipe: Long): Result<Unit> {
+        val userDoc = store.collection("users").document(user.id.uid)
+        return try {
+            userDoc.update("lastSeenRecipe", lastSeenRecipe).await()
+            Ok(Unit)
+        } catch (throwable: Throwable) {
             BadServer()
         }
     }

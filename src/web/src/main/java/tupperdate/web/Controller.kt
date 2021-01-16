@@ -9,11 +9,21 @@ import io.ktor.util.pipeline.*
 import org.koin.ktor.ext.inject
 import tupperdate.common.dto.MyUserDTO
 import tupperdate.common.dto.NewNotificationTokenDTO
-import tupperdate.web.facade.profiles.*
-import tupperdate.web.legacy.auth.tupperdateAuthPrincipal
+import tupperdate.common.dto.NewRecipeDTO
+import tupperdate.web.facade.accounts.AccountFacade
+import tupperdate.web.facade.profiles.Profile
+import tupperdate.web.facade.profiles.ProfileFacade
+import tupperdate.web.facade.profiles.toNewProfile
+import tupperdate.web.facade.profiles.toNotificationToken
+import tupperdate.web.facade.profiles.toUserDTO
+import tupperdate.web.facade.recipes.RecipeFacade
+import tupperdate.web.facade.recipes.toNewRecipe
+import tupperdate.web.facade.recipes.toRecipeDTO
 import tupperdate.web.model.Result
 import tupperdate.web.model.map
 import tupperdate.web.model.profiles.User
+import tupperdate.web.utils.statusException
+import tupperdate.web.utils.tupperdateAuthPrincipal
 
 fun Route.endpoints() {
     val facade by this.inject<ProfileFacade>()
@@ -25,9 +35,16 @@ fun Route.endpoints() {
             ).let { respond(it) }
         }
     }
-    route("/users") {
 
-        put("{userId}") {
+    route("/accounts") {
+        val facade by this.inject<AccountFacade>()
+        post("logout") {
+            respond(facade.logout(user = requireUser()))
+        }
+    }
+
+    route("/users") {
+        put("/{userId}") {
             facade.save(
                 user = requireUser(),
                 profileId = requireParam("userId"),
@@ -35,11 +52,51 @@ fun Route.endpoints() {
             ).let { respond(it) }
         }
 
-        get("{userId}") {
+        get("/{userId}") {
             facade.read(
                 user = requireUser(),
                 profileId = requireParam("userId")
             ).map(Profile::toUserDTO).let { respond(it) }
+        }
+    }
+
+    // Recipes
+    route("/recipes") {
+        val facade by this.inject<RecipeFacade>()
+
+        post {
+            facade.save(
+                user = requireUser(),
+                recipe = requireBody<NewRecipeDTO>().toNewRecipe(),
+            ).let { respond(it) }
+        }
+
+        get("/own") {
+            facade.readOwn(user = requireUser()).map { it.map { recipe -> recipe.toRecipeDTO() } }
+                .let { respond(it) }
+        }
+
+        get("/{identifier}") {
+            facade.readOne(user = requireUser(), recipeId = requireParam("identifier"))
+                .map { it.toRecipeDTO() }.let { respond(it) }
+        }
+
+
+        get {
+            facade.readAll(
+                user = requireUser(),
+                count = requireParam("count").toIntOrNull()
+                    ?: throw statusException(HttpStatusCode.BadRequest)
+            ).map { it.map { recipe -> recipe.toRecipeDTO() } }.let { respond(it) }
+        }
+
+
+        put("/{recipeId}/like") {
+            respond(facade.like(user = requireUser(), recipeId = requireParam("recipeId")))
+        }
+
+        put("/{recipeId}/dislike") {
+            respond(facade.dislike(user = requireUser(), recipeId = requireParam("recipeId")))
         }
     }
 }

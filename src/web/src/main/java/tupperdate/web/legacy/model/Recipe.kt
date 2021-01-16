@@ -4,7 +4,7 @@ import io.ktor.http.*
 import tupperdate.common.dto.NewRecipeDTO
 import tupperdate.common.dto.RecipeAttributesDTO
 import tupperdate.common.dto.RecipeDTO
-import tupperdate.web.legacy.exceptions.statusException
+import tupperdate.web.utils.statusException
 
 data class Recipe(
     val id: String? = null,
@@ -15,22 +15,6 @@ data class Recipe(
     val picture: String? = null,
     val attributes: Map<String, Boolean>? = null,
 )
-
-fun NewRecipeDTO.toRecipe(id: String, userId: String, picture: String?): Recipe {
-    return Recipe(
-        id = id,
-        userId = userId,
-        title = this.title,
-        description = this.description,
-        timestamp = System.currentTimeMillis(),
-        picture = picture,
-        attributes = mapOf(
-            "hasAllergens" to this.attributes.hasAllergens,
-            "vegetarian" to this.attributes.vegetarian,
-            "warm" to this.attributes.warm,
-        ),
-    )
-}
 
 fun Recipe.toRecipeDTO(): RecipeDTO {
     return RecipeDTO(

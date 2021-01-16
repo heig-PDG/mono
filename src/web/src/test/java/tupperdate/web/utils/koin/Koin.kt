@@ -1,7 +1,8 @@
-package tupperdate.web.koin
+package tupperdate.web.utils.koin
 
 import org.koin.dsl.module
 import tupperdate.web.facade.accounts.AccountFacade
+import tupperdate.web.koin.NotificationRepositoryMock
 import tupperdate.web.model.accounts.NotificationRepository
 import tupperdate.web.model.accounts.PhoneRepository
 
