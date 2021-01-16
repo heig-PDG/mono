@@ -1,5 +1,6 @@
 package tupperdate.web.model.chats
 
+import com.google.cloud.firestore.FieldValue
 import tupperdate.web.model.Result
 import tupperdate.web.model.profiles.User
 
@@ -25,4 +26,12 @@ interface ChatRepository {
         content: String,
     ): Result<Unit>
 
+    suspend fun saveNewChat(
+        chat: ModelNewChat,
+    ): Result<Unit>
+
+    suspend fun updateLikes(
+        chatId: String,
+        likes: Map<String, String>,
+    ): Result<Unit>
 }

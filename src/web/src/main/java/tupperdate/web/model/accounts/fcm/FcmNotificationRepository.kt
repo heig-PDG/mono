@@ -3,7 +3,7 @@ package tupperdate.web.model.accounts.fcm
 import com.google.cloud.firestore.FieldMask
 import com.google.cloud.firestore.Firestore
 import com.google.firebase.messaging.FirebaseMessaging
-import tupperdate.web.legacy.util.await
+import tupperdate.web.utils.await
 import tupperdate.web.model.Result
 import tupperdate.web.model.accounts.Notification
 import tupperdate.web.model.accounts.NotificationRepository

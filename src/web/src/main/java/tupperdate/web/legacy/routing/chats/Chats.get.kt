@@ -7,11 +7,11 @@ import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import tupperdate.common.dto.ConversationDTO
-import tupperdate.web.legacy.auth.tupperdateAuthPrincipal
-import tupperdate.web.legacy.exceptions.statusException
 import tupperdate.web.legacy.model.*
-import tupperdate.web.legacy.util.await
+import tupperdate.web.utils.await
 import tupperdate.web.model.profiles.firestore.FirestoreUser
+import tupperdate.web.utils.tupperdateAuthPrincipal
+import tupperdate.web.utils.statusException
 
 fun Route.getChats(store: Firestore) = get {
     val id = call.tupperdateAuthPrincipal?.uid ?: statusException(HttpStatusCode.Unauthorized)

@@ -7,6 +7,11 @@ interface UserRepository {
         user: ModelNewUser,
     ): Result<Unit>
 
+    suspend fun updateLastSeenRecipe(
+        user: User,
+        lastSeenRecipe: Long,
+    ): Result<Unit>
+
     suspend fun read(
         user: User,
     ): Result<ModelUser>

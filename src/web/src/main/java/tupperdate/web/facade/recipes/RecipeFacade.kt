@@ -9,22 +9,22 @@ interface RecipeFacade {
 
     suspend fun save(
         user: User,
-        recipe: NewRecipe<PictureBase64>,
+        recipe: NewRecipe,
     ): Result<Unit>
 
     suspend fun readOwn(
         user: User,
-    ): Result<List<Recipe<PictureUrl>>>
+    ): Result<List<Recipe>>
 
     suspend fun readAll(
         user: User,
         count: Int,
-    ): Result<List<Recipe<PictureUrl>>>
+    ): Result<List<Recipe>>
 
     suspend fun readOne(
         user: User,
         recipeId: String,
-    ): Result<Recipe<PictureUrl>>
+    ): Result<Recipe>
 
     suspend fun like(
         user: User,
