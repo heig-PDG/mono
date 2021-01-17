@@ -9,6 +9,7 @@ import tupperdate.android.ui.home.Home
 import tupperdate.android.ui.home.chats.Chat
 import tupperdate.android.ui.home.feed.MatchDialog
 import tupperdate.android.ui.home.recipe.NewRecipe
+import tupperdate.android.ui.home.recipe.UpdateRecipe
 import tupperdate.android.ui.home.recipe.ViewRecipe
 
 /**
@@ -18,6 +19,7 @@ private object LoggedInDestination {
     const val HOME = "home"
     const val NEW_RECIPE = "newRecipe"
     const val VIEW_RECIPE = "viewRecipe/{recipe}"
+    const val EDIT_RECIPE = "editRecipe/{recipe}"
     const val VIEW_CONVERSATION = "conversation/{id}"
 
     fun viewConversation(identifier: String): String {
@@ -26,6 +28,10 @@ private object LoggedInDestination {
 
     fun viewRecipe(identifier: String): String {
         return "viewRecipe/$identifier"
+    }
+
+    fun editRecipe(identifier: String): String {
+        return "editRecipe/$identifier"
     }
 }
 
@@ -69,6 +75,17 @@ fun LoggedIn() {
             }
         }
         composable(
+            LoggedInDestination.EDIT_RECIPE,
+            arguments = listOf(navArgument("recipe") { type = StringType }),
+        ) {
+            it.arguments?.getString("recipe")?.let { recipe ->
+                UpdateRecipe(
+                    identifier = recipe,
+                    onBack = { navController.navigateUp() },
+                )
+            }
+        }
+        composable(
             LoggedInDestination.VIEW_CONVERSATION,
             listOf(navArgument("id") { type = StringType })
         ) {
@@ -84,6 +101,9 @@ fun LoggedIn() {
                 onNewRecipeClick = { navController.navigate(LoggedInDestination.NEW_RECIPE) },
                 onRecipeDetailsClick = {
                     navController.navigate(LoggedInDestination.viewRecipe(it.identifier))
+                },
+                onRecipeUpdateClick = {
+                    navController.navigate(LoggedInDestination.editRecipe(it.identifier))
                 },
                 onConversationClick = {
                     navController.navigate(LoggedInDestination.viewConversation(it))

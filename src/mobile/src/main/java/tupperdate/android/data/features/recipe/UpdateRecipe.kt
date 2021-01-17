@@ -5,7 +5,7 @@ import android.net.Uri
 data class UpdateRecipe(
     val id: String,
     val title: String,
-    val updateTitle: Boolean,
+    val titleUpdate: Boolean,
     val description: String,
     val descriptionUpdate: Boolean,
     val picture: Uri?,
@@ -18,4 +18,12 @@ data class UpdateRecipe(
     val isWarmUpdate: Boolean,
     val hasAllergens: Boolean,
     val hasAllergensUpdate: Boolean,
-)
+) {
+
+    fun hasUpdates() = titleUpdate
+            || descriptionUpdate
+            || pictureUpdate
+            || isVeganUpdate
+            || isWarmUpdate
+            || hasAllergensUpdate
+}

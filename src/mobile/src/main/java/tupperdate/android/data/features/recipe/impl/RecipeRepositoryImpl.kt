@@ -71,21 +71,24 @@ class RecipeRepositoryImpl(
             )
         )
 
-        val refreshStack = SyncRequestBuilder<RefreshStackWorker>().build()
         val refreshOwn = SyncRequestBuilder<RefreshOwnWorker>().build()
 
         // Fetch the newly created recipe.
         workManager.beginWith(SyncRequestBuilder<SyncPendingCreationsWorker>().build())
-            .then(listOf(refreshStack, refreshOwn))
+            .then(refreshOwn)
             .enqueue()
     }
 
     override suspend fun update(recipe: UpdateRecipe) {
+
+        // Don't patch unchanged recipes.
+        if (!recipe.hasUpdates()) return
+
         database.recipes().pendingUpdatesRecipesInsert(
             PendingUpdateRecipeEntity(
                 id = recipe.id,
                 title = recipe.title,
-                titleUpdate = recipe.updateTitle,
+                titleUpdate = recipe.titleUpdate,
                 picture = recipe.picture?.toString(),
                 pictureUpdate = recipe.pictureUpdate,
                 description = recipe.description,
@@ -99,12 +102,11 @@ class RecipeRepositoryImpl(
             )
         )
 
-        val refreshStack = SyncRequestBuilder<RefreshStackWorker>().build()
         val refreshOwn = SyncRequestBuilder<RefreshOwnWorker>().build()
 
         // Fetch the newly created recipe.
         workManager.beginWith(SyncRequestBuilder<SyncPendingUpdatesWorker>().build())
-            .then(listOf(refreshStack, refreshOwn))
+            .then(refreshOwn)
             .enqueue()
     }
 

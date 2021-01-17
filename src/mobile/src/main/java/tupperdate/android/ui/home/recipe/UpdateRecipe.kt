@@ -7,75 +7,75 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import org.koin.androidx.compose.getViewModel
+import org.koin.core.parameter.parametersOf
 import tupperdate.android.R
+import tupperdate.android.ui.ambients.AmbientImagePicker
+import tupperdate.android.ui.theme.PlaceholderRecipeImage
 import tupperdate.android.ui.theme.material.BrandedButton
 
 /**
- * A data class representing the different fields that can be edited in a recipe.
- */
-data class EditableRecipe(
-    val title: String,
-    val description: String,
-    val vegetarian: Boolean,
-    val warm: Boolean,
-    val hasAllergens: Boolean,
-)
-
-/**
- * A composable that displays some editable fields for recipes.
+ * A composable that displays some editable fields for existing recipes.
  *
- * @param heroImage the image to display. Can be a drawable, URI, URL, ...
- * @param recipe the [EditableRecipe] to display.
- * @param onRecipeChange a callback called when the recipe is changed.
- * @param onDeleteClick a callback called when the delete button is pressed.
- * @param onSaveClick a callback called when the save button is pressed.
+ * @param identifier the [String] identifier for the recipe to display.
+ * @param onBack a callback called when this recipe should be closed.
  * @param modifier the [Modifier] for this composable.
  */
 @Composable
-fun EditRecipe(
-    heroImage: Any,
-    recipe: EditableRecipe,
-    onRecipeChange: (EditableRecipe) -> Unit,
-    onDeleteClick: () -> Unit,
-    onSaveClick: () -> Unit,
-    onEdit: () -> Unit,
+fun UpdateRecipe(
+    identifier: String,
+    onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val picker = AmbientImagePicker.current
+    val viewModel = getViewModel<UpdateRecipeViewModel> { parametersOf(identifier, picker) }
+    val heroImage by viewModel.picture.collectAsState(null)
+    val title by viewModel.title.collectAsState("")
+    val description by viewModel.description.collectAsState("")
+    val vegetarian by viewModel.isVegetarian.collectAsState(false)
+    val allergens by viewModel.hasAllergens.collectAsState(false)
+    val warm by viewModel.isWarm.collectAsState(false)
+
     RecipeDetail(
-        heroImage = heroImage,
+        heroImage = heroImage ?: PlaceholderRecipeImage,
         header = {
-            EditRecipeHeader(
-                title = recipe.title,
-                onTitleChange = { onRecipeChange(recipe.copy(title = it)) },
-                onDeleteClick = onDeleteClick,
-                onSaveClick = onSaveClick,
+            UpdateRecipeHeader(
+                title = title,
+                onTitleChange = viewModel::onTitleChanged,
+                onCancelClick = onBack,
+                onSaveClick = {
+                    viewModel.onSubmit()
+                    onBack()
+                },
             )
         },
         icons = {
             RecipeTags(
-                vegan = recipe.vegetarian,
-                hot = recipe.warm,
-                hasAllergens = recipe.hasAllergens,
-                onClickVegan = { onRecipeChange(recipe.copy(vegetarian = !recipe.vegetarian)) },
-                onClickHot = { onRecipeChange(recipe.copy(warm = !recipe.warm)) },
-                onClickAllergens = { onRecipeChange(recipe.copy(hasAllergens = !recipe.hasAllergens)) }
+                vegan = vegetarian,
+                hot = warm,
+                hasAllergens = allergens,
+                onClickVegan = { viewModel.onVegetarianChanged(!vegetarian) },
+                onClickHot = { viewModel.onWarmChanged(!warm) },
+                onClickAllergens = { viewModel.onAllergensChanged(!allergens) }
             )
         },
         description = {
             OutlinedTextField(
-                value = recipe.description,
-                onValueChange = { onRecipeChange(recipe.copy(description = it)) },
+                value = description,
+                onValueChange = viewModel::onDescriptionChanged,
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text(stringResource(id = R.string.edit_recipe_label_description)) },
                 placeholder = { Text(stringResource(id = R.string.edit_recipe_placeholder_description)) },
             )
         },
-        onClose = onDeleteClick,
-        onEdit = onEdit,
+        onClose = onBack,
+        onEdit = viewModel::onPictureClick,
         modifier = modifier,
     )
 }
@@ -85,10 +85,10 @@ fun EditRecipe(
  * options.
  */
 @Composable
-private fun EditRecipeHeader(
+private fun UpdateRecipeHeader(
     title: String,
     onTitleChange: (String) -> Unit,
-    onDeleteClick: () -> Unit,
+    onCancelClick: () -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -106,7 +106,7 @@ private fun EditRecipeHeader(
     ) {
         BrandedButton(
             value = stringResource(id = R.string.edit_recipe_cancel),
-            onClick = onDeleteClick,
+            onClick = onCancelClick,
             modifier = modifier.weight(1f, fill = true),
             shape = RoundedCornerShape(8.dp)
         )

@@ -6,6 +6,7 @@ import tupperdate.android.data.features.picker.ImagePicker
 import tupperdate.android.ui.home.feed.FeedViewModel
 import tupperdate.android.ui.home.profile.ProfileViewModel
 import tupperdate.android.ui.home.recipe.NewRecipeViewModel
+import tupperdate.android.ui.home.recipe.UpdateRecipeViewModel
 import tupperdate.android.ui.home.recipe.ViewRecipeViewModel
 
 val KoinModuleUIHome = module {
@@ -16,6 +17,9 @@ val KoinModuleUIHome = module {
     }
     viewModel { (picker: ImagePicker, onBack: () -> Unit) ->
         NewRecipeViewModel(picker, onBack, get())
+    }
+    viewModel { (recipeId: String, picker: ImagePicker) ->
+        UpdateRecipeViewModel(recipeId, picker, get())
     }
     viewModel { (recipeId: String) -> ViewRecipeViewModel(get(), recipeId) }
 }
