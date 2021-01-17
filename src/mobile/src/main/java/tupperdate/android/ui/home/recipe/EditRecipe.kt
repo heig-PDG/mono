@@ -118,33 +118,3 @@ private fun EditRecipeHeader(
         )
     }
 }
-
-// PREVIEWS
-
-/*
-@Preview(showBackground = true)
-@Composable
-private fun EditRecipePreview() {
-    TupperdateTheme {
-        val (recipe, setRecipe) = remember {
-            mutableStateOf(
-                EditableRecipe(
-                    title = "Chilli con carne",
-                    description = "A wonderful meat-based meal with whatever something.",
-                    vegan = false,
-                    hot = true,
-                    hasAllergens = false,
-                )
-            )
-        }
-        EditRecipe(
-            heroImageUrl = "",
-            recipe = recipe,
-            onRecipeChange = setRecipe,
-            onDeleteClick = {},
-            onSaveClick = {},
-        )
-    }
-}
-
- */
