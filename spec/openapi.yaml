@@ -201,6 +201,35 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '404':
           description: Not found; if the recipe can't be found
+    patch:
+      tags:
+        - recipes
+      summary: Patch a specific recipe
+      operationId: patchSomeRecipe
+
+      parameters:
+      - name: recipeId
+        in: path
+        description: id of the recipe to patch
+        required: true
+        schema:
+          type: string
+
+      requestBody:
+        description: RecipePartDTO object that needs to be patched as the authenticated user
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipePartDTO'
+
+      responses:
+        '200':
+          description: OK; if the recipe could be patched
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Not found; if the recipe can't be found
 
   /recipes/{recipeId}/like:
     put:
@@ -441,6 +470,23 @@ components:
         - timestamp
         - picture
         - attributes
+
+    RecipePartDTO:
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        timestamp:
+          type: string
+        picture:
+          type: string
+        attributes:
+          $ref: '#/components/schemas/RecipeAttributesDTO'
     
           
     MessageContentDTO:
