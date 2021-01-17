@@ -13,6 +13,15 @@ interface RecipeFacade {
     ): Result<Unit>
 
     /**
+     * Update a recipe with optional values
+     */
+    suspend fun update(
+        user: User,
+        recipe: PartRecipe,
+        recipeId: String,
+    ): Result<Unit>
+
+    /**
      * Read and return all user's own recipes
      */
     suspend fun readOwn(
