@@ -6,12 +6,15 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import tupperdate.android.data.features.picker.ImagePicker
 import tupperdate.android.data.features.recipe.RecipeRepository
 import tupperdate.android.data.features.recipe.UpdateRecipe
 
 class UpdateRecipeViewModel(
-    identifier: String,
+    private val identifier: String,
+    private val onBack: () -> Unit,
     private val picker: ImagePicker,
     private val recipes: RecipeRepository,
 ) : ViewModel() {
@@ -22,23 +25,7 @@ class UpdateRecipeViewModel(
      * The recipe that we are currently editing. By default, no fields will be updated, but when
      * submitted, the object will be passed to the repository for further processing.
      */
-    private val editing = MutableStateFlow(
-        UpdateRecipe(
-            id = identifier,
-            title = "",
-            titleUpdate = false,
-            description = "",
-            descriptionUpdate = false,
-            picture = null,
-            pictureUpdate = false,
-            hasAllergens = false,
-            hasAllergensUpdate = false,
-            isWarm = false,
-            isWarmUpdate = false,
-            isVegan = false,
-            isVeganUpdate = false,
-        )
-    )
+    private val editing = MutableStateFlow(emptyRecipe(identifier))
 
     val title = combine(recipe, editing) { existing, new ->
         if (new.titleUpdate) new.title
@@ -97,9 +84,31 @@ class UpdateRecipeViewModel(
         editing.value = editing.value.copy(isVegan = value, isVeganUpdate = true)
     }
 
+    private val mutex = Mutex()
+
     fun onSubmit() {
         viewModelScope.launch {
-            recipes.update(editing.value)
+            mutex.withLock {
+                recipes.update(editing.value)
+                editing.value = emptyRecipe(identifier)
+                onBack()
+            }
         }
     }
 }
+
+private fun emptyRecipe(identifier: String) = UpdateRecipe(
+    id = identifier,
+    title = "",
+    titleUpdate = false,
+    description = "",
+    descriptionUpdate = false,
+    picture = null,
+    pictureUpdate = false,
+    hasAllergens = false,
+    hasAllergensUpdate = false,
+    isWarm = false,
+    isWarmUpdate = false,
+    isVegan = false,
+    isVeganUpdate = false,
+)

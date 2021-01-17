@@ -187,7 +187,7 @@ abstract class RecipeDao {
     @Query("SELECT * FROM recipesUpdates")
     abstract fun pendingUpdates(): Flow<List<PendingUpdateRecipeEntity>>
 
-    @Insert
+    @Insert(onConflict = REPLACE)
     abstract suspend fun pendingUpdatesRecipesInsert(dto: PendingUpdateRecipeEntity)
 
     @Query("DELETE FROM recipesUpdates WHERE recipesUpdates.identifier = :id")

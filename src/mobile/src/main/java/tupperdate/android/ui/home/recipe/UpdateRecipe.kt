@@ -34,7 +34,9 @@ fun UpdateRecipe(
     modifier: Modifier = Modifier,
 ) {
     val picker = AmbientImagePicker.current
-    val viewModel = getViewModel<UpdateRecipeViewModel> { parametersOf(identifier, picker) }
+    val viewModel = getViewModel<UpdateRecipeViewModel> {
+        parametersOf(identifier, onBack, picker)
+    }
     val heroImage by viewModel.picture.collectAsState(null)
     val title by viewModel.title.collectAsState("")
     val description by viewModel.description.collectAsState("")
@@ -49,10 +51,7 @@ fun UpdateRecipe(
                 title = title,
                 onTitleChange = viewModel::onTitleChanged,
                 onCancelClick = onBack,
-                onSaveClick = {
-                    viewModel.onSubmit()
-                    onBack()
-                },
+                onSaveClick = viewModel::onSubmit,
             )
         },
         icons = {

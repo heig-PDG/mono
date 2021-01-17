@@ -18,8 +18,8 @@ val KoinModuleUIHome = module {
     viewModel { (picker: ImagePicker, onBack: () -> Unit) ->
         NewRecipeViewModel(picker, onBack, get())
     }
-    viewModel { (recipeId: String, picker: ImagePicker) ->
-        UpdateRecipeViewModel(recipeId, picker, get())
+    viewModel { (recipeId: String, onBack: () -> Unit, picker: ImagePicker) ->
+        UpdateRecipeViewModel(recipeId, onBack, picker, get())
     }
     viewModel { (recipeId: String) -> ViewRecipeViewModel(get(), recipeId) }
 }
