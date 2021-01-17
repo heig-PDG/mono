@@ -73,6 +73,36 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
+    patch:
+      tags:
+      - users
+      summary: Patches an existing user given an authentication token
+      operationId: postNewUser
+
+      parameters:
+      - in: path
+        name: userId
+        description: ID of user
+        required: true
+        schema:
+          type: string
+
+      requestBody:
+        description: MyUserPartDTO object that needs to be registered
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MyUserPartDTO'
+
+      responses:
+        '200':
+          description: OK; if the new user was successfully updatetd
+        '400':
+          description: Bad request; if the json body can't be parsed to a patched user object
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
     get:
       tags:
       - users
@@ -402,9 +432,24 @@ components:
       properties:
         displayName:
           type: string
+        imageBase64:
+          type: string
+          format: byte
+          nullable: true
       required:  
         - displayName
-  
+        - imageBase64
+
+
+    MyUserPatchDTO:
+      properties:
+        displayName:
+          type: string
+        imageBase64:
+          type: string
+          format: byte
+          nullable: true
+
     UserDTO:
       properties:
         id:
@@ -442,10 +487,15 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/RecipeAttributesDTO'
+        picture:
+          type: string
+          format: byte
+          nullable: true
       required:
         - title
         - description
         - attributes
+        - picture
   
     RecipeDTO:
       properties:
