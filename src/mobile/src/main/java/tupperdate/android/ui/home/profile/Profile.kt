@@ -42,6 +42,8 @@ fun Profile(
     val viewModel = getViewModel<ProfileViewModel> { parametersOf(picker) }
     val editing by viewModel.editing.collectAsState(false)
     val recipes by viewModel.recipes.collectAsState(emptyList())
+    val restrictedVegetarian by viewModel.prefWarnVegetarian.collectAsState(false)
+    val restrictedAllergens by viewModel.prefWarnAllergens.collectAsState(false)
 
     val profile = AmbientProfile.current
     val profileName = (profile as? AuthenticationStatus.Displayable)?.displayName ?: ""
@@ -62,6 +64,10 @@ fun Profile(
             viewModel.onSave(name)
         },
         onProfilePictureClick = viewModel::onProfilePictureClick,
+        restrictVegetarian = restrictedVegetarian,
+        restrictAllergens = restrictedAllergens,
+        onRestrictVegetarianChanged = viewModel::onWarnVegetarian,
+        onRestrictAllergensChanged = viewModel::onWarnAllergens,
         recipes = recipes,
         onRecipeNewClick = onNewRecipeClick,
         onRecipeOwnClick = onOwnRecipeClick,
@@ -80,6 +86,11 @@ private fun Profile(
     onProfileEditClick: () -> Unit,
     onProfileSaveClick: () -> Unit,
     onProfilePictureClick: () -> Unit,
+    // Preferences.
+    restrictVegetarian: Boolean,
+    restrictAllergens: Boolean,
+    onRestrictVegetarianChanged: (Boolean) -> Unit,
+    onRestrictAllergensChanged: (Boolean) -> Unit,
     // Recipe management.
     recipes: List<Recipe>,
     onRecipeNewClick: () -> Unit,
@@ -110,6 +121,43 @@ private fun Profile(
                 onPictureClick = onProfilePictureClick,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
+        }
+        item {
+            Text(
+                text = stringResource(R.string.profile_restrictions_title),
+                style = TupperdateTypography.overline,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+        }
+        item {
+            ExpandableSettingsItem(
+                icon = {
+                    Icon(
+                        vectorResource(R.drawable.ic_editrecipe_not_veggie),
+                        Modifier.size(24.dp)
+                    )
+                },
+                title = { Text(stringResource(R.string.profile_restrictions_vegetarian_header)) },
+            ) {
+                Restriction(
+                    restricted = restrictVegetarian,
+                    onRestrictedChange = onRestrictVegetarianChanged,
+                )
+            }
+            ExpandableSettingsItem(
+                icon = {
+                    Icon(
+                        vectorResource(R.drawable.ic_editrecipe_allergens),
+                        Modifier.size(24.dp)
+                    )
+                },
+                title = { Text(stringResource(R.string.profile_restrictions_allergens_header)) },
+            ) {
+                Restriction(
+                    restricted = restrictAllergens,
+                    onRestrictedChange = onRestrictAllergensChanged,
+                )
+            }
         }
         item {
             Text(
@@ -236,6 +284,10 @@ fun ProfilePreview() {
             onProfileEditClick = { setEditing(true) },
             onProfileSaveClick = { setEditing(false) },
             onProfilePictureClick = { },
+            restrictVegetarian = false,
+            restrictAllergens = false,
+            onRestrictAllergensChanged = {},
+            onRestrictVegetarianChanged = {},
             recipes = reList,
             onRecipeNewClick = { },
             onRecipeOwnClick = { })
