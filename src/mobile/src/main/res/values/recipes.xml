@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="warn_not_vegetarian">Non-vegetarian recipe.</string>
+    <string name="warn_has_allergens">Contains allergens.</string>
+    <string name="warn_all">Contains allergens and is non-vegetarian.</string>
+
+</resources>

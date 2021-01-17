@@ -9,6 +9,7 @@ import androidx.compose.runtime.onCommit
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.getViewModel
@@ -30,9 +31,16 @@ fun Feed(
     val recipes by viewModel.stack().collectAsState(emptyList())
     val unswipeable by viewModel.unswipeEnabled.collectAsState(false)
 
+    val warnAllergens by viewModel.warnIfHasAllergens.collectAsState(false)
+    val warnNotVegetarian by viewModel.warnIfNotVegetarian.collectAsState(false)
+
     Feed(
         recipes = recipes,
         unswipeEnabled = unswipeable,
+
+        // Warnings.
+        warnAllergens = warnAllergens,
+        warnNotVegetarian = warnNotVegetarian,
 
         // Recipe callbacks.
         onRecipeLiked = viewModel::onLike,
@@ -46,11 +54,31 @@ fun Feed(
     )
 }
 
+/**
+ * Decides which warning to display to the user, if relevant.
+ *
+ * @param allergens if the allergens warning should be displayed.
+ * @param vegetarian if the vegetarian warning should be displayed.
+ */
+@Composable
+private fun warningText(
+    allergens: Boolean,
+    vegetarian: Boolean,
+): String? = when {
+    allergens && vegetarian -> stringResource(R.string.warn_all)
+    allergens -> stringResource(R.string.warn_has_allergens)
+    vegetarian -> stringResource(R.string.warn_not_vegetarian)
+    else -> null
+}
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Feed(
     recipes: List<Recipe>,
     unswipeEnabled: Boolean,
+    // Warnings
+    warnAllergens: Boolean,
+    warnNotVegetarian: Boolean,
     // Interacting with the current recipe.
     onRecipeLiked: () -> Unit,
     onRecipeDisliked: () -> Unit,
@@ -95,6 +123,10 @@ fun Feed(
                     recipe = recipe,
                     onInfoClick = { onRecipeDetailsClick(recipe) },
                     modifier = Modifier.fillMaxSize(),
+                    warning = warningText(
+                        allergens = warnAllergens && recipe.attributes.hasAllergens,
+                        vegetarian = warnNotVegetarian && !recipe.attributes.vegetarian,
+                    ),
                     overlay = {
                         val progress = state.progress
                         // Swiping to the "like" state.

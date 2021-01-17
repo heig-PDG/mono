@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import tupperdate.android.data.features.profile.RestrictionsRepository
 import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.data.features.recipe.RecipeRepository
 
@@ -11,9 +12,11 @@ import tupperdate.android.data.features.recipe.RecipeRepository
  * A [ViewModel] for the feed screen.
  *
  * @param recipeRepository the [RecipeRepository] that can be used to fetch the recipes in the stack.
+ * @param restrictions the [RestrictionsRepository] that acn be used to display restriction warnings.
  */
 class FeedViewModel(
-    private val recipeRepository: RecipeRepository
+    private val recipeRepository: RecipeRepository,
+    private val restrictions: RestrictionsRepository,
 ) : ViewModel() {
 
     /**
@@ -29,6 +32,16 @@ class FeedViewModel(
      * A [Flow] that emits true if the unswipe action should be enabled.
      */
     val unswipeEnabled = lastSwiped.map { it != null }
+
+    /**
+     * A [Flow] that emits true if recipes should have warnings if they contain allergens.
+     */
+    val warnIfHasAllergens: Flow<Boolean> = restrictions.warnIfHasAllergens
+
+    /**
+     * A [Flow] that emits true if recipes should have warnings if they're not vegetarian.
+     */
+    val warnIfNotVegetarian: Flow<Boolean> = restrictions.warnIfNotVegetarian
 
     /**
      * Returns a [Flow] of the recipes that should be displayed in the stack.

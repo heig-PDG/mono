@@ -11,6 +11,11 @@
     <string name="profile_sign_out">SIGN OUT</string>
     <string name="profile_location">Location</string>
     <string name="profile_location_placeholder">HEIG-VD, Yverdon-les-bains</string>
+    <string name="profile_restrictions_title">YOUR PREFERENCES</string>
+    <string name="profile_restrictions_vegetarian_header">Vegetarian restrictions</string>
+    <string name="profile_restrictions_allergens_header">Allergens restrictions</string>
+    <string name="profile_restrictions_enabled">Warning on card</string>
+    <string name="profile_restrictions_disabled">None</string>
     <string name="profile_tupps">YOUR TUPPS</string>
     <string name="profile_new_recipe">+ NEW</string>
 </resources>
