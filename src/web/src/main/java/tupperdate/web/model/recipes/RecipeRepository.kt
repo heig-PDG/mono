@@ -1,5 +1,6 @@
 package tupperdate.web.model.recipes
 
+import tupperdate.web.facade.recipes.Recipe
 import tupperdate.web.model.Result
 import tupperdate.web.model.profiles.User
 
@@ -19,6 +20,7 @@ interface RecipeRepository {
     suspend fun update(
         user: User,
         partRecipe: ModelPartRecipe,
+        oldRecipe: ModelRecipe,
     ): Result<Unit>
 
     /**

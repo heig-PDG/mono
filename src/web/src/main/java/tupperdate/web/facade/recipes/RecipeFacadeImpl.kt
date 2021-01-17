@@ -45,7 +45,7 @@ class RecipeFacadeImpl(
             return Result.Forbidden()
         }
 
-        val result = recipes.update(user, recipe.toModelPartRecipe(recipeId = recipeId))
+        val result = recipes.update(user, recipe.toModelPartRecipe(recipeId = recipeId), recipeBefore)
 
         // Let the recipe owner sync his recipe
         if (result is Result.Ok) notifications.dispatch(

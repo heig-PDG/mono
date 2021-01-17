@@ -52,8 +52,12 @@ class FirestoreRecipeRepository(
         }
     }
 
-    override suspend fun update(user: User, partRecipe: ModelPartRecipe): Result<Unit> {
-        val doc = store.collection("recipes").document()
+    override suspend fun update(
+        user: User,
+        partRecipe: ModelPartRecipe,
+        oldRecipe: ModelRecipe,
+    ): Result<Unit> {
+        val doc = store.collection("recipes").document(partRecipe.identifier)
         val id = UUID.randomUUID().toString()
         val bytes = partRecipe.picture?.let { Base64.decodeBase64(it.encoded) }
 
@@ -66,19 +70,12 @@ class FirestoreRecipeRepository(
         }
 
         val partAttributesMap = mutableMapOf<String, Any?>()
-        if (partRecipe.hasAllergensProvided) {
-            partAttributesMap["hasAllergens"] = partRecipe.hasAllergens
-        }
-        if (partRecipe.vegetarianProvided) {
-            partAttributesMap["vegetarian"] = partRecipe.vegetarian
-        }
-        if (partRecipe.warmProvided) {
-            partAttributesMap["warm"] = partRecipe.warm
-        }
-
-        if (partAttributesMap.isNotEmpty()) {
-            partRecipeMap["attributes"] = partAttributesMap
-        }
+        partAttributesMap["hasAllergens"] =
+            if (partRecipe.hasAllergensProvided) partRecipe.hasAllergens else oldRecipe.hasAllergens
+        partAttributesMap["vegetarian"] =
+            if (partRecipe.vegetarianProvided) partRecipe.vegetarian else oldRecipe.vegetarian
+        partAttributesMap["warm"] =
+            if (partRecipe.warmProvided) partRecipe.warm else oldRecipe.warm
 
         if (partRecipe.pictureProvided && bytes != null) {
             val fileName = "$id.jpg"
@@ -99,6 +96,7 @@ class FirestoreRecipeRepository(
             }
             Result.Ok(Unit)
         } catch (throwable: Throwable) {
+            throwable.printStackTrace()
             Result.BadServer()
         }
     }

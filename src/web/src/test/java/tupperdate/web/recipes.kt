@@ -131,7 +131,25 @@ class RecipesTest {
                     ),
                 )
                 setBody(Json.encodeToString(body))
-            }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
+            }.apply {
+                assertEquals(HttpStatusCode.OK, response.status())
+            }
+
+            // Get recipe
+            handleRequest(HttpMethod.Get, "/recipes/own") {
+                authRequest(botId)
+            }.apply {
+                assertEquals(HttpStatusCode.OK, response.status())
+                val recipe = Json.decodeFromString<List<RecipeDTO>>(response.content ?: "")[0]
+                assertEquals(recipeId, recipe.id)
+                assertEquals(titleAfter, recipe.title)
+                assertEquals(description, recipe.description)
+                assertEquals(botId, recipe.userId)
+                assertEquals(hasAllergensAfter, recipe.attributes.hasAllergens)
+                assertEquals(vegetarian, recipe.attributes.vegetarian)
+                assertEquals(warmAfter, recipe.attributes.warm)
+                assertNotEquals(0, recipe.timestamp)
+            }
         }
     }
 
