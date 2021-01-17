@@ -18,7 +18,7 @@ interface RecipeRepository {
      */
     suspend fun update(
         user: User,
-        recipe: ModelPartRecipe,
+        partRecipe: ModelPartRecipe,
     ): Result<Unit>
 
     /**

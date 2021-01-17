@@ -52,8 +52,55 @@ class FirestoreRecipeRepository(
         }
     }
 
-    override suspend fun update(user: User, recipe: ModelPartRecipe): Result<Unit> {
-        TODO("Not yet implemented")
+    override suspend fun update(user: User, partRecipe: ModelPartRecipe): Result<Unit> {
+        val doc = store.collection("recipes").document()
+        val id = UUID.randomUUID().toString()
+        val bytes = partRecipe.picture?.let { Base64.decodeBase64(it.encoded) }
+
+        val partRecipeMap = mutableMapOf<String, Any?>()
+        if (partRecipe.titleProvided) {
+            partRecipeMap["title"] = partRecipe.title
+        }
+        if (partRecipe.descriptionProvided) {
+            partRecipeMap["description"] = partRecipe.description
+        }
+
+        val partAttributesMap = mutableMapOf<String, Any?>()
+        if (partRecipe.hasAllergensProvided) {
+            partAttributesMap["hasAllergens"] = partRecipe.hasAllergens
+        }
+        if (partRecipe.vegetarianProvided) {
+            partAttributesMap["vegetarian"] = partRecipe.vegetarian
+        }
+        if (partRecipe.warmProvided) {
+            partAttributesMap["warm"] = partRecipe.warm
+        }
+
+        if (partAttributesMap.isNotEmpty()) {
+            partRecipeMap["attributes"] = partAttributesMap
+        }
+
+        if (partRecipe.pictureProvided && bytes != null) {
+            val fileName = "$id.jpg"
+            val blob = storage.bucket().create(
+                fileName,
+                bytes.inputStream(),
+                ContentType.Image.JPEG.contentType,
+            )
+            val url = blob.signUrl(365, TimeUnit.DAYS)
+            partRecipeMap["picture"] = url.toString()
+        } else if (partRecipe.pictureProvided && bytes == null) {
+            partRecipeMap["picture"] = null
+        }
+
+        return try {
+            if (partRecipeMap.isNotEmpty()) {
+                doc.update(partRecipeMap).await()
+            }
+            Result.Ok(Unit)
+        } catch (throwable: Throwable) {
+            Result.BadServer()
+        }
     }
 
     override suspend fun readOwn(

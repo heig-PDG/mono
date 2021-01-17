@@ -36,12 +36,26 @@ class RecipeFacadeImpl(
         recipe: PartRecipe,
         recipeId: String,
     ): Result<Unit> {
+        val recipeBefore = when (val res = recipes.readOne(user, recipeId)) {
+            is Result.Ok -> res.result
+            else -> return res.map {}
+        }
+
+        if (user.id.uid != recipeBefore.userId) {
+            return Result.Forbidden()
+        }
+
         val result = recipes.update(user, recipe.toModelPartRecipe(recipeId = recipeId))
 
         // Let the recipe owner sync his recipe
-        if (result is Result.Ok) notifications.dispatch(Notification.ToUser.UserSyncOneRecipe(user.id.uid, recipeId))
+        if (result is Result.Ok) notifications.dispatch(
+            Notification.ToUser.UserSyncOneRecipe(
+                user.id.uid,
+                recipeId
+            )
+        )
 
-        TODO("Not yet implemented")
+        return Result.Ok(Unit)
     }
 
     override suspend fun readOwn(
