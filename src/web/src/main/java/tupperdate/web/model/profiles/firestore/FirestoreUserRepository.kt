@@ -61,17 +61,17 @@ class FirestoreUserRepository(
     }
 
     override suspend fun update(partUser: ModelPartUser): Result<Unit> {
-        val doc = store.collection("users").document(partUser.identifier)
-
-        val id = UUID.randomUUID().toString()
-        val bytes = partUser.imageBase64?.let { Base64.decodeBase64(it.encoded) }
         val partUserMap = mutableMapOf<String, Any?>()
 
         if (partUser.displayNameProvided) {
             partUserMap["displayName"] = partUser.displayName
         }
 
+        val doc = store.collection("users").document(partUser.identifier)
+        val bytes = partUser.imageBase64?.let { Base64.decodeBase64(it.encoded) }
+
         if (partUser.imageBase64Provided && bytes != null) {
+            val id = UUID.randomUUID().toString()
             val fileName = "$id.jpg"
             val blob = storage.bucket().create(
                 fileName,

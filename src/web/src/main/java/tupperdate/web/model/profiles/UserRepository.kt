@@ -14,7 +14,7 @@ interface UserRepository {
      * Update (patch) a user
      */
     suspend fun update(
-        user: ModelPartUser,
+        partUser: ModelPartUser,
     ): Result<Unit>
 
     /**

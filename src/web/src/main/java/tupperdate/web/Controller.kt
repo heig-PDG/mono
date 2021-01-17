@@ -88,7 +88,7 @@ fun Route.endpoints() {
                 .let { respond(it) }
         }
 
-        patch("/recipeId") {
+        patch("/{recipeId}") {
             recipeFacade.update(
                 user = requireUser(),
                 recipe = requireBody<RecipePartDTO>().toPartRecipe(),
