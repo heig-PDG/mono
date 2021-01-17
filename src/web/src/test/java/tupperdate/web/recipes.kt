@@ -78,10 +78,10 @@ class RecipesTest {
         val titleAfter = UUID.randomUUID().toString()
         val description = UUID.randomUUID().toString()
         val hasAllergensBefore = true
-        val hasAllergensAfter = true
+        val hasAllergensAfter = false
         val vegetarian = false
         val warmBefore = false
-        val warmAfter = false
+        val warmAfter = true
 
         var recipeId: String
 

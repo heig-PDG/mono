@@ -57,6 +57,5 @@ fun RecipePartDTO.toPartRecipe(): PartRecipe {
         vegetarianProvided = vegetarianPair.second,
         warm = warmPair.first,
         warmProvided = warmPair.second,
-
     )
 }

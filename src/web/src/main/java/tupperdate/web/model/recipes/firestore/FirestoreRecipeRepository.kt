@@ -57,9 +57,6 @@ class FirestoreRecipeRepository(
         partRecipe: ModelPartRecipe,
         oldRecipe: ModelRecipe,
     ): Result<Unit> {
-        val doc = store.collection("recipes").document(partRecipe.identifier)
-        val id = UUID.randomUUID().toString()
-        val bytes = partRecipe.picture?.let { Base64.decodeBase64(it.encoded) }
 
         val partRecipeMap = mutableMapOf<String, Any?>()
         if (partRecipe.titleProvided) {
@@ -76,6 +73,12 @@ class FirestoreRecipeRepository(
             if (partRecipe.vegetarianProvided) partRecipe.vegetarian else oldRecipe.vegetarian
         partAttributesMap["warm"] =
             if (partRecipe.warmProvided) partRecipe.warm else oldRecipe.warm
+
+        partRecipeMap["attributes"] = partAttributesMap
+
+        val doc = store.collection("recipes").document(partRecipe.identifier)
+        val id = UUID.randomUUID().toString()
+        val bytes = partRecipe.picture?.let { Base64.decodeBase64(it.encoded) }
 
         if (partRecipe.pictureProvided && bytes != null) {
             val fileName = "$id.jpg"
