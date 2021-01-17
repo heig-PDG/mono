@@ -30,6 +30,11 @@ interface RecipeRepository {
      */
     suspend fun create(recipe: NewRecipe)
 
+    /**
+     * Updates a recipe, provided with an [UpdateRecipe] instance.
+     */
+    suspend fun update(recipe: UpdateRecipe)
+
     // WRITING
 
     /**
