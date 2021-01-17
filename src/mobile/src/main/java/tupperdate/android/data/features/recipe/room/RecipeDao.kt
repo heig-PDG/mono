@@ -182,4 +182,14 @@ abstract class RecipeDao {
 
     @Query("DELETE FROM recipesCreations WHERE recipesCreations.id = :localId")
     abstract suspend fun pendingCreationsDelete(localId: Long)
+
+    // UPDATES
+    @Query("SELECT * FROM recipesUpdates")
+    abstract fun pendingUpdates(): Flow<List<PendingUpdateRecipeEntity>>
+
+    @Insert
+    abstract suspend fun pendingUpdatesRecipesInsert(dto: PendingUpdateRecipeEntity)
+
+    @Query("DELETE FROM recipesUpdates WHERE recipesUpdates.identifier = :id")
+    abstract suspend fun pendingUpdatesDelete(id: String)
 }
