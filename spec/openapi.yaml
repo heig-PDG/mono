@@ -441,7 +441,7 @@ components:
         - imageBase64
 
 
-    MyUserPatchDTO:
+    MyUserPartDTO:
       properties:
         displayName:
           type: string
