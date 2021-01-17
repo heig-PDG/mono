@@ -73,6 +73,36 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
+    patch:
+      tags:
+      - users
+      summary: Patches an existing user given an authentication token
+      operationId: postNewUser
+
+      parameters:
+      - in: path
+        name: userId
+        description: ID of user
+        required: true
+        schema:
+          type: string
+
+      requestBody:
+        description: MyUserPartDTO object that needs to be registered
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MyUserPartDTO'
+
+      responses:
+        '200':
+          description: OK; if the new user was successfully updatetd
+        '400':
+          description: Bad request; if the json body can't be parsed to a patched user object
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
     get:
       tags:
       - users
@@ -197,6 +227,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RecipeDTO'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Not found; if the recipe can't be found
+    patch:
+      tags:
+        - recipes
+      summary: Patch a specific recipe
+      operationId: patchSomeRecipe
+
+      parameters:
+      - name: recipeId
+        in: path
+        description: id of the recipe to patch
+        required: true
+        schema:
+          type: string
+
+      requestBody:
+        description: RecipePartDTO object that needs to be patched as the authenticated user
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipePartDTO'
+
+      responses:
+        '200':
+          description: OK; if the recipe could be patched
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
@@ -373,9 +432,24 @@ components:
       properties:
         displayName:
           type: string
+        imageBase64:
+          type: string
+          format: byte
+          nullable: true
       required:  
         - displayName
-  
+        - imageBase64
+
+
+    MyUserPartDTO:
+      properties:
+        displayName:
+          type: string
+        imageBase64:
+          type: string
+          format: byte
+          nullable: true
+
     UserDTO:
       properties:
         id:
@@ -413,10 +487,15 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/RecipeAttributesDTO'
+        picture:
+          type: string
+          format: byte
+          nullable: true
       required:
         - title
         - description
         - attributes
+        - picture
   
     RecipeDTO:
       properties:
@@ -441,11 +520,30 @@ components:
         - timestamp
         - picture
         - attributes
+
+    RecipePartDTO:
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        timestamp:
+          type: string
+        picture:
+          type: string
+        attributes:
+          $ref: '#/components/schemas/RecipeAttributesDTO'
     
           
     MessageContentDTO:
       properties:
         content:
+          type: string
+        tempId:
           type: string
         
     MessageDTO:
