@@ -6,10 +6,7 @@ import tupperdate.android.data.InternalDataApi
 import tupperdate.android.data.features.auth.room.ProfileDao
 import tupperdate.android.data.features.auth.room.ProfileEntity
 import tupperdate.android.data.features.messages.room.*
-import tupperdate.android.data.features.recipe.room.PendingNewRecipeEntity
-import tupperdate.android.data.features.recipe.room.PendingRateRecipeEntity
-import tupperdate.android.data.features.recipe.room.RecipeDao
-import tupperdate.android.data.features.recipe.room.RecipeEntity
+import tupperdate.android.data.features.recipe.room.*
 
 @Database(
     entities = [
@@ -23,6 +20,7 @@ import tupperdate.android.data.features.recipe.room.RecipeEntity
         MessageEntity::class,
         // Changes to be sent to the server.
         PendingNewRecipeEntity::class,
+        PendingUpdateRecipeEntity::class,
         PendingRateRecipeEntity::class,
         PendingMessageEntity::class,
     ],

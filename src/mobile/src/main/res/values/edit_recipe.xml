@@ -4,7 +4,7 @@
     <string name="edit_recipe_placeholder_title">Name of your recipe</string>
     <string name="edit_recipe_label_description">Description</string>
     <string name="edit_recipe_placeholder_description">Your recipe description…</string>
-    <string name="edit_recipe_delete">DELETE</string>
+    <string name="edit_recipe_cancel">CANCEL</string>
     <string name="edit_recipe_save">SAVE</string>
     <string name="edit_recipe_veggie">VEGGIE</string>
     <string name="edit_recipe_not_veggie">NOT VEGGIE</string>

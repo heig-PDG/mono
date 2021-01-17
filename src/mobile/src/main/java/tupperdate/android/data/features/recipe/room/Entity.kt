@@ -49,3 +49,22 @@ data class PendingNewRecipeEntity(
     @ColumnInfo(name = "isVegetarian") val vegetarian: Boolean,
     @ColumnInfo(name = "hasAllergens") val allergens: Boolean,
 )
+
+@Entity(tableName = "recipesUpdates")
+@InternalDataApi
+data class PendingUpdateRecipeEntity(
+    @PrimaryKey
+    @ColumnInfo(name = "identifier") val id: String,
+    @ColumnInfo(name = "title") val title: String,
+    @ColumnInfo(name = "titleUpdate") val titleUpdate: Boolean,
+    @ColumnInfo(name = "description") val description: String,
+    @ColumnInfo(name = "descriptionUpdate") val descriptionUpdate: Boolean,
+    @ColumnInfo(name = "picture") val picture: String?,
+    @ColumnInfo(name = "pictureUpdate") val pictureUpdate: Boolean,
+    @ColumnInfo(name = "isWarm") val warm: Boolean,
+    @ColumnInfo(name = "isWarmUpdate") val warmUpdate: Boolean,
+    @ColumnInfo(name = "isVegetarian") val vegetarian: Boolean,
+    @ColumnInfo(name = "isVegetarianUpdate") val vegetarianUpdate: Boolean,
+    @ColumnInfo(name = "hasAllergens") val allergens: Boolean,
+    @ColumnInfo(name = "hasAllergensUpdate") val allergensUpdate: Boolean,
+)

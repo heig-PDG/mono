@@ -12,12 +12,12 @@ data class PartProfile(
 
 fun MyUserPartDTO.toPartProfile(): PartProfile {
     val displayNamePair = when(val opt = displayName) {
-        is utils.OptionalProperty.Provided -> Pair(opt.value, true)
-        utils.OptionalProperty.NotProvided -> Pair(null, false)
+        is utils.OptionalProperty.Provided -> opt.value to true
+        utils.OptionalProperty.NotProvided -> null to false
     }
     val imageBase64Pair = when(val opt = imageBase64) {
-        is utils.OptionalProperty.Provided -> Pair(opt.value, true)
-        utils.OptionalProperty.NotProvided -> Pair(null, false)
+        is utils.OptionalProperty.Provided -> opt.value to true
+        utils.OptionalProperty.NotProvided -> null to false
     }
 
     return PartProfile(

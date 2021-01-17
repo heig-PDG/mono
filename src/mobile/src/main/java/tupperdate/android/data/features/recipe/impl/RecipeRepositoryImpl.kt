@@ -14,15 +14,10 @@ import tupperdate.android.data.features.auth.AuthenticationRepository
 import tupperdate.android.data.features.recipe.NewRecipe
 import tupperdate.android.data.features.recipe.Recipe
 import tupperdate.android.data.features.recipe.RecipeRepository
+import tupperdate.android.data.features.recipe.UpdateRecipe
 import tupperdate.android.data.features.recipe.api.RecipeFetchers
-import tupperdate.android.data.features.recipe.room.PendingNewRecipeEntity
-import tupperdate.android.data.features.recipe.room.RecipeOwnSourceOfTruth
-import tupperdate.android.data.features.recipe.room.RecipeSourceOfTruth
-import tupperdate.android.data.features.recipe.room.RecipeStackSourceOfTruth
-import tupperdate.android.data.features.recipe.work.RefreshOwnWorker
-import tupperdate.android.data.features.recipe.work.RefreshStackWorker
-import tupperdate.android.data.features.recipe.work.SyncPendingCreationsWorker
-import tupperdate.android.data.features.recipe.work.SyncPendingVotesWorker
+import tupperdate.android.data.features.recipe.room.*
+import tupperdate.android.data.features.recipe.work.*
 import tupperdate.android.data.room.TupperdateDatabase
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
@@ -76,12 +71,42 @@ class RecipeRepositoryImpl(
             )
         )
 
-        val refreshStack = SyncRequestBuilder<RefreshStackWorker>().build()
         val refreshOwn = SyncRequestBuilder<RefreshOwnWorker>().build()
 
         // Fetch the newly created recipe.
         workManager.beginWith(SyncRequestBuilder<SyncPendingCreationsWorker>().build())
-            .then(listOf(refreshStack, refreshOwn))
+            .then(refreshOwn)
+            .enqueue()
+    }
+
+    override suspend fun update(recipe: UpdateRecipe) {
+
+        // Don't patch unchanged recipes.
+        if (!recipe.hasUpdates()) return
+
+        database.recipes().pendingUpdatesRecipesInsert(
+            PendingUpdateRecipeEntity(
+                id = recipe.id,
+                title = recipe.title,
+                titleUpdate = recipe.titleUpdate,
+                picture = recipe.picture?.toString(),
+                pictureUpdate = recipe.pictureUpdate,
+                description = recipe.description,
+                descriptionUpdate = recipe.descriptionUpdate,
+                warm = recipe.isWarm,
+                warmUpdate = recipe.isWarmUpdate,
+                allergens = recipe.hasAllergens,
+                allergensUpdate = recipe.hasAllergensUpdate,
+                vegetarian = recipe.isVegan,
+                vegetarianUpdate = recipe.isVeganUpdate,
+            )
+        )
+
+        val refreshOwn = SyncRequestBuilder<RefreshOwnWorker>().build()
+
+        // Fetch the newly created recipe.
+        workManager.beginWith(SyncRequestBuilder<SyncPendingUpdatesWorker>().build())
+            .then(refreshOwn)
             .enqueue()
     }
 

@@ -9,6 +9,7 @@ import tupperdate.web.facade.PictureUrl
 import tupperdate.web.model.Result
 import tupperdate.web.model.profiles.User
 import tupperdate.web.model.recipes.ModelNewRecipe
+import tupperdate.web.model.recipes.ModelPartRecipe
 import tupperdate.web.model.recipes.ModelRecipe
 import tupperdate.web.model.recipes.RecipeRepository
 import tupperdate.web.utils.await
@@ -47,6 +48,58 @@ class FirestoreRecipeRepository(
             doc.set(firestoreRecipe).await()
             Result.Ok(Unit)
         } catch (throwable: Throwable) {
+            Result.BadServer()
+        }
+    }
+
+    override suspend fun update(
+        user: User,
+        partRecipe: ModelPartRecipe,
+        oldRecipe: ModelRecipe,
+    ): Result<Unit> {
+
+        val partRecipeMap = mutableMapOf<String, Any?>()
+        if (partRecipe.titleProvided) {
+            partRecipeMap["title"] = partRecipe.title
+        }
+        if (partRecipe.descriptionProvided) {
+            partRecipeMap["description"] = partRecipe.description
+        }
+
+        val partAttributesMap = mutableMapOf<String, Any?>()
+        partAttributesMap["hasAllergens"] =
+            if (partRecipe.hasAllergensProvided) partRecipe.hasAllergens else oldRecipe.hasAllergens
+        partAttributesMap["vegetarian"] =
+            if (partRecipe.vegetarianProvided) partRecipe.vegetarian else oldRecipe.vegetarian
+        partAttributesMap["warm"] =
+            if (partRecipe.warmProvided) partRecipe.warm else oldRecipe.warm
+
+        partRecipeMap["attributes"] = partAttributesMap
+
+        val doc = store.collection("recipes").document(partRecipe.identifier)
+        val id = UUID.randomUUID().toString()
+        val bytes = partRecipe.picture?.let { Base64.decodeBase64(it.encoded) }
+
+        if (partRecipe.pictureProvided && bytes != null) {
+            val fileName = "$id.jpg"
+            val blob = storage.bucket().create(
+                fileName,
+                bytes.inputStream(),
+                ContentType.Image.JPEG.contentType,
+            )
+            val url = blob.signUrl(365, TimeUnit.DAYS)
+            partRecipeMap["picture"] = url.toString()
+        } else if (partRecipe.pictureProvided && bytes == null) {
+            partRecipeMap["picture"] = null
+        }
+
+        return try {
+            if (partRecipeMap.isNotEmpty()) {
+                doc.update(partRecipeMap).await()
+            }
+            Result.Ok(Unit)
+        } catch (throwable: Throwable) {
+            throwable.printStackTrace()
             Result.BadServer()
         }
     }

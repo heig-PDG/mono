@@ -10,6 +10,7 @@ import tupperdate.web.model.profiles.User
 import tupperdate.web.model.profiles.UserRepository
 import tupperdate.web.model.recipes.RecipeRepository
 import tupperdate.web.model.recipes.toModelNewRecipe
+import tupperdate.web.model.recipes.toModelPartRecipe
 
 class RecipeFacadeImpl(
     private val recipes: RecipeRepository,
@@ -22,12 +23,39 @@ class RecipeFacadeImpl(
         user: User,
         recipe: NewRecipe,
     ): Result<Unit> {
-        val result =  recipes.save(user, recipe.toModelNewRecipe())
+        val result = recipes.save(user, recipe.toModelNewRecipe())
 
         // Let all the currently active clients sync the stack.
         if (result is Result.Ok) notifications.dispatch(Notification.ToAll.UserSyncAllStackRecipes)
 
         return result
+    }
+
+    override suspend fun update(
+        user: User,
+        recipe: PartRecipe,
+        recipeId: String,
+    ): Result<Unit> {
+        val recipeBefore = when (val res = recipes.readOne(user, recipeId)) {
+            is Result.Ok -> res.result
+            else -> return res.map {}
+        }
+
+        if (user.id.uid != recipeBefore.userId) {
+            return Result.Forbidden()
+        }
+
+        val result = recipes.update(user, recipe.toModelPartRecipe(recipeId = recipeId), recipeBefore)
+
+        // Let the recipe owner sync his recipe
+        if (result is Result.Ok) notifications.dispatch(
+            Notification.ToUser.UserSyncOneRecipe(
+                user.id.uid,
+                recipeId
+            )
+        )
+
+        return Result.Ok(Unit)
     }
 
     override suspend fun readOwn(

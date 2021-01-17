@@ -16,6 +16,7 @@ import tupperdate.web.facade.chats.toNewMessage
 import tupperdate.web.facade.profiles.*
 import tupperdate.web.facade.recipes.RecipeFacade
 import tupperdate.web.facade.recipes.toNewRecipe
+import tupperdate.web.facade.recipes.toPartRecipe
 import tupperdate.web.facade.recipes.toRecipeDTO
 import tupperdate.web.model.Result
 import tupperdate.web.model.map
@@ -85,6 +86,14 @@ fun Route.endpoints() {
             recipeFacade.readOwn(user = requireUser())
                 .map { it.map { recipe -> recipe.toRecipeDTO() } }
                 .let { respond(it) }
+        }
+
+        patch("/{recipeId}") {
+            recipeFacade.update(
+                user = requireUser(),
+                recipe = requireBody<RecipePartDTO>().toPartRecipe(),
+                recipeId = requireParam("recipeId"),
+            ).let { respond(it) }
         }
 
         get("/{identifier}") {
