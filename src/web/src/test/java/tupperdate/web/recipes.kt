@@ -6,13 +6,11 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.junit.Test
-import tupperdate.common.dto.MyUserDTO
-import tupperdate.common.dto.NewRecipeDTO
-import tupperdate.common.dto.RecipeAttributesDTO
-import tupperdate.common.dto.RecipeDTO
+import tupperdate.common.dto.*
 import tupperdate.web.utils.authRequest
 import tupperdate.web.utils.jsonType
 import tupperdate.web.utils.koin.withTupperdateTestApplication
+import utils.OptionalProperty
 import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
@@ -69,6 +67,71 @@ class RecipesTest {
                 assertEquals(warm, recipe.attributes.warm)
                 assertNotEquals(0, recipe.timestamp)
             }
+        }
+    }
+
+    @Test
+    fun testPostPatchGetOwnRecipe() {
+        val botId = UUID.randomUUID().toString()
+        val botName = UUID.randomUUID().toString()
+        val titleBefore = UUID.randomUUID().toString()
+        val titleAfter = UUID.randomUUID().toString()
+        val description = UUID.randomUUID().toString()
+        val hasAllergensBefore = true
+        val hasAllergensAfter = true
+        val vegetarian = false
+        val warmBefore = false
+        val warmAfter = false
+
+        var recipeId: String
+
+        withTupperdateTestApplication {
+            // Put user profile
+            handleRequest(HttpMethod.Put, "/users/$botId") {
+                authRequest(botId)
+                jsonType()
+                val body = MyUserDTO(displayName = botName, imageBase64 = null)
+                setBody(Json.encodeToString(body))
+            }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
+
+            // Post recipe
+            handleRequest(HttpMethod.Post, "/recipes") {
+                authRequest(botId)
+                jsonType()
+                val body = NewRecipeDTO(
+                    title = titleBefore,
+                    description = description,
+                    attributes = RecipeAttributesDTO(
+                        hasAllergens = hasAllergensBefore,
+                        vegetarian = vegetarian,
+                        warm = warmBefore,
+                    ),
+                    imageBase64 = null,
+                )
+                setBody(Json.encodeToString(body))
+            }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
+
+            // Get recipe id
+            handleRequest(HttpMethod.Get, "/recipes/own") {
+                authRequest(botId)
+            }.apply {
+                assertEquals(HttpStatusCode.OK, response.status())
+                recipeId = Json.decodeFromString<List<RecipeDTO>>(response.content ?: "")[0].id
+            }
+
+            // Patch recipe
+            handleRequest(HttpMethod.Patch, "/recipes/$recipeId") {
+                authRequest(botId)
+                jsonType()
+                val body = RecipePartDTO(
+                    title = OptionalProperty.Provided(titleAfter),
+                    attributes = RecipeAttributesPartDTO(
+                        hasAllergens = OptionalProperty.Provided(hasAllergensAfter),
+                        warm = OptionalProperty.Provided(warmAfter),
+                    ),
+                )
+                setBody(Json.encodeToString(body))
+            }.apply { assertEquals(HttpStatusCode.OK, response.status()) }
         }
     }
 
