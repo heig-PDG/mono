@@ -493,6 +493,8 @@ components:
       properties:
         content:
           type: string
+        tempId:
+          type: string
         
     MessageDTO:
       properties:
