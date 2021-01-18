@@ -5,7 +5,11 @@
 ![Deploy Website to GitHub Pages](https://github.com/heig-PDG/mono/workflows/Deploy%20Website%20to%20GitHub%20Pages/badge.svg)
 [![Heroku App Status](http://heroku-shields.herokuapp.com/heig-pdg)](https://heig-pdg.herokuapp.com)
 
-An Android and web application to match and meet people based on meals, recipes and tupperwares. This is a semester project done at HEIG-VD. More information is available on the [class repository on GitLab](https://gitlab.com/softeng-heigvd/teaching-heigvd-pdg-2020/guidelines).
+An Android and web application to match and meet people based on meals, recipes and tupperwares. This is a semester project done at HEIG-VD.
+
+![App illustration](./Phones.png)
+
+More information is available on the [class repository on GitLab](https://gitlab.com/softeng-heigvd/teaching-heigvd-pdg-2020/guidelines).
 
 ## Team
 
