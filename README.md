@@ -18,7 +18,7 @@ An Android and web application to match and meet people based on meals, recipes 
 
 ## Structure
 
-We use a mono-repository approach to store and manage the files of our project. We also make use of some external tools for [time tracking](https://clockify.me) and [prototyping](https://www.figma.com).
+We use a mono-repository approach to store and manage the files of our project. We also make use of some external tools for [prototyping](https://www.figma.com).
 
 The sub-folder structure is as follows:
 
@@ -32,45 +32,3 @@ The sub-folder structure is as follows:
 
 **Our prototypes are visible on Figma ([overview](https://www.figma.com/file/sZTqSZOMoUmuJTMhw7khx3/Mobile?node-id=1%3A2), [live prototype](https://www.figma.com/proto/sZTqSZOMoUmuJTMhw7khx3/Mobile?node-id=158%3A380&viewport=849%2C581%2C0.3042562007904053&scaling=scale-down)).**
 
-## Time tracking
-
-Since we're using Clockify to track the time for the project, we thought that it'd be useful to monitor the time invested every week.
-
-### Overview
-
-This table represents the total time invested. It will be updated two times a week.
-
-| Date | Total time |
-| :--: | :-----: |
-| 2020-10-02 | 12h 22m 34s |
-| 2020-10-06 | 19h 55m 55s |
-| 2020-10-06 | 21h 35m 47s |
-| 2020-10-09 | 24h 49m 34s |
-| 2020-10-13 | 24h 49m 34s |
-| 2020-10-16 | 27h 59m 13s |
-| 2020-10-20 | 35h 14m 13s |
-| 2020-10-23 | 35h 14m 13s |
-| 2020-10-27 | 40h 47m 13s |
-| 2020-10-30 | 40h 47m 13s |
-| 2020-11-03 | 40h 47m 13s |
-| 2020-11-06 | 45h 53m 46s |
-| 2020-11-10 | 49h 53m 46s |
-| 2020-11-13 | 52h 18m 10s |
-| 2020-11-17 | 53h 18m 10s |
-| 2020-11-20 | 60h 1m 10s |
-| 2020-11-24 | 115h 6m 49s |
-| 2020-11-27 | 107h 43m 49s |
-| 2020-12-01 | 107h 43m 49s |
-| 2020-12-04 | 107h 43m 49s |
-| 2020-12-08 | 112h 43m 49s |
-| 2020-12-11 | 112h 43m 49s |
-| 2020-12-15 | 112h 43m 49s |
-| 2020-12-18 | 112h 43m 49s |
-| 2020-12-22 | 112h 43m 49s |
-| 2020-12-25 | 112h 43m 49s |
-| 2020-12-29 | 112h 43m 49s |
-| 2021-01-01 | 112h 43m 49s |
-| 2021-01-05 | 112h 43m 49s |
-| 2021-01-08 | 112h 43m 49s |
-| 2021-01-12 | 112h 43m 49s |
-| 2021-01-15 | 112h 43m 49s |
