@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html:-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  background-color: #FFFFFF;
+}
+
+.funcImg {
+  max-width: 80%;
+  max-height: 80%;
+}
+
+.customBackgroundGradient {
+  background: linear-gradient(
+    -45deg,
+    #0A88FF,
+    #990093 10%,
+    #CC00C4 40%,
+    #0069CC 70%
+  );
+
+	background-size: 400% 400%;
+	-webkit-animation: gradientBG 60s ease infinite;
+	        animation: gradientBG 60s ease infinite;
+}
+
+@-webkit-keyframes gradientBG {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+@keyframes gradientBG {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+
+.customTitleGradient {
+  background: linear-gradient(
+    to right,
+    #0A88FF,
+    #990093 10%,
+    #CC00C4 30%,
+    #0069CC 70%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
+
+	background-size: 400% 400%;
+	-webkit-animation: gradientBG 25s ease infinite;
+	        animation: gradientBG 25s ease infinite;
+
+}
+
+.fastTitleGradient {
+  background: linear-gradient(
+    to right,
+    #0A88FF,
+    #990093 10%,
+    #CC00C4 30%,
+    #0069CC 70%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
+
+	background-size: 400% 400%;
+	-webkit-animation: gradientBG 10s ease infinite;
+	        animation: gradientBG 10s ease infinite;
+
+}
